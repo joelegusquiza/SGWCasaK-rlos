@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28010.2046
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SGWCasaK-rlos", "SGWCasaK-rlos\SGWCasaK-rlos.csproj", "{0B9733F7-AA4E-4967-96DB-24D723981DEE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApplicationContext", "ApplicationContext\ApplicationContext.csproj", "{BC6111C5-14BA-4FC3-984C-E051D97C29F0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{0B9733F7-AA4E-4967-96DB-24D723981DEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0B9733F7-AA4E-4967-96DB-24D723981DEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0B9733F7-AA4E-4967-96DB-24D723981DEE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC6111C5-14BA-4FC3-984C-E051D97C29F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC6111C5-14BA-4FC3-984C-E051D97C29F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC6111C5-14BA-4FC3-984C-E051D97C29F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC6111C5-14BA-4FC3-984C-E051D97C29F0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
