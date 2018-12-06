@@ -29,7 +29,7 @@ namespace SGWCasaK_rlos
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-            //services.AddDbContext<DataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<DataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             return services.BuildServiceProvider();
         }
