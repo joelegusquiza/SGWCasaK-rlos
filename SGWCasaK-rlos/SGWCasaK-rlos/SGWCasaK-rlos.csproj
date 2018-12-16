@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.9" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.4" />
   </ItemGroup>
 
   <ItemGroup>
@@ -14,6 +15,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ApplicationContext\ApplicationContext.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Areas\Admin\" />
+    <Folder Include="Areas\Client\" />
+    <Folder Include="wwwroot\metronic\" />
   </ItemGroup>
 
 </Project>
