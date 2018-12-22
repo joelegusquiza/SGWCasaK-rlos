@@ -3,8 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ApplicationContext;
+using Core.Automapper;
+using Core.DAL.Interfaces;
+using Core.DAL.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,13 +35,21 @@ namespace SGWCasaK_rlos
         {
             services.AddMvc();
             services.AddDbContext<DataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-
+            services.AddSingleton(x => Configuration);
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+            services.AddSingleton<IVentas, VentasServices>();
             return services.BuildServiceProvider();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            AutoMapper.Mapper.Initialize(cfg =>
+            {
+                cfg.AddProfile<VentasProfile>();
+
+            });
             if (env.IsDevelopment())
             {
                 app.UseBrowserLink();
@@ -51,6 +64,10 @@ namespace SGWCasaK_rlos
 
             app.UseMvc(routes =>
             {
+                routes.MapRoute(
+                    name: "areaRoute",
+                    template: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");

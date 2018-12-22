@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="8.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.9" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.4" />
   </ItemGroup>
@@ -15,12 +16,22 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ApplicationContext\ApplicationContext.csproj" />
+    <ProjectReference Include="..\Core.Automapper\Core.Automapper.csproj" />
+    <ProjectReference Include="..\Core.DAL\Core.DAL.csproj" />
+    <ProjectReference Include="..\Core.DTOs\Core.DTOs.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Areas\Admin\" />
-    <Folder Include="Areas\Client\" />
-    <Folder Include="wwwroot\metronic\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Areas\Platform\Views\_ViewImports.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Areas\Platform\Views\_ViewStart.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
   </ItemGroup>
 
 </Project>

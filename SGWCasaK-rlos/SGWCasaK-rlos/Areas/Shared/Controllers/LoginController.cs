@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace SGWCasaK_rlos.Areas.Shared.Controllers
 {
+    [Area("Shared")]
     public class LoginController : Controller
     {
         public IActionResult Index()

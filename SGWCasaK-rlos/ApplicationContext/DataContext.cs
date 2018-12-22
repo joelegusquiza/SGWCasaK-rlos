@@ -32,7 +32,18 @@ namespace ApplicationContext
 
         }
 
-        public DbSet<User> Users { get; set; }
+        public DbSet<Usuario> Usuarios { get; set; }
+        public DbSet<CategoriaProducto> CategoriasProducto { get; set; }
+        public DbSet<Compra> Compras { get; set; }
+        public DbSet<DetalleCompra> DetallesCompra { get; set; }
+        public DbSet<DetallePedido> DetallesPedido { get; set; }
+        public DbSet<DetalleVenta> DetallesVenta { get; set; }
+        public DbSet<Direccion> Direcciones { get; set; }
+        public DbSet<Pedido> Pedidos { get; set; }
+        public DbSet<Producto> Productos { get; set; }
+        public DbSet<Proveedor> Proveedores { get; set; }
+        public DbSet<Timbrado> Timbrados { get; set; }
+        public DbSet<UnidadMedida> UnidadesMedidas { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -44,6 +55,66 @@ namespace ApplicationContext
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Venta>()
+                .HasMany(x => x.DetalleVenta)
+                .WithOne(x => x.Venta)
+                .HasForeignKey(x => x.VentaId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Producto>()
+                .HasMany(x => x.DetalleVenta)
+                .WithOne(x => x.Producto)
+                .HasForeignKey(x => x.ProductoId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Compra>()
+                .HasMany(x => x.DetalleCompra)
+                .WithOne(x => x.Compra)
+                .HasForeignKey(x => x.CompraId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Producto>()
+                .HasMany(x => x.DetalleCompra)
+                .WithOne(x => x.Producto)
+                .HasForeignKey(x => x.ProductoId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Pedido>()
+                .HasMany(x => x.DetallePedido)
+                .WithOne(x => x.Pedido)
+                .HasForeignKey(x => x.PedidoId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Producto>()
+               .HasMany(x => x.DetallePedido)
+               .WithOne(x => x.Producto)
+               .HasForeignKey(x => x.ProductoId)
+               .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<CategoriaProducto>()
+               .HasMany(x => x.Productos)
+               .WithOne(x => x.CategoriaProducto)
+               .HasForeignKey(x => x.CategoriaProductoId)
+               .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Usuario>()
+               .HasMany(x => x.Direcciones)
+               .WithOne(x => x.Usuario)
+               .HasForeignKey(x => x.UsuarioId)
+               .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Proveedor>()
+               .HasMany(x => x.Compras)
+               .WithOne(x => x.Proveedor)
+               .HasForeignKey(x => x.ProveedorId)
+               .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Timbrado>()
+              .HasMany(x => x.Ventas)
+              .WithOne(x => x.Timbrado)
+              .HasForeignKey(x => x.TimbradoId)
+              .OnDelete(DeleteBehavior.Restrict);           
         }
 
         public override int SaveChanges()
