@@ -4,9 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Core.DAL.Interfaces;
+using Core.DTOs.Shared;
 using Core.DTOs.Ventas;
 using Core.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace SGWCasaK_rlos.Areas.Platform.Controllers
 {
@@ -32,6 +34,13 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
         {
             var viewModel = new VentasAddViewModel();
             return View(viewModel);
+        }
+
+        [HttpPost]
+        public SystemValidationModel Save(string model)
+        {
+            var viewModel = JsonConvert.DeserializeObject<VentasAddViewModel>(model);
+            return _ventas.Save(viewModel);
         }
     }
 }

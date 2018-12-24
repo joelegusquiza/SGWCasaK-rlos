@@ -12,7 +12,7 @@ namespace Core.Entities
         public float Latitud { get; set; }
         public float Longitud { get; set; }
 
-        public int UsuarioId { get; set; }
-        public Usuario Usuario { get; set; }
+        public int ClienteId { get; set; }
+        public Cliente Cliente { get; set; }
     }
 }

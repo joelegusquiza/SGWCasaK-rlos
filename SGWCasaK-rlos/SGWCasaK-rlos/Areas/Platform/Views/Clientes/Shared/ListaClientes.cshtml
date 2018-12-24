@@ -1,46 +1,51 @@
-﻿@model Core.DTOs.Productos.ListaProductosIndexViewModel
+﻿@model Core.DTOs.Clientes.ListaClientesIndexViewModel
 @{
-    ViewData["Title"] = "ListaProductos";
+    ViewData["Title"] = "ListaClientes";
     Layout = "~/Areas/Shared/Views/Shared/_EmptyLayout.cshtml";
 }
+
 <div class="" style="width: 100%">
     <!--begin::Portlet-->
-    <div class="m-portlet m-portlet--tab" style="margin-bottom: 0px !important">      
+    <div class="m-portlet m-portlet--tab" style="margin-bottom: 0px !important">
         <!--begin::Form-->
         <form class="m-form m-form--fit m-form--label-align-right">
             <div class="m-portlet__body" style="margin-left: 20px; margin-right: 20px;">
-                <table class="" id="listaProdutosTable" width="100%">
+                <table class="" id="listaClientesTable" width="100%">
                     <thead>
                         <tr>
                             <th title="Field #1">
-                                Id
+                                RUC
                             </th>
                             <th title="Field #2">
                                 Nombre
                             </th>
+                            <th title="Field #3">
+                                Apellido
+                            </th>
 
                             <th title="Field #4">
-                                Precio Venta
+                                Razon Social
                             </th>
                             <th title="Field #5">
-                                Stock
+                                Telefono
                             </th>
 
                         </tr>
                     </thead>
-                    <tbody data-bind="foreach: productos">
-                        <tr data-bind=" attr: { id : productoId()}">
-                            <td data-bind="text: productoId"></td>
+                    <tbody data-bind="foreach: clientes">
+                        <tr data-bind=" attr: { id : clienteId()}">
+                            <td data-bind="text: ruc"></td>
                             <td data-bind="text: nombre"></td>
-                            <td data-bind="text: precioVenta"></td>
-                            <td data-bind="text: stockActual"></td>
+                            <td data-bind="text: apellido"></td>
+                            <td data-bind="text: razonSocial"></td>
+                            <td data-bind="text: telefono"></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
             <div class="m-portlet__foot m-portlet__foot--fit">
                 <div class="m-form__actions">
-                    <button type="reset" class="btn btn-primary" data-bind="click: seleccionarProducto, enable: productoId() > 0">
+                    <button type="reset" class="btn btn-primary" data-bind="click: seleccionarCliente, enable: clienteId() > 0">
                         Agregar
                     </button>
                     <button type="reset" class="btn btn-secondary">
@@ -56,27 +61,27 @@
     <script>
         var model = @Html.Raw(Json.Serialize(Model));
         var dataViewModel = ko.mapping.fromJS(model);
-        dataViewModel.productoId = ko.observable();
+        dataViewModel.clienteId = ko.observable();
         $(document).ready(function () {
-            var table = $('#listaProdutosTable').DataTable();
+            var table = $('#listaClientesTable').DataTable();
 
-            $('#listaProdutosTable tbody').on('click', 'tr', function () {
+            $('#listaClientesTable tbody').on('click', 'tr', function () {
                 if ($(this).hasClass('selected')) {
                     dataViewModel.productoId(0);
                     $(this).removeClass('selected');
                 }
                 else {
-                    dataViewModel.productoId($(this).attr('id'));
+                    dataViewModel.clienteId($(this).attr('id'));
                     table.$('tr.selected').removeClass('selected');
                     $(this).addClass('selected');
                 }
             });
         })
 
-        dataViewModel.seleccionarProducto = function()
+        dataViewModel.seleccionarCliente = function()
         {
-            var producto = $.grep(dataViewModel.productos(), function (item) { return item.productoId() === parseInt(dataViewModel.productoId()); })[0];
-            parent.seleccionarProducto(ko.mapping.toJS(producto));
+            var cliente = $.grep(dataViewModel.clientes(), function (item) { return item.clienteId() === parseInt(dataViewModel.clienteId()); })[0];
+            parent.seleccionarCliente(ko.mapping.toJS(cliente));
         }
 
 

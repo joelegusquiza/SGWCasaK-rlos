@@ -4,14 +4,16 @@ using ApplicationContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ApplicationContext.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20181223125623_addPorcentajeIva")]
+    partial class addPorcentajeIva
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -42,39 +44,6 @@ namespace ApplicationContext.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("CategoriaProductos");
-                });
-
-            modelBuilder.Entity("Core.Entities.Cliente", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<bool>("Active");
-
-                    b.Property<string>("Apellido");
-
-                    b.Property<DateTime>("DateCreated");
-
-                    b.Property<DateTime?>("DateModified");
-
-                    b.Property<string>("Nombre");
-
-                    b.Property<string>("RazonSocial");
-
-                    b.Property<string>("Ruc");
-
-                    b.Property<decimal>("Saldo");
-
-                    b.Property<string>("Telefono");
-
-                    b.Property<int>("UserCreatedId");
-
-                    b.Property<int>("UserModifiedId");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Clientes");
                 });
 
             modelBuilder.Entity("Core.Entities.Compra", b =>
@@ -221,8 +190,6 @@ namespace ApplicationContext.Migrations
 
                     b.Property<bool>("Active");
 
-                    b.Property<int>("ClienteId");
-
                     b.Property<DateTime>("DateCreated");
 
                     b.Property<DateTime?>("DateModified");
@@ -237,9 +204,11 @@ namespace ApplicationContext.Migrations
 
                     b.Property<int>("UserModifiedId");
 
+                    b.Property<int>("UsuarioId");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("ClienteId");
+                    b.HasIndex("UsuarioId");
 
                     b.ToTable("Direccion");
                 });
@@ -407,8 +376,6 @@ namespace ApplicationContext.Migrations
 
                     b.Property<string>("Apellido");
 
-                    b.Property<int?>("ClienteId");
-
                     b.Property<DateTime>("DateCreated");
 
                     b.Property<DateTime?>("DateModified");
@@ -424,6 +391,8 @@ namespace ApplicationContext.Migrations
 
                     b.Property<string>("PasswordHash");
 
+                    b.Property<decimal>("Saldo");
+
                     b.Property<string>("Salt");
 
                     b.Property<string>("Telefono");
@@ -433,8 +402,6 @@ namespace ApplicationContext.Migrations
                     b.Property<int>("UserModifiedId");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ClienteId");
 
                     b.ToTable("Usuarios");
                 });
@@ -447,15 +414,11 @@ namespace ApplicationContext.Migrations
 
                     b.Property<bool>("Active");
 
-                    b.Property<int>("ClienteId");
-
-                    b.Property<int>("CondicionVenta");
-
                     b.Property<DateTime>("DateCreated");
 
                     b.Property<DateTime?>("DateModified");
 
-                    b.Property<decimal>("Excenta");
+                    b.Property<decimal>("Exenta");
 
                     b.Property<decimal>("IvaCinco");
 
@@ -472,8 +435,6 @@ namespace ApplicationContext.Migrations
                     b.Property<int>("UserModifiedId");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ClienteId");
 
                     b.HasIndex("TimbradoId");
 
@@ -529,9 +490,9 @@ namespace ApplicationContext.Migrations
 
             modelBuilder.Entity("Core.Entities.Direccion", b =>
                 {
-                    b.HasOne("Core.Entities.Cliente", "Cliente")
+                    b.HasOne("Core.Entities.Usuario", "Usuario")
                         .WithMany("Direcciones")
-                        .HasForeignKey("ClienteId")
+                        .HasForeignKey("UsuarioId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
@@ -543,21 +504,8 @@ namespace ApplicationContext.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
-            modelBuilder.Entity("Core.Entities.Usuario", b =>
-                {
-                    b.HasOne("Core.Entities.Cliente", "Cliente")
-                        .WithMany("Usuarios")
-                        .HasForeignKey("ClienteId")
-                        .OnDelete(DeleteBehavior.Restrict);
-                });
-
             modelBuilder.Entity("Core.Entities.Venta", b =>
                 {
-                    b.HasOne("Core.Entities.Cliente", "Cliente")
-                        .WithMany("Ventas")
-                        .HasForeignKey("ClienteId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.HasOne("Core.Entities.Timbrado", "Timbrado")
                         .WithMany("Ventas")
                         .HasForeignKey("TimbradoId")

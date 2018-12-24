@@ -4,14 +4,16 @@ using ApplicationContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ApplicationContext.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20181224151728_updateCliente")]
+    partial class updateCliente
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -449,13 +451,11 @@ namespace ApplicationContext.Migrations
 
                     b.Property<int>("ClienteId");
 
-                    b.Property<int>("CondicionVenta");
-
                     b.Property<DateTime>("DateCreated");
 
                     b.Property<DateTime?>("DateModified");
 
-                    b.Property<decimal>("Excenta");
+                    b.Property<decimal>("Exenta");
 
                     b.Property<decimal>("IvaCinco");
 

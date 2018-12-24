@@ -13,7 +13,13 @@ namespace Core.Automapper
         {
             CreateMap<Venta, VentaViewModel>()
                 .ReverseMap();
-            
+
+            CreateMap<Venta, VentasAddViewModel>()
+                .ReverseMap();
+
+            CreateMap<DetalleVenta, VentasDetalleAddViewModel>()
+                .ReverseMap();
+
         }
     }
 }

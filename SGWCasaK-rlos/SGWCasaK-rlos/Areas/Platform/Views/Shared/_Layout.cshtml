@@ -49,19 +49,22 @@ License: You must have a valid license purchased only from themeforest(the above
     <div class="m-grid m-grid--hor m-grid--root m-page">
         <!-- BEGIN: Header -->
         @{
-            Html.RenderPartial("~/Areas/Shared/Views/Shared/_Header.cshtml");
+            Html.RenderPartial("~/Areas/Platform/Views/Shared/_Header.cshtml");
         }
         <!-- END: Header -->
         <!-- begin::Body -->
         <div class="m-grid__item m-grid__item--fluid m-grid m-grid--ver-desktop m-grid--desktop m-body">
             <!-- BEGIN: Left Aside -->
+            @{
+              Html.RenderPartial("~/Areas/Platform/Views/Shared/_Sidebar.cshtml");
+            }
             <!-- END: Left Aside -->
             @RenderBody();
         </div>
         <!-- end:: Body -->
         <!-- begin::Footer -->
         @{
-            Html.RenderPartial("~/Areas/Shared/Views/Shared/_Footer.cshtml");
+            Html.RenderPartial("~/Areas/Platform/Views/Shared/_Footer.cshtml");
         }
         <!-- end::Footer -->
     </div>

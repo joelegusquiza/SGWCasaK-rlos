@@ -39,6 +39,9 @@ namespace SGWCasaK_rlos
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
             services.AddSingleton<IVentas, VentasServices>();
+            services.AddSingleton<IProductos, ProductosServices>();
+            services.AddSingleton<IClientes, ClientesService>();
+            services.AddSingleton<ITimbrados, TimbradosService>();
             return services.BuildServiceProvider();
         }
 
@@ -48,7 +51,8 @@ namespace SGWCasaK_rlos
             AutoMapper.Mapper.Initialize(cfg =>
             {
                 cfg.AddProfile<VentasProfile>();
-
+                cfg.AddProfile<ProductosProfile>();
+                cfg.AddProfile<ClientesProfile>();
             });
             if (env.IsDevelopment())
             {

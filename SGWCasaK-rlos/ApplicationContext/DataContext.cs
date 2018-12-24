@@ -13,7 +13,7 @@ namespace ApplicationContext
     {
         private readonly IHttpContextAccessor _contextAccessor;
         private readonly IConfigurationRoot _configuration;
-        
+
 
         public DataContext()
         {
@@ -28,11 +28,12 @@ namespace ApplicationContext
 
             _contextAccessor = contextAccessor;
             _configuration = configuration;
-         
+
 
         }
 
         public DbSet<Usuario> Usuarios { get; set; }
+        public DbSet<Cliente> Clientes { get; set; }
         public DbSet<CategoriaProducto> CategoriasProducto { get; set; }
         public DbSet<Compra> Compras { get; set; }
         public DbSet<DetalleCompra> DetallesCompra { get; set; }
@@ -98,10 +99,10 @@ namespace ApplicationContext
                .HasForeignKey(x => x.CategoriaProductoId)
                .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Usuario>()
+            modelBuilder.Entity<Cliente>()
                .HasMany(x => x.Direcciones)
-               .WithOne(x => x.Usuario)
-               .HasForeignKey(x => x.UsuarioId)
+               .WithOne(x => x.Cliente)
+               .HasForeignKey(x => x.ClienteId)
                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Proveedor>()
@@ -114,7 +115,19 @@ namespace ApplicationContext
               .HasMany(x => x.Ventas)
               .WithOne(x => x.Timbrado)
               .HasForeignKey(x => x.TimbradoId)
-              .OnDelete(DeleteBehavior.Restrict);           
+              .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Cliente>()
+             .HasMany(x => x.Usuarios)
+             .WithOne(x => x.Cliente)
+             .HasForeignKey(x => x.ClienteId)
+             .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Cliente>()
+               .HasMany(x => x.Ventas)
+               .WithOne(x => x.Cliente)
+               .HasForeignKey(x => x.ClienteId)
+               .OnDelete(DeleteBehavior.Restrict);
         }
 
         public override int SaveChanges()

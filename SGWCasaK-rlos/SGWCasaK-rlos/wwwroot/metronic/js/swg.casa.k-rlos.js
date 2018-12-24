@@ -1,5 +1,5 @@
 ﻿function showError(message) {
-    swal("Exito!", message, "error");
+    swal("Error!", message, "error");
 }
 
 function showSuccess(message) {

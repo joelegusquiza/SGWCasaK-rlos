@@ -1,4 +1,5 @@
-﻿using Core.DTOs.Shared;
+﻿using Core.DTOs.Clientes;
+using Core.DTOs.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +10,13 @@ namespace Core.DTOs.Ventas
 {
     public class VentasAddViewModel
     {
-        public DateTime DateCreated { get; set; } = DateTime.UtcNow;
-        public int UserId { get; set; }
-        public int ClienteId { get; set; }
+        public DateTime DateCreated { get; set; } = DateTime.UtcNow;        
         public int NroFactura { get; set; }
         public int TimbradoId { get; set; }
+        public decimal MontoTotal { get; set; }
+        public decimal IvaCinco { get; set; }
+        public decimal IvaDiez { get; set; }
+        public decimal Excenta { get; set; }
 
         public CondicionVenta CondicionVenta{ get; set; }
         public List<DropDownViewModel<CondicionVenta>> CondicionesVenta = Enum.GetValues(typeof(CondicionVenta)).Cast<CondicionVenta>().Select(x => new DropDownViewModel<CondicionVenta>
@@ -22,6 +25,7 @@ namespace Core.DTOs.Ventas
             Value = x
         }).ToList();
 
+        public ListaClienteViewModel Cliente { get; set; } = new ListaClienteViewModel();
         public VentasDetalleAddViewModel Producto { get; set; } = new VentasDetalleAddViewModel();
         public List<VentasDetalleAddViewModel> DetalleVenta { get;  set; } = new List<VentasDetalleAddViewModel>();
 
