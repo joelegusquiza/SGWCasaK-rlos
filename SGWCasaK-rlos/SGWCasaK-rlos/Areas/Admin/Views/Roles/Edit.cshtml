@@ -1,0 +1,110 @@
+﻿@model Core.DTOs.Roles.RolesEditViewModel
+<div class="m-content" style="width: 50%">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="m-portlet m-portlet--tab">
+                <div class="m-portlet__head">
+                    <div class="m-portlet__head-caption">
+                        <div class="m-portlet__head-title">
+                            <span class="m-portlet__head-icon m--hide">
+                                <i class="la la-gear"></i>
+                            </span>
+                            <h3 class="m-portlet__head-text">
+                                Editar Rol
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+                <!--begin::Form-->
+                <form class="m-form m-form--fit m-form--label-align-right" id="form" data-bind="submit: postDataToController">
+                    <div class="m-portlet__body">
+                        <div class="form-group m-form__group">
+                            <label for="exampleInputEmail1">
+                                Nombre
+                            </label>
+                            <input type="text" class="form-control m-input" id="nombre" name="nombre" data-bind="value: nombre">
+                            <span class="alert-danger"></span>
+                        </div>
+                        <div class="form-group m-form__group">
+                            <label for="exampleInputEmail1">
+                                Descripcion
+                            </label>
+                            <input type="text" class="form-control m-input" id="descripcion" name="descripcion" data-bind="value: descripcion">
+                            <span class="alert-danger"></span>
+                        </div>
+                        <div class="m-form__group form-group">
+                            <label>
+                                Permisos
+                            </label>
+                            <div class="m-checkbox-list" style=" list-style: none; overflow-y: scroll; height: 120px; " data-bind="foreach: permisosList">
+
+                                <div class="checkbox">
+                                    <label class="i-checks">
+                                        <input type="checkbox" value="" data-bind="checked: selected">
+                                        <i></i>
+                                        <span data-bind="text: nombre" style="margin-left:20px"></span>
+                                    </label>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="m-portlet__foot m-portlet__foot--fit">
+                        <div class="m-form__actions">
+                            <button type="submit" class="btn btn-primary">
+                                Guardar
+                            </button>
+
+                        </div>
+                    </div>
+                </form>
+                <!--end::Form-->
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script>
+        var model = @Html.Raw(Json.Serialize(Model));
+        var dataViewModel = ko.mapping.fromJS(model);
+        dataViewModel.postDataToController = function () {
+
+            if ($.grep(dataViewModel.permisosList(), function (item) { return item.selected() === true; }).length < 1) {
+                showError("Debe seleccionar al menos un permiso para el rol");
+                return;
+            }
+            if (!$("#form").valid()) return;
+
+            $.ajax({
+                url: "@Url.Action("Edit", "Roles")",
+                type: "POST",
+                data: { model: ko.toJSON(dataViewModel) },
+                success: function (response) {
+                    if (response.success) {
+                        showSuccessAndGoToUrl(response.message, '@Url.Action("Index", "Roles", new { area = "Admin"})');
+                    } else {
+                        showError(response.message);
+                    }
+                },
+                error: function () {
+                    showError();
+                }
+            });
+            return false;
+        }
+        ko.applyBindings(dataViewModel);
+
+
+        $('#form').validate({
+            rules: {
+                nombre: {
+                    required: true
+                }
+            },
+            errorPlacement: function (error, element) {
+                var span = element.siblings('span');
+                error.appendTo(span);
+            }
+        });
+    </script>
+}

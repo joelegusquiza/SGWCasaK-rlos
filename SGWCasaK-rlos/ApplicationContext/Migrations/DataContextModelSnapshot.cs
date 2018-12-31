@@ -85,13 +85,19 @@ namespace ApplicationContext.Migrations
 
                     b.Property<bool>("Active");
 
+                    b.Property<decimal>("Cambio");
+
+                    b.Property<int>("CondicionCompra");
+
+                    b.Property<DateTimeOffset>("DateCompra");
+
                     b.Property<DateTime>("DateCreated");
 
                     b.Property<DateTime?>("DateModified");
 
-                    b.Property<decimal>("Excenta");
+                    b.Property<int>("Estado");
 
-                    b.Property<decimal>("FechaCompra");
+                    b.Property<decimal>("Excenta");
 
                     b.Property<decimal>("IvaCinco");
 
@@ -99,7 +105,9 @@ namespace ApplicationContext.Migrations
 
                     b.Property<decimal>("MontoTotal");
 
-                    b.Property<int>("ProveedorId");
+                    b.Property<string>("NroFactura");
+
+                    b.Property<int?>("ProveedorId");
 
                     b.Property<int>("UserCreatedId");
 
@@ -244,6 +252,68 @@ namespace ApplicationContext.Migrations
                     b.ToTable("Direccion");
                 });
 
+            modelBuilder.Entity("Core.Entities.PagoCompra", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("Active");
+
+                    b.Property<int>("CompraId");
+
+                    b.Property<DateTime>("DateCreated");
+
+                    b.Property<DateTime?>("DateModified");
+
+                    b.Property<decimal>("Monto");
+
+                    b.Property<int?>("ProveedorId");
+
+                    b.Property<int>("UserCreatedId");
+
+                    b.Property<int>("UserModifiedId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompraId");
+
+                    b.HasIndex("ProveedorId");
+
+                    b.ToTable("PagosCompras");
+                });
+
+            modelBuilder.Entity("Core.Entities.PagoVenta", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("Active");
+
+                    b.Property<int>("ClienteId");
+
+                    b.Property<DateTime>("DateCreated");
+
+                    b.Property<DateTime?>("DateModified");
+
+                    b.Property<decimal>("Monto");
+
+                    b.Property<int>("UserCreatedId");
+
+                    b.Property<int>("UserModifiedId");
+
+                    b.Property<int>("VentaId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClienteId");
+
+                    b.HasIndex("VentaId");
+
+                    b.ToTable("PagosVentas");
+                });
+
             modelBuilder.Entity("Core.Entities.Pedido", b =>
                 {
                     b.Property<int>("Id")
@@ -343,6 +413,35 @@ namespace ApplicationContext.Migrations
                     b.ToTable("Proveedores");
                 });
 
+            modelBuilder.Entity("Core.Entities.Rol", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("Active");
+
+                    b.Property<DateTime>("DateCreated");
+
+                    b.Property<DateTime?>("DateModified");
+
+                    b.Property<string>("Descripcion");
+
+                    b.Property<bool>("IsAdmin");
+
+                    b.Property<string>("Nombre");
+
+                    b.Property<string>("Permisos");
+
+                    b.Property<int>("UserCreatedId");
+
+                    b.Property<int>("UserModifiedId");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Roles");
+                });
+
             modelBuilder.Entity("Core.Entities.Timbrado", b =>
                 {
                     b.Property<int>("Id")
@@ -424,6 +523,8 @@ namespace ApplicationContext.Migrations
 
                     b.Property<string>("PasswordHash");
 
+                    b.Property<int>("RolId");
+
                     b.Property<string>("Salt");
 
                     b.Property<string>("Telefono");
@@ -436,6 +537,8 @@ namespace ApplicationContext.Migrations
 
                     b.HasIndex("ClienteId");
 
+                    b.HasIndex("RolId");
+
                     b.ToTable("Usuarios");
                 });
 
@@ -447,6 +550,8 @@ namespace ApplicationContext.Migrations
 
                     b.Property<bool>("Active");
 
+                    b.Property<decimal>("Cambio");
+
                     b.Property<int>("ClienteId");
 
                     b.Property<int>("CondicionVenta");
@@ -454,6 +559,8 @@ namespace ApplicationContext.Migrations
                     b.Property<DateTime>("DateCreated");
 
                     b.Property<DateTime?>("DateModified");
+
+                    b.Property<int>("Estado");
 
                     b.Property<decimal>("Excenta");
 
@@ -535,6 +642,32 @@ namespace ApplicationContext.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
+            modelBuilder.Entity("Core.Entities.PagoCompra", b =>
+                {
+                    b.HasOne("Core.Entities.Compra", "Compra")
+                        .WithMany("PagosCompra")
+                        .HasForeignKey("CompraId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Core.Entities.Proveedor", "Proveedor")
+                        .WithMany("PagosCompra")
+                        .HasForeignKey("ProveedorId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("Core.Entities.PagoVenta", b =>
+                {
+                    b.HasOne("Core.Entities.Cliente", "Cliente")
+                        .WithMany("PagosVenta")
+                        .HasForeignKey("ClienteId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Core.Entities.Venta", "Venta")
+                        .WithMany("PagosVenta")
+                        .HasForeignKey("VentaId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
             modelBuilder.Entity("Core.Entities.Producto", b =>
                 {
                     b.HasOne("Core.Entities.CategoriaProducto", "CategoriaProducto")
@@ -548,6 +681,11 @@ namespace ApplicationContext.Migrations
                     b.HasOne("Core.Entities.Cliente", "Cliente")
                         .WithMany("Usuarios")
                         .HasForeignKey("ClienteId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Core.Entities.Rol", "Rol")
+                        .WithMany("Usuarios")
+                        .HasForeignKey("RolId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 

@@ -26,9 +26,16 @@ namespace Core.DTOs.Ventas
         }).ToList();
 
         public ListaClienteViewModel Cliente { get; set; } = new ListaClienteViewModel();
+        public AddPagoVentaViewModel PagoVenta { get; set; } = new AddPagoVentaViewModel();
         public VentasDetalleAddViewModel Producto { get; set; } = new VentasDetalleAddViewModel();
         public List<VentasDetalleAddViewModel> DetalleVenta { get;  set; } = new List<VentasDetalleAddViewModel>();
 
+    }
+
+    public class AddPagoVentaViewModel
+    {
+        public decimal Monto { get; set; }
+        public decimal Cambio { get; set; }
     }
 
     public class VentasDetalleAddViewModel

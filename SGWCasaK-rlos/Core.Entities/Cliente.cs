@@ -18,5 +18,6 @@ namespace Core.Entities
         public ICollection<Direccion> Direcciones { get; set; } = new HashSet<Direccion>();
         public ICollection<Usuario> Usuarios { get; set; } = new HashSet<Usuario>();
         public ICollection<Venta> Ventas { get; set; } = new HashSet<Venta>();
+        public ICollection<PagoVenta> PagosVenta { get; set; } = new HashSet<PagoVenta>();
     }
 }

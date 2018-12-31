@@ -16,7 +16,7 @@
                         </div>
                         <div class="col-md-6 col-sm-4" align="right">
                             <div class="m-portlet__head-title" style="margin-top: 20px;">
-                                <button type="button" class="btn btn-success" data-bind="click: postDataToController">
+                                <button type="button" class="btn btn-success" data-bind="click: showPagoVentaModal">
                                     Guardar
                                 </button>
                             </div>
@@ -291,6 +291,7 @@
     Html.RenderPartial("~/Areas/Platform/Views/Shared/_ListaProductoModal.cshtml");
     Html.RenderPartial("~/Areas/Platform/Views/Shared/_AddProductoModal.cshtml");
     Html.RenderPartial("~/Areas/Platform/Views/Shared/_ListaClientesModal.cshtml");
+    Html.RenderPartial("~/Areas/Platform/Views/Shared/_AddPagoVentaModal.cshtml");
 }
 <!-- /content -->
 @section scripts{
@@ -378,6 +379,20 @@
         dataViewModel.montoTotal = ko.pureComputed(function () {
             return dataViewModel.totalExcenta() + dataViewModel.totalCinco() + dataViewModel.totalDiez();
         })
+
+        dataViewModel.pagoVenta.cambio = ko.pureComputed(function () {
+            if (dataViewModel.pagoVenta.monto() > dataViewModel.montoTotal()) {
+                return dataViewModel.pagoVenta.monto() - dataViewModel.montoTotal();
+            } else {
+                return 0;
+            }
+            
+        });
+
+        dataViewModel.showPagoVentaModal = function ()
+        {
+            $("#addPagoVentaModal").modal("show");
+        }
 
         dataViewModel.postDataToController = function () {
             if (dataViewModel.cliente.clienteId() == 0)

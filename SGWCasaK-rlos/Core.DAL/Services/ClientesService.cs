@@ -19,7 +19,7 @@ namespace Core.DAL.Services
 
         public List<Cliente> GetAll()
         {
-            return _context.Set<Cliente>().ToList();
+            return _context.Set<Cliente>().Where(x => x.Active).ToList();
         }
     }
 }

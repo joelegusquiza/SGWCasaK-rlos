@@ -42,6 +42,10 @@ namespace SGWCasaK_rlos
             services.AddSingleton<IProductos, ProductosServices>();
             services.AddSingleton<IClientes, ClientesService>();
             services.AddSingleton<ITimbrados, TimbradosService>();
+            services.AddSingleton<ICompras, ComprasService>();
+            services.AddSingleton<IProveedores, ProveedoresService>();
+            services.AddSingleton<IRoles, RolesService>();
+            services.AddSingleton<IUsuarios, UsuariosService>();
             return services.BuildServiceProvider();
         }
 
@@ -53,6 +57,10 @@ namespace SGWCasaK_rlos
                 cfg.AddProfile<VentasProfile>();
                 cfg.AddProfile<ProductosProfile>();
                 cfg.AddProfile<ClientesProfile>();
+                cfg.AddProfile<ProveedoresProfile>();
+                cfg.AddProfile<ComprasProfile>();
+                cfg.AddProfile<RolesProfile>();
+                cfg.AddProfile<UsuariosProfile>();
             });
             if (env.IsDevelopment())
             {

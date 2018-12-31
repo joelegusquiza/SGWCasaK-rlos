@@ -17,5 +17,6 @@ namespace Core.Entities
         public decimal Saldo { get; set; }
 
         public ICollection<Compra> Compras { get; set; } = new HashSet<Compra>();
+        public ICollection<PagoCompra> PagosCompra { get; set; } = new HashSet<PagoCompra>();
     }
 }

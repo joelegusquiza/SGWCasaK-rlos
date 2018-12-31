@@ -45,6 +45,9 @@ namespace ApplicationContext
         public DbSet<Proveedor> Proveedores { get; set; }
         public DbSet<Timbrado> Timbrados { get; set; }
         public DbSet<UnidadMedida> UnidadesMedidas { get; set; }
+        public DbSet<PagoVenta> PagosVentas { get; set; }
+        public DbSet<PagoCompra> PagosCompras { get; set; }
+        public DbSet<Rol> Roles { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -128,6 +131,36 @@ namespace ApplicationContext
                .WithOne(x => x.Cliente)
                .HasForeignKey(x => x.ClienteId)
                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Cliente>()
+                .HasMany(x => x.PagosVenta)
+                .WithOne(x => x.Cliente)
+                .HasForeignKey(x => x.ClienteId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Venta>()
+                .HasMany(x => x.PagosVenta)
+                .WithOne(x => x.Venta)
+                .HasForeignKey(x => x.VentaId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Proveedor>()
+                .HasMany(x => x.PagosCompra)
+                .WithOne(x => x.Proveedor)
+                .HasForeignKey(x => x.ProveedorId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Compra>()
+               .HasMany(x => x.PagosCompra)
+               .WithOne(x => x.Compra)
+               .HasForeignKey(x => x.CompraId)
+               .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Rol>()
+                .HasMany(x => x.Usuarios)
+                .WithOne(x => x.Rol)
+                .HasForeignKey(x => x.RolId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
 
         public override int SaveChanges()

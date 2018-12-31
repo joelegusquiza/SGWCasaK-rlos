@@ -1,17 +1,42 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
 
 namespace Core
 {
     public class Constants
     {
+        public enum AccessFunctions
+        {
+            [Description("Agregar Rol")]
+            AddRole = 100,
+            [Description("Editar Rol")]
+            EditRole = 200,
+            [Description("Eliminar Rol")]
+            DeleteRole = 300,
+            [Description("Agregar Usuario")]
+            AddUsuario = 400,
+            [Description("Editar Usuario")]
+            EditUsuario = 500,
+            [Description("Eliminar Usuario")]
+            DeleteUsuario = 600,
+
+        }
+        
         public enum EstadoVenta
         {
             Pagado,
             Anulado,
             Pendiente
         }
+
+        public enum EstadoCompra
+        {
+            Pagado,
+            Anulado,
+            Pendiente
+        }       
 
         public enum PorcIva
         {
@@ -21,6 +46,12 @@ namespace Core
         }
 
         public enum CondicionVenta
+        {
+            Contado,
+            Credito
+        }
+
+        public enum CondicionCompra
         {
             Contado,
             Credito

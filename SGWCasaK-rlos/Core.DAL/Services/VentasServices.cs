@@ -25,7 +25,7 @@ namespace Core.DAL.Services
 
         public List<Venta> GetAll()
         {
-            return _context.Set<Venta>().ToList();
+            return _context.Set<Venta>().Where(x => x.Active).ToList();
         }
 
         public int? GetValidNroFactura (Timbrado timbrado)
@@ -62,6 +62,19 @@ namespace Core.DAL.Services
             {
                 _context.Entry(detalle).State = EntityState.Added;
             }
+            if (viewModel.PagoVenta.Monto > 0){
+                var pagoVenta = new PagoVenta()
+                {
+                    Monto = viewModel.PagoVenta.Monto,
+                    Venta = venta,
+                    ClienteId = venta.ClienteId
+                };
+                venta.Cambio = viewModel.PagoVenta.Cambio;
+                _context.Entry(pagoVenta).State = EntityState.Added;
+            }
+           
+            venta.Estado = viewModel.PagoVenta.Monto == venta.MontoTotal ? Constants.EstadoVenta.Pagado : Constants.EstadoVenta.Pendiente;
+          
             var success = _context.SaveChanges() > 0;
             var validation = new SystemValidationModel()
             {
