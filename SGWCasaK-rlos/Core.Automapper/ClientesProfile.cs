@@ -19,6 +19,19 @@ namespace Core.Automapper
             CreateMap<Cliente, RegisterViewModel>()              
                .ReverseMap();
 
+            CreateMap<Cliente, ClienteViewModel>()
+               .ReverseMap();
+
+            CreateMap<Cliente, ClientesAddViewModel>()
+               .ReverseMap();
+
+            CreateMap<ClientesEditViewModel, Cliente>()
+               .ForMember(dest => dest.Direcciones, opt => opt.Ignore())
+               .ReverseMap();
+
+            CreateMap<Direccion, ClientesDireccionesViewModel>()
+               .ReverseMap();
+
         }
     }
 }
