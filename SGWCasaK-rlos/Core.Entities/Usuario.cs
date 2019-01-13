@@ -26,7 +26,7 @@ namespace Core.Entities
         public int RolId { get; set; }
         public Rol Rol { get; set; }
 
-        public static string SetPassword(string password, out string saltOut)
+        public void SetPassword(string password)
         {
             var salt = new byte[128 / 8];
             using (var rng = RandomNumberGenerator.Create())
@@ -41,19 +41,20 @@ namespace Core.Entities
                 prf: KeyDerivationPrf.HMACSHA1,
                 iterationCount: 10000,
                 numBytesRequested: 256 / 8));
-            saltOut = Convert.ToBase64String(salt);
-            return hashed;
+            var saltOut = Convert.ToBase64String(salt);
+            Salt = saltOut;
+            PasswordHash = hashed;
         }
 
-        public static bool CheckPassword(string password, string passwordHash, string salt)
+        public bool CheckPassword(string password)
         {
             var hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
                 password: password,
-                salt: Convert.FromBase64String(salt),
+                salt: Convert.FromBase64String(Salt),
                 prf: KeyDerivationPrf.HMACSHA1,
                 iterationCount: 10000,
                 numBytesRequested: 256 / 8));
-            return hashed == passwordHash;
+            return hashed == PasswordHash;
         }
 
     }

@@ -33,6 +33,12 @@ namespace Core.DAL.Services
 
         public SystemValidationModel Save(RolesAddViewModel viewModel)
         {
+            if (viewModel.IsCliente)
+            {
+                var clienteRol = GetAll().FirstOrDefault(x => x.IsCliente);
+                if (clienteRol != null)
+                    return new SystemValidationModel() { Success = false, Message = "Ya existe un rol asignado para los clientes" };
+            }
             var rol = Mapper.Map<Rol>(viewModel);
             rol.Permisos = string.Join(",",viewModel.PermisosList.Where(x => x.Selected).Select(x => (int)x.Permiso));
             _context.Entry(rol).State = EntityState.Added;
@@ -48,6 +54,12 @@ namespace Core.DAL.Services
 
         public SystemValidationModel Edit(RolesEditViewModel viewModel)
         {
+            if (viewModel.IsCliente)
+            {
+                var clienteRol = GetAll().FirstOrDefault(x => x.IsCliente);
+                if (clienteRol != null)
+                    return new SystemValidationModel() { Success = false, Message = "Ya existe un rol asignado para los clientes" };
+            }
             var rol = GetById(viewModel.Id);
             rol = Mapper.Map(viewModel, rol);
             rol.Permisos = string.Join(",", viewModel.PermisosList.Where(x => x.Selected).Select(x => (int)x.Permiso));

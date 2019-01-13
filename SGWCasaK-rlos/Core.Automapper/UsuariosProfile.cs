@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Core.DTOs.Login;
 using Core.DTOs.Usuarios;
 using Core.Entities;
 using System;
@@ -18,6 +19,9 @@ namespace Core.Automapper
                 .ReverseMap();
 
             CreateMap<Usuario, UsuariosEditViewModel>()
+                .ReverseMap();
+
+            CreateMap<Usuario, RegisterViewModel>()
                 .ReverseMap();
         }
     }

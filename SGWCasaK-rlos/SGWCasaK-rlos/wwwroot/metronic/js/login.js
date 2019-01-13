@@ -1,7 +1,8 @@
 //== Class Definition
+var login = $('#m_login');
 var SnippetLogin = function() {
 
-    var login = $('#m_login');
+    
 
     var showErrorMsg = function(form, type, msg) {
         var alert = $('<div class="m-alert m-alert--outline alert alert-' + type + ' alert-dismissible" role="alert">\
@@ -17,29 +18,7 @@ var SnippetLogin = function() {
 
     //== Private Functions
 
-    var displaySignUpForm = function() {
-        login.removeClass('m-login--forget-password');
-        login.removeClass('m-login--signin');
-
-        login.addClass('m-login--signup');
-        login.find('.m-login__signup').animateClass('flipInX animated');
-    }
-
-    var displaySignInForm = function() {
-        login.removeClass('m-login--forget-password');
-        login.removeClass('m-login--signup');
-
-        login.addClass('m-login--signin');
-        login.find('.m-login__signin').animateClass('flipInX animated');
-    }
-
-    var displayForgetPasswordForm = function() {
-        login.removeClass('m-login--signin');
-        login.removeClass('m-login--signup');
-
-        login.addClass('m-login--forget-password');
-        login.find('.m-login__forget-password').animateClass('flipInX animated');
-    }
+   
 
     var handleFormSwitch = function() {
         $('#m_login_forget_password').click(function(e) {
@@ -211,7 +190,29 @@ var SnippetLogin = function() {
         }
     };
 }();
+var displaySignUpForm = function () {
+    login.removeClass('m-login--forget-password');
+    login.removeClass('m-login--signin');
 
+    login.addClass('m-login--signup');
+    login.find('.m-login__signup').animateClass('flipInX animated');
+}
+
+var displaySignInForm = function () {
+    login.removeClass('m-login--forget-password');
+    login.removeClass('m-login--signup');
+
+    login.addClass('m-login--signin');
+    login.find('.m-login__signin').animateClass('flipInX animated');
+}
+
+var displayForgetPasswordForm = function () {
+    login.removeClass('m-login--signin');
+    login.removeClass('m-login--signup');
+
+    login.addClass('m-login--forget-password');
+    login.find('.m-login__forget-password').animateClass('flipInX animated');
+}
 //== Class Initialization
 jQuery(document).ready(function() {
     SnippetLogin.init();

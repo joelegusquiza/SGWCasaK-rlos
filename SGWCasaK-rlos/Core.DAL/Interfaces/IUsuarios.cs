@@ -1,4 +1,5 @@
-﻿using Core.DTOs.Shared;
+﻿using Core.DTOs.Login;
+using Core.DTOs.Shared;
 using Core.DTOs.Usuarios;
 using Core.Entities;
 using System;
@@ -11,8 +12,13 @@ namespace Core.DAL.Interfaces
     {
         List<Usuario> GetAll();
         Usuario GetById(int id);
+        Usuario GetByEmail(string email);
+        Usuario GetByGuid(string guid);
+        bool Update(Usuario usuario);
+        SystemValidationModel Register(RegisterViewModel viewModel);
         SystemValidationModel Save(UsuariosAddViewModel viewModel);
         SystemValidationModel Edit(UsuariosEditViewModel viewModel);
         SystemValidationModel Desactivate(int id);
+        SystemValidationModel UpdatePassword(ChangePasswordViewModel viewModel);
     }
 }

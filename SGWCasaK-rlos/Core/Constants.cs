@@ -21,6 +21,12 @@ namespace Core
             EditUsuario = 500,
             [Description("Eliminar Usuario")]
             DeleteUsuario = 600,
+            [Description("Agregar Pedido")]
+            AddPedido = 700,
+            [Description("Editar Pedido")]
+            EditPedido = 800,
+            [Description("Eliminar Pedido")]
+            DeletePedido = 900,
 
         }
         

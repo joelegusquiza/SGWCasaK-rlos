@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Core.DTOs.Clientes;
+using Core.DTOs.Login;
 using Core.Entities;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,9 @@ namespace Core.Automapper
             CreateMap<Cliente, ListaClienteViewModel>()
                 .ForMember(dest => dest.ClienteId, opt => opt.MapFrom(src => src.Id))
                 .ReverseMap();
+
+            CreateMap<Cliente, RegisterViewModel>()              
+               .ReverseMap();
 
         }
     }
