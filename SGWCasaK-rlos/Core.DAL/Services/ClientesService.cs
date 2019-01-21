@@ -40,6 +40,7 @@ namespace Core.DAL.Services
         {
             return _context.Set<Cliente>().FirstOrDefault(x => x.Ruc.ToLower() == ruc.ToLower());
         }
+
         public SystemValidationModel Save(ClientesAddViewModel viewModel)
         {
             var cliente = GetByRazonSocial(viewModel.RazonSocial);
@@ -98,6 +99,25 @@ namespace Core.DAL.Services
             {
                 Success = success,
                 Message = success ? "Se ha editado correctamente el cliente" : "No se pudo editar el cliente"
+            };
+            return validation;
+        }
+
+        public SystemValidationModel Desactivate(int id)
+        {
+            var cliente = GetById(id);
+            cliente.Active = false;
+            _context.Entry(cliente).State = EntityState.Modified;
+            foreach (var direccion in cliente.Direcciones)
+            {
+                direccion.Active = false;
+                _context.Entry(direccion).State = EntityState.Modified;
+            }
+            var success = _context.SaveChanges() > 0;
+            var validation = new SystemValidationModel()
+            {
+                Success = success,
+                Message = success ? "Se ha eliminado correctamente el cliente" : "No se pudo eliminar el cliente"
             };
             return validation;
         }

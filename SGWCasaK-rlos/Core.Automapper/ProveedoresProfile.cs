@@ -14,6 +14,12 @@ namespace Core.Automapper
             CreateMap<Proveedor, ListaProveedorViewModel>()
                 .ForMember(dest => dest.ProveedorId, opt => opt.MapFrom(src => src.Id))
                 .ReverseMap();
+
+            CreateMap<Proveedor, ProveedorViewModel>()               
+               .ReverseMap();
+
+            CreateMap<Proveedor, ProveedoresUpserViewModel>()
+                .ReverseMap();
         }
     }
 }

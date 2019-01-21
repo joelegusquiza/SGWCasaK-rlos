@@ -4,14 +4,16 @@ using ApplicationContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ApplicationContext.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20190114200857_addpresentacionunidadmedida")]
+    partial class addpresentacionunidadmedida
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -367,7 +369,7 @@ namespace ApplicationContext.Migrations
 
                     b.Property<int>("Stock");
 
-                    b.Property<int>("UnidadMedida");
+                    b.Property<int>("UnidadMedidaId");
 
                     b.Property<int>("UserCreatedId");
 
@@ -376,6 +378,8 @@ namespace ApplicationContext.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CategoriaProductoId");
+
+                    b.HasIndex("UnidadMedidaId");
 
                     b.ToTable("Productos");
                 });
@@ -506,6 +510,29 @@ namespace ApplicationContext.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Timbrados");
+                });
+
+            modelBuilder.Entity("Core.Entities.UnidadMedida", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("Active");
+
+                    b.Property<DateTime>("DateCreated");
+
+                    b.Property<DateTime?>("DateModified");
+
+                    b.Property<string>("Nombre");
+
+                    b.Property<int>("UserCreatedId");
+
+                    b.Property<int>("UserModifiedId");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UnidadesMedida");
                 });
 
             modelBuilder.Entity("Core.Entities.Usuario", b =>
@@ -684,12 +711,17 @@ namespace ApplicationContext.Migrations
                         .WithMany("Productos")
                         .HasForeignKey("CategoriaProductoId")
                         .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Core.Entities.UnidadMedida", "UnidadMedida")
+                        .WithMany("Productos")
+                        .HasForeignKey("UnidadMedidaId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Core.Entities.ProductoPresentacion", b =>
                 {
                     b.HasOne("Core.Entities.Producto", "Producto")
-                        .WithMany("ProductoPresentaciones")
+                        .WithMany("Presentaciones")
                         .HasForeignKey("ProductoId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });

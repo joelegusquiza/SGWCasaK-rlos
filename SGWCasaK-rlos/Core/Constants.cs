@@ -63,6 +63,19 @@ namespace Core
             Credito
         }
 
+        public enum UnidadesMedida
+        {
+            kilogramo,
+            gramo,
+            litro,
+            centimetro,
+            metro,
+            metroscuadrados,
+            metroscubicos,
+            unidad
+
+        }
+
         public static class CustomClaimTypes
         {
             public static string UserId = "UserId";

@@ -44,10 +44,10 @@ namespace ApplicationContext
         public DbSet<Producto> Productos { get; set; }
         public DbSet<Proveedor> Proveedores { get; set; }
         public DbSet<Timbrado> Timbrados { get; set; }
-        public DbSet<UnidadMedida> UnidadesMedidas { get; set; }
         public DbSet<PagoVenta> PagosVentas { get; set; }
         public DbSet<PagoCompra> PagosCompras { get; set; }
         public DbSet<Rol> Roles { get; set; }
+        public DbSet<ProductoPresentacion> ProductoPresentaciones { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -161,6 +161,12 @@ namespace ApplicationContext
                 .WithOne(x => x.Rol)
                 .HasForeignKey(x => x.RolId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Producto>()
+                .HasMany(x => x.ProductoPresentaciones)
+                .WithOne(x => x.Producto)
+                .HasForeignKey(x => x.ProductoId)
+                .OnDelete(DeleteBehavior.Restrict);           
         }
 
         public override int SaveChanges()

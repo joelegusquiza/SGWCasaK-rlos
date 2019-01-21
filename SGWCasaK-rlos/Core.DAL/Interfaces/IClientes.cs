@@ -13,5 +13,6 @@ namespace Core.DAL.Interfaces
         Cliente GetById(int id);
         SystemValidationModel Save(ClientesAddViewModel viewModel);
         SystemValidationModel Edit(ClientesEditViewModel viewModel);
+        SystemValidationModel Desactivate(int id);
     }
 }

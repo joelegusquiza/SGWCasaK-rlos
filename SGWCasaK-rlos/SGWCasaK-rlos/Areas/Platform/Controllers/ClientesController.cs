@@ -62,5 +62,11 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
             var viewModel = JsonConvert.DeserializeObject<ClientesEditViewModel>(model);
             return _clientes.Edit(viewModel);
         }
+
+        [HttpPost]
+        public SystemValidationModel Desactivate(int id)
+        {           
+            return _clientes.Desactivate(id);
+        }
     }
 }
