@@ -4,6 +4,7 @@ using Core.DAL.Interfaces;
 using Core.DTOs.Clientes;
 using Core.DTOs.Shared;
 using Core.Entities;
+using Core.Helpers;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -33,7 +34,7 @@ namespace Core.DAL.Services
 
         public Cliente GetByRazonSocial(string razonSocial)
         {
-            return _context.Set<Cliente>().FirstOrDefault(x => x.RazonSocial.ToLower() == razonSocial.ToLower());
+            return _context.Set<Cliente>().FirstOrDefault(x => x.RazonSocial.ToLower() == razonSocial.TryToLower());
         }
 
         public Cliente GetByRuc(string ruc)

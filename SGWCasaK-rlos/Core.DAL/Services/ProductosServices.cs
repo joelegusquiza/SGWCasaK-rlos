@@ -23,6 +23,11 @@ namespace Core.DAL.Services
 
         public List<Producto> GetAll()
         {
+            return _context.Set<Producto>().Where(x => x.Active).ToList();
+        }
+
+        public List<Producto> GetAllWithPresentacion()
+        {
             return _context.Set<Producto>().Include(x => x.ProductoPresentaciones).Where(x => x.Active).ToList();
         }
 

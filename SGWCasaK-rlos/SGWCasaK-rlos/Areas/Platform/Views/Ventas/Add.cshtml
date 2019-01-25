@@ -311,8 +311,8 @@
                 resetProductoForm();
                 return;
             }
-
-            if (dataViewModel.producto.cantidad() > dataViewModel.producto.stockActual()) {
+            var cantidadSeleccionada = dataViewModel.producto.equivalencia() == 0 ? parseInt(dataViewModel.producto.cantidad()) : parseInt(dataViewModel.producto.cantidad() * dataViewModel.producto.equivalencia());
+            if (cantidadSeleccionada > dataViewModel.producto.stockActual()) {
                 showError("El producto no existe en la cantidad deseada");
                 resetProductoForm();
                 return;
@@ -331,11 +331,9 @@
 
         dataViewModel.totalExcenta = ko.pureComputed(function () {
             var total = $.grep(dataViewModel.detalleVenta(), function (item) { return item.porcentajeIva() === 1; }).reduce(function (a, b) {
-                if (a == 0) {
-                    return b.montoTotal();
-                } else {
-                    return a.montoTotal() + b.montoTotal();
-                }
+               
+                    return a + b.montoTotal();
+                
             }, 0)
             return total;
         })
@@ -343,11 +341,9 @@
         dataViewModel.totalCinco = ko.pureComputed(function ()
         {
             var total = $.grep(dataViewModel.detalleVenta(), function (item) { return item.porcentajeIva() === 2; }).reduce(function (a, b) {
-                if (a == 0) {
-                    return b.montoTotal();
-                } else {
-                    return a.montoTotal() + b.montoTotal();
-                }
+               
+                    return a + b.montoTotal();
+                
             }, 0)
             return total;
         })
@@ -355,11 +351,11 @@
         dataViewModel.totalDiez = ko.pureComputed(function () {
             var total = $.grep(dataViewModel.detalleVenta(), function (item) { return item.porcentajeIva() === 3; }).reduce(function (a, b)
             {               
-                if (a == 0) {
-                    return b.montoTotal();
-                } else {
-                    return a.montoTotal() + b.montoTotal();
-                }                
+                ////if (a == 0) {
+                ////    return b.montoTotal();
+                ////} else {
+                    return a + b.montoTotal();
+                //}                
             }, 0)
             return total;
         })
@@ -404,6 +400,7 @@
                 showError("Debe ingresar al menos un producto para la venta");
                 return;
             }
+            dataViewModel.producto.cantidad(0);
             $.ajax({
                 url: "@Url.Action("Save", "Ventas")",
                 type: "POST",
@@ -433,11 +430,12 @@
             $("#listaProductosModal").modal("show");
         }
 
-        function seleccionarProducto(producto) {
-            ko.mapping.fromJS(producto, {}, dataViewModel.producto);        
-            $("#listaProductosModal").modal("hide");
-            dataViewModel.producto.cantidad("");
-            $("#productoCantidad").focus();
+        function seleccionarProducto(producto) {            
+            ko.mapping.fromJS(producto, {}, dataViewModel.producto);
+            $("#listaProductosModal").modal("hide");                                          
+            //dataViewModel.detalleVenta.push(ko.mapping.fromJS(producto));            
+            //dataViewModel.producto.cantidad("");
+            //$("#productoCantidad").focus();
         }
 
        function showListaClientesModal() {

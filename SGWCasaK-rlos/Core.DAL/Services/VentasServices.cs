@@ -93,7 +93,10 @@ namespace Core.DAL.Services
             foreach (var producto in productos)
             {
                 var detalleVenta = detallesVenta.FirstOrDefault(x => x.ProductoId == producto.Id);
-                producto.Stock -= detalleVenta.Cantidad;
+                if (detalleVenta.Equivalencia == 0)
+                    producto.Stock -= detalleVenta.Cantidad;
+                else
+                    producto.Stock -= detalleVenta.Cantidad * detalleVenta.Equivalencia;
                 _context.Entry(producto).State = EntityState.Modified;
             }
         }

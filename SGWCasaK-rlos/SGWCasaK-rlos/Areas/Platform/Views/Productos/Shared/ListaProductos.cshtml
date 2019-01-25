@@ -3,9 +3,74 @@
     ViewData["Title"] = "ListaProductos";
     Layout = "~/Areas/Shared/Views/Shared/_EmptyLayout.cshtml";
 }
-<div class="" style="width: 100%">
+<div class="m-portlet__body--no-padding" >
     <!--begin::Portlet-->
-    <div class="m-portlet m-portlet--tab" style="margin-bottom: 0px !important">      
+    <div class="m-portlet m-portlet--tab" style="margin-bottom: 0px !important">
+        <!--begin::Form-->
+        <form class="m-form m-form--fit m-form--label-align-right" id="productoAddDetalleForm">
+            <div class="m-portlet__body container-fluid">
+                <div class="" style="display: flex">
+                    <div class="col-md-4">
+                        <div class="form-group m-form__group row">
+                            <label for="example-text-input" class="col-3 col-form-label">
+                                Nombre
+                            </label>
+                            <div class="col-9">
+                                <input class="form-control m-input" type="text" id="productoNombre" data-bind="value: dataViewModel.producto.nombre" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group m-form__group row">
+                            <label for="example-text-input" class="col-2 col-form-label">
+                                Precio
+                            </label>
+                            <div class="col-10">
+                                <input class="form-control m-input" type="text" id="productoPrecioVenta" data-bind="value: dataViewModel.producto.precioVenta" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    @*<div class="col-md-3">
+                        <div class="form-group m-form__group row">
+                            <label for="example-text-input" class="col-3 col-form-label">
+                                Cantidad
+                            </label>
+                            <div class="col-9">
+                                <input class="form-control m-input" type="text" id="productoCantidad" data-bind="value: dataViewModel.producto.cantidad">
+                            </div>
+                        </div>
+                    </div>*@
+                    <div class="col-md-4">
+                        <div class="form-group m-form__group row">
+                            <label for="example-text-input" class="col-4 col-form-label">
+                                Presentacion
+                            </label>
+                            <div class="col-8">
+                                <select class="form-control m-input m-input--square" id="presentacionSelect" data-bind="options: producto.productoPresentaciones,
+                                          
+                                           optionsText: 'nombre',
+                                           value: producto.presentacion,
+                                           optionsCaption: 'Seleccione una opcion'"></select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="m-portlet__foot m-portlet__foot--fit">
+                <div class="m-form__actions">
+                    <button type="reset" class="btn btn-primary" data-bind="click: seleccionarProducto, enable: dataViewModel.producto.productoId() > 0">
+                        Agregar
+                    </button>
+                    <button type="reset" class="btn btn-secondary">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </form>
+        <!--end::Form-->
+    </div>
+    <div class="m-portlet m-portlet--tab" style="margin-bottom: 0px !important">
         <!--begin::Form-->
         <form class="m-form m-form--fit m-form--label-align-right">
             <div class="m-portlet__body" style="margin-left: 20px; margin-right: 20px;">
@@ -38,16 +103,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="m-portlet__foot m-portlet__foot--fit">
-                <div class="m-form__actions">
-                    <button type="reset" class="btn btn-primary" data-bind="click: seleccionarProducto, enable: productoId() > 0">
-                        Agregar
-                    </button>
-                    <button type="reset" class="btn btn-secondary">
-                        Cancel
-                    </button>
-                </div>
-            </div>
+            
         </form>
         <!--end::Form-->
     </div>
@@ -67,6 +123,8 @@
                 }
                 else {
                     dataViewModel.productoId($(this).attr('id'));
+                    var producto = $.grep(dataViewModel.productos(), function (item) { return item.productoId() === parseInt(dataViewModel.productoId()); })[0];                    
+                    ko.mapping.fromJS(producto, {}, dataViewModel.producto);
                     table.$('tr.selected').removeClass('selected');
                     $(this).addClass('selected');
                 }
@@ -75,12 +133,38 @@
 
         dataViewModel.seleccionarProducto = function()
         {
-            var producto = $.grep(dataViewModel.productos(), function (item) { return item.productoId() === parseInt(dataViewModel.productoId()); })[0];
-            parent.seleccionarProducto(ko.mapping.toJS(producto));
+            //var stockDisponible;
+            if (dataViewModel.producto.presentacion != undefined && dataViewModel.producto.presentacion.presentacionId() != 0)
+            {
+                dataViewModel.producto.nombre(dataViewModel.producto.nombre() + " (" + dataViewModel.producto.presentacion.nombre() + ")")
+                dataViewModel.producto.precioVenta(dataViewModel.producto.presentacion.precioVenta())
+                dataViewModel.producto.equivalencia(dataViewModel.producto.presentacion.equivalencia())                
+            }
+            //else
+            //{
+            //    stockDisponible = checkStock(parseInt(dataViewModel.producto.cantidad()) * parseInt(dataViewModel.producto.presentacion.equivalencia()), dataViewModel.producto.stockActual());
+            //    dataViewModel.producto.nombre(dataViewModel.producto.nombre() + " (" + dataViewModel.producto.presentacion.nombre() + ")")
+            //    dataViewModel.producto.precioVenta(dataViewModel.producto.presentacion.precioVenta())
+            //    dataViewModel.producto.equivalencia(dataViewModel.producto.presentacion.equivalencia())
+               
+            //}
+
+            //if (stockDisponible) {
+                dataViewModel.producto.montoTotal(dataViewModel.producto.cantidad() * dataViewModel.producto.precioVenta())
+                parent.seleccionarProducto(ko.mapping.toJS(dataViewModel.producto));
+            //    return
+            //} else {
+            //    showError("No existe la cantidad disponible del producto");
+            //}
+                
         }
 
-
         ko.applyBindings(dataViewModel);
+
+        function checkStock(cantidad, stock)
+        {
+            return cantidad <= stock;
+        }
     </script>
 
 }

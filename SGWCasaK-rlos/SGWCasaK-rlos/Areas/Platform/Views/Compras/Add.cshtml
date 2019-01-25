@@ -311,12 +311,9 @@
                 resetProductoForm();
                 return;
             }
-            dataViewModel.producto.montoTotal(dataViewModel.producto.precioCompra() *  dataViewModel.producto.cantidad());
+            dataViewModel.producto.montoTotal(parseInt(dataViewModel.producto.precioCompra()) *  parseInt(dataViewModel.producto.cantidad()));
             dataViewModel.detalleCompra.push(ko.mapping.fromJS(ko.mapping.toJS(dataViewModel.producto)))
             resetProductoForm();
-            dataViewModel.producto.cantidad("");
-            dataViewModel.producto.precioCompra("");
-
         }
 
         dataViewModel.eliminarDetalle = function ()
@@ -326,36 +323,27 @@
         }
 
         dataViewModel.totalExcenta = ko.pureComputed(function () {
-            var total = $.grep(dataViewModel.detalleCompra(), function (item) { return item.porcentajeIva() === 1; }).reduce(function (a, b) {
-                if (a == 0) {
-                    return b.montoTotal();
-                } else {
-                    return a.montoTotal() + b.montoTotal();
-                }
+            var total = $.grep(dataViewModel.detalleCompra(), function (item) { return item.porcentajeIva() === 1; }).reduce(function (a, b) {               
+                    return a + b.montoTotal();                
             }, 0)
             return total;
         })
 
         dataViewModel.totalCinco = ko.pureComputed(function ()
         {
-            var total = $.grep(dataViewModel.detalleCompra(), function (item) { return item.porcentajeIva() === 2; }).reduce(function (a, b) {
-                if (a == 0) {
-                    return b.montoTotal();
-                } else {
-                    return a.montoTotal() + b.montoTotal();
-                }
+            var total = $.grep(dataViewModel.detalleCompra(), function (item) { return item.porcentajeIva() === 2; }).reduce(function (a, b) {                
+                    return a + b.montoTotal();                
             }, 0)
             return total;
         })
 
         dataViewModel.totalDiez = ko.pureComputed(function () {
-            var total = $.grep(dataViewModel.detalleCompra(), function (item) { return item.porcentajeIva() === 3; }).reduce(function (a, b)
-            {
-                if (a == 0) {
-                    return b.montoTotal();
-                } else {
-                    return a.montoTotal() + b.montoTotal();
-                }
+            var total = $.grep(dataViewModel.detalleCompra(), function (item) { return item.porcentajeIva() === 3; }).reduce(function (a, b) {
+                ////if (a == 0) {
+                ////    return b.montoTotal();
+                ////} else {
+                return a + b.montoTotal();
+                //}                
             }, 0)
             return total;
         })
@@ -419,11 +407,8 @@
         }
 
         function seleccionarProducto(producto) {
-            ko.mapping.fromJS(producto, {}, dataViewModel.producto);
             $("#listaProductosModal").modal("hide");
-            dataViewModel.producto.cantidad("");
-            dataViewModel.producto.precioCompra("");
-            $("#productoPrecioCompra").focus();
+            ko.mapping.fromJS(producto, {}, dataViewModel.producto);            
         }
 
        function showListaProveedoresModal() {
@@ -438,8 +423,8 @@
 
         function resetProductoForm() {
             dataViewModel.producto.nombre("");
-            dataViewModel.producto.precioCompra(0);
-            dataViewModel.producto.cantidad(0);
+            dataViewModel.producto.cantidad("");
+            dataViewModel.producto.precioCompra("");
             dataViewModel.producto.productoId(0);
         }
         ko.applyBindings(dataViewModel);

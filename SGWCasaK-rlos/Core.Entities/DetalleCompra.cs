@@ -10,6 +10,7 @@ namespace Core.Entities
     {
         public int Cantidad { get; set; }
         public decimal PrecioCompra { get; set; }
+        public int Equivalencia { get; set; } = 1;
 
         public int CompraId { get; set; }
         public Compra Compra { get; set; }

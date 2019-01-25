@@ -16,6 +16,10 @@ namespace Core.Automapper
                 .ForMember(dest => dest.StockActual, opt => opt.MapFrom(src => src.Stock))
                 .ReverseMap();
 
+            CreateMap<ProductoPresentacion, PresentacionProductoViewModel>()
+                .ForMember(dest => dest.PresentacionId, opt => opt.MapFrom(src => src.Id))
+                .ReverseMap();
+
             CreateMap<Producto, ProductosAddViewModel>()                
                 .ReverseMap();
 

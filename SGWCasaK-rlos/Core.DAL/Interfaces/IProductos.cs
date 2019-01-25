@@ -10,9 +10,11 @@ namespace Core.DAL.Interfaces
     public interface IProductos
     {
         List<Producto> GetAll();
+        List<Producto> GetAllWithPresentacion();
         Producto GetById(int id);
         SystemValidationModel Save(ProductosAddViewModel viewModel);
         SystemValidationModel Edit(ProductosEditViewModel viewModel);
         SystemValidationModel Desactivate(int id);
+        
     }
 }

@@ -47,5 +47,7 @@ namespace Core.DTOs.Ventas
         public PorcIva PorcentajeIva { get; set; }
         public decimal PrecioVenta { get; set; }
         public decimal MontoTotal { get; set; }
+        public int Equivalencia { get; set; }          
     }
+    
 }

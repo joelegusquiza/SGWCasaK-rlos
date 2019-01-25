@@ -10,6 +10,7 @@ namespace Core.Entities
     {
         public int Cantidad { get; set; }
         public decimal MontoTotal { get; set; }
+        public int Equivalencia { get; set; } = 1;
 
         public int PedidoId { get; set; }
         public Pedido Pedido { get; set; }
