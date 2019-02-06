@@ -7,13 +7,14 @@ using Core.DAL.Interfaces;
 using Core.DTOs.Roles;
 using Core.DTOs.Shared;
 using Core.Helpers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using static Core.Constants;
 
 namespace SGWCasaK_rlos.Areas.Admin.Controllers
 {
-    [Area("Admin")]
+    [Area("Admin"), Authorize]
     public class RolesController : Controller
     {
         private readonly IRoles _roles;
@@ -21,7 +22,7 @@ namespace SGWCasaK_rlos.Areas.Admin.Controllers
         {
             _roles = roles;
         }
-
+        [Authorize(Policy = "IndexRole")]
         public IActionResult Index()
         {
             var viewModel = new RolesIndexViewModel()
@@ -59,6 +60,7 @@ namespace SGWCasaK_rlos.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "AddRole")]
         public SystemValidationModel Save(string model)
         {
             var viewModel = JsonConvert.DeserializeObject<RolesAddViewModel>(model);
@@ -66,6 +68,7 @@ namespace SGWCasaK_rlos.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "EditRole")]
         public SystemValidationModel Edit(string model)
         {
             var viewModel = JsonConvert.DeserializeObject<RolesEditViewModel>(model);
@@ -73,6 +76,7 @@ namespace SGWCasaK_rlos.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "DeleteRole")]
         public SystemValidationModel Desactivate(int id)
         {
             return _roles.Desactivate(id);

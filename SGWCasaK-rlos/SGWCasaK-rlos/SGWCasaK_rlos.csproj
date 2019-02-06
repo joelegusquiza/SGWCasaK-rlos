@@ -7,6 +7,7 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="8.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.9" />
+    <PackageReference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation" Version="2.2.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.4" />
     <PackageReference Include="Sendgrid" Version="9.10.0" />
   </ItemGroup>
@@ -20,6 +21,7 @@
     <ProjectReference Include="..\Core.Automapper\Core.Automapper.csproj" />
     <ProjectReference Include="..\Core.DAL\Core.DAL.csproj" />
     <ProjectReference Include="..\Core.DTOs\Core.DTOs.csproj" />
+    <ProjectReference Include="..\Core.Entities\Core.Entities.csproj" />
   </ItemGroup>
 
   <ItemGroup>

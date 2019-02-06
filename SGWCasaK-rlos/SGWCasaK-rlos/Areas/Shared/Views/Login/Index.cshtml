@@ -142,7 +142,7 @@
                 data: { model: ko.toJSON(dataViewModel.loginModel) },
                 success: function (response) {
                     if (response.success) {
-                        showSuccessAndGoToUrl(response.message, response.url);
+                        location.replace(response.url);
                     } else {
                         showError(response.message);
                     }

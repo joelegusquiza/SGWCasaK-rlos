@@ -6,6 +6,8 @@ using ApplicationContext;
 using Core.Automapper;
 using Core.DAL.Interfaces;
 using Core.DAL.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -13,6 +15,8 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using SGWCasaK_rlos.SecurityHelpers;
+using static Core.Constants;
 
 namespace SGWCasaK_rlos
 {
@@ -34,6 +38,27 @@ namespace SGWCasaK_rlos
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+
+            // Register it as scope, because it uses Repository that probably uses dbcontext
+            services.AddScoped<IAuthorizationHandler, PermissionHandler>();
+            services.AddAuthorization(options =>
+            {       
+                foreach (var permission in Enum.GetValues(typeof(AccessFunctions)))
+                {
+                    // assuming .Permission is enum
+                    options.AddPolicy(permission.ToString(),
+                        policy => policy.Requirements.Add(new PermissionRequirement((AccessFunctions)permission)));
+                }
+            });
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+               .AddCookie(opts =>
+               {
+                   opts.LoginPath = new PathString("/Shared/Login/Index");
+                   opts.AccessDeniedPath = new PathString("/Shared/Login/Index");
+                   opts.LogoutPath = new PathString("/Shared/Login/Index");
+                   opts.SlidingExpiration = true;
+               });
+
             services.AddDbContext<DataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddSingleton(x => Configuration);
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -49,6 +74,9 @@ namespace SGWCasaK_rlos
             services.AddSingleton<ICategoriaProductos, CategoriaProductosService>();
             services.AddSingleton<IEmailSender, EmailSenderService>();
             services.AddSingleton<IEnvironmentContext, EnvironmentContextService>();
+            
+
+
             return services.BuildServiceProvider();
         }
 
@@ -77,7 +105,7 @@ namespace SGWCasaK_rlos
             }
 
             app.UseStaticFiles();
-
+            app.UseAuthentication();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

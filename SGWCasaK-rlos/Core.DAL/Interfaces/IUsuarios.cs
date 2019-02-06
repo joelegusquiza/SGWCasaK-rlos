@@ -5,14 +5,18 @@ using Core.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
+using static Core.Constants;
 
 namespace Core.DAL.Interfaces
 {
     public interface IUsuarios
     {
         List<Usuario> GetAll();
+        Task<bool> CheckPermissionForUser(int userId, AccessFunctions permission);
         Usuario GetById(int id);
         Usuario GetByEmail(string email);
+        Usuario GetByEmailWithRol(string email);
         Usuario GetByGuid(string guid);
         bool Update(Usuario usuario);
         SystemValidationModel Register(RegisterViewModel viewModel);

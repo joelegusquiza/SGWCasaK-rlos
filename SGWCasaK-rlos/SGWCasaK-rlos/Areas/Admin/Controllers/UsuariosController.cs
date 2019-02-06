@@ -6,22 +6,25 @@ using AutoMapper;
 using Core.DAL.Interfaces;
 using Core.DTOs.Shared;
 using Core.DTOs.Usuarios;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using static Core.Constants;
 
 namespace SGWCasaK_rlos.Areas.Admin.Controllers
 {
-    [Area("Admin")]
+    [Area("Admin"), Authorize]
     public class UsuariosController : Controller
     {
         private readonly IUsuarios _usuarios;
         private readonly IRoles _roles;
+        static string IndexUsuario;
         public UsuariosController(IUsuarios usuarios, IRoles roles)
         {
             _usuarios = usuarios;
             _roles = roles;
         }
-
+        [Authorize(Policy = "IndexUsuario")]
         public IActionResult Index()
         {
             var viewModel = new UsuariosIndexViewModel()
@@ -48,6 +51,7 @@ namespace SGWCasaK_rlos.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "AddUsuario")]
         public SystemValidationModel Save(string model)
         {
             var viewModel = JsonConvert.DeserializeObject<UsuariosAddViewModel>(model);
@@ -55,6 +59,7 @@ namespace SGWCasaK_rlos.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "EditUsuario")]
         public SystemValidationModel Edit(string model)
         {
             var viewModel = JsonConvert.DeserializeObject<UsuariosEditViewModel>(model);
@@ -62,6 +67,7 @@ namespace SGWCasaK_rlos.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "DeleteUsuario")]
         public SystemValidationModel Desactivate(int id)
         {
             return _usuarios.Desactivate(id);

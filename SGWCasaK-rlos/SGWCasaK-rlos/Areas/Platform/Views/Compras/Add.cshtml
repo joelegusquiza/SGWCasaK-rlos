@@ -310,8 +310,9 @@
                 showError("Debe ingresar un producto para agregar al detalle");
                 resetProductoForm();
                 return;
-            }
-            dataViewModel.producto.montoTotal(parseInt(dataViewModel.producto.precioCompra()) *  parseInt(dataViewModel.producto.cantidad()));
+            }            
+
+            dataViewModel.producto.montoTotal(dataViewModel.producto.precioCompra() * dataViewModel.producto.cantidad());
             dataViewModel.detalleCompra.push(ko.mapping.fromJS(ko.mapping.toJS(dataViewModel.producto)))
             resetProductoForm();
         }

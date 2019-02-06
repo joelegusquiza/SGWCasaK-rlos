@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2046
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SGWCasaK-rlos", "SGWCasaK-rlos\SGWCasaK-rlos.csproj", "{0B9733F7-AA4E-4967-96DB-24D723981DEE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SGWCasaK_rlos", "SGWCasaK-rlos\SGWCasaK_rlos.csproj", "{0B9733F7-AA4E-4967-96DB-24D723981DEE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApplicationContext", "ApplicationContext\ApplicationContext.csproj", "{BC6111C5-14BA-4FC3-984C-E051D97C29F0}"
 EndProject
@@ -11,11 +11,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Entities", "Core.Entit
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "Core\Core.csproj", "{F3EC3CB0-837A-4A75-B07F-451DD4ED7292}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.DTOs", "Core.DTOs\Core.DTOs.csproj", "{E0CBEF41-A8C8-4180-8882-665893A5EBFE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.DTOs", "Core.DTOs\Core.DTOs.csproj", "{E0CBEF41-A8C8-4180-8882-665893A5EBFE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Automapper", "Core.Automapper\Core.Automapper.csproj", "{21DCA553-632A-4FC3-9193-445F1C3BAA3F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Automapper", "Core.Automapper\Core.Automapper.csproj", "{21DCA553-632A-4FC3-9193-445F1C3BAA3F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.DAL", "Core.DAL\Core.DAL.csproj", "{0D659760-922A-42EC-8F81-C432EA671314}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.DAL", "Core.DAL\Core.DAL.csproj", "{0D659760-922A-42EC-8F81-C432EA671314}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

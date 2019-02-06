@@ -10,6 +10,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
+using static Core.Constants;
 
 namespace Core.DAL.Services
 {
@@ -29,6 +31,12 @@ namespace Core.DAL.Services
             return _context.Set<Usuario>().Where(x => x.Active).ToList();
         }
 
+        public async Task<bool> CheckPermissionForUser(int userId, AccessFunctions permission)
+        {
+            var usuario = await _context.Set<Usuario>().Include(x => x.Rol).FirstOrDefaultAsync(x => x.Id == userId);
+            return usuario.Rol.Permisos.Contains(((int)permission).ToString());
+        }
+
         public Usuario GetById(int id)
         {
             return GetAll().FirstOrDefault(x => x.Id == id);
@@ -37,6 +45,13 @@ namespace Core.DAL.Services
         public Usuario GetByEmail(string email)
         {
             return GetAll().FirstOrDefault(x => x.Email == email);
+        }
+
+        public Usuario GetByEmailWithRol(string email)
+        {
+            var usuario = GetByEmail(email);
+            usuario.Rol = _context.Set<Rol>().FirstOrDefault(x => x.Id == usuario.RolId);
+            return usuario;
         }
 
         public Usuario GetByGuid(string guid)

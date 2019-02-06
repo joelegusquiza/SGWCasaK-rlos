@@ -9,20 +9,26 @@ namespace Core
     {
         public enum AccessFunctions
         {
+            [Description("Ver Roles")]
+            IndexRole = 99,
             [Description("Agregar Rol")]
             AddRole = 100,
             [Description("Editar Rol")]
             EditRole = 200,
             [Description("Eliminar Rol")]
             DeleteRole = 300,
+            [Description("Ver Usuarios")]
+            IndexUsuario = 399,
             [Description("Agregar Usuario")]
             AddUsuario = 400,
             [Description("Editar Usuario")]
             EditUsuario = 500,
             [Description("Eliminar Usuario")]
             DeleteUsuario = 600,
+            [Description("Ver Pedidos")]
+            IndexPedido = 700,
             [Description("Agregar Pedido")]
-            AddPedido = 700,
+            AddPedido = 799,
             [Description("Editar Pedido")]
             EditPedido = 800,
             [Description("Eliminar Pedido")]

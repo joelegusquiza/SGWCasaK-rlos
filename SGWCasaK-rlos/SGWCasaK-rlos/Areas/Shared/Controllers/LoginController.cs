@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Core.DAL.Interfaces;
 using Core.DTOs.Emails;
 using Core.DTOs.Login;
 using Core.DTOs.Shared;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using SGWCasaK_rlos.SecurityHelpers;
 
 namespace SGWCasaK_rlos.Areas.Shared.Controllers
 {
@@ -48,17 +52,35 @@ namespace SGWCasaK_rlos.Areas.Shared.Controllers
 
         }
 
-        [HttpPost]
-        public SystemValidationModel Login(string model)
+        public async Task<IActionResult> Logout()
         {
-            var viewModel = JsonConvert.DeserializeObject<LoginViewModel>(model);
-            var usuario = _usuarios.GetByEmail(viewModel.Email);
-            if (usuario == null)
-                return new SystemValidationModel() { Success = false, Message = "El usuario no existe"};
-            var success = usuario.CheckPassword(viewModel.Password);
-            if (success)
-                return new SystemValidationModel() { Success = true, Message = "Login Exitoso", Url = Url.Action("Index", "Dashboard", new { area = "platform"}) };
-            return new SystemValidationModel() { Success = false, Message = "Password Incorrecto" };
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Index", "Login", new { area = "Shared" });
+        }
+
+        [HttpPost]
+        public async Task<SystemValidationModel> Login(string model)
+        {
+            try 
+            {
+                var viewModel = JsonConvert.DeserializeObject<LoginViewModel>(model);
+                var usuario = _usuarios.GetByEmailWithRol(viewModel.Email);
+                if (usuario == null)
+                    return new SystemValidationModel() { Success = false, Message = "El usuario no existe" };
+                var success = usuario.CheckPassword(viewModel.Password);
+                if (success)
+                {
+                    ClaimsIdentity claims = new ClaimsIdentity(SecurityHelper.GetUserClaims(usuario), "Cookie");
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claims));
+                    return new SystemValidationModel() { Success = true, Message = "Login Exitoso", Url = Url.Action("Index", "Dashboard", new { area = "platform" }) };
+                }
+                return new SystemValidationModel() { Success = false, Message = "Password Incorrecto" };
+            } 
+            catch (Exception ex) 
+            {
+                throw;
+            }
+            
         }
 
         [HttpPost]

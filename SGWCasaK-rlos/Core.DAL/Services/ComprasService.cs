@@ -64,14 +64,17 @@ namespace Core.DAL.Services
             return validation;
         }
 
-        public void AumentarStock(List<ComprasDetalleAddViewModel> detalleCompra)
+        public void AumentarStock(List<ComprasDetalleAddViewModel> detallesCompra)
         {
-            var productoIds = detalleCompra.Select(x => x.ProductoId);
+            var productoIds = detallesCompra.Select(x => x.ProductoId);
             var productos = _context.Set<Producto>().Where(x => productoIds.Contains(x.Id));
-            foreach (var producto in productos)
+            foreach (var producto in productos.ToList())
             {
-                var detalleVenta = detalleCompra.FirstOrDefault(x => x.ProductoId == producto.Id);
-                producto.Stock += detalleVenta.Cantidad;
+                var detalleCompra = detallesCompra.FirstOrDefault(x => x.ProductoId == producto.Id);
+                if (detalleCompra.Equivalencia == 0)
+                    producto.Stock += detalleCompra.Cantidad;
+                else
+                    producto.Stock += detalleCompra.Cantidad * detalleCompra.Equivalencia;
                 _context.Entry(producto).State = EntityState.Modified;
             }
         }

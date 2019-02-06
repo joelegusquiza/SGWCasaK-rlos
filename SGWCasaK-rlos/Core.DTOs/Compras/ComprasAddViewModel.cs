@@ -45,5 +45,6 @@ namespace Core.DTOs.Compras
         public PorcIva PorcentajeIva { get; set; }
         public decimal PrecioCompra { get; set; }
         public decimal MontoTotal { get; set; }
+        public int Equivalencia { get; set; }
     }
 }
