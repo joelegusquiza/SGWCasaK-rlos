@@ -57,14 +57,21 @@
                         </th>
                         <th title="Field #5">
                             Estado
-                        </th>                      
+                        </th>      
+                        <th> Con Delivery </th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody data-bind="foreach: pedidos">
-                    <tr>                        
+                    <tr>
                         <td data-bind="text: montoTotal"></td>
-                        <td data-bind="text: estadoDescripcion"></td>                        
+                        <td data-bind="text: estadoDescripcion"></td>
+                        <!-- ko if: delivery() == true -->
+                        <td data-bind="text:'Si'"></td>
+                        <!-- /ko -->
+                        <!-- ko if: delivery() != true -->
+                        <td data-bind="text:'No'"></td>
+                        <!-- /ko -->
                         <td>
                             @if (HasPermisos(Core.Constants.AccessFunctions.ClienteEditPedido))
                             {

@@ -62,10 +62,7 @@
                             Estado
                         </th>
                         <th title="Field #2">
-                            Fecha Entrega
-                        </th>
-                        <th title="Field #5">
-                            Direccion Entrega
+                            Con Delivery
                         </th>
                         <th></th>
                     </tr>
@@ -75,8 +72,12 @@
                         <td data-bind="text: displayName"></td>
                         <td data-bind="text: montoTotal"></td>
                         <td data-bind="text: estadoDescripcion"></td>
-                        <td data-bind="text: moment(dateCreated()).format('DD/MM/YYYY')"></td>
-                        <td data-bind="text: direccionEntrega"></td>
+                        <!-- ko if: delivery() == true -->
+                        <td data-bind="text:'Si'"></td>
+                        <!-- /ko -->
+                        <!-- ko if: delivery() != true -->
+                        <td data-bind="text:'No'"></td>
+                        <!-- /ko -->
                         <td>
                             @if (HasPermisos(Core.Constants.AccessFunctions.EditPedido))
                             {
@@ -94,7 +95,7 @@
                             {
                                 <a href="#" data-bind="attr: { id: id() }" onClick="javacript: openCambiarEstadoModal(this)"><i class="fa fa-edit"></i> Cambiar Estado</a>
                             }
-                            
+
                         </td>
                     </tr>
                 </tbody>

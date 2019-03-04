@@ -12,7 +12,7 @@ namespace Core.Entities
         public decimal MontoTotal { get; set; }
         public bool Delivery { get; set; }
         public string DireccionEntrega { get; set; }
-        public DateTimeOffset FechaEntrega { get; set; }
+        public DateTimeOffset? FechaEntrega { get; set; }
         public EstadoPedido Estado { get; set; }
 
         public Cliente Cliente { get; set; }

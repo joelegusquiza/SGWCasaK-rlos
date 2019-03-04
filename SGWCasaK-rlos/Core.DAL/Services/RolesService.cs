@@ -56,7 +56,7 @@ namespace Core.DAL.Services
         {
             if (viewModel.IsCliente)
             {
-                var clienteRol = GetAll().FirstOrDefault(x => x.IsCliente);
+                var clienteRol = GetAll().FirstOrDefault(x => x.IsCliente && x.Id != viewModel.Id);
                 if (clienteRol != null)
                     return new SystemValidationModel() { Success = false, Message = "Ya existe un rol asignado para los clientes" };
             }

@@ -20,7 +20,7 @@ namespace Core.DTOs.PedidosCliente
         public string EstadoDescripcion => Estado.GetDescription();       
         public decimal MontoTotal { get; set; }
         //public DateTime DateCreated { get; set; }
-        //public bool Delivery { get; set; }
+        public bool Delivery { get; set; }
         //public string DireccionEntrega { get; set; }
         //public DateTimeOffset FechaEntrega { get; set; }
     }

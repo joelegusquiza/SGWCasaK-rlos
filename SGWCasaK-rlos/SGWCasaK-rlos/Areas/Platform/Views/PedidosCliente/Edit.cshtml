@@ -42,12 +42,12 @@
                                     <label for="exampleInputEmail1">
                                         Delivery
                                     </label>
-                                    <input type="checkbox" class="form-control m-input" id="delivery" name="delivery" data-bind="checked: delivery">
+                                    <input type="checkbox" class="form-control m-input" id="delivery" name="delivery" data-bind="checked: delivery, event:{ change: deliveryValues}">
 
                                 </div>
 
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-4"data-bind="visible: delivery()">
                                 <div class="form-group m-form__group row">
                                     <label for="example-text-input" class="col-4 col-form-label" style="text-align: left">
                                         Fecha de entrega
@@ -57,7 +57,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-4"data-bind="visible: delivery()">
                                 <div class="form-group m-form__group row">
                                     <label for="example-text-input" class="col-4 col-form-label" style="text-align: left">
                                         Direccion de Entrega
@@ -294,6 +294,19 @@
             dataViewModel.producto.cantidad(0);
             dataViewModel.producto.productoId(0);
         }
+
+        function deliveryValues() {
+            if (dataViewModel.delivery()) {
+                dataViewModel.fechaEntrega(new Date());
+
+            }
+            else {
+                dataViewModel.fechaEntrega(null);
+                dataViewModel.direccionEntrega("");
+            }
+
+        };
+
         ko.applyBindings(dataViewModel);
     </script>
 }
