@@ -6,12 +6,13 @@ using AutoMapper;
 using Core.DAL.Interfaces;
 using Core.DTOs.Compras;
 using Core.DTOs.Shared;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
 namespace SGWCasaK_rlos.Areas.Platform.Controllers
 {
-    [Area("Platform")]
+    [Area("Platform"), Authorize]
     public class ComprasController : Controller
     {
         private readonly ICompras _compras;
@@ -19,6 +20,8 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
         {
             _compras = compras;
         }
+
+        [Authorize(Policy = "IndexCompra")]
         public IActionResult Index()
         {
             var viewModel = new ComprasIndexViewModel()
@@ -35,6 +38,7 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "AddCompra")]
         public SystemValidationModel Save(string model)
         {
             var viewModel = JsonConvert.DeserializeObject<ComprasAddViewModel>(model);

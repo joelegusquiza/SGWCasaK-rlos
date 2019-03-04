@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Core.DTOs.Clientes;
 using Core.DTOs.Login;
+using Core.DTOs.Usuarios;
 using Core.Entities;
 using System;
 using System.Collections.Generic;
@@ -31,6 +32,9 @@ namespace Core.Automapper
 
             CreateMap<Direccion, ClientesDireccionesViewModel>()
                .ReverseMap();
+
+            CreateMap<UsuariosAddViewModel, Cliente>()
+            .ReverseMap();
 
         }
     }

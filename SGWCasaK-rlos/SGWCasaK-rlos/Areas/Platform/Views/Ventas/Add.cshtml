@@ -301,6 +301,11 @@
 
         dataViewModel.agregarDetalle = function ()
         {
+            if (parseInt(dataViewModel.producto.cantidad()) == 0) {
+                showError("Debe introducir la cantidad para agregar a la venta");
+
+                return;
+            }
             if ($.grep(dataViewModel.detalleVenta(), function (item) { return item.productoId() === parseInt(dataViewModel.producto.productoId()); }).length > 0) {
                 showError("El producto ya fue agregado al detalle de venta");
                 resetProductoForm();

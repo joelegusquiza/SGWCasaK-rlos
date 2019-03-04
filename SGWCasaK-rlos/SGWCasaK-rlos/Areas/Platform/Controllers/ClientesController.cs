@@ -6,12 +6,13 @@ using AutoMapper;
 using Core.DAL.Interfaces;
 using Core.DTOs.Clientes;
 using Core.DTOs.Shared;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
 namespace SGWCasaK_rlos.Areas.Platform.Controllers
 {
-    [Area("Platform")]
+    [Area("Platform"), Authorize]
     public class ClientesController : Controller
     {
         private readonly IClientes _clientes;
@@ -19,6 +20,7 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
         {
             _clientes = clientes;
         }
+        [Authorize(Policy = "IndexCliente")]
         public IActionResult Index()
         {
             var viewModel = new ClientesIndexViewModel() 
@@ -50,6 +52,7 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "AddCliente")]
         public SystemValidationModel Save(string model)
         {
             var viewModel = JsonConvert.DeserializeObject<ClientesAddViewModel>(model);
@@ -57,6 +60,7 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "EditCliente")]
         public SystemValidationModel Edit(string model)
         { 
             var viewModel = JsonConvert.DeserializeObject<ClientesEditViewModel>(model);
@@ -64,6 +68,7 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "DeleteCliente")]
         public SystemValidationModel Desactivate(int id)
         {           
             return _clientes.Desactivate(id);

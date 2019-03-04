@@ -20,6 +20,7 @@ namespace Core.Automapper
                 .ReverseMap();
 
             CreateMap<ComprasDetalleAddViewModel, DetalleCompra>()
+                .ForMember(dest => dest.Descripcion, opt => opt.MapFrom(src => src.Nombre))
                .ReverseMap();
         }
 

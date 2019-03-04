@@ -17,7 +17,17 @@ namespace Core.Automapper
             CreateMap<Venta, VentasAddViewModel>()
                 .ReverseMap();
 
-            CreateMap<DetalleVenta, VentasDetalleAddViewModel>()
+            CreateMap<VentasDetalleAddViewModel, DetalleVenta>()
+                .ForMember(dest => dest.Descripcion, opt => opt.MapFrom(src => src.Nombre))
+                .ReverseMap();
+
+            CreateMap<Pedido, VentasAddViewModel>()
+                .ForMember(dest => dest.DetalleVenta, opt => opt.MapFrom(src => src.DetallePedido))
+                .ForMember(dest => dest.PedidoId, opt => opt.MapFrom(src => src.Id))
+                .ReverseMap();
+
+            CreateMap<DetallePedido, VentasDetalleAddViewModel>()
+                .ForMember(dest => dest.Nombre, opt => opt.MapFrom(src => src.Descripcion))
                 .ReverseMap();
 
         }

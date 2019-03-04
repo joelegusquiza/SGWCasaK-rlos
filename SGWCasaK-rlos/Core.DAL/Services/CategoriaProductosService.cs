@@ -63,5 +63,20 @@ namespace Core.DAL.Services
             return validation;
         }
 
+        public SystemValidationModel Desactivate (int id)
+        {
+            var categoriaProducto = GetById(id);
+            categoriaProducto.Active = false;
+            _context.Entry(categoriaProducto).State = EntityState.Modified;
+            var success = _context.SaveChanges() > 0;
+            var validation = new SystemValidationModel()
+            {
+                Id = categoriaProducto.Id,
+                Message = success ? "Se ha eliminado la categoria" : "No se pudo eliminar la categoria",
+                Success = success
+            };
+            return validation;
+        }
+
     }
 }

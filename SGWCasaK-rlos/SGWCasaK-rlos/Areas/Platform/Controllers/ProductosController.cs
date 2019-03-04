@@ -6,12 +6,13 @@ using AutoMapper;
 using Core.DAL.Interfaces;
 using Core.DTOs.Productos;
 using Core.DTOs.Shared;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
 namespace SGWCasaK_rlos.Areas.Platform.Controllers
 {
-    [Area("Platform")]
+    [Area("Platform"), Authorize]
     public class ProductosController : Controller
     {
         private readonly IProductos _productos;
@@ -21,6 +22,7 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
             _productos = productos;
             _categoriaProductos = categoriaProductos;
         }
+        [Authorize(Policy = "IndexProducto")]
         public IActionResult Index()
         {
             var viewModel = new ProductosIndexViewModel()
@@ -54,6 +56,7 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "AddProducto")]
         public SystemValidationModel Save(string model)
         {
             var viewModel = JsonConvert.DeserializeObject<ProductosAddViewModel>(model);
@@ -61,6 +64,7 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "EditProducto")]
         public SystemValidationModel Edit (string model)
         {
             var viewModel = JsonConvert.DeserializeObject<ProductosEditViewModel>(model);
@@ -68,6 +72,7 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "DeleteProducto")]
         public SystemValidationModel Desactivate(int id)
         {
             return _productos.Desactivate(id);

@@ -86,7 +86,7 @@
             if (!$("#form").valid()) return;
 
             $.ajax({
-                url: "@Url.Action("Upsert", "Proveedores")",
+                url: "@Url.Action("Save", "Proveedores")",
                 type: "POST",
                 data: { model: ko.toJSON(dataViewModel) },
                 success: function (response) {

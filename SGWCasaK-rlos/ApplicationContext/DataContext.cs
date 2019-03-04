@@ -166,7 +166,19 @@ namespace ApplicationContext
                 .HasMany(x => x.ProductoPresentaciones)
                 .WithOne(x => x.Producto)
                 .HasForeignKey(x => x.ProductoId)
-                .OnDelete(DeleteBehavior.Restrict);           
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Cliente>()
+               .HasMany(x => x.Pedidos)
+               .WithOne(x => x.Cliente)
+               .HasForeignKey(x => x.ClienteId)
+               .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Pedido>()
+              .HasMany(x => x.Ventas)
+              .WithOne(x => x.Pedido)
+              .HasForeignKey(x => x.PedidoId)
+              .OnDelete(DeleteBehavior.Restrict);
         }
 
         public override int SaveChanges()

@@ -31,6 +31,11 @@ namespace Core.DAL.Services
             return GetAll().FirstOrDefault(x => x.Id == id);
         }
 
+        public Proveedor GetByRuc(string ruc)
+        {
+            return GetAll().FirstOrDefault(x => x.RUC == ruc); 
+        }
+
         public SystemValidationModel Upsert(ProveedoresUpserViewModel viewModel)
         {
             if (viewModel.Id > 0)
@@ -40,6 +45,13 @@ namespace Core.DAL.Services
 
         private SystemValidationModel Add(ProveedoresUpserViewModel viewModel)
         {
+            if (!string.IsNullOrEmpty(viewModel.RUC))
+            {
+                var verifyProveedor = GetByRuc(viewModel.RUC);
+                if (verifyProveedor != null)
+                    return new SystemValidationModel() { Message = "Ya existe un proveedor con el mismo RUC", Success = false};
+            }
+                
             var proveedor = Mapper.Map<Proveedor>(viewModel);
             _context.Entry(proveedor).State = EntityState.Added;
             var success = _context.SaveChanges() > 0;
@@ -54,6 +66,12 @@ namespace Core.DAL.Services
 
         private SystemValidationModel Edit(ProveedoresUpserViewModel viewModel)
         {
+            if (!string.IsNullOrEmpty(viewModel.RUC))
+            {
+                var verifyProveedor = GetAll().FirstOrDefault(x => x.Id != viewModel.Id && x.RUC == viewModel.RUC);
+                if (verifyProveedor != null)
+                    return new SystemValidationModel() { Message = "Ya existe un proveedor con el mismo RUC", Success = false };
+            }
             var proveedor = GetById(viewModel.Id);
             proveedor = Mapper.Map(viewModel, proveedor);
             _context.Entry(proveedor).State = EntityState.Modified;

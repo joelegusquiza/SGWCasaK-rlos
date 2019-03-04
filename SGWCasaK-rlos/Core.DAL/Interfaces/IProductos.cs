@@ -12,6 +12,7 @@ namespace Core.DAL.Interfaces
         List<Producto> GetAll();
         List<Producto> GetAllWithPresentacion();
         Producto GetById(int id);
+        SystemValidationModel ValidateStockPedido(List<DetallePedido> detallesPedio);
         SystemValidationModel Save(ProductosAddViewModel viewModel);
         SystemValidationModel Edit(ProductosEditViewModel viewModel);
         SystemValidationModel Desactivate(int id);

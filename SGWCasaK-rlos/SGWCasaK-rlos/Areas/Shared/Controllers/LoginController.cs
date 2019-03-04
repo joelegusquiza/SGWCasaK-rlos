@@ -64,13 +64,18 @@ namespace SGWCasaK_rlos.Areas.Shared.Controllers
             try 
             {
                 var viewModel = JsonConvert.DeserializeObject<LoginViewModel>(model);
-                var usuario = _usuarios.GetByEmailWithRol(viewModel.Email);
+                var usuario = _usuarios.GetForLogin(viewModel.Email);
                 if (usuario == null)
                     return new SystemValidationModel() { Success = false, Message = "El usuario no existe" };
                 var success = usuario.CheckPassword(viewModel.Password);
                 if (success)
                 {
-                    ClaimsIdentity claims = new ClaimsIdentity(SecurityHelper.GetUserClaims(usuario), "Cookie");
+                    ClaimsIdentity claims ;
+                    if (usuario.Cliente == null)
+                        claims = new ClaimsIdentity(SecurityHelper.GetUserClaims(usuario), "Cookie");
+                    else
+                        claims = new ClaimsIdentity(SecurityHelper.GetUserClaims(usuario, usuario.Cliente), "Cookie");
+
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claims));
                     return new SystemValidationModel() { Success = true, Message = "Login Exitoso", Url = Url.Action("Index", "Dashboard", new { area = "platform" }) };
                 }

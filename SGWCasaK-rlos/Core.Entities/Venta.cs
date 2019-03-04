@@ -22,6 +22,8 @@ namespace Core.Entities
         public Cliente Cliente { get; set; }
         public int TimbradoId { get; set; }
         public Timbrado Timbrado { get; set; }
+        public int? PedidoId { get; set; }
+        public Pedido Pedido { get; set; }
         public ICollection<DetalleVenta> DetalleVenta { get; set; } = new HashSet<DetalleVenta>();
         public ICollection<PagoVenta> PagosVenta { get; set; } = new HashSet<PagoVenta>();
     }

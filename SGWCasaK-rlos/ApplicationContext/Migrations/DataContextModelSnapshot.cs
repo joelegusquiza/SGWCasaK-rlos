@@ -136,6 +136,8 @@ namespace ApplicationContext.Migrations
 
                     b.Property<DateTime?>("DateModified");
 
+                    b.Property<string>("Descripcion");
+
                     b.Property<int>("Equivalencia");
 
                     b.Property<decimal>("PrecioCompra");
@@ -169,11 +171,15 @@ namespace ApplicationContext.Migrations
 
                     b.Property<DateTime?>("DateModified");
 
+                    b.Property<string>("Descripcion");
+
                     b.Property<int>("Equivalencia");
 
                     b.Property<decimal>("MontoTotal");
 
                     b.Property<int>("PedidoId");
+
+                    b.Property<decimal>("PrecioVenta");
 
                     b.Property<int>("ProductoId");
 
@@ -203,6 +209,8 @@ namespace ApplicationContext.Migrations
                     b.Property<DateTime>("DateCreated");
 
                     b.Property<DateTime?>("DateModified");
+
+                    b.Property<string>("Descripcion");
 
                     b.Property<int>("Equivalencia");
 
@@ -328,6 +336,8 @@ namespace ApplicationContext.Migrations
 
                     b.Property<bool>("Active");
 
+                    b.Property<int>("ClienteId");
+
                     b.Property<DateTime>("DateCreated");
 
                     b.Property<DateTime?>("DateModified");
@@ -335,6 +345,8 @@ namespace ApplicationContext.Migrations
                     b.Property<bool>("Delivery");
 
                     b.Property<string>("DireccionEntrega");
+
+                    b.Property<int>("Estado");
 
                     b.Property<DateTimeOffset>("FechaEntrega");
 
@@ -345,6 +357,8 @@ namespace ApplicationContext.Migrations
                     b.Property<int>("UserModifiedId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ClienteId");
 
                     b.ToTable("Pedidos");
                 });
@@ -590,6 +604,8 @@ namespace ApplicationContext.Migrations
 
                     b.Property<int>("NroFactura");
 
+                    b.Property<int?>("PedidoId");
+
                     b.Property<int>("TimbradoId");
 
                     b.Property<int>("UserCreatedId");
@@ -599,6 +615,8 @@ namespace ApplicationContext.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ClienteId");
+
+                    b.HasIndex("PedidoId");
 
                     b.HasIndex("TimbradoId");
 
@@ -686,6 +704,14 @@ namespace ApplicationContext.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
+            modelBuilder.Entity("Core.Entities.Pedido", b =>
+                {
+                    b.HasOne("Core.Entities.Cliente", "Cliente")
+                        .WithMany("Pedidos")
+                        .HasForeignKey("ClienteId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
             modelBuilder.Entity("Core.Entities.Producto", b =>
                 {
                     b.HasOne("Core.Entities.CategoriaProducto", "CategoriaProducto")
@@ -720,6 +746,11 @@ namespace ApplicationContext.Migrations
                     b.HasOne("Core.Entities.Cliente", "Cliente")
                         .WithMany("Ventas")
                         .HasForeignKey("ClienteId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Core.Entities.Pedido", "Pedido")
+                        .WithMany("Ventas")
+                        .HasForeignKey("PedidoId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Core.Entities.Timbrado", "Timbrado")

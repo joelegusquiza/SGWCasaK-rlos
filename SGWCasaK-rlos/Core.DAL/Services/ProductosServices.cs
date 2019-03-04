@@ -31,6 +31,28 @@ namespace Core.DAL.Services
             return _context.Set<Producto>().Include(x => x.ProductoPresentaciones).Where(x => x.Active).ToList();
         }
 
+        public SystemValidationModel ValidateStockPedido(List<DetallePedido> detallesPedio)
+        {
+            var result = new SystemValidationModel() {  Success = true};
+            List<string> productosStock = new List<string>();
+            var productosIds = detallesPedio.Select(x => x.ProductoId).ToList();
+            var productos = _context.Set<Producto>().Where(x => productosIds.Contains(x.Id));
+            foreach (var detalle in detallesPedio)
+            {
+                var producto = productos.FirstOrDefault(x => x.Id == detalle.ProductoId);
+                var cantidadDetalle = detalle.Cantidad;
+                if (detalle.Equivalencia > 0)
+                    cantidadDetalle = cantidadDetalle * detalle.Equivalencia;
+                if (producto.Stock < cantidadDetalle)
+                {
+                    result.Success = false;
+                    productosStock.Add(producto.Nombre);
+                }                    
+            }
+            result.Object = productosStock;
+            return result;
+        }
+
         public Producto GetById(int id)
         {
             return GetAll().FirstOrDefault(x => x.Id == id);

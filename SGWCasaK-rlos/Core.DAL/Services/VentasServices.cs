@@ -15,9 +15,10 @@ namespace Core.DAL.Services
     public class VentasServices: IVentas
     {
         private readonly ITimbrados _timbrados;
+        private readonly IPedidos _pediddos;
         private readonly DataContext _context;
 
-        public VentasServices(DataContext context, ITimbrados timbrados)
+        public VentasServices(DataContext context, IPedidos pediddos, ITimbrados timbrados)
         {
             _context = context;
             _timbrados = timbrados;
@@ -46,6 +47,7 @@ namespace Core.DAL.Services
 
         public SystemValidationModel Save(VentasAddViewModel viewModel)
         {
+            
             var venta = Mapper.Map<Venta>(viewModel);
             var timbrado = _timbrados.GetValidTimbrado();
             if (timbrado == null)
@@ -74,7 +76,14 @@ namespace Core.DAL.Services
             }
            
             venta.Estado = viewModel.PagoVenta.Monto == venta.MontoTotal ? Constants.EstadoVenta.Pagado : Constants.EstadoVenta.Pendiente;
-          
+           
+            if (viewModel.PedidoId != 0)
+            {
+                var pedido = _pediddos.GetById(viewModel.PedidoId);
+                pedido.Estado = Constants.EstadoPedido.Finalizado;
+                _context.Entry(pedido).State = EntityState.Deleted;
+            }
+
             var success = _context.SaveChanges() > 0;
             var validation = new SystemValidationModel()
             {
@@ -82,6 +91,7 @@ namespace Core.DAL.Services
                 Message = success ? "Se ha guardado correctamente la venta" : "No se pudo guardar la venta",
                 Success = success
             };
+
             return validation;
 
         }

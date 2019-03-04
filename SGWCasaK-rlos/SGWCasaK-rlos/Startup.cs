@@ -74,7 +74,7 @@ namespace SGWCasaK_rlos
             services.AddSingleton<ICategoriaProductos, CategoriaProductosService>();
             services.AddSingleton<IEmailSender, EmailSenderService>();
             services.AddSingleton<IEnvironmentContext, EnvironmentContextService>();
-            
+            services.AddSingleton<IPedidos, PedidosService>();
 
 
             return services.BuildServiceProvider();
@@ -93,6 +93,8 @@ namespace SGWCasaK_rlos
                 cfg.AddProfile<RolesProfile>();
                 cfg.AddProfile<UsuariosProfile>();
                 cfg.AddProfile<CategoriaProductosProfile>();
+                cfg.AddProfile<PedidosProfile>();
+                cfg.AddProfile<TimbradosProfile>();
             });
             if (env.IsDevelopment())
             {

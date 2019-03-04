@@ -1,4 +1,5 @@
 ﻿using Core.DTOs.Login;
+using Core.DTOs.Profile;
 using Core.DTOs.Shared;
 using Core.DTOs.Usuarios;
 using Core.Entities;
@@ -15,6 +16,7 @@ namespace Core.DAL.Interfaces
         List<Usuario> GetAll();
         Task<bool> CheckPermissionForUser(int userId, AccessFunctions permission);
         Usuario GetById(int id);
+        Usuario GetForLogin(string email);
         Usuario GetByEmail(string email);
         Usuario GetByEmailWithRol(string email);
         Usuario GetByGuid(string guid);
@@ -22,6 +24,7 @@ namespace Core.DAL.Interfaces
         SystemValidationModel Register(RegisterViewModel viewModel);
         SystemValidationModel Save(UsuariosAddViewModel viewModel);
         SystemValidationModel Edit(UsuariosEditViewModel viewModel);
+        SystemValidationModel Edit(ProfileViewModel viewModel);
         SystemValidationModel Desactivate(int id);
         SystemValidationModel UpdatePassword(ChangePasswordViewModel viewModel);
     }

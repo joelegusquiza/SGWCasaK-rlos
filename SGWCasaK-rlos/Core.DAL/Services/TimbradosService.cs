@@ -1,10 +1,13 @@
 ﻿using ApplicationContext;
+using AutoMapper;
 using Core.DAL.Interfaces;
+using Core.DTOs.Shared;
+using Core.DTOs.Timbrados;
 using Core.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Core.DAL.Services
 {
@@ -17,9 +20,75 @@ namespace Core.DAL.Services
             _context = context;
         }
 
+        public List<Timbrado> GetAll()
+        {
+            return _context.Set<Timbrado>().Where(x => x.Active).ToList();
+        }
+        public Timbrado GetById(int id)
+        {
+            return GetAll().FirstOrDefault(x => x.Id == id);
+        }
+
         public Timbrado GetValidTimbrado ()
         {
-            return _context.Set<Timbrado>().FirstOrDefault(x => DateTime.Now >= x.FechaInicio  && DateTime.Now <= x.FechaFin);
+            var timbrados = _context.Set<Timbrado>().Where(x => x.Active && DateTime.Now >= x.FechaInicio  && DateTime.Now <= x.FechaFin).ToList();
+            return timbrados.FirstOrDefault();
+        }
+
+        public Timbrado VerifyTimbrado(DateTimeOffset inicio, DateTimeOffset fin)
+        {
+            return _context.Set<Timbrado>().FirstOrDefault(x => x.Active && (inicio >= x.FechaInicio && fin <= x.FechaFin) || (inicio >= x.FechaInicio && inicio <= x.FechaFin) || (fin >= x.FechaInicio && fin <= x.FechaFin) || (x.FechaInicio >= inicio && x.FechaFin <= fin));
+        }
+
+        public SystemValidationModel Save(TimbradosAddViewModel viewModel)
+        {
+
+            var timbrado = VerifyTimbrado(viewModel.FechaInicio, viewModel.FechaFin);
+            if (timbrado != null)
+                return new SystemValidationModel() { Success = false, Message = "Ya existe un timbrado en el rango de fecha seleccionado" };
+            timbrado = Mapper.Map<Timbrado>(viewModel);
+            _context.Entry(timbrado).State = EntityState.Added;
+            var success = _context.SaveChanges() > 0;
+            var validation = new SystemValidationModel()
+            {
+                Id = timbrado.Id,
+                Message = success ? "Se ha guardado correctamente el timbrado" : "No se pudo guardar el timbrado",
+                Success = success
+            };
+            return validation;
+        }
+
+        public SystemValidationModel Edit(TimbradosEditViewModel viewModel)
+        {
+            var timbrado = GetById(viewModel.Id);
+            var anotherTimbrado = VerifyTimbrado(viewModel.FechaInicio, viewModel.FechaFin);
+            if (anotherTimbrado != null && anotherTimbrado.Id != viewModel.Id)
+                return new SystemValidationModel() { Success = false, Message = "Ya existe un timbrado en el rango de fecha seleccionado" };
+            timbrado = Mapper.Map(viewModel, timbrado);
+            _context.Entry(timbrado).State = EntityState.Modified;
+            var success = _context.SaveChanges() > 0;
+            var validation = new SystemValidationModel()
+            {
+                Id = timbrado.Id,
+                Message = success ? "Se ha modificado correctamente el timbrado" : "No se pudo modificar el timbrado",
+                Success = success
+            };
+            return validation;
+        }
+
+        public SystemValidationModel Desactivate(int id)
+        {
+            var timbrado = GetById(id);
+            timbrado.Active = false;
+            _context.Entry(timbrado).State = EntityState.Modified;
+            var success = _context.SaveChanges() > 0;
+            var validation = new SystemValidationModel()
+            {
+                Id = timbrado.Id,
+                Message = success ? "Se ha eliminado correctamente el timbrado" : "No se pudo eliminar el timbrado",
+                Success = success
+            };
+            return validation;
         }
     }
 }

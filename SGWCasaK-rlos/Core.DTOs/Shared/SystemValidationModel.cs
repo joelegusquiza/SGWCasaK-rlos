@@ -10,5 +10,6 @@ namespace Core.DTOs.Shared
         public bool Success { get; set; }
         public string Message { get; set; }
         public string Url { get; set; }
+        public dynamic Object { get; set; }
     }
 }

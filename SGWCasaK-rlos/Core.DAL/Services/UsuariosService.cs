@@ -2,6 +2,7 @@
 using AutoMapper;
 using Core.DAL.Interfaces;
 using Core.DTOs.Login;
+using Core.DTOs.Profile;
 using Core.DTOs.Shared;
 using Core.DTOs.Usuarios;
 using Core.Entities;
@@ -45,6 +46,12 @@ namespace Core.DAL.Services
         public Usuario GetByEmail(string email)
         {
             return GetAll().FirstOrDefault(x => x.Email == email);
+        }
+
+        public Usuario GetForLogin(string email)
+        {
+            var usuario = _context.Set<Usuario>().Include(x => x.Rol).Include(x => x.Cliente).FirstOrDefault(x => x.Active && x.Email == email);
+            return usuario;
         }
 
         public Usuario GetByEmailWithRol(string email)
@@ -95,6 +102,13 @@ namespace Core.DAL.Services
         public SystemValidationModel Save(UsuariosAddViewModel viewModel)
         {
             var usuario = Mapper.Map<Usuario>(viewModel);
+            var rol = _roles.GetById(viewModel.RolId);
+            if (rol.IsCliente)
+            {
+                usuario.Cliente = Mapper.Map<Cliente>(viewModel);
+                _context.Entry(usuario.Cliente).State = EntityState.Added;
+            }
+                                              
             usuario.SetPassword(viewModel.Password);
             _context.Entry(usuario).State = EntityState.Added;
             var success = _context.SaveChanges() > 0;
@@ -114,6 +128,25 @@ namespace Core.DAL.Services
             if (!string.IsNullOrEmpty(viewModel.Password)){                
                 usuario.SetPassword(viewModel.Password);                
             }            
+            _context.Entry(usuario).State = EntityState.Modified;
+            var success = _context.SaveChanges() > 0;
+            var validation = new SystemValidationModel()
+            {
+                Id = usuario.Id,
+                Message = success ? "Se ha editado correctamente el usuario" : "No se pudo editar el usuario",
+                Success = success
+            };
+            return validation;
+        }
+
+        public SystemValidationModel Edit(ProfileViewModel viewModel)
+        {
+            var usuario = GetById(viewModel.Id);
+            usuario = Mapper.Map(viewModel, usuario);
+            if (!string.IsNullOrEmpty(viewModel.Password))
+            {
+                usuario.SetPassword(viewModel.Password);
+            }
             _context.Entry(usuario).State = EntityState.Modified;
             var success = _context.SaveChanges() > 0;
             var validation = new SystemValidationModel()

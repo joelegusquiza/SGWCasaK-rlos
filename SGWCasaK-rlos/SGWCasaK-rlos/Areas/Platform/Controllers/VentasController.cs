@@ -7,20 +7,25 @@ using Core.DAL.Interfaces;
 using Core.DTOs.Shared;
 using Core.DTOs.Ventas;
 using Core.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
 namespace SGWCasaK_rlos.Areas.Platform.Controllers
 {
-    [Area("Platform")]
+    [Area("Platform"), Authorize]
     public class VentasController : Controller
     {
         private readonly IVentas _ventas;
-
-        public VentasController(IVentas ventas)
+        private readonly IPedidos _pedidos;
+        private readonly IProductos _productos;
+        public VentasController(IVentas ventas, IPedidos pedidos, IProductos productos)
         {
             _ventas = ventas;
+            _pedidos = pedidos;
+            _productos = productos;
         }
+        [Authorize(Policy = "IndexVenta")]
         public IActionResult Index()
         {
             var viewModel = new VentasIndexViewModel()
@@ -30,13 +35,32 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
             return View(viewModel);
         }
 
-        public IActionResult Add()
+        public IActionResult Add(VentasAddViewModel viewModel)
         {
-            var viewModel = new VentasAddViewModel();
+            if (viewModel == null)
+                viewModel = new VentasAddViewModel();
             return View(viewModel);
         }
 
+        public IActionResult GenerateVentaFromPedido(int pedidoId)
+        {
+            var pedido = _pedidos.GetById(pedidoId);
+            var productosIds = pedido.DetallePedido.Select(x => x.ProductoId).ToList();
+            var productos = _productos.GetAll().Where(x => productosIds.Contains(x.Id));
+           
+            var viewModel = Mapper.Map<VentasAddViewModel>(pedido);           
+            foreach (var detalle in viewModel.DetalleVenta)
+            {
+                var producto = productos.FirstOrDefault(x => x.Id == detalle.ProductoId);
+                var detallePedido = pedido.DetallePedido.FirstOrDefault(x => x.ProductoId == detalle.ProductoId);
+                detalle.PorcentajeIva = producto.PorcentajeIva;
+                detalle.Nombre = detallePedido.Descripcion;
+            }
+            return View("~/Areas/Platform/Views/Ventas/Add.cshtml", viewModel);
+        }
+
         [HttpPost]
+        [Authorize(Policy = "AddVenta")]
         public SystemValidationModel Save(string model)
         {
             var viewModel = JsonConvert.DeserializeObject<VentasAddViewModel>(model);

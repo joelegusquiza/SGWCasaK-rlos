@@ -13,5 +13,6 @@ namespace Core.DAL.Interfaces
         CategoriaProducto GetById(int id);
         SystemValidationModel Save(CategoriaProductosAddViewModel viewModel);
         SystemValidationModel Edit(CategoriaProductosEditViewModel viewModel);
+        SystemValidationModel Desactivate(int id);
     }
 }
