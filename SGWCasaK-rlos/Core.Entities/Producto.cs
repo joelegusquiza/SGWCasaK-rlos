@@ -21,6 +21,7 @@ namespace Core.Entities
         public ICollection<DetalleCompra> DetalleCompra { get; set; } = new HashSet<DetalleCompra>();
         public ICollection<DetallePedido> DetallePedido { get; set; } = new HashSet<DetallePedido>();
         public ICollection<DetalleVenta> DetalleVenta { get; set; } = new HashSet<DetalleVenta>();
+        public ICollection<DetalleInventario> DetalleInventario { get; set; } = new HashSet<DetalleInventario>();
         public ICollection<ProductoPresentacion> ProductoPresentaciones { get; set; } = new HashSet<ProductoPresentacion>();
         
 

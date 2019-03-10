@@ -437,10 +437,7 @@
 
         function seleccionarProducto(producto) {            
             ko.mapping.fromJS(producto, {}, dataViewModel.producto);
-            $("#listaProductosModal").modal("hide");                                          
-            //dataViewModel.detalleVenta.push(ko.mapping.fromJS(producto));            
-            //dataViewModel.producto.cantidad("");
-            //$("#productoCantidad").focus();
+            $("#listaProductosModal").modal("hide");                                                     
         }
 
        function showListaClientesModal() {

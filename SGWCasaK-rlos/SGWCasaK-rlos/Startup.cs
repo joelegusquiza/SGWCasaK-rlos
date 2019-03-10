@@ -75,7 +75,7 @@ namespace SGWCasaK_rlos
             services.AddSingleton<IEmailSender, EmailSenderService>();
             services.AddSingleton<IEnvironmentContext, EnvironmentContextService>();
             services.AddSingleton<IPedidos, PedidosService>();
-
+            services.AddSingleton<IInventario, InventarioService>();
 
             return services.BuildServiceProvider();
         }
@@ -95,6 +95,7 @@ namespace SGWCasaK_rlos
                 cfg.AddProfile<CategoriaProductosProfile>();
                 cfg.AddProfile<PedidosProfile>();
                 cfg.AddProfile<TimbradosProfile>();
+                cfg.AddProfile<InventarioProfile>();
             });
             if (env.IsDevelopment())
             {

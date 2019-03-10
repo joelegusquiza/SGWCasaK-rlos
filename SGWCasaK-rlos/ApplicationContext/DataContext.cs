@@ -48,6 +48,8 @@ namespace ApplicationContext
         public DbSet<PagoCompra> PagosCompras { get; set; }
         public DbSet<Rol> Roles { get; set; }
         public DbSet<ProductoPresentacion> ProductoPresentaciones { get; set; }
+        public DbSet<Inventario> Inventario { get; set; }
+        public DbSet<DetalleInventario> DetalleInventario { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -179,6 +181,18 @@ namespace ApplicationContext
               .WithOne(x => x.Pedido)
               .HasForeignKey(x => x.PedidoId)
               .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Inventario>()
+                .HasMany(x => x.DetalleInventario)
+                .WithOne(x => x.Inventario)
+                .HasForeignKey(x => x.InventarioId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Producto>()
+                .HasMany(x => x.DetalleInventario)
+                .WithOne(x => x.Producto)
+                .HasForeignKey(x => x.ProductoId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
 
         public override int SaveChanges()

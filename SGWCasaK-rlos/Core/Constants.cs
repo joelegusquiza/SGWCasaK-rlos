@@ -103,6 +103,14 @@ namespace Core
             AnularVenta = 4100,
             [Description("Ver Reportes")]
             VerReportes = 4200,
+            [Description("Ver Inventarios")]
+            IndexInventario = 4300,
+            [Description("Agregar Inventario")]
+            AddInventario = 4400,                        
+            [Description("Eliminar Inventario")]
+            DeleteInventario = 4500,
+            [Description("Ver Detalle Inventario")]
+            ViewInventario = 4600,
         }
         
         public enum EstadoVenta

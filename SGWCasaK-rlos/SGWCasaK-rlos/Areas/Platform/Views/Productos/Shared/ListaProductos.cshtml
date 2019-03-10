@@ -124,7 +124,7 @@
                 else {
                     dataViewModel.productoId($(this).attr('id'));
                     var producto = $.grep(dataViewModel.productos(), function (item) { return item.productoId() === parseInt(dataViewModel.productoId()); })[0];                    
-                    ko.mapping.fromJS(producto, {}, dataViewModel.producto);
+                    ko.mapping.fromJS(producto, {}, dataViewModel.producto);       
                     table.$('tr.selected').removeClass('selected');
                     $(this).addClass('selected');
                 }

@@ -21,9 +21,9 @@ namespace Core.DAL.Services
             _context = context;
         }
 
-        public List<Producto> GetAll()
+        public IQueryable<Producto> GetAll()
         {
-            return _context.Set<Producto>().Where(x => x.Active).ToList();
+            return _context.Set<Producto>().Where(x => x.Active);
         }
 
         public List<Producto> GetAllWithPresentacion()
@@ -55,7 +55,7 @@ namespace Core.DAL.Services
 
         public Producto GetById(int id)
         {
-            return GetAll().FirstOrDefault(x => x.Id == id);
+            return _context.Set<Producto>().Include(X => X.ProductoPresentaciones).FirstOrDefault(x => x.Active && x.Id == id);
         }
 
         public SystemValidationModel Save(ProductosAddViewModel viewModel)
