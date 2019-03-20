@@ -10,11 +10,12 @@ using Core.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using SGWCasaK_rlos.SecurityHelpers;
 using static Core.Constants;
 
 namespace SGWCasaK_rlos.Areas.Admin.Controllers
 {
-    [Area("Admin"), Authorize]
+    [Area("Admin"), Authorize, ServiceFilter(typeof(UserEmailActiveFilter))]
     public class RolesController : Controller
     {
         private readonly IRoles _roles;

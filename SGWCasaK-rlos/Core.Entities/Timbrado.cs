@@ -11,8 +11,11 @@ namespace Core.Entities
         public int NroTimbrado { get; set; }
         public DateTimeOffset FechaInicio { get; set; }
         public DateTimeOffset FechaFin { get; set; }
+        public int PuntoExpedicion { get; set; }
         public int NroInicio { get; set; }
         public int NroFin { get; set; }
+        public int CajaId { get; set; }
+        public Caja Caja { get; set; }
 
         public ICollection<Venta> Ventas { get; set; } = new HashSet<Venta>();
     }

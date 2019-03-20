@@ -9,5 +9,8 @@ namespace Core.Helpers
         public const string UserId = "UserId";
         public const string ClientId = "ClientId";
         public const string Permisos = "Permisos";
+        public const string EmailVerified = "EmailVerified";
+        public const string CajaId = "CajaId";
+        public const string CajaNombre = "CajaNombre";
     }
 }

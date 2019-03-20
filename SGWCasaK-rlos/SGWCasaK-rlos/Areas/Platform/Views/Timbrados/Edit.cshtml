@@ -53,6 +53,23 @@
                             <input type="text" class="form-control m-input" id="nombre" name="nroFin" data-bind="value: nroFin">
                             <span class="alert-danger"></span>
                         </div>
+                        <div class="form-group m-form__group">
+                            <label for="exampleInputEmail1">
+                                Punto Expedicion
+                            </label>
+                            <input type="text" class="form-control m-input" id="puntoExpedicion" name="puntoExpedicion" data-bind="value: puntoExpedicion">
+                            <span class="alert-danger"></span>
+                        </div>
+                        <div class="form-group m-form__group">
+                            <label for="exampleInputEmail1">
+                                Cajas
+                            </label>
+                            <select class="form-control m-input m-input--square" id="roles" name="roles" data-bind="options: cajas,
+                                           optionsValue: 'value',
+                                           optionsText: 'text',
+                                           value: cajaId,
+                                           optionsCaption: 'Seleccione una opcion'"></select>
+                        </div>
 
                     </div>
                     <div class="m-portlet__foot m-portlet__foot--fit">
@@ -100,13 +117,16 @@
         $('#form').validate({
             rules: {
                 nroTimbrado: {
-                    required: true
+                    required: true,
+                    number: true
                 },
                 nroInicio: {
-                    required: true
+                    required: true,
+                    number: true
                 },
                 nroFin: {
-                    required: true
+                    required: true,
+                    number: true
                 }
             },
             errorPlacement: function (error, element) {

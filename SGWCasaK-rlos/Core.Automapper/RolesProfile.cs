@@ -17,7 +17,8 @@ namespace Core.Automapper
             CreateMap<Rol, RolesAddViewModel>()
                 .ReverseMap();
 
-            CreateMap<Rol, RolesEditViewModel>()
+            CreateMap<RolesEditViewModel, Rol>()
+                .ForMember(dest => dest.Nombre, opt => opt.Ignore())
                 .ReverseMap();
         }
     }

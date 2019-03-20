@@ -35,21 +35,29 @@ namespace Core.DAL.Services
             return timbrados.FirstOrDefault();
         }
 
-        public Timbrado VerifyTimbrado(DateTimeOffset inicio, DateTimeOffset fin)
+        public SystemValidationModel VerifyTimbrado(DateTimeOffset inicio, DateTimeOffset fin, int puntoExpedicion, int nroInicio, int nroFin, int nroTimbrado, int? id)
         {
-            return _context.Set<Timbrado>().FirstOrDefault(x => x.Active && (inicio >= x.FechaInicio && fin <= x.FechaFin) || (inicio >= x.FechaInicio && inicio <= x.FechaFin) || (fin >= x.FechaInicio && fin <= x.FechaFin) || (x.FechaInicio >= inicio && x.FechaFin <= fin));
+            var timbrado = _context.Set<Timbrado>().FirstOrDefault(x => x.Active &&(inicio >= x.FechaInicio && fin <= x.FechaFin) || (inicio >= x.FechaInicio && inicio <= x.FechaFin) || (fin >= x.FechaInicio && fin <= x.FechaFin) || (x.FechaInicio >= inicio && x.FechaFin <= fin));
+            
+            if (timbrado != null)
+                return new SystemValidationModel() { Success = false, Message = "Ya existe un timbrado en el rango de fecha seleccionado" };
+            timbrado = _context.Set<Timbrado>().FirstOrDefault(x => x.Active && x.PuntoExpedicion == puntoExpedicion && x.NroTimbrado == nroTimbrado && x.FechaInicio == inicio && x.FechaFin == fin);
+            if (timbrado != null)
+                return new SystemValidationModel() { Success = false, Message = "Ya existe un timbrado igual };
+            return null;
         }
 
         public SystemValidationModel Save(TimbradosAddViewModel viewModel)
         {
 
-            var timbrado = VerifyTimbrado(viewModel.FechaInicio, viewModel.FechaFin);
-            if (timbrado != null)
-                return new SystemValidationModel() { Success = false, Message = "Ya existe un timbrado en el rango de fecha seleccionado" };
-            timbrado = Mapper.Map<Timbrado>(viewModel);
+            var validation = VerifyTimbrado(viewModel.FechaInicio, viewModel.FechaFin, viewModel.PuntoExpedicion, viewModel.NroInicio, viewModel.NroFin, viewModel.NroTimbrado, null);
+            if (validation != null)
+                return validation;
+               
+            var timbrado = Mapper.Map<Timbrado>(viewModel);
             _context.Entry(timbrado).State = EntityState.Added;
             var success = _context.SaveChanges() > 0;
-            var validation = new SystemValidationModel()
+            validation = new SystemValidationModel()
             {
                 Id = timbrado.Id,
                 Message = success ? "Se ha guardado correctamente el timbrado" : "No se pudo guardar el timbrado",
@@ -61,13 +69,13 @@ namespace Core.DAL.Services
         public SystemValidationModel Edit(TimbradosEditViewModel viewModel)
         {
             var timbrado = GetById(viewModel.Id);
-            var anotherTimbrado = VerifyTimbrado(viewModel.FechaInicio, viewModel.FechaFin);
+            var validation = VerifyTimbrado(viewModel.FechaInicio, viewModel.FechaFin);
             if (anotherTimbrado != null && anotherTimbrado.Id != viewModel.Id)
                 return new SystemValidationModel() { Success = false, Message = "Ya existe un timbrado en el rango de fecha seleccionado" };
             timbrado = Mapper.Map(viewModel, timbrado);
             _context.Entry(timbrado).State = EntityState.Modified;
             var success = _context.SaveChanges() > 0;
-            var validation = new SystemValidationModel()
+            validation = new SystemValidationModel()
             {
                 Id = timbrado.Id,
                 Message = success ? "Se ha modificado correctamente el timbrado" : "No se pudo modificar el timbrado",

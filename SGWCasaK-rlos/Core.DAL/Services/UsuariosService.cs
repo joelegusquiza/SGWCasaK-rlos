@@ -6,6 +6,7 @@ using Core.DTOs.Profile;
 using Core.DTOs.Shared;
 using Core.DTOs.Usuarios;
 using Core.Entities;
+using Core.Helpers;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -45,12 +46,17 @@ namespace Core.DAL.Services
 
         public Usuario GetByEmail(string email)
         {
-            return GetAll().FirstOrDefault(x => x.Email == email);
+            return GetAll().FirstOrDefault(x => x.Email.TryTrim() == email.TryTrim());
+        }
+
+        public Usuario GetBUserVerifyEmailGuid(string serVerifyEmailGuid)
+        {
+            return GetAll().FirstOrDefault(x => x.UserVerifyEmailGuid.ToString().TryTrim() == serVerifyEmailGuid.TryTrim());
         }
 
         public Usuario GetForLogin(string email)
         {
-            var usuario = _context.Set<Usuario>().Include(x => x.Rol).Include(x => x.Cliente).FirstOrDefault(x => x.Active && x.Email == email);
+            var usuario = _context.Set<Usuario>().Include(x => x.Rol).Include(x => x.Cliente).Include(x => x.Caja).FirstOrDefault(x => x.Active && x.Email == email);
             return usuario;
         }
 
@@ -128,6 +134,20 @@ namespace Core.DAL.Services
             if (!string.IsNullOrEmpty(viewModel.Password)){                
                 usuario.SetPassword(viewModel.Password);                
             }            
+            _context.Entry(usuario).State = EntityState.Modified;
+            var success = _context.SaveChanges() > 0;
+            var validation = new SystemValidationModel()
+            {
+                Id = usuario.Id,
+                Message = success ? "Se ha editado correctamente el usuario" : "No se pudo editar el usuario",
+                Success = success
+            };
+            return validation;
+        }
+
+        public SystemValidationModel Edit(Usuario usuario)
+        {
+           
             _context.Entry(usuario).State = EntityState.Modified;
             var success = _context.SaveChanges() > 0;
             var validation = new SystemValidationModel()

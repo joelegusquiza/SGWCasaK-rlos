@@ -69,7 +69,7 @@
                 <tbody data-bind="foreach: productos">
                     <tr>
                         <td data-bind="text: nombre"></td>
-                        <td data-bind="text: stock"></td>
+                        <td data-bind="text: stockString"></td>
                         <td data-bind="text: precioVenta"></td>
                         <td>
                             @if (HasPermisos(Core.Constants.AccessFunctions.EditProducto))

@@ -9,16 +9,19 @@ using Core.DTOs.Timbrados;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using SGWCasaK_rlos.SecurityHelpers;
 
 namespace SGWCasaK_rlos.Areas.Platform.Controllers
 {
-    [Area ("Platform"), Authorize]
+    [Area ("Platform"), Authorize, ServiceFilter(typeof(UserEmailActiveFilter))]
     public class TimbradosController : Controller
     {
         private readonly ITimbrados _timbrados;
-        public TimbradosController(ITimbrados timbrados)
+        private readonly ICajas _cajas;
+        public TimbradosController(ITimbrados timbrados, ICajas cajas)
         {
             _timbrados = timbrados;
+            _cajas = cajas;
         }
         [Authorize(Policy = "IndexTimbrado")]
         public IActionResult Index()
@@ -32,13 +35,14 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
 
         public IActionResult Add()
         {
-            
-            return View(new TimbradosAddViewModel());
+            var viewModel = new TimbradosAddViewModel() { Cajas = _cajas.GetAll().Select(x => new DropDownViewModel<int>() { Value = x.Id, Text = x.Nombre }).ToList() };
+            return View(viewModel);
         }
 
         public IActionResult Edit(int id)
         {
             var viewModel = Mapper.Map<TimbradosEditViewModel>(_timbrados.GetById(id));
+            viewModel.Cajas = _cajas.GetAll().Select(x => new DropDownViewModel<int>() { Value = x.Id, Text = x.Nombre }).ToList();
             return View(viewModel);
         }
 

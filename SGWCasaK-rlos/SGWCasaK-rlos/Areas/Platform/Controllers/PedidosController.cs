@@ -11,11 +11,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using SGWCasaK_rlos.Areas.Shared.Controllers;
+using SGWCasaK_rlos.SecurityHelpers;
 using static Core.Constants;
 
 namespace SGWCasaK_rlos.Areas.Platform.Controllers
 {
-    [Area("Platform"), Authorize]
+    [Area("Platform"), Authorize, ServiceFilter(typeof(UserEmailActiveFilter))]
     public class PedidosController : BaseController
     {
         private readonly IPedidos _pedidos;

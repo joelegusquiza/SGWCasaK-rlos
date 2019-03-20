@@ -10,10 +10,11 @@ using Core.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using SGWCasaK_rlos.SecurityHelpers;
 
 namespace SGWCasaK_rlos.Areas.Platform.Controllers
 {
-    [Area("Platform"), Authorize]
+    [Area("Platform"), Authorize, ServiceFilter(typeof(UserEmailActiveFilter))]
     public class VentasController : Controller
     {
         private readonly IVentas _ventas;

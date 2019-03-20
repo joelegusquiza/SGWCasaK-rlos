@@ -23,12 +23,27 @@ namespace Core.DAL.Services
 
         public IQueryable<Producto> GetAll()
         {
-            return _context.Set<Producto>().Where(x => x.Active);
+            return _context.Set<Producto>().Include(x => x.ProductoPresentaciones).Where(x => x.Active);
         }
 
-        public List<Producto> GetAllWithPresentacion()
+        public List<ProductoViewModel> GetAllWithPresentacion()
         {
-            return _context.Set<Producto>().Include(x => x.ProductoPresentaciones).Where(x => x.Active).ToList();
+            var productos = GetFormatProductList(GetAll().ToList());
+            return productos;
+        }
+
+        private List<ProductoViewModel> GetFormatProductList(List<Producto> list)
+        {
+            var listToReturn = new List<ProductoViewModel>();
+            foreach (var producto in list)
+            {
+                var viewModel = Mapper.Map<ProductoViewModel>(producto);
+                var dictionary = producto.ProductoPresentaciones.ToList().ToDictionary(x => x.Nombre, x=> x.Equivalencia);
+                viewModel.StockString = Helpers.Helpers.FormatStock(viewModel.Stock, dictionary);
+                listToReturn.Add(viewModel);
+            }
+
+            return listToReturn;
         }
 
         public SystemValidationModel ValidateStockPedido(List<DetallePedido> detallesPedio)

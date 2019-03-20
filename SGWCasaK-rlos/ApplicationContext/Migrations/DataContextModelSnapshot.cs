@@ -19,6 +19,29 @@ namespace ApplicationContext.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("Core.Entities.Caja", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("Active");
+
+                    b.Property<DateTime>("DateCreated");
+
+                    b.Property<DateTime?>("DateModified");
+
+                    b.Property<string>("Nombre");
+
+                    b.Property<int>("UserCreatedId");
+
+                    b.Property<int>("UserModifiedId");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Cajas");
+                });
+
             modelBuilder.Entity("Core.Entities.CategoriaProducto", b =>
                 {
                     b.Property<int>("Id")
@@ -503,6 +526,8 @@ namespace ApplicationContext.Migrations
 
                     b.Property<string>("Direccion");
 
+                    b.Property<string>("Email");
+
                     b.Property<string>("Nombre");
 
                     b.Property<string>("RUC");
@@ -512,6 +537,8 @@ namespace ApplicationContext.Migrations
                     b.Property<decimal>("Saldo");
 
                     b.Property<string>("Telefono");
+
+                    b.Property<int>("Tipo");
 
                     b.Property<int>("UserCreatedId");
 
@@ -561,6 +588,8 @@ namespace ApplicationContext.Migrations
 
                     b.Property<bool>("Active");
 
+                    b.Property<int>("CajaId");
+
                     b.Property<DateTime>("DateCreated");
 
                     b.Property<DateTime?>("DateModified");
@@ -575,11 +604,15 @@ namespace ApplicationContext.Migrations
 
                     b.Property<int>("NroTimbrado");
 
+                    b.Property<int>("PuntoExpedicion");
+
                     b.Property<int>("UserCreatedId");
 
                     b.Property<int>("UserModifiedId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CajaId");
 
                     b.ToTable("Timbrados");
                 });
@@ -594,6 +627,8 @@ namespace ApplicationContext.Migrations
 
                     b.Property<string>("Apellido");
 
+                    b.Property<int?>("CajaId");
+
                     b.Property<int?>("ClienteId");
 
                     b.Property<DateTime>("DateCreated");
@@ -601,7 +636,9 @@ namespace ApplicationContext.Migrations
                     b.Property<DateTime?>("DateModified");
 
                     b.Property<string>("Email")
-                        .HasMaxLength(50);
+                        .HasMaxLength(100);
+
+                    b.Property<bool>("EmailVerified");
 
                     b.Property<DateTime?>("Expiration");
 
@@ -615,11 +652,17 @@ namespace ApplicationContext.Migrations
 
                     b.Property<string>("Salt");
 
+                    b.Property<string>("Telefono");
+
                     b.Property<int>("UserCreatedId");
 
                     b.Property<int>("UserModifiedId");
 
+                    b.Property<Guid>("UserVerifyEmailGuid");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("CajaId");
 
                     b.HasIndex("ClienteId");
 
@@ -795,8 +838,21 @@ namespace ApplicationContext.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
+            modelBuilder.Entity("Core.Entities.Timbrado", b =>
+                {
+                    b.HasOne("Core.Entities.Caja", "Caja")
+                        .WithMany("Timbrados")
+                        .HasForeignKey("CajaId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
             modelBuilder.Entity("Core.Entities.Usuario", b =>
                 {
+                    b.HasOne("Core.Entities.Caja", "Caja")
+                        .WithMany("Usuarios")
+                        .HasForeignKey("CajaId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("Core.Entities.Cliente", "Cliente")
                         .WithMany("Usuarios")
                         .HasForeignKey("ClienteId")

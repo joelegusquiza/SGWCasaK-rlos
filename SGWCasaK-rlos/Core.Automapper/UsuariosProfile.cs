@@ -19,7 +19,8 @@ namespace Core.Automapper
             CreateMap<Usuario, UsuariosAddViewModel>()
                 .ReverseMap();
 
-            CreateMap<Usuario, UsuariosEditViewModel>()
+            CreateMap<UsuariosEditViewModel, Usuario>()
+                .ForMember(dest => dest.Email, opt => opt.Ignore())
                 .ReverseMap();
 
             CreateMap<Usuario, RegisterViewModel>()

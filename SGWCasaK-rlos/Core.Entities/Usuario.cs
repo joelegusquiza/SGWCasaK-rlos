@@ -11,10 +11,14 @@ namespace Core.Entities
     [Table("Usuarios")]
     public class Usuario : BaseEntity
     {
-        [MaxLength(50)]
+        [MaxLength(100)]
         public string Email { get; set; }
         public string Nombre { get; set; }
         public string Apellido { get; set; }  
+        public string Telefono { get; set; }
+
+        public bool EmailVerified { get; set; }
+        public Guid UserVerifyEmailGuid { get; set; }
 
         public string PasswordHash { get; set; }
         public string Salt { get; set; }
@@ -25,6 +29,8 @@ namespace Core.Entities
         public Cliente Cliente { get; set; }
         public int RolId { get; set; }
         public Rol Rol { get; set; }
+        public int? CajaId { get; set; }
+        public Caja Caja { get; set; }
 
         public void SetPassword(string password)
         {

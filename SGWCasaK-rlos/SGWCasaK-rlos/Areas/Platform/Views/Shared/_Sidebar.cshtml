@@ -103,39 +103,7 @@
             </li>
         }
 
-        @if (HasPermisos(Constants.AccessFunctions.IndexTimbrado))
-        {
-            <li class="m-menu__item " aria-haspopup="true">
-                <a href="@Url.Action("Index", "Timbrados", new { area = "Platform"})" class="m-menu__link ">
-                    <i class="m-menu__link-icon flaticon-line-graph"></i>
-                    <span class="m-menu__link-title">
-                        <span class="m-menu__link-wrap">
-                            <span class="m-menu__link-text">
-                                Timbrados
-                            </span>
 
-                        </span>
-                    </span>
-                </a>
-            </li>
-        }
-
-        @if (HasPermisos(Constants.AccessFunctions.IndexCategoria))
-        {
-            <li class="m-menu__item " aria-haspopup="true">
-                <a href="@Url.Action("Index", "CategoriaProductos", new { area = "Platform"})" class="m-menu__link ">
-                    <i class="m-menu__link-icon flaticon-line-graph"></i>
-                    <span class="m-menu__link-title">
-                        <span class="m-menu__link-wrap">
-                            <span class="m-menu__link-text">
-                                Categoria Productos
-                            </span>
-
-                        </span>
-                    </span>
-                </a>
-            </li>
-        }
         @if (HasPermisos(Constants.AccessFunctions.VerReportes))
         {
             <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" data-menu-submenu-toggle="hover">
@@ -201,7 +169,39 @@
             </li>
         }*@
 
+            @if (HasPermisos(Constants.AccessFunctions.IndexTimbrado))
+            {
+                <li class="m-menu__item " aria-haspopup="true">
+                    <a href="@Url.Action("Index", "Timbrados", new { area = "Platform"})" class="m-menu__link ">
+                        <i class="m-menu__link-icon flaticon-line-graph"></i>
+                        <span class="m-menu__link-title">
+                            <span class="m-menu__link-wrap">
+                                <span class="m-menu__link-text">
+                                    Timbrados
+                                </span>
 
+                            </span>
+                        </span>
+                    </a>
+                </li>
+            }
+
+            @if (HasPermisos(Constants.AccessFunctions.IndexCategoria))
+            {
+                <li class="m-menu__item " aria-haspopup="true">
+                    <a href="@Url.Action("Index", "CategoriaProductos", new { area = "Platform"})" class="m-menu__link ">
+                        <i class="m-menu__link-icon flaticon-line-graph"></i>
+                        <span class="m-menu__link-title">
+                            <span class="m-menu__link-wrap">
+                                <span class="m-menu__link-text">
+                                    Categoria Productos
+                                </span>
+
+                            </span>
+                        </span>
+                    </a>
+                </li>
+            }
 
             @if (HasPermisos(Constants.AccessFunctions.IndexProducto))
             {
@@ -253,6 +253,24 @@
                     </a>
                 </li>
             }
+
+            @if (HasPermisos(Constants.AccessFunctions.IndexCaja))
+            {
+                <li class="m-menu__item " aria-haspopup="true">
+                    <a href="@Url.Action("Index", "Cajas", new { area = "Admin"})" class="m-menu__link ">
+                        <i class="m-menu__link-icon flaticon-line-graph"></i>
+                        <span class="m-menu__link-title">
+                            <span class="m-menu__link-wrap">
+                                <span class="m-menu__link-text">
+                                    Cajas
+                                </span>
+
+                            </span>
+                        </span>
+                    </a>
+                </li>
+            }
+
 
             @if (HasPermisos(Core.Constants.AccessFunctions.IndexUsuario))
             {

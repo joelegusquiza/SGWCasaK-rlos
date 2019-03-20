@@ -83,7 +83,7 @@
             if (!$("#form").valid()) return;
 
             $.ajax({
-                url: "@Url.Action("Modify", "Profile")",
+                url: "@Url.Action("ResendEmail", "Profile")",
                 type: "POST",
                 data: { model: ko.toJSON(dataViewModel) },
                 success: function (response) {

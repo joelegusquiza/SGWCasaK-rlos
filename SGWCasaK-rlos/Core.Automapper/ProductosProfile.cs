@@ -11,6 +11,7 @@ namespace Core.Automapper
     {
         public ProductosProfile()
         {
+            CreateMap<Producto, ProductoViewModel>().ReverseMap();
             CreateMap<Producto, ListaProductoViewModel>()
                 .ForMember(dest => dest.ProductoId, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.StockActual, opt => opt.MapFrom(src => src.Stock))

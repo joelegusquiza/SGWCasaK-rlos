@@ -50,6 +50,7 @@ namespace ApplicationContext
         public DbSet<ProductoPresentacion> ProductoPresentaciones { get; set; }
         public DbSet<Inventario> Inventario { get; set; }
         public DbSet<DetalleInventario> DetalleInventario { get; set; }
+        public DbSet<Caja> Cajas { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -193,6 +194,18 @@ namespace ApplicationContext
                 .WithOne(x => x.Producto)
                 .HasForeignKey(x => x.ProductoId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Caja>()
+                  .HasMany(x => x.Timbrados)
+                  .WithOne(x => x.Caja)
+                  .HasForeignKey(x => x.CajaId)
+                  .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Caja>()
+                  .HasMany(x => x.Usuarios)
+                  .WithOne(x => x.Caja)
+                  .HasForeignKey(x => x.CajaId)
+                  .OnDelete(DeleteBehavior.Restrict);
         }
 
         public override int SaveChanges()

@@ -6,13 +6,15 @@ using AutoMapper;
 using Core.DAL.Interfaces;
 using Core.DTOs.Productos;
 using Core.DTOs.Shared;
+using Core.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using SGWCasaK_rlos.SecurityHelpers;
 
 namespace SGWCasaK_rlos.Areas.Platform.Controllers
 {
-    [Area("Platform"), Authorize]
+    [Area("Platform"), Authorize, ServiceFilter(typeof(UserEmailActiveFilter))]
     public class ProductosController : Controller
     {
         private readonly IProductos _productos;
@@ -27,7 +29,7 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
         {
             var viewModel = new ProductosIndexViewModel()
             {
-                Productos = Mapper.Map<List<ProductoViewModel>>(_productos.GetAll())
+                Productos = _productos.GetAllWithPresentacion()
             };
             return View(viewModel);
         }
@@ -41,7 +43,14 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
 
         public IActionResult Edit(int id)
         {
-            var viewModel = Mapper.Map<ProductosEditViewModel>(_productos.GetById(id));
+            var producto = _productos.GetById(id);
+            var viewModel = Mapper.Map<ProductosEditViewModel>(producto);
+            var dictionary = new Dictionary<string, int>();
+            foreach (var presentacion in producto.ProductoPresentaciones)
+            {
+                dictionary.Add(presentacion.Nombre, presentacion.Equivalencia);
+            }
+            viewModel.StockString = Helpers.FormatStock(producto.Stock, dictionary );
             viewModel.CategoriasProducto = _categoriaProductos.GetAll().Select(x => new DropDownViewModel<int>() { Text = x.Nombre, Value = x.Id }).ToList();
             return View(viewModel);
         }

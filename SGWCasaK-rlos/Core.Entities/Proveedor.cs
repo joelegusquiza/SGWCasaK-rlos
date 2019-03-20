@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
+using static Core.Constants;
 
 namespace Core.Entities
 {
@@ -14,7 +15,9 @@ namespace Core.Entities
         public string RUC { get; set; }
         public string Telefono { get; set; }
         public string Direccion { get; set; }
+        public string Email { get; set; }
         public decimal Saldo { get; set; }
+        public TiposProveedores Tipo { get; set; }
 
         public ICollection<Compra> Compras { get; set; } = new HashSet<Compra>();
         public ICollection<PagoCompra> PagosCompra { get; set; } = new HashSet<PagoCompra>();

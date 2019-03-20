@@ -103,11 +103,11 @@ namespace Core.Helpers
         {
             try
             {
-                return myObject?.ToString() ?? string.Empty;
+                return myObject?.ToString() ?? "";
             }
             catch (Exception)
             {
-                return string.Empty;
+                return "";
             }
         }
 

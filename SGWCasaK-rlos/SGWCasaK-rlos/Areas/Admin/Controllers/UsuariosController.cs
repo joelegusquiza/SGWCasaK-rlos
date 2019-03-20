@@ -9,20 +9,23 @@ using Core.DTOs.Usuarios;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using SGWCasaK_rlos.SecurityHelpers;
 using static Core.Constants;
 
 namespace SGWCasaK_rlos.Areas.Admin.Controllers
 {
-    [Area("Admin"), Authorize]
+    [Area("Admin"), Authorize , ServiceFilter(typeof(UserEmailActiveFilter))]
     public class UsuariosController : Controller
     {
         private readonly IUsuarios _usuarios;
         private readonly IRoles _roles;
+        private readonly ICajas _cajas;
         static string IndexUsuario;
-        public UsuariosController(IUsuarios usuarios, IRoles roles)
+        public UsuariosController(IUsuarios usuarios, IRoles roles, ICajas cajas)
         {
             _usuarios = usuarios;
             _roles = roles;
+            _cajas = cajas;
         }
         [Authorize(Policy = "IndexUsuario")]
         public IActionResult Index()
@@ -38,7 +41,8 @@ namespace SGWCasaK_rlos.Areas.Admin.Controllers
         {
             var viewModel = new UsuariosAddViewModel() 
             { 
-                Roles = _roles.GetAll().Select(x => new DropDownViewModel<int>() { Value = x.Id, Text = x.Nombre}).ToList()
+                Roles = _roles.GetAll().Select(x => new DropDownViewModel<int>() { Value = x.Id, Text = x.Nombre}).ToList(),
+                Cajas = _cajas.GetAll().Select(x => new DropDownViewModel<int>() { Value = x.Id, Text = x.Nombre }).ToList(),
             };
             return View(viewModel);
         }
@@ -47,6 +51,7 @@ namespace SGWCasaK_rlos.Areas.Admin.Controllers
         {
             var viewModel = Mapper.Map<UsuariosEditViewModel>(_usuarios.GetById(id));
             viewModel.Roles = _roles.GetAll().Select(x => new DropDownViewModel<int>() { Value = x.Id, Text = x.Nombre }).ToList();
+            viewModel.Cajas = _cajas.GetAll().Select(x => new DropDownViewModel<int>() { Value = x.Id, Text = x.Nombre }).ToList();
             return View(viewModel);
         }
 

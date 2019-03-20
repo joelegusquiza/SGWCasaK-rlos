@@ -111,6 +111,14 @@ namespace Core
             DeleteInventario = 4500,
             [Description("Ver Detalle Inventario")]
             ViewInventario = 4600,
+            [Description("Ver Cajas")]
+            IndexCaja = 4700,
+            [Description("Agregar Cajas")]
+            AddCaja = 4800,
+            [Description("Editar Cajas")]
+            EditCaja = 4900,
+            [Description("Eliminar Cajas")]
+            DeleteCaja = 5000,
         }
         
         public enum EstadoVenta
@@ -168,7 +176,12 @@ namespace Core
             metroscuadrados,
             metroscubicos,
             unidad
+        }
 
+        public enum TiposProveedores
+        {
+            Fisica,
+            Juridica
         }
 
         public static class CustomClaimTypes

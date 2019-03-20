@@ -27,7 +27,7 @@ namespace SGWCasaK_rlos.Areas.Shared.Controllers
             _emailSender = emailSender;
             _environment = environment;
         }
-        
+
         public IActionResult Index()
         {
             var viewModel = new LoginIndexViewModel();
@@ -58,10 +58,19 @@ namespace SGWCasaK_rlos.Areas.Shared.Controllers
             return RedirectToAction("Index", "Login", new { area = "Shared" });
         }
 
+        public IActionResult ConfirmEmail(string userVerifyEmailGuid)
+        {
+            var user = _usuarios.GetBUserVerifyEmailGuid(userVerifyEmailGuid);
+            user.EmailVerified = true;
+            var success = _usuarios.Edit(user);
+            return View(success.Success);
+
+        }
+
         [HttpPost]
         public async Task<SystemValidationModel> Login(string model)
         {
-            try 
+            try
             {
                 var viewModel = JsonConvert.DeserializeObject<LoginViewModel>(model);
                 var usuario = _usuarios.GetForLogin(viewModel.Email);
@@ -70,7 +79,7 @@ namespace SGWCasaK_rlos.Areas.Shared.Controllers
                 var success = usuario.CheckPassword(viewModel.Password);
                 if (success)
                 {
-                    ClaimsIdentity claims ;
+                    ClaimsIdentity claims;
                     if (usuario.Cliente == null)
                         claims = new ClaimsIdentity(SecurityHelper.GetUserClaims(usuario), "Cookie");
                     else
@@ -80,19 +89,40 @@ namespace SGWCasaK_rlos.Areas.Shared.Controllers
                     return new SystemValidationModel() { Success = true, Message = "Login Exitoso", Url = Url.Action("Index", "Dashboard", new { area = "platform" }) };
                 }
                 return new SystemValidationModel() { Success = false, Message = "Password Incorrecto" };
-            } 
-            catch (Exception ex) 
+            }
+            catch (Exception ex)
             {
                 throw;
             }
-            
+
         }
 
+        
         [HttpPost]
-        public SystemValidationModel Register(string model)
+        public async Task<SystemValidationModel> Register(string model)
         {
             var viewModel = JsonConvert.DeserializeObject<RegisterViewModel>(model);
-            return _usuarios.Register(viewModel);
+            var result = _usuarios.Register(viewModel);
+            if (result.Success)
+            {
+                var usuario = _usuarios.GetById(result.Id);
+                usuario.UserVerifyEmailGuid = Guid.NewGuid();
+                var success = _usuarios.Edit(usuario);
+                if (success.Success)
+                {
+                    var emailModel = new EmailModel()
+                    {
+                        From = "noreply@casak-rlos.com.py",
+                        FromName = "Casa K-rlos",
+                        HtmlContent = $"Haga click <a href='{_environment.BaseUrl()}/Shared/Login/ConfirmEmail?userVerifyEmailGuid={usuario.UserVerifyEmailGuid.ToString()}'>aqui</a> para activar su cuenta.",
+                        Subject = "Email de Activacion de Cuenta",
+                        To = viewModel.Email,
+                        ToName = $"{usuario.Nombre} {usuario.Apellido}"
+                    };
+                    await _emailSender.SendEmailAsync(emailModel);
+                }
+            }
+            return result;
         }
 
         [HttpPost]
@@ -104,12 +134,12 @@ namespace SGWCasaK_rlos.Areas.Shared.Controllers
                 return new SystemValidationModel() { Success = false, Message = "No existe una cuenta registrada con ese email" };
             usuario.Guid = Guid.NewGuid();
             usuario.Expiration = DateTime.UtcNow.AddMinutes(30);
-            var success = _usuarios.Update(usuario);
-            if (!success)
+            var success = _usuarios.Edit(usuario);
+            if (!success.Success)
                 return new SystemValidationModel() { Success = false, Message = "Ocurrio un eror por favor intentelo de nuevo" };
             var emailModel = new EmailModel()
             {
-               
+
                 From = "noreply@casak-rlos.com.py",
                 FromName = "Casa K-rlos",
                 HtmlContent = $"Haga click <a href='{_environment.BaseUrl()}/Shared/Login/ChangePassword?resetGuid={usuario.Guid}'>aqui</a> para recuperar su cuenta.",

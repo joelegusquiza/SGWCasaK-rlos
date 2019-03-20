@@ -20,10 +20,12 @@ namespace Core.DAL.Interfaces
         Usuario GetByEmail(string email);
         Usuario GetByEmailWithRol(string email);
         Usuario GetByGuid(string guid);
+        Usuario GetBUserVerifyEmailGuid(string serVerifyEmailGuid);
         bool Update(Usuario usuario);
         SystemValidationModel Register(RegisterViewModel viewModel);
         SystemValidationModel Save(UsuariosAddViewModel viewModel);
         SystemValidationModel Edit(UsuariosEditViewModel viewModel);
+        SystemValidationModel Edit(Usuario usuario);
         SystemValidationModel Edit(ProfileViewModel viewModel);
         SystemValidationModel Desactivate(int id);
         SystemValidationModel UpdatePassword(ChangePasswordViewModel viewModel);

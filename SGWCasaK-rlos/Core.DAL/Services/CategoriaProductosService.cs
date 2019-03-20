@@ -4,6 +4,7 @@ using Core.DAL.Interfaces;
 using Core.DTOs.CategoriaProductos;
 using Core.DTOs.Shared;
 using Core.Entities;
+using Core.Helpers;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -31,8 +32,15 @@ namespace Core.DAL.Services
             return GetAll().FirstOrDefault(x => x.Id == id);
         }
 
+        public CategoriaProducto GetByName(string name)
+        {
+            return GetAll().Where(x => x.Nombre.ToLower().TryTrim() == name.ToLower().TryTrim()).FirstOrDefault();
+        }
+
         public SystemValidationModel Save(CategoriaProductosAddViewModel viewModel)
         {
+            if (GetByName(viewModel.Nombre) != null)
+                return new SystemValidationModel() { Success = false, Message = "Ya existe una categoria con el mismo nombre" };
             var categoriaProducto = Mapper.Map<CategoriaProducto>(viewModel);
 
             _context.Entry(categoriaProducto).State = EntityState.Added;
@@ -48,7 +56,10 @@ namespace Core.DAL.Services
 
         public SystemValidationModel Edit(CategoriaProductosEditViewModel viewModel)
         {
-
+         
+            var checkCatageria = GetByName(viewModel.Nombre);
+            if (checkCatageria != null && checkCatageria.Id != viewModel.Id)
+                return new SystemValidationModel() { Success = false, Message = "Ya existe una categoria con el mismo nombre" };
             var categoriaProducto = GetById(viewModel.Id);
             categoriaProducto = Mapper.Map(viewModel, categoriaProducto);
 
