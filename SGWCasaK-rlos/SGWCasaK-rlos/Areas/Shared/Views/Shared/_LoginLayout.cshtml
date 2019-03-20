@@ -64,18 +64,9 @@ License: You must have a valid license purchased only from themeforest(the above
     <script src="~/metronic/js/messages_es.js" type="text/javascript"></script>
     <script src="~/metronic/js/swg.casa.k-rlos.js"></script>
     <script type="text/javascript">
-        $(document)
-            .ready(function () {
-
-            })
-            .ajaxStart(function () {
-                $.blockUI({ message: '' });
-                $("#pleaseWaitDialog").modal("show");
-            })
-            .ajaxStop(function () {
-                $("#pleaseWaitDialog").modal("hide");
-                $.unblockUI();
-            });
+        $(document)           
+            .ajaxStart(function () { $.blockUI({ message: '' }); $("#pleaseWaitDialog").modal("show"); })
+            .ajaxStop(function () { console.log("here"); $.unblockUI(); $("#pleaseWaitDialog").modal("hide"); }); 
     </script>
     @RenderSection("scripts", required: false)
 </body>

@@ -10,6 +10,7 @@ namespace Core.DTOs.Productos
         public string Nombre { get; set; }
         public string Descripcion { get; set; }
         public int Equivalencia { get; set; }
-        public decimal PrecioVenta { get; set; }
+        //public decimal PrecioVenta { get; set; }
+        public double PorcentajeGanancia { get; set; }
     }
 }

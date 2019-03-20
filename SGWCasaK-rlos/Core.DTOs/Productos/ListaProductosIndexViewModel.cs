@@ -18,7 +18,8 @@ namespace Core.DTOs.Productos
         public int Cantidad { get; set; }
         public int StockActual { get; set; }
         public PorcIva PorcentajeIva { get; set; }
-        public decimal PrecioVenta { get; set; }
+        //public decimal PrecioVenta { get; set; }
+        public double PorcentajeGanancia { get; set; }
         public decimal Equivalencia { get; set; }
         public decimal PrecioCompra { get; set; }
         public decimal MontoTotal { get; set; }
@@ -33,6 +34,7 @@ namespace Core.DTOs.Productos
         public int PresentacionId { get; set; }
         public string Nombre{ get; set; }
         public int Equivalencia { get; set; }
-        public decimal PrecioVenta { get; set; }
+        //public decimal PrecioVenta { get; set; }
+        public double PorcentajeGanancia { get; set; }
     }
 }

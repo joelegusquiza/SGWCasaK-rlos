@@ -41,9 +41,9 @@
                         </div>
                         <div class="form-group m-form__group">
                             <label for="exampleInputEmail1">
-                                Precio Venta
+                                Porcentaje Ganancia
                             </label>
-                            <input type="text" class="form-control m-input" id="precioVenta" name="precioVenta" data-bind="value: precioVenta">
+                            <input type="text" class="form-control m-input" id="porcentajeGanancia" name="porcentajeGanancia" data-bind="value: porcentajeGanancia">
                             <span class="alert-danger"></span>
                         </div>
                         <div class="form-group m-form__group">
@@ -129,9 +129,9 @@
                         </div>
                         <div class="form-group m-form__group">
                             <label for="exampleInputEmail1">
-                                Precio
+                                Porcentaje Ganancia
                             </label>
-                            <input type="text" class="form-control m-input" id="presentacionEquivalencia" name="presentacionEquivalencia" data-bind="value: productoPresentacion.precioVenta">
+                            <input type="text" class="form-control m-input" id="porcentajeGanancia" name="porcentajeGanancia" data-bind="value: productoPresentacion.porcentajeGanancia">
                             <span class="alert-danger"></span>
                         </div>
                     </div>
@@ -163,7 +163,7 @@
                                             Equivalencia
                                         </th>
                                         <th style="width: 20%">
-                                            Precio Venta
+                                            Porcentaje Ganancia
                                         </th>
                                         <th style="width: 15%">
 
@@ -178,7 +178,7 @@
                                         <td data-bind="text: nombre"></td>
                                         <td data-bind="text: descripcion"></td>
                                         <td data-bind="text: equivalencia"></td>
-                                        <td data-bind="text: precioVenta"></td>
+                                        <td data-bind="text: porcentajeGanancia"></td>
                                         <td><a href="#" data-bind="click: $parent.deletePresentacion "><i class="fa fa-trash"></i></a></td>
                                     </tr>
 
@@ -251,7 +251,7 @@
                 unidadMedida: {
                     required: true
                 },
-                precioVenta: {
+                porcentajeGanancia: {
                     required: true
                 },
                 categoriaProducto: {
