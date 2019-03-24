@@ -51,6 +51,7 @@ namespace ApplicationContext
         public DbSet<Inventario> Inventario { get; set; }
         public DbSet<DetalleInventario> DetalleInventario { get; set; }
         public DbSet<Caja> Cajas { get; set; }
+        public DbSet<Sucursal> Sucursales { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -199,13 +200,13 @@ namespace ApplicationContext
                   .HasMany(x => x.Timbrados)
                   .WithOne(x => x.Caja)
                   .HasForeignKey(x => x.CajaId)
-                  .OnDelete(DeleteBehavior.Restrict);
+                  .OnDelete(DeleteBehavior.Restrict);           
 
-            modelBuilder.Entity<Caja>()
-                  .HasMany(x => x.Usuarios)
-                  .WithOne(x => x.Caja)
-                  .HasForeignKey(x => x.CajaId)
-                  .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Sucursal>()
+                .HasMany(x => x.Timbrados)
+                .WithOne(x => x.Sucursal)
+                .HasForeignKey(x => x.SucursalId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
 
         public override int SaveChanges()

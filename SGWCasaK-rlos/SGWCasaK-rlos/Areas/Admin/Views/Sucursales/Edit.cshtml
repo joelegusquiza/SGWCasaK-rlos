@@ -1,4 +1,4 @@
-﻿@model Core.DTOs.Roles.RolesEditViewModel
+﻿@model Core.DTOs.Sucursales.SucursalesEditViewModel
 <div class="m-content" style="width: 50%">
     <div class="row">
         <div class="col-md-12">
@@ -10,7 +10,7 @@
                                 <i class="la la-gear"></i>
                             </span>
                             <h3 class="m-portlet__head-text">
-                                Editar Rol
+                                Editar Sucursal
                             </h3>
                         </div>
                     </div>
@@ -22,45 +22,15 @@
                             <label for="exampleInputEmail1">
                                 Nombre
                             </label>
-                            <input type="text" class="form-control m-input" id="nombre" name="nombre" data-bind="value: nombre" readonly>
+                            <input type="text" class="form-control m-input" id="nombre" name="nombre" data-bind="value: nombre">
                             <span class="alert-danger"></span>
                         </div>
                         <div class="form-group m-form__group">
                             <label for="exampleInputEmail1">
-                                Descripcion
+                                Codigo Establecimiento
                             </label>
-                            <input type="text" class="form-control m-input" id="descripcion" name="descripcion" data-bind="value: descripcion">
+                            <input type="text" class="form-control m-input" id="codigoEstablecimiento" name="codigoEstablecimiento" data-bind="value: codigoEstablecimiento">
                             <span class="alert-danger"></span>
-                        </div>
-                        <div class="form-group m-form__group">
-                            <label for="exampleInputEmail1">
-                                Es Cliente
-                            </label>
-                            <input type="checkbox" class="form-control m-input" id="isCliente" name="isCliente" data-bind="checked: isCliente">
-
-                        </div>
-                        <div class="form-group m-form__group">
-                            <label for="exampleInputEmail1">
-                                Es Cajero
-                            </label>
-                            <input type="checkbox" class="form-control m-input" id="isCajero" name="isCajero" data-bind="checked: isCajero">
-
-                        </div>
-                        <div class="m-form__group form-group">
-                            <label>
-                                Permisos
-                            </label>
-                            <div class="m-checkbox-list" style=" list-style: none; overflow-y: scroll; height: 120px; " data-bind="foreach: permisosList">
-
-                                <div class="checkbox">
-                                    <label class="i-checks">
-                                        <input type="checkbox" value="" data-bind="checked: selected">
-                                        <i></i>
-                                        <span data-bind="text: nombre" style="margin-left:20px"></span>
-                                    </label>
-                                </div>
-                            </div>
-
                         </div>
                     </div>
                     <div class="m-portlet__foot m-portlet__foot--fit">
@@ -83,19 +53,16 @@
         var dataViewModel = ko.mapping.fromJS(model);
         dataViewModel.postDataToController = function () {
 
-            if ($.grep(dataViewModel.permisosList(), function (item) { return item.selected() === true; }).length < 1) {
-                showError("Debe seleccionar al menos un permiso para el rol");
-                return;
-            }
+
             if (!$("#form").valid()) return;
-            if (dataViewModel.isCajero() && dataViewModel.isCliente()) { showError("El rolo puede ser solo cajero o cliente, no ambos");  return;};
+
             $.ajax({
-                url: "@Url.Action("Edit", "Roles")",
+                url: "@Url.Action("Edit", "Sucursales")",
                 type: "POST",
                 data: { model: ko.toJSON(dataViewModel) },
                 success: function (response) {
                     if (response.success) {
-                        showSuccessAndGoToUrl(response.message, '@Url.Action("Index", "Roles", new { area = "Admin"})');
+                        showSuccessAndGoToUrl(response.message, '@Url.Action("Index", "Sucursales", new { area = "Admin"})');
                     } else {
                         showError(response.message);
                     }
@@ -113,6 +80,12 @@
             rules: {
                 nombre: {
                     required: true
+                },
+                codigoEstablecimiento:
+                {
+                    required: true,
+                    number: true,
+                    min: 1
                 }
             },
             errorPlacement: function (error, element) {

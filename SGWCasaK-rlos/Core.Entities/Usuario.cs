@@ -29,8 +29,6 @@ namespace Core.Entities
         public Cliente Cliente { get; set; }
         public int RolId { get; set; }
         public Rol Rol { get; set; }
-        public int? CajaId { get; set; }
-        public Caja Caja { get; set; }
 
         public void SetPassword(string password)
         {

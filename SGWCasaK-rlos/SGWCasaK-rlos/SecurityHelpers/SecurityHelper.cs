@@ -18,8 +18,6 @@ namespace SGWCasaK_rlos.SecurityHelpers
                 new Claim(ClaimTypes.Name, $"{usuario.Nombre} {usuario.Apellido}"),
                 new Claim(CustomClaims.Permisos, usuario.Rol.Permisos),
                 new Claim(CustomClaims.EmailVerified, usuario.EmailVerified.ToString()),
-                new Claim(CustomClaims.CajaId, usuario.CajaId.TryToString()),
-                new Claim(CustomClaims.CajaNombre, usuario.Caja == null? "" : usuario.Caja.Nombre.TryToString())
             };
             return claims;
         }

@@ -243,8 +243,10 @@
                     required: true
                 },
                 stock: {
-                    required: true
-                },                
+                    required: true,
+                    number: true,
+                    min: 1
+                },
                 porcentajeIva: {
                     required: true
                 },
@@ -252,7 +254,9 @@
                     required: true
                 },
                 porcentajeGanancia: {
-                    required: true
+                    required: true,
+                    number: true,
+                    min: 1
                 },
                 categoriaProducto: {
                     required: true

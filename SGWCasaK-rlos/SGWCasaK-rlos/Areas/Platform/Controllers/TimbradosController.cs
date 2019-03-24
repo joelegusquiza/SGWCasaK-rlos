@@ -18,10 +18,12 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
     {
         private readonly ITimbrados _timbrados;
         private readonly ICajas _cajas;
-        public TimbradosController(ITimbrados timbrados, ICajas cajas)
+        private readonly ISucursales _sucursales;
+        public TimbradosController(ITimbrados timbrados, ICajas cajas, ISucursales sucursales)
         {
             _timbrados = timbrados;
             _cajas = cajas;
+            _sucursales = sucursales;
         }
         [Authorize(Policy = "IndexTimbrado")]
         public IActionResult Index()
@@ -35,7 +37,11 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
 
         public IActionResult Add()
         {
-            var viewModel = new TimbradosAddViewModel() { Cajas = _cajas.GetAll().Select(x => new DropDownViewModel<int>() { Value = x.Id, Text = x.Nombre }).ToList() };
+            var viewModel = new TimbradosAddViewModel() 
+            {
+                Cajas = _cajas.GetAll().Select(x => new DropDownViewModel<int>() { Value = x.Id, Text = x.Nombre }).ToList(),
+                Sucursales = _sucursales.GetAll().Select(x => new DropDownViewModel<int>() { Value = x.Id, Text = $"{x.Nombre} - Codigo Establecimiento: {x.CodigoEstablecimiento}" }).ToList()
+            };
             return View(viewModel);
         }
 
@@ -43,6 +49,7 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
         {
             var viewModel = Mapper.Map<TimbradosEditViewModel>(_timbrados.GetById(id));
             viewModel.Cajas = _cajas.GetAll().Select(x => new DropDownViewModel<int>() { Value = x.Id, Text = x.Nombre }).ToList();
+            viewModel.Sucursales = _sucursales.GetAll().Select(x => new DropDownViewModel<int>() { Value = x.Id, Text = $"{x.Nombre} - Codigo Establecimiento: {x.CodigoEstablecimiento}" }).ToList();
             return View(viewModel);
         }
 

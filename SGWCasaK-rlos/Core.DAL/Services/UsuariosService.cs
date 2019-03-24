@@ -56,7 +56,7 @@ namespace Core.DAL.Services
 
         public Usuario GetForLogin(string email)
         {
-            var usuario = _context.Set<Usuario>().Include(x => x.Rol).Include(x => x.Cliente).Include(x => x.Caja).FirstOrDefault(x => x.Active && x.Email == email);
+            var usuario = _context.Set<Usuario>().Include(x => x.Rol).Include(x => x.Cliente).FirstOrDefault(x => x.Active && x.Email == email);
             return usuario;
         }
 

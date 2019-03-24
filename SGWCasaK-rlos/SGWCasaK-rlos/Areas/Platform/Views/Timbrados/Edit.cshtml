@@ -118,16 +118,26 @@
             rules: {
                 nroTimbrado: {
                     required: true,
-                    number: true
+                    number: true,
+                    min: 1
                 },
                 nroInicio: {
                     required: true,
-                    number: true
+                    number: true,
+                    min: 1
                 },
                 nroFin: {
                     required: true,
-                    number: true
-                }
+                    number: true,
+                    min: 1
+                },
+                puntoExpedicion: {
+                    required: true,
+                    number: true,
+                    min: 1
+                },
+                sucursalId: { required: true },
+                cajaId: { required: true }
             },
             errorPlacement: function (error, element) {
                 var span = element.siblings('span');

@@ -271,6 +271,23 @@
                 </li>
             }
 
+            @if (HasPermisos(Constants.AccessFunctions.IndexSucursal))
+            {
+                <li class="m-menu__item " aria-haspopup="true">
+                    <a href="@Url.Action("Index", "Sucursales", new { area = "Admin"})" class="m-menu__link ">
+                        <i class="m-menu__link-icon flaticon-line-graph"></i>
+                        <span class="m-menu__link-title">
+                            <span class="m-menu__link-wrap">
+                                <span class="m-menu__link-text">
+                                    Sucursales
+                                </span>
+
+                            </span>
+                        </span>
+                    </a>
+                </li>
+            }
+
 
             @if (HasPermisos(Core.Constants.AccessFunctions.IndexUsuario))
             {

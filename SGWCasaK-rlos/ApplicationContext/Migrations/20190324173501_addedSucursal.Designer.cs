@@ -4,14 +4,16 @@ using ApplicationContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ApplicationContext.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20190324173501_addedSucursal")]
+    partial class addedSucursal
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -569,8 +571,6 @@ namespace ApplicationContext.Migrations
 
                     b.Property<bool>("IsAdmin");
 
-                    b.Property<bool>("IsCajero");
-
                     b.Property<bool>("IsCliente");
 
                     b.Property<string>("Nombre");
@@ -593,8 +593,6 @@ namespace ApplicationContext.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<bool>("Active");
-
-                    b.Property<int>("CodigoEstablecimiento");
 
                     b.Property<DateTime>("DateCreated");
 
@@ -899,9 +897,10 @@ namespace ApplicationContext.Migrations
 
             modelBuilder.Entity("Core.Entities.Usuario", b =>
                 {
-                    b.HasOne("Core.Entities.Caja")
+                    b.HasOne("Core.Entities.Caja", "Caja")
                         .WithMany("Usuarios")
-                        .HasForeignKey("CajaId");
+                        .HasForeignKey("CajaId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Core.Entities.Cliente", "Cliente")
                         .WithMany("Usuarios")

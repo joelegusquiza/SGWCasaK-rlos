@@ -19,13 +19,12 @@ namespace SGWCasaK_rlos.Areas.Admin.Controllers
     {
         private readonly IUsuarios _usuarios;
         private readonly IRoles _roles;
-        private readonly ICajas _cajas;
-        static string IndexUsuario;
-        public UsuariosController(IUsuarios usuarios, IRoles roles, ICajas cajas)
+
+        public UsuariosController(IUsuarios usuarios, IRoles roles)
         {
             _usuarios = usuarios;
             _roles = roles;
-            _cajas = cajas;
+
         }
         [Authorize(Policy = "IndexUsuario")]
         public IActionResult Index()
@@ -42,7 +41,7 @@ namespace SGWCasaK_rlos.Areas.Admin.Controllers
             var viewModel = new UsuariosAddViewModel() 
             { 
                 Roles = _roles.GetAll().Select(x => new DropDownViewModel<int>() { Value = x.Id, Text = x.Nombre}).ToList(),
-                Cajas = _cajas.GetAll().Select(x => new DropDownViewModel<int>() { Value = x.Id, Text = x.Nombre }).ToList(),
+                
             };
             return View(viewModel);
         }
@@ -51,7 +50,7 @@ namespace SGWCasaK_rlos.Areas.Admin.Controllers
         {
             var viewModel = Mapper.Map<UsuariosEditViewModel>(_usuarios.GetById(id));
             viewModel.Roles = _roles.GetAll().Select(x => new DropDownViewModel<int>() { Value = x.Id, Text = x.Nombre }).ToList();
-            viewModel.Cajas = _cajas.GetAll().Select(x => new DropDownViewModel<int>() { Value = x.Id, Text = x.Nombre }).ToList();
+           
             return View(viewModel);
         }
 
