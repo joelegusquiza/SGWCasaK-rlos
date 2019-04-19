@@ -127,6 +127,8 @@ namespace Core
             EditSucursal = 5300,
             [Description("Eliminar Sucursales")]
             DeleteSucursal = 5400,
+            [Description("Cambiar de Sucursal")]
+            ChangeSucursal = 5500,
         }
         
         public enum EstadoVenta

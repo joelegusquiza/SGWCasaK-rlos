@@ -16,7 +16,8 @@ namespace Core.DTOs.Productos
         public int ProductoId { get; set; }
         public string Nombre { get; set; }
         public int Cantidad { get; set; }
-        public int StockActual { get; set; }
+        public int Stock { get; set; }
+        public string StockString { get; set; }
         public PorcIva PorcentajeIva { get; set; }
         //public decimal PrecioVenta { get; set; }
         public double PorcentajeGanancia { get; set; }

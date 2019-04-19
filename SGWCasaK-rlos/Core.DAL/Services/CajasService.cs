@@ -44,7 +44,7 @@ namespace Core.DAL.Services
         public SystemValidationModel Edit(CajasEditViewModel viewModel)
         {
             var checkCaja= GetByName(viewModel.Nombre);
-            if (checkCaja != null && checkCaja.Id != viewModel.Id)
+            if (checkCaja != null && checkCaja.Id != viewModel.Id && viewModel.SucursalId == checkCaja.SucursalId)
                 return new SystemValidationModel() { Success = false, Message = "Ya existe una caja con el mismo nombre" };
             var rol = GetById(viewModel.Id);
             rol = Mapper.Map(viewModel, rol);
@@ -72,8 +72,8 @@ namespace Core.DAL.Services
 
         public SystemValidationModel Save(CajasAddViewModel viewModel)
         {
-            
-            if (GetByName(viewModel.Nombre) != null)
+            var checkCaja = GetByName(viewModel.Nombre);
+            if (checkCaja != null && viewModel.SucursalId == checkCaja.SucursalId) 
                 return new SystemValidationModel() { Success = false, Message = "Ya existe una caja con el mismo nombre" };
 
             var caja = Mapper.Map<Caja>(viewModel);

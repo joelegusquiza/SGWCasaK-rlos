@@ -70,22 +70,7 @@
                 </a>
             </li>
         }
-        @if (HasPermisos(Constants.AccessFunctions.IndexCompra))
-        {
-            <li class="m-menu__item " aria-haspopup="true">
-                <a href="@Url.Action("Index", "Compras", new { area = "Platform"})" class="m-menu__link ">
-                    <i class="m-menu__link-icon flaticon-line-graph"></i>
-                    <span class="m-menu__link-title">
-                        <span class="m-menu__link-wrap">
-                            <span class="m-menu__link-text">
-                                Compras
-                            </span>
 
-                        </span>
-                    </span>
-                </a>
-            </li>
-        }
         @if (HasPermisos(Constants.AccessFunctions.IndexCliente))
         {
             <li class="m-menu__item " aria-haspopup="true">
@@ -168,7 +153,22 @@
                 </div>
             </li>
         }*@
+            @if (HasPermisos(Constants.AccessFunctions.IndexCompra))
+            {
+                <li class="m-menu__item " aria-haspopup="true">
+                    <a href="@Url.Action("Index", "Compras", new { area = "Platform"})" class="m-menu__link ">
+                        <i class="m-menu__link-icon flaticon-line-graph"></i>
+                        <span class="m-menu__link-title">
+                            <span class="m-menu__link-wrap">
+                                <span class="m-menu__link-text">
+                                    Compras
+                                </span>
 
+                            </span>
+                        </span>
+                    </a>
+                </li>
+            }
             @if (HasPermisos(Constants.AccessFunctions.IndexTimbrado))
             {
                 <li class="m-menu__item " aria-haspopup="true">

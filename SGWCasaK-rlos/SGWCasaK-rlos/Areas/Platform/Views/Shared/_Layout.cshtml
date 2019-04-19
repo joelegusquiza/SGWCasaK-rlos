@@ -102,10 +102,62 @@ License: You must have a valid license purchased only from themeforest(the above
     <script type="text/javascript">
         $(document)
             .ready(function () {
-
+                getSucursales();
             })
             .ajaxStart(function () { $.blockUI({ message: '' }); $("#pleaseWaitDialog").modal("show"); })
-            .ajaxStop(function () { $.unblockUI(); $("#pleaseWaitDialog").modal("hide"); });       
+            .ajaxStop(function () { $.unblockUI(); $("#pleaseWaitDialog").modal("hide"); }); 
+
+        function getSucursales() {
+            $.ajax({
+                url: '/Admin/Sucursales/GetSucursales',
+                type: "POST",
+                data: {},
+                global: false,
+                success: function (response) {
+                    if (response.length > 1) {
+                        for (var i = 0; i < response.length; i++) {
+                            var id = response[i].value;
+                            var nombre = response[i].text;
+                            $("#listSucursales").append(
+                                `<li id="`+id+`"class="m-menu__item " aria-haspopup="true">
+                                                <a onclick = "javascript: changeSucursal(`+id+`)" href="#" class="m-menu__link ">
+                                                   
+                                                    <span class="m-menu__link-text">
+                                                        `+nombre+`
+                                                    </span>
+                                                </a>
+                                            </li>`                                
+                            );
+
+
+                        }
+                    } else {
+                        //se oculta la lista de la sucursal y el nombre de la sucursales si solamente tiene central
+                        $("#listSucursalesLi").hide();
+                        $("#nombreSucursal").hide();
+                    }
+
+                },
+                error: function () {
+                    showError();
+                }
+            });
+        }
+
+        function changeSucursal(id) {
+            $.ajax({
+                url: '/Shared/Login/ChangeSucursal',
+                type: "POST",
+                data: { id: id },
+                success: function (response) {
+                    location.reload();
+                },
+                error: function () {
+                    showError();
+                }
+            });
+        }
+
     </script>
     @RenderSection("scripts", required: false)
 

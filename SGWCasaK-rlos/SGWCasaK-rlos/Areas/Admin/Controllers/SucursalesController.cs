@@ -43,6 +43,13 @@ namespace SGWCasaK_rlos.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        public List<DropDownViewModel<int>> GetSucursales()
+        {
+            var sucursales = _sucursales.GetAll().Select(x => new DropDownViewModel<int>() { Text = x.Nombre, Value = x.Id}).ToList();
+            return sucursales;
+        }
+
+        [HttpPost]
         [Authorize(Policy = "AddSucursal")]
         public SystemValidationModel Save(string model)
         {

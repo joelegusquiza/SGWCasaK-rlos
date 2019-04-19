@@ -17,9 +17,11 @@ namespace SGWCasaK_rlos.Areas.Admin.Controllers
     public class CajasController : Controller
     {
         private readonly ICajas _cajas;
-        public CajasController(ICajas cajas)
+        private readonly ISucursales _sucursales;
+        public CajasController(ICajas cajas, ISucursales sucursales)
         {
             _cajas = cajas;
+            _sucursales = sucursales;
         }
         [Authorize(Policy = "IndexRole")]
         public IActionResult Index()
@@ -33,7 +35,7 @@ namespace SGWCasaK_rlos.Areas.Admin.Controllers
 
         public IActionResult Add()
         {
-            var viewModel = new CajasAddViewModel() { };
+            var viewModel = new CajasAddViewModel() { Sucursales = _sucursales.GetAll().Select(x => new DropDownViewModel<int>() {  Text = x.Nombre, Value = x.Id}).ToList()};
             
             return View(viewModel);
         }
@@ -41,7 +43,8 @@ namespace SGWCasaK_rlos.Areas.Admin.Controllers
         public IActionResult Edit(int id)
         {
 
-            var viewModel = Mapper.Map<CajasEditViewModel>(_cajas.GetById(id));        
+            var viewModel = Mapper.Map<CajasEditViewModel>(_cajas.GetById(id));
+            viewModel.Sucursales = _sucursales.GetAll().Select(x => new DropDownViewModel<int>() { Text = x.Nombre, Value = x.Id }).ToList();
             return View(viewModel);
         }
 

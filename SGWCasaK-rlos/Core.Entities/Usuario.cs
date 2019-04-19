@@ -29,6 +29,8 @@ namespace Core.Entities
         public Cliente Cliente { get; set; }
         public int RolId { get; set; }
         public Rol Rol { get; set; }
+        public int SucursalId { get; set; }
+        public Sucursal Sucursal { get; set; }
 
         public void SetPassword(string password)
         {

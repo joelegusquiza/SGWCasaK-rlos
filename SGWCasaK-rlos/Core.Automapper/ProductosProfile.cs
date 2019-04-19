@@ -3,6 +3,7 @@ using Core.DTOs.Productos;
 using Core.Entities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Core.Automapper
@@ -11,11 +12,13 @@ namespace Core.Automapper
     {
         public ProductosProfile()
         {
-            CreateMap<Producto, ProductoViewModel>().ReverseMap();
+            CreateMap<Producto, ProductoViewModel>()
+                   .ForMember(dest => dest.StockString, opt => opt.MapFrom(src => Helpers.Helpers.FormatStock(src.Stock, src.ProductoPresentaciones.ToDictionary(x => x.Nombre, x => x.Equivalencia))))
+                   .ReverseMap();
             CreateMap<Producto, ListaProductoViewModel>()
-                .ForMember(dest => dest.ProductoId, opt => opt.MapFrom(src => src.Id))
-                .ForMember(dest => dest.StockActual, opt => opt.MapFrom(src => src.Stock))
-                .ReverseMap();
+                .ForMember(dest => dest.ProductoId, opt => opt.MapFrom(src => src.Id))  
+                .ForMember(dest => dest.StockString, opt => opt.MapFrom(src => Helpers.Helpers.FormatStock(src.Stock, src.ProductoPresentaciones.ToDictionary(x => x.Nombre, x => x.Equivalencia))))
+                .ReverseMap();           
 
             CreateMap<ProductoPresentacion, PresentacionProductoViewModel>()
                 .ForMember(dest => dest.PresentacionId, opt => opt.MapFrom(src => src.Id))

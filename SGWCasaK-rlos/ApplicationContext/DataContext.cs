@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using static Core.Constants;
 
@@ -17,8 +18,8 @@ namespace ApplicationContext
 
         public DataContext()
         {
-
-        }
+        
+        }       
 
         public DataContext(DbContextOptions options, IHttpContextAccessor contextAccessor, IConfigurationRoot configuration) : base(options)
         {
@@ -28,8 +29,6 @@ namespace ApplicationContext
 
             _contextAccessor = contextAccessor;
             _configuration = configuration;
-
-
         }
 
         public DbSet<Usuario> Usuarios { get; set; }
@@ -200,7 +199,7 @@ namespace ApplicationContext
                   .HasMany(x => x.Timbrados)
                   .WithOne(x => x.Caja)
                   .HasForeignKey(x => x.CajaId)
-                  .OnDelete(DeleteBehavior.Restrict);           
+                  .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Sucursal>()
                 .HasMany(x => x.Timbrados)
@@ -213,6 +212,12 @@ namespace ApplicationContext
                .WithOne(x => x.Sucursal)
                .HasForeignKey(x => x.SucursalId)
                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Sucursal>()
+              .HasMany(x => x.Usuarios)
+              .WithOne(x => x.Sucursal)
+              .HasForeignKey(x => x.SucursalId)
+              .OnDelete(DeleteBehavior.Restrict);
         }
 
         public override int SaveChanges()

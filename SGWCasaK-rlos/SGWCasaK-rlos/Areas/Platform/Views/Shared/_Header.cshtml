@@ -1,14 +1,16 @@
-﻿<header class="m-grid__item    m-header " data-minimize-offset="200" data-minimize-mobile-offset="200">
+﻿@using Core.Helpers
+@using Core
+<header class="m-grid__item    m-header " data-minimize-offset="200" data-minimize-mobile-offset="200">
     <div class="m-container m-container--fluid m-container--full-height">
         <div class="m-stack m-stack--ver m-stack--desktop">
             <!-- BEGIN: Brand -->
             <div class="m-stack__item m-brand  m-brand--skin-dark ">
                 <div class="m-stack m-stack--ver m-stack--general">
                     @*<div class="m-stack__item m-stack__item--middle m-brand__logo">
-                        <a href="index.html" class="m-brand__logo-wrapper">
-                            <img alt="" src="~/metronic/img/logo_default_dark.png" />
-                        </a>
-                    </div>*@
+                            <a href="index.html" class="m-brand__logo-wrapper">
+                                <img alt="" src="~/metronic/img/logo_default_dark.png" />
+                            </a>
+                        </div>*@
                     <div class="m-stack__item m-stack__item--middle m-brand__tools">
                         <!-- BEGIN: Left Aside Minimize Toggle -->
                         <a href="javascript:;" id="m_aside_left_minimize_toggle" class="m-brand__icon m-brand__toggler m-brand__toggler--left m--visible-desktop-inline-block ">
@@ -38,13 +40,39 @@
                 <!-- BEGIN: Horizontal Menu -->
                 <button class="m-aside-header-menu-mobile-close  m-aside-header-menu-mobile-close--skin-dark " id="m_aside_header_menu_mobile_close_btn">
                     <i class="la la-close"></i>
-                </button>             
-                <!-- END: Horizontal Menu -->								
+                </button>
+                <div id="m_header_menu" class="m-header-menu m-aside-header-menu-mobile m-aside-header-menu-mobile--offcanvas  m-header-menu--skin-light m-header-menu--submenu-skin-light m-aside-header-menu-mobile--skin-dark m-aside-header-menu-mobile--submenu-skin-dark ">
+                    <ul class="m-menu__nav  m-menu__nav--submenu-arrow ">
+                            <li class="m-menu__item  m-menu__item--submenu m-menu__item--rel" data-menu-submenu-toggle="click" data-redirect="true" aria-haspopup="true">
+                                <a href="#" class="m-menu__link m-menu__toggle">
+                                    <i class="m-menu__link-icon flaticon-add"></i>
+                                    <span class="m-menu__link-text">
+                                        @User.Claims.FirstOrDefault(x => x.Type == CustomClaims.SucursalNombre).Value
+                                    </span>
+                                    <i class="m-menu__hor-arrow la la-angle-down"></i>
+                                    <i class="m-menu__ver-arrow la la-angle-right"></i>
+                                </a>
+                                <div class="m-menu__submenu m-menu__submenu--classic m-menu__submenu--left">
+                                    <span class="m-menu__arrow m-menu__arrow--adjust"></span>
+                                    @if (AccountPermisos.Contains(((int)Constants.AccessFunctions.ChangeSucursal).ToString()))
+                                    {
+                                        <ul id="listSucursales" class="m-menu__subnav">
+                                            
+                                           
+                                        </ul>
+
+                                    }
+
+                                </div>
+                            </li>
+                        </ul>                    
+                </div>
+                <!-- END: Horizontal Menu -->
                 <!-- BEGIN: Topbar -->
                 <div id="m_header_topbar" class="m-topbar  m-stack m-stack--ver m-stack--general">
                     <div class="m-stack__item m-topbar__nav-wrapper">
                         <ul class="m-topbar__nav m-nav m-nav--inline">
-                           
+
                             <li class="m-nav__item m-topbar__user-profile m-topbar__user-profile--img  m-dropdown m-dropdown--medium m-dropdown--arrow m-dropdown--header-bg-fill m-dropdown--align-right m-dropdown--mobile-full-width m-dropdown--skin-light" data-dropdown-toggle="click">
                                 <a href="#" class="m-nav__link m-dropdown__toggle">
                                     <span class="m-topbar__userpic">
@@ -87,7 +115,7 @@
                                                                 <span class="m-nav__link-wrap">
                                                                     <span class="m-nav__link-text">
                                                                         Perfil
-                                                                    </span>                                                                   
+                                                                    </span>
                                                                 </span>
                                                             </span>
                                                         </a>
