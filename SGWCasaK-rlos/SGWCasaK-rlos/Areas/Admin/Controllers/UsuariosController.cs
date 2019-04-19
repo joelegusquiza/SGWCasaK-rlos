@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Core.DAL.Interfaces;
+using Core.DTOs.Emails;
 using Core.DTOs.Shared;
 using Core.DTOs.Usuarios;
 using Microsoft.AspNetCore.Authorization;
@@ -19,12 +20,15 @@ namespace SGWCasaK_rlos.Areas.Admin.Controllers
     {
         private readonly IUsuarios _usuarios;
         private readonly IRoles _roles;
+        private readonly IEmailSender _emailSender;
+        private readonly IEnvironmentContext _environment;
 
-        public UsuariosController(IUsuarios usuarios, IRoles roles)
+        public UsuariosController(IUsuarios usuarios, IRoles roles, IEmailSender emailSender, IEnvironmentContext environment)
         {
             _usuarios = usuarios;
             _roles = roles;
-
+            _emailSender = emailSender;
+            _environment = environment;
         }
         [Authorize(Policy = "IndexUsuario")]
         public IActionResult Index()
@@ -56,10 +60,27 @@ namespace SGWCasaK_rlos.Areas.Admin.Controllers
 
         [HttpPost]
         [Authorize(Policy = "AddUsuario")]
-        public SystemValidationModel Save(string model)
+        public async Task<SystemValidationModel> Save(string model)
         {
-            var viewModel = JsonConvert.DeserializeObject<UsuariosAddViewModel>(model);
-            return _usuarios.Save(viewModel);
+            var viewModel = JsonConvert.DeserializeObject<UsuariosAddViewModel>(model);  
+            var result = _usuarios.Save(viewModel);
+            if (result.Success)
+            {
+                var usuario = _usuarios.GetById(result.Id);
+                usuario.UserVerifyEmailGuid = Guid.NewGuid();
+                var success = _usuarios.Edit(usuario);
+                var emailModel = new EmailModel()
+                {
+                    From = "noreply@casak-rlos.com.py",
+                    FromName = "Casa K-rlos",
+                    HtmlContent = $"Haga click <a href='{_environment.BaseUrl()}/Shared/Login/ConfirmEmail?userVerifyEmailGuid={usuario.UserVerifyEmailGuid.ToString()}'>aqui</a> para activar su cuenta.",
+                    Subject = "Email de Activacion de Cuenta",
+                    To = viewModel.Email,
+                    ToName = $"{usuario.Nombre} {usuario.Apellido}"
+                };
+                await _emailSender.SendEmailAsync(emailModel);
+            }
+            return result;
         }
 
         [HttpPost]

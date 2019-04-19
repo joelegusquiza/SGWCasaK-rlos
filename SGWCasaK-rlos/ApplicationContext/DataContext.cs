@@ -207,6 +207,12 @@ namespace ApplicationContext
                 .WithOne(x => x.Sucursal)
                 .HasForeignKey(x => x.SucursalId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Sucursal>()
+               .HasMany(x => x.Cajas)
+               .WithOne(x => x.Sucursal)
+               .HasForeignKey(x => x.SucursalId)
+               .OnDelete(DeleteBehavior.Restrict);
         }
 
         public override int SaveChanges()
