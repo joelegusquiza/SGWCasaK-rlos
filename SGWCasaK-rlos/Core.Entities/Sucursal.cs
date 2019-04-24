@@ -11,6 +11,8 @@ namespace Core.Entities
         public string Telefono { get; set; }
         public int CodigoEstablecimiento { get; set; }
 
+        public ICollection<Compra> Compras { get; set; } = new HashSet<Compra>();
+        public ICollection<Venta> Ventas { get; set; } = new HashSet<Venta>();
         public ICollection<Usuario> Usuarios { get; set; } = new HashSet<Usuario>();
         public ICollection<Timbrado> Timbrados { get; set; } = new HashSet<Timbrado>();
         public ICollection<Caja> Cajas { get; set; } = new HashSet<Caja>();
