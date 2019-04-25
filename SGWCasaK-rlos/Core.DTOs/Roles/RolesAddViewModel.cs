@@ -10,6 +10,8 @@ namespace Core.DTOs.Roles
         public string Nombre { get; set; }
         public string Descripcion { get; set; }
         public bool IsCliente { get; set; }
+        public bool IsAdmin  => !IsCajero && !IsCliente;
+        public bool IsCajero { get; set; }
         public List<PermisoViewModel> PermisosList { get; set; } = new List<PermisoViewModel>();
     }
 

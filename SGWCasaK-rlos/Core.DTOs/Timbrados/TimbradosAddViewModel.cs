@@ -13,7 +13,9 @@ namespace Core.DTOs.Timbrados
         public int NroInicio { get; set; }
         public int NroFin { get; set; }
         public int PuntoExpedicion { get; set; }
-        public int CajaId { get; set; }
+        public int CajaId { get; set; }        
+        public int SucursalId { get; set; }
         public List<DropDownViewModel<int>> Cajas { get; set; } = new List<DropDownViewModel<int>>();
+        public List<DropDownViewModel<int>> Sucursales { get; set; } = new List<DropDownViewModel<int>>();
     }
 }

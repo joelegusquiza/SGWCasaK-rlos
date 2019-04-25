@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Core.DAL.Interfaces;
+using Core.DTOs.Emails;
 using Core.DTOs.Shared;
 using Core.DTOs.Usuarios;
 using Microsoft.AspNetCore.Authorization;
@@ -19,13 +20,15 @@ namespace SGWCasaK_rlos.Areas.Admin.Controllers
     {
         private readonly IUsuarios _usuarios;
         private readonly IRoles _roles;
-        private readonly ICajas _cajas;
-        static string IndexUsuario;
-        public UsuariosController(IUsuarios usuarios, IRoles roles, ICajas cajas)
+        private readonly IEmailSender _emailSender;
+        private readonly IEnvironmentContext _environment;
+
+        public UsuariosController(IUsuarios usuarios, IRoles roles, IEmailSender emailSender, IEnvironmentContext environment)
         {
             _usuarios = usuarios;
             _roles = roles;
-            _cajas = cajas;
+            _emailSender = emailSender;
+            _environment = environment;
         }
         [Authorize(Policy = "IndexUsuario")]
         public IActionResult Index()
@@ -42,7 +45,7 @@ namespace SGWCasaK_rlos.Areas.Admin.Controllers
             var viewModel = new UsuariosAddViewModel() 
             { 
                 Roles = _roles.GetAll().Select(x => new DropDownViewModel<int>() { Value = x.Id, Text = x.Nombre}).ToList(),
-                Cajas = _cajas.GetAll().Select(x => new DropDownViewModel<int>() { Value = x.Id, Text = x.Nombre }).ToList(),
+                
             };
             return View(viewModel);
         }
@@ -51,16 +54,33 @@ namespace SGWCasaK_rlos.Areas.Admin.Controllers
         {
             var viewModel = Mapper.Map<UsuariosEditViewModel>(_usuarios.GetById(id));
             viewModel.Roles = _roles.GetAll().Select(x => new DropDownViewModel<int>() { Value = x.Id, Text = x.Nombre }).ToList();
-            viewModel.Cajas = _cajas.GetAll().Select(x => new DropDownViewModel<int>() { Value = x.Id, Text = x.Nombre }).ToList();
+           
             return View(viewModel);
         }
 
         [HttpPost]
         [Authorize(Policy = "AddUsuario")]
-        public SystemValidationModel Save(string model)
+        public async Task<SystemValidationModel> Save(string model)
         {
-            var viewModel = JsonConvert.DeserializeObject<UsuariosAddViewModel>(model);
-            return _usuarios.Save(viewModel);
+            var viewModel = JsonConvert.DeserializeObject<UsuariosAddViewModel>(model);  
+            var result = _usuarios.Save(viewModel);
+            if (result.Success)
+            {
+                var usuario = _usuarios.GetById(result.Id);
+                usuario.UserVerifyEmailGuid = Guid.NewGuid();
+                var success = _usuarios.Edit(usuario);
+                var emailModel = new EmailModel()
+                {
+                    From = "noreply@casak-rlos.com.py",
+                    FromName = "Casa K-rlos",
+                    HtmlContent = $"Haga click <a href='{_environment.BaseUrl()}/Shared/Login/ConfirmEmail?userVerifyEmailGuid={usuario.UserVerifyEmailGuid.ToString()}'>aqui</a> para activar su cuenta.",
+                    Subject = "Email de Activacion de Cuenta",
+                    To = viewModel.Email,
+                    ToName = $"{usuario.Nombre} {usuario.Apellido}"
+                };
+                await _emailSender.SendEmailAsync(emailModel);
+            }
+            return result;
         }
 
         [HttpPost]

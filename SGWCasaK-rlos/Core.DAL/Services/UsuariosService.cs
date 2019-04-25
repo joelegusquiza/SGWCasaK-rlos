@@ -26,6 +26,7 @@ namespace Core.DAL.Services
         {
             _context = context;
             _roles = roles;
+            CreateDefualtUsers();
         }
 
         public List<Usuario> GetAll()
@@ -56,7 +57,7 @@ namespace Core.DAL.Services
 
         public Usuario GetForLogin(string email)
         {
-            var usuario = _context.Set<Usuario>().Include(x => x.Rol).Include(x => x.Cliente).Include(x => x.Caja).FirstOrDefault(x => x.Active && x.Email == email);
+            var usuario = _context.Set<Usuario>().Include(x => x.Rol).Include(x => x.Cliente).Include(x => x.Sucursal).FirstOrDefault(x => x.Active && x.Email == email);
             return usuario;
         }
 
@@ -87,7 +88,7 @@ namespace Core.DAL.Services
             var usuario = GetByEmail(viewModel.Email);
             if (usuario != null)
                 return new SystemValidationModel() { Success = false, Message = "Ya existe un usuario registrado con ese correo" };
-            
+
             usuario = Mapper.Map<Usuario>(viewModel);
             var cliente = Mapper.Map<Cliente>(viewModel);
             usuario.Rol = clienteRol;
@@ -114,7 +115,7 @@ namespace Core.DAL.Services
                 usuario.Cliente = Mapper.Map<Cliente>(viewModel);
                 _context.Entry(usuario.Cliente).State = EntityState.Added;
             }
-                                              
+
             usuario.SetPassword(viewModel.Password);
             _context.Entry(usuario).State = EntityState.Added;
             var success = _context.SaveChanges() > 0;
@@ -131,9 +132,10 @@ namespace Core.DAL.Services
         {
             var usuario = GetById(viewModel.Id);
             usuario = Mapper.Map(viewModel, usuario);
-            if (!string.IsNullOrEmpty(viewModel.Password)){                
-                usuario.SetPassword(viewModel.Password);                
-            }            
+            if (!string.IsNullOrEmpty(viewModel.Password))
+            {
+                usuario.SetPassword(viewModel.Password);
+            }
             _context.Entry(usuario).State = EntityState.Modified;
             var success = _context.SaveChanges() > 0;
             var validation = new SystemValidationModel()
@@ -147,7 +149,7 @@ namespace Core.DAL.Services
 
         public SystemValidationModel Edit(Usuario usuario)
         {
-           
+
             _context.Entry(usuario).State = EntityState.Modified;
             var success = _context.SaveChanges() > 0;
             var validation = new SystemValidationModel()
@@ -182,7 +184,7 @@ namespace Core.DAL.Services
         {
             var usuario = GetById(id);
             usuario.Active = false;
-           
+
             _context.Entry(usuario).State = EntityState.Modified;
             var success = _context.SaveChanges() > 0;
             var validation = new SystemValidationModel()
@@ -199,7 +201,7 @@ namespace Core.DAL.Services
             var usuario = GetByGuid(viewModel.Guid);
             if (usuario == null)
                 return new SystemValidationModel() { Success = false, Message = "Ocurrio un error" };
-            usuario.SetPassword(viewModel.Password);        
+            usuario.SetPassword(viewModel.Password);
             _context.Entry(usuario).State = EntityState.Modified;
             var success = _context.SaveChanges() > 0;
             var validation = new SystemValidationModel()
@@ -209,6 +211,92 @@ namespace Core.DAL.Services
                 Success = success
             };
             return validation;
+        }
+
+        private void CreateDefualtUsers()
+        {
+            var cantUsuarios = GetAll().Count;
+            if (cantUsuarios > 0)
+                return;
+            var rol = _context.Set<Rol>().FirstOrDefault(x => x.Active && x.IsAdmin);
+            if (rol == null)
+            {
+                rol = new Rol()
+                {
+                    Active = true,
+                    DateCreated = DateTime.UtcNow,
+                    DateModified = DateTime.UtcNow,
+                    IsAdmin = true,
+                    Nombre = "Admin2",
+                    Permisos = string.Join(",", Enum.GetValues(typeof(AccessFunctions)).Cast<AccessFunctions>().Select(x => ((int)x).ToString()))
+                };
+                _context.Entry(rol).State = EntityState.Added;
+            }
+            
+            var sucursal = _context.Set<Sucursal>().FirstOrDefault(x => x.Active);
+            if (sucursal == null)
+            {
+                sucursal = new Sucursal()
+                {
+                    Active = true,
+                    DateCreated = DateTime.UtcNow,
+                    DateModified = DateTime.UtcNow,
+                    
+                    Nombre = "Casa Central",
+                };                    
+                _context.Entry(sucursal).State = EntityState.Added;
+            }
+            var usuarios = new List<Usuario>()
+            {
+                new Usuario()
+                {
+                    Nombre = "Joel",
+                    Apellido = "Egusquiza",
+                    EmailVerified = true,
+                    Active = true,
+                    DateCreated = DateTime.UtcNow,
+                    DateModified = DateTime.UtcNow,
+                    Email = "joelegusquizaacosta@gmail.com",
+                    Rol = rol,
+                    Sucursal = sucursal
+
+                },
+                 new Usuario()
+                {
+                    Nombre = "Gabriela",
+                    Apellido = "Gimenez",
+                    EmailVerified = true,
+                    Active = true,
+                    DateCreated = DateTime.UtcNow,
+                    DateModified = DateTime.UtcNow,
+                    Email = "gabygimcol09@gmail.com",
+                    Rol = rol,
+                    Sucursal = sucursal
+
+                },
+                 new Usuario()
+                {
+                    Nombre = "Cynthia",
+                    Apellido = "Morel",
+                    EmailVerified = true,
+                    Active = true,
+                    DateCreated = DateTime.UtcNow,
+                    DateModified = DateTime.UtcNow,
+                    Email = "cyn.morel@gmail.com",
+                    Rol = rol,
+                    Sucursal = sucursal
+
+                }
+            };
+           
+            foreach (var usuario in usuarios)
+            {
+                usuario.SetPassword("123");
+                _context.Entry(usuario).State = EntityState.Added;
+              
+            }
+            _context.SaveChanges();
+
         }
     }
 }

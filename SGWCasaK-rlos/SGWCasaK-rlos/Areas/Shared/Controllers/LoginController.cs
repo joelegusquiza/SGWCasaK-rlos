@@ -9,6 +9,7 @@ using Core.DTOs.Login;
 using Core.DTOs.Shared;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using SGWCasaK_rlos.SecurityHelpers;
@@ -16,16 +17,18 @@ using SGWCasaK_rlos.SecurityHelpers;
 namespace SGWCasaK_rlos.Areas.Shared.Controllers
 {
     [Area("Shared")]
-    public class LoginController : Controller
+    public class LoginController : BaseController
     {
         private readonly IUsuarios _usuarios;
         private readonly IEmailSender _emailSender;
         private readonly IEnvironmentContext _environment;
-        public LoginController(IUsuarios usuarios, IEnvironmentContext environment, IEmailSender emailSender)
+        private readonly ISucursales _sucursales;
+        public LoginController(IUsuarios usuarios, IEnvironmentContext environment, IEmailSender emailSender, ISucursales sucursales)
         {
             _usuarios = usuarios;
             _emailSender = emailSender;
             _environment = environment;
+            _sucursales = sucursales;
         }
 
         public IActionResult Index()
@@ -68,6 +71,25 @@ namespace SGWCasaK_rlos.Areas.Shared.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "ChangeSucursal")]
+        public async Task<SystemValidationModel> ChangeSucursal(int id)
+        {
+            var user = _usuarios.GetById(UserId);                        
+            var sucursal = _sucursales.GetById(id);
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            var claims = new ClaimsIdentity(SecurityHelper.GetUserClaims(user, sucursal), "Cookie");
+                   
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claims));
+
+            var validation = new SystemValidationModel()
+            {
+                Success = true
+
+            };
+            return validation;
+        }
+
+        [HttpPost]
         public async Task<SystemValidationModel> Login(string model)
         {
             try
@@ -81,7 +103,7 @@ namespace SGWCasaK_rlos.Areas.Shared.Controllers
                 {
                     ClaimsIdentity claims;
                     if (usuario.Cliente == null)
-                        claims = new ClaimsIdentity(SecurityHelper.GetUserClaims(usuario), "Cookie");
+                        claims = new ClaimsIdentity(SecurityHelper.GetUserClaims(usuario, usuario.Sucursal), "Cookie");
                     else
                         claims = new ClaimsIdentity(SecurityHelper.GetUserClaims(usuario, usuario.Cliente), "Cookie");
 

@@ -16,7 +16,9 @@ namespace Core.Entities
         public int NroFin { get; set; }
         public int CajaId { get; set; }
         public Caja Caja { get; set; }
+        public int SucursalId { get; set; }
+        public Sucursal Sucursal { get; set; }
 
-        public ICollection<Venta> Ventas { get; set; } = new HashSet<Venta>();
+        public ICollection<Venta> Ventas { get; set; } = new HashSet<Venta>();      
     }
 }

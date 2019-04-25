@@ -77,6 +77,7 @@ namespace SGWCasaK_rlos
             services.AddSingleton<IPedidos, PedidosService>();
             services.AddSingleton<IInventario, InventarioService>();
             services.AddSingleton<ICajas, CajasService>();
+            services.AddSingleton<ISucursales, SucursalesService>();
             services.AddScoped<UserEmailActiveFilter>();
             return services.BuildServiceProvider();
         }
@@ -98,6 +99,7 @@ namespace SGWCasaK_rlos
                 cfg.AddProfile<TimbradosProfile>();
                 cfg.AddProfile<InventarioProfile>();
                 cfg.AddProfile<CajasProfile>();
+                cfg.AddProfile<SucursalesProfile>();
             });
             if (env.IsDevelopment())
             {

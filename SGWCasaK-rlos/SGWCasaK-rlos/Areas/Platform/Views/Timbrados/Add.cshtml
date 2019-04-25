@@ -53,6 +53,7 @@
                             <input type="text" class="form-control m-input" id="nombre" name="nroFin" data-bind="value: nroFin">
                             <span class="alert-danger"></span>
                         </div>
+
                         <div class="form-group m-form__group">
                             <label for="exampleInputEmail1">
                                 Punto Expedicion
@@ -62,9 +63,19 @@
                         </div>
                         <div class="form-group m-form__group">
                             <label for="exampleInputEmail1">
+                                Sucursales
+                            </label>
+                            <select class="form-control m-input m-input--square" id="sucursalId" name="sucursalId" data-bind="options: sucursales,
+                                           optionsValue: 'value',
+                                           optionsText: 'text',
+                                           value: sucursalId,
+                                           optionsCaption: 'Seleccione una opcion'"></select>
+                        </div>
+                        <div class="form-group m-form__group">
+                            <label for="exampleInputEmail1">
                                 Cajas
                             </label>
-                            <select class="form-control m-input m-input--square" id="roles" name="roles" data-bind="options: cajas,
+                            <select class="form-control m-input m-input--square" id="cajaId" name="cajaId" data-bind="options: cajas,
                                            optionsValue: 'value',
                                            optionsText: 'text',
                                            value: cajaId,
@@ -118,20 +129,26 @@
             rules: {
                 nroTimbrado: {
                     required: true,
-                    number: true
+                    number: true,
+                    min: 1
                 },
                 nroInicio: {
                     required: true,
-                    number: true
+                    number: true,
+                    min: 1
                 },
                 nroFin: {
                     required: true,
-                    number: true
+                    number: true,
+                    min: 1
                 },
                 puntoExpedicion: {
                     required: true,
-                    number: true
+                    number: true,
+                    min: 1
                 },
+                sucursalId: { required: true },
+                cajaId: {required: true}
             },
             errorPlacement: function (error, element) {
                 var span = element.siblings('span');
