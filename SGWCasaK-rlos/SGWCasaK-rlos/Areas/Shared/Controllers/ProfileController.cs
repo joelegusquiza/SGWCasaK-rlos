@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace SGWCasaK_rlos.Areas.Shared.Controllers
 {
-    [Area("Shared"), Authorize]
+    [Area("Shared")]
     public class ProfileController : BaseController
     {
         private readonly IUsuarios _usuarios;
