@@ -119,6 +119,16 @@ namespace Core
             EditCaja = 4900,
             [Description("Eliminar Cajas")]
             DeleteCaja = 5000,
+            [Description("Ver Sucursales")]
+            IndexSucursal = 5100,
+            [Description("Agregar Sucursales")]
+            AddSucursal = 5200,
+            [Description("Editar Sucursales")]
+            EditSucursal = 5300,
+            [Description("Eliminar Sucursales")]
+            DeleteSucursal = 5400,
+            [Description("Cambiar de Sucursal")]
+            ChangeSucursal = 5500,
         }
         
         public enum EstadoVenta

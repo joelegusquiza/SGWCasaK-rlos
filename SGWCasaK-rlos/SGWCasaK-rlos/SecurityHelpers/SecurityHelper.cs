@@ -9,7 +9,7 @@ namespace SGWCasaK_rlos.SecurityHelpers
 {
     public static class SecurityHelper
     {
-        public static List<Claim> GetUserClaims(Usuario usuario)
+        public static List<Claim> GetUserClaims(Usuario usuario, Sucursal sucursal)
         {
             var claims = new List<Claim>()
             {
@@ -18,8 +18,8 @@ namespace SGWCasaK_rlos.SecurityHelpers
                 new Claim(ClaimTypes.Name, $"{usuario.Nombre} {usuario.Apellido}"),
                 new Claim(CustomClaims.Permisos, usuario.Rol.Permisos),
                 new Claim(CustomClaims.EmailVerified, usuario.EmailVerified.ToString()),
-                new Claim(CustomClaims.CajaId, usuario.CajaId.TryToString()),
-                new Claim(CustomClaims.CajaNombre, usuario.Caja == null? "" : usuario.Caja.Nombre.TryToString())
+                new Claim(CustomClaims.SucursalId, sucursal.Id.ToString()),
+                new Claim(CustomClaims.SucursalNombre, sucursal.Nombre.ToString())
             };
             return claims;
         }

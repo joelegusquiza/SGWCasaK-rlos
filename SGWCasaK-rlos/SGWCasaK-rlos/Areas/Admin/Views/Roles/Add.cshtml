@@ -37,7 +37,14 @@
                                 Es Cliente
                             </label>
                             <input type="checkbox" class="form-control m-input" id="isCliente" name="isCliente" data-bind="checked: isCliente">
-                            
+
+                        </div>
+                        <div class="form-group m-form__group">
+                            <label for="exampleInputEmail1">
+                                Es Cajero
+                            </label>
+                            <input type="checkbox" class="form-control m-input" id="isCajero" name="isCajero" data-bind="checked: isCajero">
+
                         </div>
                         <div class="m-form__group form-group">
                             <label>
@@ -81,7 +88,7 @@
                 return;
             }
             if (!$("#form").valid()) return;
-
+            if (dataViewModel.isCajero() && dataViewModel.isCliente()) { showError("El rolo puede ser solo cajero o cliente, no ambos"); return; };
             $.ajax({
                 url: "@Url.Action("Save", "Roles")",
                 type: "POST",

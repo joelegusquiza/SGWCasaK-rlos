@@ -21,6 +21,8 @@ namespace Core.Entities
 
         public int? ProveedorId { get; set; }
         public Proveedor Proveedor { get; set; }
+        public int SucursalId { get; set; }
+        public Sucursal Sucursal { get; set; }
         public ICollection<DetalleCompra> DetalleCompra { get; set; } = new HashSet<DetalleCompra>();
         public ICollection<PagoCompra> PagosCompra { get; set; } = new HashSet<PagoCompra>();
     }

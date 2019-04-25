@@ -33,11 +33,15 @@ namespace ApplicationContext.Migrations
 
                     b.Property<string>("Nombre");
 
+                    b.Property<int>("SucursalId");
+
                     b.Property<int>("UserCreatedId");
 
                     b.Property<int>("UserModifiedId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("SucursalId");
 
                     b.ToTable("Cajas");
                 });
@@ -132,6 +136,8 @@ namespace ApplicationContext.Migrations
 
                     b.Property<int?>("ProveedorId");
 
+                    b.Property<int>("SucursalId");
+
                     b.Property<int>("UserCreatedId");
 
                     b.Property<int>("UserModifiedId");
@@ -139,6 +145,8 @@ namespace ApplicationContext.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ProveedorId");
+
+                    b.HasIndex("SucursalId");
 
                     b.ToTable("Compras");
                 });
@@ -565,6 +573,8 @@ namespace ApplicationContext.Migrations
 
                     b.Property<bool>("IsAdmin");
 
+                    b.Property<bool>("IsCajero");
+
                     b.Property<bool>("IsCliente");
 
                     b.Property<string>("Nombre");
@@ -578,6 +588,35 @@ namespace ApplicationContext.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Roles");
+                });
+
+            modelBuilder.Entity("Core.Entities.Sucursal", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("Active");
+
+                    b.Property<int>("CodigoEstablecimiento");
+
+                    b.Property<DateTime>("DateCreated");
+
+                    b.Property<DateTime?>("DateModified");
+
+                    b.Property<string>("Direccion");
+
+                    b.Property<string>("Nombre");
+
+                    b.Property<string>("Telefono");
+
+                    b.Property<int>("UserCreatedId");
+
+                    b.Property<int>("UserModifiedId");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Sucursales");
                 });
 
             modelBuilder.Entity("Core.Entities.Timbrado", b =>
@@ -606,6 +645,8 @@ namespace ApplicationContext.Migrations
 
                     b.Property<int>("PuntoExpedicion");
 
+                    b.Property<int>("SucursalId");
+
                     b.Property<int>("UserCreatedId");
 
                     b.Property<int>("UserModifiedId");
@@ -613,6 +654,8 @@ namespace ApplicationContext.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CajaId");
+
+                    b.HasIndex("SucursalId");
 
                     b.ToTable("Timbrados");
                 });
@@ -652,6 +695,8 @@ namespace ApplicationContext.Migrations
 
                     b.Property<string>("Salt");
 
+                    b.Property<int>("SucursalId");
+
                     b.Property<string>("Telefono");
 
                     b.Property<int>("UserCreatedId");
@@ -667,6 +712,8 @@ namespace ApplicationContext.Migrations
                     b.HasIndex("ClienteId");
 
                     b.HasIndex("RolId");
+
+                    b.HasIndex("SucursalId");
 
                     b.ToTable("Usuarios");
                 });
@@ -703,6 +750,8 @@ namespace ApplicationContext.Migrations
 
                     b.Property<int?>("PedidoId");
 
+                    b.Property<int>("SucursalId");
+
                     b.Property<int>("TimbradoId");
 
                     b.Property<int>("UserCreatedId");
@@ -715,9 +764,19 @@ namespace ApplicationContext.Migrations
 
                     b.HasIndex("PedidoId");
 
+                    b.HasIndex("SucursalId");
+
                     b.HasIndex("TimbradoId");
 
                     b.ToTable("Ventas");
+                });
+
+            modelBuilder.Entity("Core.Entities.Caja", b =>
+                {
+                    b.HasOne("Core.Entities.Sucursal", "Sucursal")
+                        .WithMany("Cajas")
+                        .HasForeignKey("SucursalId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Core.Entities.Compra", b =>
@@ -726,6 +785,11 @@ namespace ApplicationContext.Migrations
                         .WithMany("Compras")
                         .HasForeignKey("ProveedorId")
                         .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Core.Entities.Sucursal", "Sucursal")
+                        .WithMany("Compras")
+                        .HasForeignKey("SucursalId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Core.Entities.DetalleCompra", b =>
@@ -844,14 +908,18 @@ namespace ApplicationContext.Migrations
                         .WithMany("Timbrados")
                         .HasForeignKey("CajaId")
                         .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Core.Entities.Sucursal", "Sucursal")
+                        .WithMany("Timbrados")
+                        .HasForeignKey("SucursalId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Core.Entities.Usuario", b =>
                 {
-                    b.HasOne("Core.Entities.Caja", "Caja")
+                    b.HasOne("Core.Entities.Caja")
                         .WithMany("Usuarios")
-                        .HasForeignKey("CajaId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("CajaId");
 
                     b.HasOne("Core.Entities.Cliente", "Cliente")
                         .WithMany("Usuarios")
@@ -861,6 +929,11 @@ namespace ApplicationContext.Migrations
                     b.HasOne("Core.Entities.Rol", "Rol")
                         .WithMany("Usuarios")
                         .HasForeignKey("RolId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Core.Entities.Sucursal", "Sucursal")
+                        .WithMany("Usuarios")
+                        .HasForeignKey("SucursalId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
@@ -875,6 +948,11 @@ namespace ApplicationContext.Migrations
                         .WithMany("Ventas")
                         .HasForeignKey("PedidoId")
                         .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Core.Entities.Sucursal", "Sucursal")
+                        .WithMany("Ventas")
+                        .HasForeignKey("SucursalId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Core.Entities.Timbrado", "Timbrado")
                         .WithMany("Ventas")

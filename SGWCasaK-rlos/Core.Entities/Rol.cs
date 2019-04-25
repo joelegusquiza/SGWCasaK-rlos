@@ -13,6 +13,7 @@ namespace Core.Entities
         public string Permisos { get; set; }
         public bool IsAdmin { get; set; }
         public bool IsCliente { get; set; }
+        public bool IsCajero { get; set; }
 
         public ICollection<Usuario> Usuarios { get; set; } = new HashSet<Usuario>();
     }

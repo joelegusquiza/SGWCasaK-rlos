@@ -9,12 +9,13 @@ using Core.DTOs.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using SGWCasaK_rlos.Areas.Shared.Controllers;
 using SGWCasaK_rlos.SecurityHelpers;
 
 namespace SGWCasaK_rlos.Areas.Platform.Controllers
 {
     [Area("Platform"), Authorize, ServiceFilter(typeof(UserEmailActiveFilter))]
-    public class ComprasController : Controller
+    public class ComprasController : BaseController
     {
         private readonly ICompras _compras;
         public ComprasController(ICompras compras)
@@ -34,7 +35,7 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
 
         public IActionResult Add()
         {
-            var viewModel = new ComprasAddViewModel();
+            var viewModel = new ComprasAddViewModel() { SucursalId = SucursalId};
             return View(viewModel);
         }
 

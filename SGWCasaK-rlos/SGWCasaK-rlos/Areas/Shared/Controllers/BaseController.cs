@@ -27,6 +27,16 @@ namespace SGWCasaK_rlos.Areas.Shared.Controllers
             }
         }
 
+        private int _sucursalId { get; set; }
+        public int SucursalId
+        {
+            get
+            {
+                return _sucursalId > 0 ? _sucursalId : (_sucursalId = Convert.ToInt32(User.Claims.FirstOrDefault(x => x.Type == CustomClaims.SucursalId).Value));
+            }
+        }
+
+
         private int GetClientId()
         {
             var clientIdString = User.Claims.FirstOrDefault(x => x.Type == CustomClaims.ClientId).Value;

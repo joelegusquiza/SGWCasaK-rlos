@@ -11,6 +11,7 @@ namespace Core.DTOs.Compras
 {
     public class ComprasAddViewModel
     {
+        public int SucursalId { get; set; }
         public DateTimeOffset DateCompra { get; set; } = DateTime.UtcNow;
         public string NroFactura { get; set; }
         public decimal MontoTotal { get; set; }

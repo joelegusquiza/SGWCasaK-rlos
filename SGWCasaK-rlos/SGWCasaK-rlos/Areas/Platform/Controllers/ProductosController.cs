@@ -29,7 +29,7 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
         {
             var viewModel = new ProductosIndexViewModel()
             {
-                Productos = _productos.GetAllWithPresentacion()
+                Productos = Mapper.Map<List<ProductoViewModel>>(_productos.GetAll())
             };
             return View(viewModel);
         }
@@ -59,7 +59,7 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
         {
             var viewModel = new ListaProductosIndexViewModel()
             {
-                Productos = Mapper.Map<List<ListaProductoViewModel>>(_productos.GetAllWithPresentacion())
+                Productos = Mapper.Map<List<ListaProductoViewModel>>(_productos.GetAll())
             };
             return View("~/Areas/Platform/Views/Productos/Shared/ListaProductos.cshtml", viewModel);
         }
