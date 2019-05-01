@@ -18,9 +18,11 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
     public class ComprasController : BaseController
     {
         private readonly ICompras _compras;
-        public ComprasController(ICompras compras)
+        private readonly IProveedores _proveedores;
+        public ComprasController(ICompras compras, IProveedores proveedores)
         {
             _compras = compras;
+            _proveedores = proveedores;
         }
 
         [Authorize(Policy = "IndexCompra")]
@@ -33,11 +35,48 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
             return View(viewModel);
         }
 
+        [Authorize(Policy = "IndexComprasPending")]
+        public IActionResult IndexPending()
+        {
+            var viewModel = new ComprasIndexViewModel()
+            {
+                Compras = Mapper.Map<List<CompraViewModel>>(_compras.GetAllPendings())
+            };
+            return View(viewModel);
+        }
+        [Authorize(Policy = "ConfirmCompra")]
+        public IActionResult Pending(int id)
+        {
+            var compra = _compras.GetById(id);
+            var viewModel = Mapper.Map<ComprasAddViewModel>(compra);
+            
+            return View(viewModel);
+        }
+
         public IActionResult Add()
         {
             var viewModel = new ComprasAddViewModel() { SucursalId = SucursalId};
             return View(viewModel);
         }
+
+        public IActionResult ListaCompras(int proveedorId)
+        {
+            var viewModel = new ListaComprasIndexViewModel()
+            {
+                Compras = Mapper.Map<List<ListaComprasViewModel>>(_compras.GetToPayByProveedorId(proveedorId))
+            };
+            return View(viewModel);
+        }
+
+        public IActionResult ListaComprasPendingByProveedorId(int proveedorId)
+        {
+            var viewModel = new ListaComprasIndexViewModel()
+            {
+                Compras = Mapper.Map<List<ListaComprasViewModel>>(_compras.GetToPayByProveedorId(proveedorId))
+            };
+            return View("~/Areas/Platform/Views/Compras/Shared/ListCompras.cshtml", viewModel);
+        }
+
 
         [HttpPost]
         [Authorize(Policy = "AddCompra")]
@@ -45,6 +84,22 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
         {
             var viewModel = JsonConvert.DeserializeObject<ComprasAddViewModel>(model);
             return _compras.Save(viewModel);
+        }
+
+        [HttpPost]
+        [Authorize(Policy = "ConfirmCompra")]
+        public SystemValidationModel Confirm(int id)
+        {
+            
+            return _compras.ConfirmCompra(id);
+        }
+
+        [HttpPost]
+        [Authorize(Policy = "AnularCompra")]
+        public SystemValidationModel Anular(int id, string razon)
+        {
+            
+            return _compras.Anular(id, razon);
         }
     }
 }

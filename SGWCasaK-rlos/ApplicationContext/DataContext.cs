@@ -44,7 +44,6 @@ namespace ApplicationContext
         public DbSet<Proveedor> Proveedores { get; set; }
         public DbSet<Timbrado> Timbrados { get; set; }
         public DbSet<PagoVenta> PagosVentas { get; set; }
-        public DbSet<PagoCompra> PagosCompras { get; set; }
         public DbSet<Rol> Roles { get; set; }
         public DbSet<ProductoPresentacion> ProductoPresentaciones { get; set; }
         public DbSet<Inventario> Inventario { get; set; }
@@ -145,19 +144,7 @@ namespace ApplicationContext
                 .HasMany(x => x.PagosVenta)
                 .WithOne(x => x.Venta)
                 .HasForeignKey(x => x.VentaId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<Proveedor>()
-                .HasMany(x => x.PagosCompra)
-                .WithOne(x => x.Proveedor)
-                .HasForeignKey(x => x.ProveedorId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<Compra>()
-               .HasMany(x => x.PagosCompra)
-               .WithOne(x => x.Compra)
-               .HasForeignKey(x => x.CompraId)
-               .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Restrict);           
 
             modelBuilder.Entity<Rol>()
                 .HasMany(x => x.Usuarios)
@@ -218,6 +205,36 @@ namespace ApplicationContext
               .WithOne(x => x.Sucursal)
               .HasForeignKey(x => x.SucursalId)
               .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<OrdenPagoCompra>()
+              .HasMany(x => x.OrdenPagoDetalle)
+              .WithOne(x => x.OrdenPagoCompra)
+              .HasForeignKey(x => x.OrdenPagoCompraId)
+              .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Compra>()
+               .HasMany(x => x.OrdenPagoDetalle)
+               .WithOne(x => x.Compra)
+               .HasForeignKey(x => x.CompraId)
+               .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Sucursal>()
+                .HasMany(x => x.OrdenesPagoCompra)
+                .WithOne(x => x.Sucursal)
+                .HasForeignKey(x => x.SucursalId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Sucursal>()
+                .HasMany(x => x.ProductoSucursal)
+                .WithOne(x => x.Sucursal)
+                .HasForeignKey(x => x.SucursalId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Producto>()
+                .HasMany(x => x.ProductoSucursal)
+                .WithOne(x => x.Producto)
+                .HasForeignKey(x => x.ProductoId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
 
         public override int SaveChanges()

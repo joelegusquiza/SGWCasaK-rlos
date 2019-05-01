@@ -4,14 +4,16 @@ using ApplicationContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ApplicationContext.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20190501114149_moreRetationWithSucursal")]
+    partial class moreRetationWithSucursal
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -563,37 +565,6 @@ namespace ApplicationContext.Migrations
                     b.ToTable("ProductoPresentaciones");
                 });
 
-            modelBuilder.Entity("Core.Entities.ProductoSucursal", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<bool>("Active");
-
-                    b.Property<int>("Cantidad");
-
-                    b.Property<DateTime>("DateCreated");
-
-                    b.Property<DateTime?>("DateModified");
-
-                    b.Property<int>("ProductoId");
-
-                    b.Property<int>("SucursalId");
-
-                    b.Property<int>("UserCreatedId");
-
-                    b.Property<int>("UserModifiedId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductoId");
-
-                    b.HasIndex("SucursalId");
-
-                    b.ToTable("ProductoSucursal");
-                });
-
             modelBuilder.Entity("Core.Entities.Proveedor", b =>
                 {
                     b.Property<int>("Id")
@@ -995,19 +966,6 @@ namespace ApplicationContext.Migrations
                     b.HasOne("Core.Entities.Producto", "Producto")
                         .WithMany("ProductoPresentaciones")
                         .HasForeignKey("ProductoId")
-                        .OnDelete(DeleteBehavior.Restrict);
-                });
-
-            modelBuilder.Entity("Core.Entities.ProductoSucursal", b =>
-                {
-                    b.HasOne("Core.Entities.Producto", "Producto")
-                        .WithMany("ProductoSucursal")
-                        .HasForeignKey("ProductoId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("Core.Entities.Sucursal", "Sucursal")
-                        .WithMany("ProductoSucursal")
-                        .HasForeignKey("SucursalId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 

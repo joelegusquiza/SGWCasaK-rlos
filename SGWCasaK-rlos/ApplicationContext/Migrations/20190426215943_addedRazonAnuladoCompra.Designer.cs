@@ -4,14 +4,16 @@ using ApplicationContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ApplicationContext.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20190426215943_addedRazonAnuladoCompra")]
+    partial class addedRazonAnuladoCompra
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -350,53 +352,16 @@ namespace ApplicationContext.Migrations
 
                     b.Property<DateTime?>("DateModified");
 
-                    b.Property<int?>("SucursalId");
-
                     b.Property<int>("UserCreatedId");
 
                     b.Property<int>("UserModifiedId");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("SucursalId");
 
                     b.ToTable("Inventario");
                 });
 
-            modelBuilder.Entity("Core.Entities.OrdenPagoCompra", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<bool>("Active");
-
-                    b.Property<DateTime>("DateCreated");
-
-                    b.Property<DateTime?>("DateModified");
-
-                    b.Property<int>("Estado");
-
-                    b.Property<decimal>("MontoTotal");
-
-                    b.Property<int>("ProveedorId");
-
-                    b.Property<int>("SucursalId");
-
-                    b.Property<int>("UserCreatedId");
-
-                    b.Property<int>("UserModifiedId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProveedorId");
-
-                    b.HasIndex("SucursalId");
-
-                    b.ToTable("OrdenPagoCompra");
-                });
-
-            modelBuilder.Entity("Core.Entities.OrdenPagoCompraDetalle", b =>
+            modelBuilder.Entity("Core.Entities.PagoCompra", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -412,7 +377,7 @@ namespace ApplicationContext.Migrations
 
                     b.Property<decimal>("Monto");
 
-                    b.Property<int>("OrdenPagoCompraId");
+                    b.Property<int?>("ProveedorId");
 
                     b.Property<int>("UserCreatedId");
 
@@ -422,9 +387,9 @@ namespace ApplicationContext.Migrations
 
                     b.HasIndex("CompraId");
 
-                    b.HasIndex("OrdenPagoCompraId");
+                    b.HasIndex("ProveedorId");
 
-                    b.ToTable("OrdenPagoCompraDetalle");
+                    b.ToTable("PagosCompras");
                 });
 
             modelBuilder.Entity("Core.Entities.PagoVenta", b =>
@@ -561,37 +526,6 @@ namespace ApplicationContext.Migrations
                     b.HasIndex("ProductoId");
 
                     b.ToTable("ProductoPresentaciones");
-                });
-
-            modelBuilder.Entity("Core.Entities.ProductoSucursal", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<bool>("Active");
-
-                    b.Property<int>("Cantidad");
-
-                    b.Property<DateTime>("DateCreated");
-
-                    b.Property<DateTime?>("DateModified");
-
-                    b.Property<int>("ProductoId");
-
-                    b.Property<int>("SucursalId");
-
-                    b.Property<int>("UserCreatedId");
-
-                    b.Property<int>("UserModifiedId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductoId");
-
-                    b.HasIndex("SucursalId");
-
-                    b.ToTable("ProductoSucursal");
                 });
 
             modelBuilder.Entity("Core.Entities.Proveedor", b =>
@@ -928,36 +862,16 @@ namespace ApplicationContext.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
-            modelBuilder.Entity("Core.Entities.Inventario", b =>
-                {
-                    b.HasOne("Core.Entities.Sucursal")
-                        .WithMany("Inventarios")
-                        .HasForeignKey("SucursalId");
-                });
-
-            modelBuilder.Entity("Core.Entities.OrdenPagoCompra", b =>
-                {
-                    b.HasOne("Core.Entities.Proveedor", "Proveedor")
-                        .WithMany("PagosCompra")
-                        .HasForeignKey("ProveedorId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Core.Entities.Sucursal", "Sucursal")
-                        .WithMany("OrdenesPagoCompra")
-                        .HasForeignKey("SucursalId")
-                        .OnDelete(DeleteBehavior.Restrict);
-                });
-
-            modelBuilder.Entity("Core.Entities.OrdenPagoCompraDetalle", b =>
+            modelBuilder.Entity("Core.Entities.PagoCompra", b =>
                 {
                     b.HasOne("Core.Entities.Compra", "Compra")
-                        .WithMany("OrdenPagoDetalle")
+                        .WithMany("PagosCompra")
                         .HasForeignKey("CompraId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Core.Entities.OrdenPagoCompra", "OrdenPagoCompra")
-                        .WithMany("OrdenPagoDetalle")
-                        .HasForeignKey("OrdenPagoCompraId")
+                    b.HasOne("Core.Entities.Proveedor", "Proveedor")
+                        .WithMany("PagosCompra")
+                        .HasForeignKey("ProveedorId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
@@ -995,19 +909,6 @@ namespace ApplicationContext.Migrations
                     b.HasOne("Core.Entities.Producto", "Producto")
                         .WithMany("ProductoPresentaciones")
                         .HasForeignKey("ProductoId")
-                        .OnDelete(DeleteBehavior.Restrict);
-                });
-
-            modelBuilder.Entity("Core.Entities.ProductoSucursal", b =>
-                {
-                    b.HasOne("Core.Entities.Producto", "Producto")
-                        .WithMany("ProductoSucursal")
-                        .HasForeignKey("ProductoId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("Core.Entities.Sucursal", "Sucursal")
-                        .WithMany("ProductoSucursal")
-                        .HasForeignKey("SucursalId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 

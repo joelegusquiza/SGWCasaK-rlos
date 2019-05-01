@@ -63,12 +63,16 @@ namespace Core
             DeleteCliente = 2100,
             [Description("Ver Compras")]
             IndexCompra = 2200,
+            [Description("Ver Compras Pendientes")]
+            IndexComprasPending = 2250,
             [Description("Agregar Compra")]
             AddCompra = 2300,
             [Description("Editar Compra")]
             EditCompra = 2400,
-            [Description("Eliminar Compra")]
-            DeleteCompra = 2500,
+            [Description("Anular Compra")]
+            AnularCompra = 2500,
+            [Description("Confirmar Compra")]
+            ConfirmCompra = 2550,
             [Description("Ver Productos")]
             IndexProducto = 2600,
             [Description("Agregar Producto")]
@@ -129,20 +133,31 @@ namespace Core
             DeleteSucursal = 5400,
             [Description("Cambiar de Sucursal")]
             ChangeSucursal = 5500,
+            [Description("Ver Orden de Pago de Compras")]
+            IndexOrdenPagoCompras = 5600,
+            [Description("Agregar Orden de Pago de Compras")]
+            AddOrdenPagoCompras = 5700,
+            [Description("Editar Orden de pago de Compras")]
+            EditOrdenPagoCompras = 5800,
+            [Description("Anular Orden de pago de compras")]
+            AnularOrdenPagoCompras = 5900,
         }
         
         public enum EstadoVenta
         {
+            Pendiente,
+            Confirmado,
             Pagado,
-            Anulado,
-            Pendiente
+            Anulado            
         }
 
         public enum EstadoCompra
         {
+            Pendiente,
+            Confirmado,
+            PendientedePago,
             Pagado,
             Anulado,
-            Pendiente
         }   
         
         public enum EstadoPedido
@@ -192,6 +207,13 @@ namespace Core
         {
             Fisica,
             Juridica
+        }
+
+        public enum OrdenPagoCompraEstado
+        {
+            Pendiente,
+            Pagado,
+            Anulado
         }
 
         public static class CustomClaimTypes
