@@ -12,12 +12,10 @@ namespace Core.Automapper
     {
         public ProductosProfile()
         {
-            CreateMap<Producto, ProductoViewModel>()
-                   .ForMember(dest => dest.StockString, opt => opt.MapFrom(src => Helpers.Helpers.FormatStock(src.Stock, src.ProductoPresentaciones.ToDictionary(x => x.Nombre, x => x.Equivalencia))))
+            CreateMap<Producto, ProductoViewModel>()              
                    .ReverseMap();
-            CreateMap<Producto, ListaProductoViewModel>()
+            CreateMap<ProductoViewModel, ListaProductoViewModel>()
                 .ForMember(dest => dest.ProductoId, opt => opt.MapFrom(src => src.Id))  
-                .ForMember(dest => dest.StockString, opt => opt.MapFrom(src => Helpers.Helpers.FormatStock(src.Stock, src.ProductoPresentaciones.ToDictionary(x => x.Nombre, x => x.Equivalencia))))
                 .ReverseMap();           
 
             CreateMap<ProductoPresentacion, PresentacionProductoViewModel>()

@@ -11,7 +11,7 @@ namespace Core.Entities
     {
         public string Nombre { get; set; }
         public string Descripcion { get; set; }
-        public int Stock { get; set; }
+        //public int Stock { get; set; }
         public PorcIva PorcentajeIva { get; set; }
         public UnidadesMedida UnidadMedida { get; set; }
         public double PorcentajeGanancia { get; set; }

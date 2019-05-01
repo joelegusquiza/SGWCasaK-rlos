@@ -79,6 +79,7 @@ namespace SGWCasaK_rlos
             services.AddSingleton<ICajas, CajasService>();
             services.AddSingleton<ISucursales, SucursalesService>();
             services.AddSingleton<IOrdenPagoCompras, OrdenPagoComprasService>();
+            services.AddSingleton<ICajaAperturaCierre, CajaAperturaCierreService>();
             services.AddScoped<UserEmailActiveFilter>();
             return services.BuildServiceProvider();
         }
@@ -102,6 +103,7 @@ namespace SGWCasaK_rlos
                 cfg.AddProfile<CajasProfile>();
                 cfg.AddProfile<SucursalesProfile>();
                 cfg.AddProfile<OrdenPagoCompraProfile>();
+                cfg.AddProfile<CajaAperturaCierreProfile>();
             });
             if (env.IsDevelopment())
             {

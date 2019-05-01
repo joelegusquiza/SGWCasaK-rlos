@@ -216,6 +216,12 @@ namespace Core
             Anulado
         }
 
+        public enum CajaTipoOperacion
+        {
+            Apertura,
+            Cierre
+        }
+
         public static class CustomClaimTypes
         {
             public static string UserId = "UserId";

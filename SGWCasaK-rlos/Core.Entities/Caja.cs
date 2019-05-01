@@ -12,5 +12,6 @@ namespace Core.Entities
         public Sucursal Sucursal { get; set; }
         public ICollection<Usuario> Usuarios { get; set; } = new HashSet<Usuario>();
         public ICollection<Timbrado> Timbrados { get; set; } = new HashSet<Timbrado>();
+        public ICollection<CajaAperturaCierre> CajaAperturasCierres { get; set; } = new HashSet<CajaAperturaCierre>();
     }
 }

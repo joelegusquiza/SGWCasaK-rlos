@@ -31,6 +31,7 @@ namespace Core.Entities
         public Rol Rol { get; set; }
         public int SucursalId { get; set; }
         public Sucursal Sucursal { get; set; }
+        public ICollection<CajaAperturaCierre> CajaAperturasCierres { get; set; } = new HashSet<CajaAperturaCierre>();
 
         public void SetPassword(string password)
         {

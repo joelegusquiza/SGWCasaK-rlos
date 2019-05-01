@@ -14,5 +14,7 @@ namespace Core.Helpers
         public const string CajaNombre = "CajaNombre";
         public const string SucursalId = "SucursalId";
         public const string SucursalNombre = "SucursalNombre";
+
+
     }
 }

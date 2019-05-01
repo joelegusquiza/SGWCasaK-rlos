@@ -7,7 +7,7 @@ using static Core.Constants;
 
 namespace Core.DTOs.Productos
 {
-    public class ProductosAddViewModel
+    public class ProductosAddViewModel : BaseViewModel
     {
         public string Nombre { get; set; }
         public string Descripcion { get; set; }

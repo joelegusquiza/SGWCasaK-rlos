@@ -77,6 +77,7 @@ License: You must have a valid license purchased only from themeforest(the above
     <!--begin::Base Scripts -->
     @{
         Html.RenderPartial("~/Areas/Shared/Views/Shared/_PleaseWaitDialog.cshtml");
+        Html.RenderPartial("~/Areas/Platform/Views/Shared/_AperturaCierreCajaModal.cshtml");
     }
     <script src="~/metronic/js/vendors.bundle.js" type="text/javascript"></script>
     <script src="~/metronic/js/scripts.bundle.js" type="text/javascript"></script>
@@ -103,6 +104,7 @@ License: You must have a valid license purchased only from themeforest(the above
         $(document)
             .ready(function () {
                 getSucursales();
+                getLastAperturaCierre();
             })
             .ajaxStart(function () { $.blockUI({ message: '' }); $("#pleaseWaitDialog").modal("show"); })
             .ajaxStop(function () { $.unblockUI(); $("#pleaseWaitDialog").modal("hide"); }); 
@@ -144,6 +146,33 @@ License: You must have a valid license purchased only from themeforest(the above
             });
         }
 
+        function getLastAperturaCierre() {
+            $.ajax({
+                url: '/Admin/CajaAperturaCierre/GetLastAperturaCierre',
+                type: "POST",
+                data: {},
+                global: false,
+                success: function (response) {
+                  
+                    for (var i = 0; i < response.length; i++) {
+                        $("#listAperturaCierre").append(
+                            `<li id="` + id + `"class="m-menu__item " aria-haspopup="true">
+                                            <a onclick = "javascript: registerAperturaCierre(`+ response[i].value + `)" href="#" class="m-menu__link ">
+                                                   
+                                                <span class="m-menu__link-text">
+                                                    `+ response[i].text + `
+                                                </span>
+                                            </a>
+                                        </li>`
+                        );
+                    }                   
+                },
+                error: function () {
+                    showError();
+                }
+            });
+        }
+
         function changeSucursal(id) {
             $.ajax({
                 url: '/Shared/Login/ChangeSucursal',
@@ -156,6 +185,21 @@ License: You must have a valid license purchased only from themeforest(the above
                     showError();
                 }
             });
+        }
+
+        function registerAperturaCierre(id) {
+            $("#aperturaCierreCajaIFrame").attr('src', '@Url.Action("CajaAperturaCierre", "CajaAperturaCierre", new { area = "Platform"})');
+            $("#aperturaCierreCajaModal").modal("show");
+        }
+
+        function aperturaCierreCajaResult(response)
+        {
+            if (response.success) {
+                showSuccess(response.message);
+                window.location.reload();
+            } else {
+                showError(response.message);
+            }
         }
 
     </script>

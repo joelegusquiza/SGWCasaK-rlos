@@ -10,6 +10,8 @@ namespace Core.Helpers
         
         public static string FormatStock(int stock, Dictionary<string, int> presentaciones)
         {
+            if (stock == 0)
+                return "0";
             var format = "";
             var stockInit = stock;
             foreach (var presentacion in presentaciones)

@@ -235,6 +235,18 @@ namespace ApplicationContext
                 .WithOne(x => x.Producto)
                 .HasForeignKey(x => x.ProductoId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Usuario>()
+               .HasMany(x => x.CajaAperturasCierres)
+               .WithOne(x => x.Usuario)
+               .HasForeignKey(x => x.UsuarioId)
+               .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Caja>()
+               .HasMany(x => x.CajaAperturasCierres)
+               .WithOne(x => x.Caja)
+               .HasForeignKey(x => x.CajaId)
+               .OnDelete(DeleteBehavior.Restrict);
         }
 
         public override int SaveChanges()

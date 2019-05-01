@@ -82,12 +82,12 @@ namespace Core.DAL.Services
             return validation;
         }
 
-        public SystemValidationModel ConfirmCompra(int id)
+        public SystemValidationModel ConfirmCompra(int id, int sucursalId)
         {
             var compra = _context.Set<Compra>().Include(x => x.DetalleCompra).FirstOrDefault(x => x.Active && x.Id == id);
             compra.Estado = Constants.EstadoCompra.Confirmado;
             _context.Entry(compra).State = EntityState.Modified;
-            AumentarStock(compra.DetalleCompra.Where(x => x.Active).ToList());           
+            AumentarStock(compra.DetalleCompra.Where(x => x.Active).ToList(), sucursalId);           
             var success = _context.SaveChanges() > 0;
             var validation = new SystemValidationModel()
             {
@@ -114,18 +114,18 @@ namespace Core.DAL.Services
             return validation;
         }       
 
-        public void AumentarStock(List<DetalleCompra> detallesCompra)
+        public void AumentarStock(List<DetalleCompra> detallesCompra, int sucursalId)
         {
             var productoIds = detallesCompra.Select(x => x.ProductoId);
-            var productos = _context.Set<Producto>().Where(x => productoIds.Contains(x.Id));
-            foreach (var producto in productos.ToList())
-            {
-                var detalleCompra = detallesCompra.FirstOrDefault(x => x.ProductoId == producto.Id);
+            var productosSucursal = _context.Set<ProductoSucursal>().Where(x => productoIds.Contains(x.ProductoId) && x.SucursalId == sucursalId);
+            foreach (var productoSucursal in productosSucursal.ToList())
+            {        
+                var detalleCompra = detallesCompra.FirstOrDefault(x => x.ProductoId == productoSucursal.ProductoId);
                 if (detalleCompra.Equivalencia == 0)
-                    producto.Stock += detalleCompra.Cantidad;
+                    productoSucursal.Stock += detalleCompra.Cantidad;
                 else
-                    producto.Stock += detalleCompra.Cantidad * detalleCompra.Equivalencia;
-                _context.Entry(producto).State = EntityState.Modified;
+                    productoSucursal.Stock += detalleCompra.Cantidad * detalleCompra.Equivalencia;
+                _context.Entry(productoSucursal).State = EntityState.Modified;
             }
         }
 

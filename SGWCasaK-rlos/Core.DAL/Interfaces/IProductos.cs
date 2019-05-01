@@ -11,12 +11,14 @@ namespace Core.DAL.Interfaces
     public interface IProductos
     {
         IQueryable<Producto> GetAll();
-        //List<ProductoViewModel> GetAllWithPresentacion();
+        List<ProductoViewModel> GetAllWithStock(int sucursalId);
         Producto GetById(int id);
         SystemValidationModel ValidateStockPedido(List<DetallePedido> detallesPedio);
         SystemValidationModel Save(ProductosAddViewModel viewModel);
         SystemValidationModel Edit(ProductosEditViewModel viewModel);
         SystemValidationModel Desactivate(int id);
-        
+        SystemValidationModel AddToSucursal(int id, int sucursalId);
+
+
     }
 }

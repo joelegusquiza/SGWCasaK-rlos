@@ -70,5 +70,11 @@ namespace SGWCasaK_rlos.Areas.Admin.Controllers
         {
             return _cajas.Desactivate(id);
         }
+
+        public List<DropDownViewModel<int>> GetCajas()
+        {
+            var cajas = _cajas.GetAll().Select(x => new DropDownViewModel<int>() { Text = x.Nombre, Value = x.Id }).ToList();
+            return cajas;
+        }
     }
 }

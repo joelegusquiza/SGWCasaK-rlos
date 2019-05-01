@@ -58,7 +58,7 @@ namespace Core.DAL.Services
                 return new SystemValidationModel() { Success = false, Message = "No existen numeros validos para el timbrado actual" };
             
             venta.NroFactura = nroFactura.Value;
-            DescontarStock(viewModel.DetalleVenta);
+            //DescontarStock(viewModel.DetalleVenta);
             _context.Entry(venta).State = EntityState.Added;
             foreach (var detalle in venta.DetalleVenta)
             {
@@ -96,19 +96,19 @@ namespace Core.DAL.Services
 
         }
 
-        private void DescontarStock(List<VentasDetalleAddViewModel> detallesVenta)
-        {
-            var productoIds = detallesVenta.Select(x => x.ProductoId);
-            var productos = _context.Set<Producto>().Where(x => productoIds.Contains(x.Id));
-            foreach (var producto in productos)
-            {
-                var detalleVenta = detallesVenta.FirstOrDefault(x => x.ProductoId == producto.Id);
-                if (detalleVenta.Equivalencia == 0)
-                    producto.Stock -= detalleVenta.Cantidad;
-                else
-                    producto.Stock -= detalleVenta.Cantidad * detalleVenta.Equivalencia;
-                _context.Entry(producto).State = EntityState.Modified;
-            }
-        }
+        //private void DescontarStock(List<VentasDetalleAddViewModel> detallesVenta)
+        //{
+        //    var productoIds = detallesVenta.Select(x => x.ProductoId);
+        //    var productos = _context.Set<Producto>().Where(x => productoIds.Contains(x.Id));
+        //    foreach (var producto in productos)
+        //    {
+        //        var detalleVenta = detallesVenta.FirstOrDefault(x => x.ProductoId == producto.Id);
+        //        if (detalleVenta.Equivalencia == 0)
+        //            producto.Stock -= detalleVenta.Cantidad;
+        //        else
+        //            producto.Stock -= detalleVenta.Cantidad * detalleVenta.Equivalencia;
+        //        _context.Entry(producto).State = EntityState.Modified;
+        //    }
+        //}
     }
 }

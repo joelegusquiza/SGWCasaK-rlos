@@ -56,13 +56,13 @@
                                     <span class="m-menu__arrow m-menu__arrow--adjust"></span>
                                     @if (AccountPermisos.Contains(((int)Constants.AccessFunctions.ChangeSucursal).ToString()))
                                     {
-                                        <ul id="listSucursales" class="m-menu__subnav">
-                                            
-                                           
-                                        </ul>
+                                        <ul id="listSucursales" class="m-menu__subnav"></ul>
 
                                     }
-
+                                    @if (User.Claims.FirstOrDefault(x => x.Type == CustomClaims.ClientId).Value == "0")
+                                    {
+                                        <ul id="listAperturaCierre" class="m-menu__subnav"></ul>
+                                    }
                                 </div>
                             </li>
                         </ul>                    

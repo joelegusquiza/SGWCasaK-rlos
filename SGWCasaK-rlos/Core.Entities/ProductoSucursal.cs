@@ -6,7 +6,7 @@ namespace Core.Entities
 {
     public class ProductoSucursal : BaseEntity
     {
-        public int Cantidad { get; set; }
+        public int Stock { get; set; }
 
         public int ProductoId { get; set; }
         public Producto Producto { get; set; }

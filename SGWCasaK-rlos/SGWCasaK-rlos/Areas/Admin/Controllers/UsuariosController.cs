@@ -20,15 +20,17 @@ namespace SGWCasaK_rlos.Areas.Admin.Controllers
     {
         private readonly IUsuarios _usuarios;
         private readonly IRoles _roles;
+        private readonly ISucursales _sucursales;
         private readonly IEmailSender _emailSender;
         private readonly IEnvironmentContext _environment;
 
-        public UsuariosController(IUsuarios usuarios, IRoles roles, IEmailSender emailSender, IEnvironmentContext environment)
+        public UsuariosController(IUsuarios usuarios, IRoles roles, IEmailSender emailSender, IEnvironmentContext environment, ISucursales sucursales)
         {
             _usuarios = usuarios;
             _roles = roles;
             _emailSender = emailSender;
             _environment = environment;
+            _sucursales = sucursales;
         }
         [Authorize(Policy = "IndexUsuario")]
         public IActionResult Index()
@@ -44,8 +46,8 @@ namespace SGWCasaK_rlos.Areas.Admin.Controllers
         {
             var viewModel = new UsuariosAddViewModel() 
             { 
-                Roles = _roles.GetAll().Select(x => new DropDownViewModel<int>() { Value = x.Id, Text = x.Nombre}).ToList(),
-                
+                Roles = _roles.GetAll().Select(x => new AdditionalData() { Value = x.Id, Text = x.Nombre, AdditionalBool = x.IsCliente }).ToList(),
+                Sucursales = _sucursales.GetAll().Select(x => new DropDownViewModel<int>() { Value = x.Id, Text = x.Nombre }).ToList(),
             };
             return View(viewModel);
         }
@@ -53,8 +55,8 @@ namespace SGWCasaK_rlos.Areas.Admin.Controllers
         public IActionResult Edit(int id)
         {
             var viewModel = Mapper.Map<UsuariosEditViewModel>(_usuarios.GetById(id));
-            viewModel.Roles = _roles.GetAll().Select(x => new DropDownViewModel<int>() { Value = x.Id, Text = x.Nombre }).ToList();
-           
+            viewModel.Roles = _roles.GetAll().Select(x => new AdditionalData() { Value = x.Id, Text = x.Nombre, AdditionalBool = x.IsCliente }).ToList();
+            viewModel.Sucursales = _sucursales.GetAll().Select(x => new DropDownViewModel<int>() { Value = x.Id, Text = x.Nombre }).ToList();
             return View(viewModel);
         }
 

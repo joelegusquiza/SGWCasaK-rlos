@@ -52,17 +52,17 @@ namespace Core.DAL.Services
             var inventario = new Inventario();
             foreach (var detalle in viewModel.DetalleInventario.GroupBy(x => x.ProductoId))
             {
-                var producto = productos.FirstOrDefault(X => X.Id == detalle.Key);
-                var detalleInventario = new DetalleInventario()
-                {
-                    ProductoId = producto.Id,
-                    StockAnterior = producto.Stock,                                       
-                };
-                producto.Stock = GetTotalStockInventario(detalle);
-                detalleInventario.StockActual = producto.Stock;
-                _context.Entry(producto).State = EntityState.Modified;
-                _context.Entry(detalleInventario).State = EntityState.Added;
-                inventario.DetalleInventario.Add(detalleInventario);
+                //var producto = productos.FirstOrDefault(X => X.Id == detalle.Key);
+                //var detalleInventario = new DetalleInventario()
+                //{
+                //    ProductoId = producto.Id,
+                //    StockAnterior = producto.Stock,                                       
+                //};
+                //producto.Stock = GetTotalStockInventario(detalle);
+                //detalleInventario.StockActual = producto.Stock;
+                //_context.Entry(producto).State = EntityState.Modified;
+                //_context.Entry(detalleInventario).State = EntityState.Added;
+                //inventario.DetalleInventario.Add(detalleInventario);
             }
             _context.Entry(inventario).State = EntityState.Added;
             var success = _context.SaveChanges() > 0;
@@ -103,13 +103,13 @@ namespace Core.DAL.Services
             var productos = _productos.GetAll().Where(x => productsIds.Contains(x.Id)).Include(x => x.DetalleInventario);
             foreach (var detalle in inventario.DetalleInventario)
             {
-                var producto = productos.FirstOrDefault(x => x.Id == detalle.ProductoId);
-                var lastDetalleProductoInventario = producto.DetalleInventario.OrderByDescending(x => x.DateCreated).FirstOrDefault();
-                if (detalle.Id == lastDetalleProductoInventario.Id)
-                {
-                    producto.Stock = lastDetalleProductoInventario.StockAnterior;
-                    _context.Entry(producto).State = EntityState.Modified;
-                }
+                //var producto = productos.FirstOrDefault(x => x.Id == detalle.ProductoId);
+                //var lastDetalleProductoInventario = producto.DetalleInventario.OrderByDescending(x => x.DateCreated).FirstOrDefault();
+                //if (detalle.Id == lastDetalleProductoInventario.Id)
+                //{
+                //    producto.Stock = lastDetalleProductoInventario.StockAnterior;
+                //    _context.Entry(producto).State = EntityState.Modified;
+                //}
             }
 
         }

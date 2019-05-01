@@ -91,7 +91,7 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
         public SystemValidationModel Confirm(int id)
         {
             
-            return _compras.ConfirmCompra(id);
+            return _compras.ConfirmCompra(id, SucursalId);
         }
 
         [HttpPost]

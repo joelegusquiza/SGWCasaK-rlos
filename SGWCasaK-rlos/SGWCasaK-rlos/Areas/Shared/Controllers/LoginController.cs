@@ -23,12 +23,14 @@ namespace SGWCasaK_rlos.Areas.Shared.Controllers
         private readonly IEmailSender _emailSender;
         private readonly IEnvironmentContext _environment;
         private readonly ISucursales _sucursales;
-        public LoginController(IUsuarios usuarios, IEnvironmentContext environment, IEmailSender emailSender, ISucursales sucursales)
+        private readonly ICajaAperturaCierre _cajaApertura;
+        public LoginController(IUsuarios usuarios, IEnvironmentContext environment, IEmailSender emailSender, ISucursales sucursales, ICajaAperturaCierre cajaApertura)
         {
             _usuarios = usuarios;
             _emailSender = emailSender;
             _environment = environment;
             _sucursales = sucursales;
+            _cajaApertura = cajaApertura;
         }
 
         public IActionResult Index()
@@ -104,8 +106,9 @@ namespace SGWCasaK_rlos.Areas.Shared.Controllers
                     ClaimsIdentity claims;
                     if (usuario.Cliente == null)
                         claims = new ClaimsIdentity(SecurityHelper.GetUserClaims(usuario, usuario.Sucursal), "Cookie");
-                    else
-                        claims = new ClaimsIdentity(SecurityHelper.GetUserClaims(usuario, usuario.Cliente), "Cookie");
+                    else                    
+                        claims = new ClaimsIdentity(SecurityHelper.GetUserClaims(usuario, usuario.Cliente), "Cookie");                    
+                        
 
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claims));
                     return new SystemValidationModel() { Success = true, Message = "Login Exitoso", Url = Url.Action("Index", "Dashboard", new { area = "platform" }) };
