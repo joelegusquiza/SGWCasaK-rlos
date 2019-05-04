@@ -15,7 +15,7 @@ namespace Core.Entities
         public CajaTipoOperacion Tipo { get; set; }
 
         public int CajaId { get; set; }
-        public Caja Caja { get; set }
+        public Caja Caja { get; set; }
         public int UsuarioId { get; set; } 
         public Usuario Usuario { get; set; }
     }

@@ -164,7 +164,7 @@
                         <i class="m-menu__ver-arrow la la-angle-right"></i>
                     </a>
                     <div class="m-menu__submenu " style="display: block;">
-                        <span class="m-menu__arrow"></span>                        
+                        <span class="m-menu__arrow"></span>
                         <ul class="m-menu__subnav">
                             @if (HasPermisos(Constants.AccessFunctions.IndexCompra))
                             {
@@ -293,23 +293,58 @@
                     </a>
                 </li>
             }
-
-            @if (HasPermisos(Constants.AccessFunctions.IndexCaja))
+            @if (HasPermisos(Constants.AccessFunctions.IndexAperturaCierreCaja) || HasPermisos(Constants.AccessFunctions.IndexCaja))
             {
-                <li class="m-menu__item " aria-haspopup="true">
-                    <a href="@Url.Action("Index", "Cajas", new { area = "Admin"})" class="m-menu__link ">
-                        <i class="m-menu__link-icon flaticon-line-graph"></i>
-                        <span class="m-menu__link-title">
-                            <span class="m-menu__link-wrap">
-                                <span class="m-menu__link-text">
-                                    Cajas
-                                </span>
-
-                            </span>
+                <li class="m-menu__item m-menu__item--submenu m-menu__item--open" aria-haspopup="true" data-menu-submenu-toggle="hover">
+                    <a href="#" class="m-menu__link m-menu__toggle">
+                        <i class="m-menu__link-icon flaticon-diagram"></i>
+                        <span class="m-menu__link-text">
+                            Cajas
                         </span>
+                        <i class="m-menu__ver-arrow la la-angle-right"></i>
                     </a>
+                    <div class="m-menu__submenu " style="display: block;">
+                        <span class="m-menu__arrow"></span>
+                        <ul class="m-menu__subnav">
+
+                            @if (HasPermisos(Constants.AccessFunctions.IndexCaja))
+                            {
+                                <li class="m-menu__item " aria-haspopup="true">
+                                    <a href="@Url.Action("Index", "Cajas", new { area = "Admin"})" class="m-menu__link ">
+                                        <i class="m-menu__link-icon flaticon-line-graph"></i>
+                                        <span class="m-menu__link-title">
+                                            <span class="m-menu__link-wrap">
+                                                <span class="m-menu__link-text">
+                                                    Listar Cajas
+                                                </span>
+
+                                            </span>
+                                        </span>
+                                    </a>
+                                </li>
+                            }
+                            @if (HasPermisos(Constants.AccessFunctions.IndexAperturaCierreCaja))
+                            {
+                                <li class="m-menu__item " aria-haspopup="true">
+                                    <a href="@Url.Action("Index", "CajaAperturaCierre", new { area = "Platform"})" class="m-menu__link ">
+                                        <i class="m-menu__link-icon flaticon-line-graph"></i>
+                                        <span class="m-menu__link-title">
+                                            <span class="m-menu__link-wrap">
+                                                <span class="m-menu__link-text">
+                                                    Listar Apertura y Cierre
+                                                </span>
+
+                                            </span>
+                                        </span>
+                                    </a>
+                                </li>
+          
+                            }
+                        </ul>
+                    </div>
                 </li>
             }
+            
 
             @if (HasPermisos(Constants.AccessFunctions.IndexSucursal))
             {

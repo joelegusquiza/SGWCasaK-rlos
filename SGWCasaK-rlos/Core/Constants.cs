@@ -141,6 +141,8 @@ namespace Core
             EditOrdenPagoCompras = 5800,
             [Description("Anular Orden de pago de compras")]
             AnularOrdenPagoCompras = 5900,
+            [Description("Ver Apertura-Cierre de Caja")]
+            IndexAperturaCierreCaja = 6000           
         }
         
         public enum EstadoVenta

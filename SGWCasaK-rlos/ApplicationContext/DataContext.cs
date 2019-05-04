@@ -247,6 +247,12 @@ namespace ApplicationContext
                .WithOne(x => x.Caja)
                .HasForeignKey(x => x.CajaId)
                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Caja>()
+                 .HasMany(x => x.Ventas)
+                 .WithOne(x => x.Caja)
+                 .HasForeignKey(x => x.CajaId)
+                 .OnDelete(DeleteBehavior.Restrict);
         }
 
         public override int SaveChanges()

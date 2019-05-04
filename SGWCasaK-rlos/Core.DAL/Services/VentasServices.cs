@@ -45,6 +45,12 @@ namespace Core.DAL.Services
             }
         }
 
+        public List<Venta> GetVentaByCajaId(int cajaId, DateTime date)
+        {
+            var ventas = _context.Set<Venta>().Where(x => x.DateCreated == date && x.CajaId == cajaId);
+            return ventas.ToList();
+        }
+
         public SystemValidationModel Save(VentasAddViewModel viewModel)
         {
             

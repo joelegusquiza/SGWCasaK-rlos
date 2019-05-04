@@ -22,6 +22,19 @@ namespace Core.DAL.Services
             _context = context;
         }
 
+        public List<CajaAperturaCierre> GetAll()
+        {
+            var list = _context.Set<CajaAperturaCierre>().Include(x => x.Caja).ToList();
+            return list;
+
+        }
+
+        public CajaAperturaCierre GetById(int id)
+        {
+            var item = _context.Set<CajaAperturaCierre>().FirstOrDefault(x => x.Active && x.Id == id);
+            return item;
+        }
+
         public CajaAperturaCierre GetLastAperturaCierreByUser(int usuarioId)
         {
             var item = _context.Set<CajaAperturaCierre>().Include(x => x.Caja).Where(x => x.Active && x.UsuarioId == usuarioId).OrderByDescending(x => x.DateCreated).FirstOrDefault();
@@ -29,8 +42,22 @@ namespace Core.DAL.Services
         }
         public SystemValidationModel Save(AddCajaAperturaCierreViewModel viewModel)
         {
-            var cajaAperturaCierre = Mapper.Map<CajaAperturaCierre>(viewModel);
-            _context.Entry(cajaAperturaCierre).State = EntityState.Modified;
+
+            var cajaAperturaCierre = new CajaAperturaCierre();
+            if (viewModel.Tipo == Constants.CajaTipoOperacion.Apertura)
+            {
+                cajaAperturaCierre = Mapper.Map<CajaAperturaCierre>(viewModel);
+                cajaAperturaCierre.MontoApertura = viewModel.Monto;
+                _context.Entry(cajaAperturaCierre).State = EntityState.Added;
+            }
+            else
+            {
+                cajaAperturaCierre = GetById(viewModel.Id);
+                cajaAperturaCierre.MontoCierre = viewModel.Monto;
+                cajaAperturaCierre.FechaCierre = viewModel.FechaCierre;           
+                _context.Entry(cajaAperturaCierre).State = EntityState.Modified;
+            }
+
             var success = _context.SaveChanges() > 0;
             var validation = new SystemValidationModel()
             {
@@ -38,6 +65,7 @@ namespace Core.DAL.Services
                 Message = success ? $"Se ha procesado correctamente" : $"No se pudo processar",
                 Success = success
             };
+
             return validation;
         }
     }

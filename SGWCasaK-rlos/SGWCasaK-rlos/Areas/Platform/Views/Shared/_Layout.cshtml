@@ -114,6 +114,7 @@ License: You must have a valid license purchased only from themeforest(the above
                 url: '/Admin/Sucursales/GetSucursales',
                 type: "POST",
                 data: {},
+                async: false,
                 global: false,
                 success: function (response) {
                     if (response.length > 1) {
@@ -148,15 +149,16 @@ License: You must have a valid license purchased only from themeforest(the above
 
         function getLastAperturaCierre() {
             $.ajax({
-                url: '/Admin/CajaAperturaCierre/GetLastAperturaCierre',
+                url: '/Platform/CajaAperturaCierre/GetLastAperturaCierre',
                 type: "POST",
                 data: {},
                 global: false,
+                async: false,
                 success: function (response) {
                   
                     for (var i = 0; i < response.length; i++) {
                         $("#listAperturaCierre").append(
-                            `<li id="` + id + `"class="m-menu__item " aria-haspopup="true">
+                            `<li id="` + response[i].value + `"class="m-menu__item " aria-haspopup="true">
                                             <a onclick = "javascript: registerAperturaCierre(`+ response[i].value + `)" href="#" class="m-menu__link ">
                                                    
                                                 <span class="m-menu__link-text">
@@ -188,7 +190,7 @@ License: You must have a valid license purchased only from themeforest(the above
         }
 
         function registerAperturaCierre(id) {
-            $("#aperturaCierreCajaIFrame").attr('src', '@Url.Action("CajaAperturaCierre", "CajaAperturaCierre", new { area = "Platform"})');
+            $("#aperturaCierreCajaIFrame").attr('src', '@Url.Action("CajaAperturaCierre", "CajaAperturaCierre", new { area = "Platform"})'+"?id="+id);
             $("#aperturaCierreCajaModal").modal("show");
         }
 

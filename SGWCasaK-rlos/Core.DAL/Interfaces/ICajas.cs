@@ -11,6 +11,7 @@ namespace Core.DAL.Interfaces
     public interface ICajas
     {
         IQueryable<Caja> GetAll();
+        IQueryable<Caja> GetAllBySucusalId(int sucursalId);
         Caja GetById(int id);
         SystemValidationModel Save(CajasAddViewModel viewModel);
         SystemValidationModel Edit(CajasEditViewModel viewModel);

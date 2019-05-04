@@ -65,6 +65,11 @@ namespace Core.DAL.Services
             return _context.Set<Caja>().Where(x => x.Active);
         }
 
+        public IQueryable<Caja> GetAllBySucusalId(int sucursalId)
+        {
+            return _context.Set<Caja>().Include(x => x.Sucursal).Where(x => x.Active && x.SucursalId == sucursalId);
+        }
+
         public Caja GetById(int id)
         {
             return GetAll().FirstOrDefault(x => x.Id == id);

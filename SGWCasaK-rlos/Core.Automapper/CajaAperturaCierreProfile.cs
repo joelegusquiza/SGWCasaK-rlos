@@ -14,7 +14,9 @@ namespace Core.Automapper
             CreateMap<CajaAperturaCierre, AddCajaAperturaCierreViewModel>()
                 .ReverseMap();
 
-           
+            CreateMap<CajaAperturaCierre, CajaAperturaCierreViewModel>()
+                 .ForMember(dest => dest.Caja, opt => opt.MapFrom(src => src.Caja.Nombre))
+                 .ReverseMap();
         }
     }
 }

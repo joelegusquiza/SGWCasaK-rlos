@@ -4,14 +4,16 @@ using ApplicationContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ApplicationContext.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20190501153822_addedAperturaCierreCaja")]
+    partial class addedAperturaCierreCaja
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -839,8 +841,6 @@ namespace ApplicationContext.Migrations
 
                     b.Property<bool>("Active");
 
-                    b.Property<int>("CajaId");
-
                     b.Property<decimal>("Cambio");
 
                     b.Property<int>("ClienteId");
@@ -874,8 +874,6 @@ namespace ApplicationContext.Migrations
                     b.Property<int>("UserModifiedId");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CajaId");
 
                     b.HasIndex("ClienteId");
 
@@ -1102,11 +1100,6 @@ namespace ApplicationContext.Migrations
 
             modelBuilder.Entity("Core.Entities.Venta", b =>
                 {
-                    b.HasOne("Core.Entities.Caja", "Caja")
-                        .WithMany("Ventas")
-                        .HasForeignKey("CajaId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.HasOne("Core.Entities.Cliente", "Cliente")
                         .WithMany("Ventas")
                         .HasForeignKey("ClienteId")
