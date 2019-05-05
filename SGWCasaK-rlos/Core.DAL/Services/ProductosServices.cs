@@ -23,11 +23,36 @@ namespace Core.DAL.Services
 
         public IQueryable<Producto> GetAll()
         {
-            var listToReturn = _context.Set<Producto>().Include(x => x.ProductoPresentaciones).Where(x => x.Active);           
+            var listToReturn = _context.Set<Producto>().Include(x => x.ProductoPresentaciones).Include(x => x.ProductoSucursal).Where(x => x.Active);           
             return listToReturn;
         }
 
-        public List<ProductoViewModel> GetAllWithStock(int sucursalId)
+        public IQueryable<ProductoSucursal> GetProductoSucursal(List<int> productoIds, int sucursalId)
+        {
+            var listToReturn = _context.Set<ProductoSucursal>().Where(x => x.Active && productoIds.Contains(x.ProductoId) && x.SucursalId == sucursalId);
+            return listToReturn;
+        }
+
+        public List<ProductoSucursalViewModel> GetAllBySucursales(List<int> sucursalesIds)
+        {
+            var listToReturn = new List<ProductoSucursalViewModel>();
+            var productos =  _context.Set<Producto>().Include(x => x.ProductoPresentaciones).Include(x=> x.ProductoSucursal).Where(x => x.Active);
+            var sucursales = _context.Set<Sucursal>().Where(x => sucursalesIds.Contains(x.Id));
+            foreach (var producto in productos)
+            {                
+                foreach (var sucursal in producto.ProductoSucursal.Where(x => sucursalesIds.Contains(x.SucursalId)))
+                {
+                    var item = Mapper.Map<ProductoSucursalViewModel>(producto);
+                    item.StockString = Helpers.Helpers.FormatStock(sucursal.Stock, producto.ProductoPresentaciones.ToDictionary(x => x.Nombre, x => x.Equivalencia));
+                    item.SucursalId = sucursal.SucursalId;
+                    item.SucursalNombre = sucursales.FirstOrDefault(x => x.Id == sucursal.SucursalId)?.Nombre;
+                    listToReturn.Add(item);
+                }                               
+            }
+            return listToReturn;
+        }
+        
+        public List<ProductoViewModel> GetAllWithFormatedStock(int sucursalId)
         {
             var listToReturn = new List<ProductoViewModel>();
             var productos = GetAll().Include(x => x.ProductoSucursal);

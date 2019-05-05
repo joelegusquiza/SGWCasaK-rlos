@@ -176,6 +176,12 @@ namespace ApplicationContext
                 .HasForeignKey(x => x.InventarioId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<Sucursal>()
+               .HasMany(x => x.Inventarios)
+               .WithOne(x => x.Sucursal)
+               .HasForeignKey(x => x.SucursalId)
+               .OnDelete(DeleteBehavior.Restrict);
+
             modelBuilder.Entity<Producto>()
                 .HasMany(x => x.DetalleInventario)
                 .WithOne(x => x.Producto)

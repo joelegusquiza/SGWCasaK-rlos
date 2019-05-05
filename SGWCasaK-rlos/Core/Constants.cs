@@ -224,6 +224,15 @@ namespace Core
             Cierre
         }
 
+        public enum InventarioEstado
+        { 
+            Pendiente,
+            Terminado,
+            Confirmado,
+            Anulado
+        }
+
+
         public static class CustomClaimTypes
         {
             public static string UserId = "UserId";

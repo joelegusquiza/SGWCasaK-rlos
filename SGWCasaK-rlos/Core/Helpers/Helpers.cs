@@ -24,10 +24,11 @@ namespace Core.Helpers
                     stockInit = rest;
                     format += $"{cant} {presentacion.Key} ";
                 }
-                else if (stockInit != 0)
-                {
-                    format += $"{stockInit} unidades";
-                }
+        
+            }
+            if (stockInit != 0)
+            {
+                format += $"y {stockInit} unidades";
             }
             return format;
         }

@@ -30,7 +30,7 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
         {
             var viewModel = new ProductosIndexViewModel()
             {
-                Productos = _productos.GetAllWithStock(SucursalId)
+                Productos = _productos.GetAllWithFormatedStock(SucursalId)
             };
             return View(viewModel);
         }

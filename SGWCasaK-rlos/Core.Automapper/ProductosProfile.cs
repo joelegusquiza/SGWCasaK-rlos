@@ -32,6 +32,9 @@ namespace Core.Automapper
             CreateMap<ProductoPresentacion, ProductoPresentacionesViewModel>()
                 .ReverseMap();
 
+            CreateMap<Producto, ProductoSucursalViewModel>()
+                .ReverseMap();
+
         }
     }
 }

@@ -13,7 +13,7 @@ namespace Core.DAL.Interfaces
         IQueryable<Inventario> GetAll();
         Inventario GetById(int Id);
         Inventario GetInventarioForView(int Id);
-        SystemValidationModel Save(InventariosAddViewModel viewModel);
-        SystemValidationModel Desactivate(int id);
+        SystemValidationModel Upsert(InventariosUpsertViewModel viewModel);
+        SystemValidationModel Anular(int id);
     }
 }

@@ -1,5 +1,5 @@
 ﻿@model Core.DTOs.Inventario.InventariosIndexViewModel
-
+@using Core
 <div class="m-content" style="width: 100%">
     <div class="m-portlet m-portlet--mobile">
         <div class="m-portlet__head">
@@ -33,7 +33,7 @@
                     @if (HasPermisos(Core.Constants.AccessFunctions.AddInventario))
                     {
                         <div class="col-xl-4 order-1 order-xl-2 m--align-right">
-                            <a href="@Url.Action("Add", "Inventario", new { area = "Platform"})" class="btn btn-primary m-btn m-btn--custom m-btn--icon m-btn--air m-btn--pill">
+                            <a href="@Url.Action("Upsert", "Inventario", new { area = "Platform"})" class="btn btn-primary m-btn m-btn--custom m-btn--icon m-btn--air m-btn--pill">
                                 <span>
                                     <i class="la la-plus"></i>
                                     <span>
@@ -56,7 +56,7 @@
                            Fecha
                         </th>
                         <th title="Field #2">
-                           Usuario
+                           Estado
                         </th>
                         
                         <th></th>
@@ -65,18 +65,18 @@
                 <tbody data-bind="foreach: inventarios">
                     <tr>
                         <td data-bind="text: moment(dateCreated()).format('DD/MM/YYYY')"></td>
-                        <td data-bind="text: user"></td>
+                        <td data-bind="text: estadoDescription"></td>
                        
                         <td>
 
-                            @if (HasPermisos(Core.Constants.AccessFunctions.DeleteInventario))
-                            {
-                                <a href="#" data-bind="attr: { id: id() }" onClick="javacript: anular(this)"><i class="fa fa-trash"></i> Eliminar</a>
-                            }
-                            @if (HasPermisos(Core.Constants.AccessFunctions.ViewInventario))
-                            {
-                                <a data-bind="attr: { href: '@Url.Action("View", "Inventario", new  { area = "Platform" })?id=' + id() }"><i class="fa fa-edit"></i> Ver</a>
-                            }
+                            <a data-bind="attr: { href: '@Url.Action("Upsert", "Inventario", new  { area = "Platform" })?id=' + id() }"><i class="fa fa-edit"></i> Ver</a>
+                            <!-- ko if: estado() == @((int) Constants.InventarioEstado.Pendiente) -->
+
+                            <a href="#" data-bind="attr: { id: id() }" onClick="javacript: anular(this)"><i class="fa fa-trash"></i> Anular</a>
+
+                            <!-- /ko -->
+
+
 
                         </td>
                     </tr>
@@ -98,12 +98,12 @@
             //bootbox.confirm("Estas seguro?", function (result) {
                 //if (result) {
                     $.ajax({
-                        url: "@Url.Action("Desactivate")",
+                        url: "@Url.Action("Anular")",
                         type: "POST",
                         data: { id: id},
                         success: function (response) {
                             if (response.success) {
-                                localStorage.setItem('message', "Se ha eliminado correctamente el inventario");
+                                localStorage.setItem('message', response.message);
                                 localStorage.setItem('show', 'true');
                                 window.location.reload();
                             } else {

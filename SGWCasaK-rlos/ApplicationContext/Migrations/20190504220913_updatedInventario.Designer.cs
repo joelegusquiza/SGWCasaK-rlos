@@ -4,14 +4,16 @@ using ApplicationContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ApplicationContext.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20190504220913_updatedInventario")]
+    partial class updatedInventario
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -253,7 +255,7 @@ namespace ApplicationContext.Migrations
 
                     b.Property<int>("StockActual");
 
-                    b.Property<int>("StockEncontrado");
+                    b.Property<int>("StockAnterior");
 
                     b.Property<int>("UserCreatedId");
 
@@ -391,7 +393,7 @@ namespace ApplicationContext.Migrations
 
                     b.Property<int>("Estado");
 
-                    b.Property<int>("SucursalId");
+                    b.Property<int?>("SucursalId");
 
                     b.Property<int>("UserCreatedId");
 
@@ -986,10 +988,9 @@ namespace ApplicationContext.Migrations
 
             modelBuilder.Entity("Core.Entities.Inventario", b =>
                 {
-                    b.HasOne("Core.Entities.Sucursal", "Sucursal")
+                    b.HasOne("Core.Entities.Sucursal")
                         .WithMany("Inventarios")
-                        .HasForeignKey("SucursalId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("SucursalId");
                 });
 
             modelBuilder.Entity("Core.Entities.OrdenPagoCompra", b =>

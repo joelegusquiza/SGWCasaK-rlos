@@ -11,7 +11,9 @@ namespace Core.DAL.Interfaces
     public interface IProductos
     {
         IQueryable<Producto> GetAll();
-        List<ProductoViewModel> GetAllWithStock(int sucursalId);
+        IQueryable<ProductoSucursal> GetProductoSucursal(List<int> productoIds, int sucursalId);
+        List<ProductoViewModel> GetAllWithFormatedStock(int sucursalId);
+        List<ProductoSucursalViewModel> GetAllBySucursales(List<int> sucursalesIds);
         Producto GetById(int id);
         SystemValidationModel ValidateStockPedido(List<DetallePedido> detallesPedio);
         SystemValidationModel Save(ProductosAddViewModel viewModel);
