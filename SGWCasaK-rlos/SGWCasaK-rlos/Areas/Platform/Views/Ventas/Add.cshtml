@@ -316,8 +316,8 @@
                 resetProductoForm();
                 return;
             }
-            var cantidadSeleccionada = dataViewModel.producto.equivalencia() == 0 ? parseInt(dataViewModel.producto.cantidad()) : parseInt(dataViewModel.producto.cantidad() * dataViewModel.producto.equivalencia());
-            if (cantidadSeleccionada > dataViewModel.producto.stockActual()) {
+            var cantidadSeleccionada = dataViewModel.producto.equivalencia() == 1 ? parseInt(dataViewModel.producto.cantidad()) : parseInt(dataViewModel.producto.cantidad() * dataViewModel.producto.equivalencia());
+            if (cantidadSeleccionada > dataViewModel.producto.stock()) {
                 showError("El producto no existe en la cantidad deseada");
                 resetProductoForm();
                 return;

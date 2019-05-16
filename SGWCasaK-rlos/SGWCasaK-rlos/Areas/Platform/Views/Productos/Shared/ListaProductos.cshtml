@@ -122,7 +122,7 @@
             if (dataViewModel.producto.presentacion != undefined && dataViewModel.producto.presentacion.presentacionId() != 0)
             {
                 dataViewModel.producto.nombre(dataViewModel.producto.nombre() + " (" + dataViewModel.producto.presentacion.nombre() + ")")
-                //dataViewModel.producto.precioVenta(dataViewModel.producto.presentacion.precioVenta())
+                dataViewModel.producto.precioVenta(dataViewModel.producto.presentacion.precioVenta())
                 dataViewModel.producto.equivalencia(dataViewModel.producto.presentacion.equivalencia())                
             }
             //else

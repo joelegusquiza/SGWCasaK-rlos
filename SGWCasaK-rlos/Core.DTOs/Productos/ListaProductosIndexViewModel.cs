@@ -19,23 +19,15 @@ namespace Core.DTOs.Productos
         public int Stock { get; set; }
         public string StockString { get; set; }
         public PorcIva PorcentajeIva { get; set; }
-        //public decimal PrecioVenta { get; set; }
+        public decimal PrecioVenta { get; set; }
         public double PorcentajeGanancia { get; set; }
-        public decimal Equivalencia { get; set; }
+        public decimal Equivalencia { get; set; } = 1;
         public decimal PrecioCompra { get; set; }
         public decimal MontoTotal { get; set; }
         
 
-        public PresentacionProductoViewModel Presentacion { get; set; } = new PresentacionProductoViewModel();
-        public List<PresentacionProductoViewModel> ProductoPresentaciones { get; set; } = new List<PresentacionProductoViewModel>();
+        public ProductoPresentacionViewModel Presentacion { get; set; } = new ProductoPresentacionViewModel();
+        public List<ProductoPresentacionViewModel> ProductoPresentaciones { get; set; } = new List<ProductoPresentacionViewModel>();
     }
-
-    public class PresentacionProductoViewModel
-    { 
-        public int PresentacionId { get; set; }
-        public string Nombre{ get; set; }
-        public int Equivalencia { get; set; }
-        //public decimal PrecioVenta { get; set; }
-        public double PorcentajeGanancia { get; set; }
-    }
+    
 }

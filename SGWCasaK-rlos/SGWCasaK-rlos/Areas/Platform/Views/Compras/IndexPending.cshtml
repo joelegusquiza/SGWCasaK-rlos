@@ -115,8 +115,7 @@
         function openAnularModal(element)
         {
             dataViewModel.idToDelete($(element).attr('id'));
-
-            $("#deleteCompraReasonModal").modal("show");
+            $("#reasonDeleteCompraModal").modal("show");
         }
         ko.applyBindings(dataViewModel);
         $(document).ready(function () {

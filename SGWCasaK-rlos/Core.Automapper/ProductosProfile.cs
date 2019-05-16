@@ -13,12 +13,13 @@ namespace Core.Automapper
         public ProductosProfile()
         {
             CreateMap<Producto, ProductoViewModel>()              
-                   .ReverseMap();
+                   .ReverseMap(); 
+            
             CreateMap<ProductoViewModel, ListaProductoViewModel>()
                 .ForMember(dest => dest.ProductoId, opt => opt.MapFrom(src => src.Id))  
                 .ReverseMap();           
 
-            CreateMap<ProductoPresentacion, PresentacionProductoViewModel>()
+            CreateMap<ProductoPresentacion, ProductoPresentacionViewModel>()
                 .ForMember(dest => dest.PresentacionId, opt => opt.MapFrom(src => src.Id))
                 .ReverseMap();
 

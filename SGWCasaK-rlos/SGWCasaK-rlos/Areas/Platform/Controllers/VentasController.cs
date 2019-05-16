@@ -10,12 +10,13 @@ using Core.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using SGWCasaK_rlos.Areas.Shared.Controllers;
 using SGWCasaK_rlos.SecurityHelpers;
 
 namespace SGWCasaK_rlos.Areas.Platform.Controllers
 {
     [Area("Platform"), Authorize, ServiceFilter(typeof(UserEmailActiveFilter))]
-    public class VentasController : Controller
+    public class VentasController : BaseController
     {
         private readonly IVentas _ventas;
         private readonly IPedidos _pedidos;
@@ -39,7 +40,7 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
         public IActionResult Add(VentasAddViewModel viewModel)
         {
             if (viewModel == null)
-                viewModel = new VentasAddViewModel();
+                viewModel = new VentasAddViewModel() { SucursalId = SucursalId};
             return View(viewModel);
         }
 

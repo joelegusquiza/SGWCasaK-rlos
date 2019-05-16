@@ -55,7 +55,7 @@ namespace Core.DAL.Services
         {
             
             var venta = Mapper.Map<Venta>(viewModel);
-            var timbrado = _timbrados.GetValidTimbrado();
+            var timbrado = _timbrados.GetValidTimbrado(viewModel.SucursalId, viewModel.CajaId);
             if (timbrado == null)
                 return new SystemValidationModel() { Success = false, Message = "No existe un timbrado valido registrado" };
             venta.Timbrado = timbrado;

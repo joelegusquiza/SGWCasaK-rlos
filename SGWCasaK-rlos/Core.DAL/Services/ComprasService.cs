@@ -15,10 +15,11 @@ namespace Core.DAL.Services
     public class ComprasService : ICompras
     {        
         private readonly DataContext _context;
-
-        public ComprasService(DataContext context)
+        private readonly IProductos _productos;
+        public ComprasService(DataContext context, IProductos productos)
         {
-            _context = context;         
+            _context = context;
+            _productos = productos;
         }
 
         public List<Compra> GetAll()
@@ -53,25 +54,12 @@ namespace Core.DAL.Services
             var compra = Mapper.Map<Compra>(viewModel);
             compra.Estado = Constants.EstadoCompra.Pendiente;
             _context.Entry(compra).State = EntityState.Added;
-            //AumentarStock(viewModel.DetalleCompra);
+         
             foreach (var detalle in compra.DetalleCompra)
             {
                 _context.Entry(detalle).State = EntityState.Added;
             }
-            //if (viewModel.PagoCompra.Monto > 0)
-            //{
-            //    var pagoCompra = new PagoCompra()
-            //    {
-            //        Monto = viewModel.PagoCompra.Monto,
-            //        Compra = compra,
-            //        ProveedorId = compra.ProveedorId
-            //    };
-            //    _context.Entry(pagoCompra).State = EntityState.Added;
-            //    UpdateProveedorSaldo(compra.ProveedorId, pagoCompra.Monto, compra.MontoTotal);
-               
-            //}
-            //compra.Estado = viewModel.PagoCompra.Monto == compra.MontoTotal ? Constants.EstadoCompra.Pagado : Constants.EstadoCompra.Pendiente;
-
+           
             var success = _context.SaveChanges() > 0;
             var validation = new SystemValidationModel()
             {
@@ -87,8 +75,11 @@ namespace Core.DAL.Services
             var compra = _context.Set<Compra>().Include(x => x.DetalleCompra).FirstOrDefault(x => x.Active && x.Id == id);
             compra.Estado = Constants.EstadoCompra.Confirmado;
             _context.Entry(compra).State = EntityState.Modified;
-            AumentarStock(compra.DetalleCompra.Where(x => x.Active).ToList(), sucursalId);           
+            AumentarStock(compra.DetalleCompra.Where(x => x.Active).ToList(), sucursalId);
+           
             var success = _context.SaveChanges() > 0;
+            if (success)
+                _productos.UpdatePrecioVenta(compra.DetalleCompra.Select(x => x.ProductoId).ToList(), sucursalId);
             var validation = new SystemValidationModel()
             {
                 Id = compra.Id,

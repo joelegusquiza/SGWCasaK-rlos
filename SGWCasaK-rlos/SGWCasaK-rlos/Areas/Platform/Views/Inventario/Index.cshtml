@@ -30,7 +30,7 @@
                             </div>
                         </div>
                     </div>
-                    @if (HasPermisos(Core.Constants.AccessFunctions.AddInventario))
+                    @if (HasPermisos(Core.Constants.AccessFunctions.Upsertnventario))
                     {
                         <div class="col-xl-4 order-1 order-xl-2 m--align-right">
                             <a href="@Url.Action("Upsert", "Inventario", new { area = "Platform"})" class="btn btn-primary m-btn m-btn--custom m-btn--icon m-btn--air m-btn--pill">
@@ -69,12 +69,19 @@
                        
                         <td>
 
-                            <a data-bind="attr: { href: '@Url.Action("Upsert", "Inventario", new  { area = "Platform" })?id=' + id() }"><i class="fa fa-edit"></i> Ver</a>
-                            <!-- ko if: estado() == @((int) Constants.InventarioEstado.Pendiente) -->
+                            @if (HasPermisos(Core.Constants.AccessFunctions.Upsertnventario))
+                            {
+                                <a data-bind="attr: { href: '@Url.Action("Upsert", "Inventario", new  { area = "Platform" })?id=' + id() }"><i class="fa fa-edit"></i> Ver</a>
+                            }
 
-                            <a href="#" data-bind="attr: { id: id() }" onClick="javacript: anular(this)"><i class="fa fa-trash"></i> Anular</a>
+                            
+                            @if (HasPermisos(Core.Constants.AccessFunctions.AnularInventario))
+                            {
+                                <!-- ko if: estado() == @((int) Constants.InventarioEstado.Pendiente) -->
+                                <a href="#" data-bind="attr: { id: id() }" onClick="javacript: anular(this)"><i class="fa fa-trash"></i> Anular</a>
+                                <!-- /ko -->
+                            }
 
-                            <!-- /ko -->
 
 
 

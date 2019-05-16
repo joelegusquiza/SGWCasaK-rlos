@@ -74,24 +74,15 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
             return listToReturn.OrderBy(x => x.ProductoNombre).ToList();
         }
 
-        //[Authorize(Policy = "ViewInventario")]
-        //public IActionResult View(int id)
-        //{
-        //    var inventario = _inventario.GetInventarioForView(id);
-        //    var viewModel = Mapper.Map<InventariosViewViewModel>(inventario);
-        //    var user = _usuarios.GetById(inventario.UserCreatedId);
-        //    viewModel.UserName = $"{user.Nombre} {user.Apellido}";
-        //    return View(viewModel);
-        //}
-
         [HttpPost]
-       
+        [Authorize(Policy = "Upsertnventario")]
         public SystemValidationModel Upsert(string model)
         {
             var viewModel = JsonConvert.DeserializeObject<InventariosUpsertViewModel>(model);
             return _inventario.Upsert(viewModel);
         }
         [HttpPost]
+        [Authorize(Policy = "ConfirmInventario")]
         public SystemValidationModel Confirmar(string model)
         {
             var viewModel = JsonConvert.DeserializeObject<InventariosUpsertViewModel>(model);
@@ -100,7 +91,7 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
         }
 
         [HttpPost]
-
+        [Authorize(Policy = "AnularInventario")]
         public SystemValidationModel Anular(int id)
         {
           

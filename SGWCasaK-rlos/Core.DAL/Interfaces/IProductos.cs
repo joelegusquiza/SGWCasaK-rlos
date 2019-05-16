@@ -15,6 +15,7 @@ namespace Core.DAL.Interfaces
         List<ProductoViewModel> GetAllWithFormatedStock(int sucursalId);
         List<ProductoSucursalViewModel> GetAllBySucursales(List<int> sucursalesIds);
         Producto GetById(int id);
+        SystemValidationModel UpdatePrecioVenta(List<int> productoIds, int sucursalId);
         SystemValidationModel ValidateStockPedido(List<DetallePedido> detallesPedio);
         SystemValidationModel Save(ProductosAddViewModel viewModel);
         SystemValidationModel Edit(ProductosEditViewModel viewModel);

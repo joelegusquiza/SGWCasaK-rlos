@@ -8,7 +8,7 @@ using static Core.Constants;
 
 namespace Core.DTOs.Ventas
 {
-    public class VentasAddViewModel
+    public class VentasAddViewModel : BaseViewModel
     {
         public DateTime DateCreated { get; set; } = DateTime.UtcNow;        
         public int NroFactura { get; set; }
@@ -18,7 +18,7 @@ namespace Core.DTOs.Ventas
         public decimal IvaDiez { get; set; }
         public decimal Excenta { get; set; }
         public int PedidoId { get; set; }
-
+        public int CajaId { get; set; }
         public CondicionVenta CondicionVenta{ get; set; }
         public List<DropDownViewModel<CondicionVenta>> CondicionesVenta = Enum.GetValues(typeof(CondicionVenta)).Cast<CondicionVenta>().Select(x => new DropDownViewModel<CondicionVenta>
         {
@@ -44,7 +44,7 @@ namespace Core.DTOs.Ventas
         public int ProductoId { get; set; }
         public string Nombre { get; set; }
         public int Cantidad { get; set; }
-        public int StockActual { get; set; }
+        public int Stock { get; set; }
         public PorcIva PorcentajeIva { get; set; }
         public decimal PrecioVenta { get; set; }
         public decimal MontoTotal { get; set; }

@@ -29,9 +29,9 @@ namespace Core.DAL.Services
             return GetAll().FirstOrDefault(x => x.Id == id);
         }
 
-        public Timbrado GetValidTimbrado ()
+        public Timbrado GetValidTimbrado (int sucursalId, int cajaId)
         {
-            var timbrados = _context.Set<Timbrado>().Where(x => x.Active && DateTime.Now >= x.FechaInicio  && DateTime.Now <= x.FechaFin).ToList();
+            var timbrados = _context.Set<Timbrado>().Where(x => x.Active && DateTime.Now >= x.FechaInicio && DateTime.Now <= x.FechaFin && x.SucursalId == sucursalId && x.CajaId == cajaId).ToList();
             return timbrados.FirstOrDefault();
         }
 

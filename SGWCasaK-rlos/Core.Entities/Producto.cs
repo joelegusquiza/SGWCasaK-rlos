@@ -15,7 +15,7 @@ namespace Core.Entities
         public PorcIva PorcentajeIva { get; set; }
         public UnidadesMedida UnidadMedida { get; set; }
         public double PorcentajeGanancia { get; set; }
-        //public decimal PrecioVenta { get; set; }
+        public decimal PrecioVenta { get; set; }
 
         public int CategoriaProductoId { get; set; }
         public CategoriaProducto CategoriaProducto { get; set; }               

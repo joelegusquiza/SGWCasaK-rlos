@@ -96,6 +96,34 @@ namespace Core.DAL.Services
             return _context.Set<Producto>().Include(X => X.ProductoPresentaciones).FirstOrDefault(x => x.Active && x.Id == id);
         }
 
+        public SystemValidationModel UpdatePrecioVenta(List<int> productoIds, int sucursalId)
+        {
+            var productos= GetAll().Include(x => x.ProductoSucursal).Include(x => x.ProductoPresentaciones).Where(x => productoIds.Contains(x.Id));
+            var compras = _context.Set<DetalleCompra>().Include(x => x.Compra).Where(x => productoIds.Contains(x.ProductoId) && x.Compra.Estado == Constants.EstadoCompra.Confirmado);
+            foreach (var producto in productos)
+            {
+                var sumaCompras = compras.Where(x => x.ProductoId == producto.Id && x.Compra.SucursalId == sucursalId).Sum(x => x.MontoTotal);
+                var cant = compras.Where(x => x.ProductoId == producto.Id).Sum(x => x.Equivalencia * x.Cantidad);
+                var precioPromedioUnidad = sumaCompras / cant;
+                producto.PrecioVenta = precioPromedioUnidad + precioPromedioUnidad * Convert.ToDecimal(producto.PorcentajeGanancia/100);
+                foreach (var presentacion in producto.ProductoPresentaciones)
+                {
+                    var precioPresentacion = precioPromedioUnidad * presentacion.Equivalencia;
+                    presentacion.PrecioVenta = precioPresentacion + precioPresentacion * Convert.ToDecimal(presentacion.PorcentajeGanancia/100);
+                }
+                _context.Entry(producto).State = EntityState.Modified;
+            }
+            
+            var success = _context.SaveChanges() > 0;
+            var validation = new SystemValidationModel()
+            {                
+                Message = success ? "Se ha guardado correctamente el precio de venta" : "No se pudo guardar el precio de venta",
+                Success = success
+            };
+            return validation;
+        }
+
+
         public SystemValidationModel Save(ProductosAddViewModel viewModel)
         {
             var producto = Mapper.Map<Producto>(viewModel);

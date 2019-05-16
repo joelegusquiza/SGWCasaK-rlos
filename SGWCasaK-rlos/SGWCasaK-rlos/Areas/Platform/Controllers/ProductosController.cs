@@ -62,7 +62,7 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
         {
             var viewModel = new ListaProductosIndexViewModel()
             {
-                Productos = Mapper.Map<List<ListaProductoViewModel>>(_productos.GetAll())
+                Productos = Mapper.Map<List<ListaProductoViewModel>>(_productos.GetAllWithFormatedStock(SucursalId))
             };
             return View("~/Areas/Platform/Views/Productos/Shared/ListaProductos.cshtml", viewModel);
         }

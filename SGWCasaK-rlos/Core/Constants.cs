@@ -109,12 +109,12 @@ namespace Core
             VerReportes = 4200,
             [Description("Ver Inventarios")]
             IndexInventario = 4300,
-            [Description("Agregar Inventario")]
-            AddInventario = 4400,                        
-            [Description("Eliminar Inventario")]
-            DeleteInventario = 4500,
-            [Description("Ver Detalle Inventario")]
-            ViewInventario = 4600,
+            [Description("Agregar, editar Inventario")]
+            Upsertnventario = 4400,                        
+            [Description("Confirmar Inventario")]
+            ConfirmInventario = 4500,
+            [Description("Anular Inventario")]
+            AnularInventario = 4600,
             [Description("Ver Cajas")]
             IndexCaja = 4700,
             [Description("Agregar Cajas")]

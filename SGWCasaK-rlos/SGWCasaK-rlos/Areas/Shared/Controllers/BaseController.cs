@@ -36,6 +36,15 @@ namespace SGWCasaK_rlos.Areas.Shared.Controllers
             }
         }
 
+        private int _cajaId { get; set; }
+        public int CajaId
+        {
+            get
+            {
+                return _cajaId > 0 ? _cajaId : (_cajaId = Convert.ToInt32(User.Claims.FirstOrDefault(x => x.Type == CustomClaims.CajaId).Value));
+            }
+        }
+
 
         private int GetClientId()
         {
