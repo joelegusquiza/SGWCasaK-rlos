@@ -64,25 +64,33 @@ namespace SGWCasaK_rlos.Areas.Admin.Controllers
         [Authorize(Policy = "AddUsuario")]
         public async Task<SystemValidationModel> Save(string model)
         {
-            var viewModel = JsonConvert.DeserializeObject<UsuariosAddViewModel>(model);  
-            var result = _usuarios.Save(viewModel);
-            if (result.Success)
-            {
-                var usuario = _usuarios.GetById(result.Id);
-                usuario.UserVerifyEmailGuid = Guid.NewGuid();
-                var success = _usuarios.Edit(usuario);
-                var emailModel = new EmailModel()
-                {
-                    From = "noreply@casak-rlos.com.py",
-                    FromName = "Casa K-rlos",
-                    HtmlContent = $"Haga click <a href='{_environment.BaseUrl()}/Shared/Login/ConfirmEmail?userVerifyEmailGuid={usuario.UserVerifyEmailGuid.ToString()}'>aqui</a> para activar su cuenta.",
-                    Subject = "Email de Activacion de Cuenta",
-                    To = viewModel.Email,
-                    ToName = $"{usuario.Nombre} {usuario.Apellido}"
-                };
-                await _emailSender.SendEmailAsync(emailModel);
-            }
-            return result;
+			try
+			{
+				var viewModel = JsonConvert.DeserializeObject<UsuariosAddViewModel>(model);
+				var result = _usuarios.Save(viewModel);
+				if (result.Success)
+				{
+					var usuario = _usuarios.GetById(result.Id);
+					usuario.UserVerifyEmailGuid = Guid.NewGuid();
+					var success = _usuarios.Edit(usuario);
+					var emailModel = new EmailModel()
+					{
+						From = "noreply@casak-rlos.com.py",
+						FromName = "Casa K-rlos",
+						HtmlContent = $"Haga click <a href='{_environment.BaseUrl()}/Shared/Login/ConfirmEmail?userVerifyEmailGuid={usuario.UserVerifyEmailGuid.ToString()}'>aqui</a> para activar su cuenta.",
+						Subject = "Email de Activacion de Cuenta",
+						To = viewModel.Email,
+						ToName = $"{usuario.Nombre} {usuario.Apellido}"
+					};
+					await _emailSender.SendEmailAsync(emailModel);
+				}
+				return result;
+			} 
+			catch(Exception ex)
+			{
+				return new SystemValidationModel() { Message = "Ocurrio un error, por favor intentelo de nuevo", Success = false };
+			}
+          
         }
 
         [HttpPost]

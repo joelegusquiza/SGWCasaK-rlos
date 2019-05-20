@@ -17,7 +17,7 @@ namespace Core.DTOs.Ventas
         public decimal IvaCinco { get; set; }
         public decimal IvaDiez { get; set; }
         public decimal Excenta { get; set; }
-        public int PedidoId { get; set; }
+        public int? PedidoId { get; set; }
         public int CajaId { get; set; }
         public CondicionVenta CondicionVenta{ get; set; }
         public List<DropDownViewModel<CondicionVenta>> CondicionesVenta = Enum.GetValues(typeof(CondicionVenta)).Cast<CondicionVenta>().Select(x => new DropDownViewModel<CondicionVenta>

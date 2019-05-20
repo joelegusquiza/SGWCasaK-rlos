@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Core.Helpers;
 using Microsoft.AspNetCore.Mvc;
@@ -41,12 +42,29 @@ namespace SGWCasaK_rlos.Areas.Shared.Controllers
         {
             get
             {
-                return _cajaId > 0 ? _cajaId : (_cajaId = Convert.ToInt32(User.Claims.FirstOrDefault(x => x.Type == CustomClaims.CajaId).Value));
+                return User.Claims.FirstOrDefault(x => x.Type == CustomClaims.CajaId) == null? 0 : Convert.ToInt32(User.Claims.FirstOrDefault(x => x.Type == CustomClaims.CajaId).Value);
             }
         }
 
+        private string _email { get; set; }
+        public string Email
+        {
+            get
+            {
+                return !string.IsNullOrEmpty(_email) ? _email : (_email = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email).Value);
+            }
+        }
 
-        private int GetClientId()
+		private int _rolId { get; set; }
+		public int RolId
+		{
+			get
+			{
+				return _cajaId > 0 ? _cajaId : (_cajaId = Convert.ToInt32(User.Claims.FirstOrDefault(x => x.Type == CustomClaims.RolId).Value));
+			}
+		}
+
+		private int GetClientId()
         {
             var clientIdString = User.Claims.FirstOrDefault(x => x.Type == CustomClaims.ClientId).Value;
             if (!string.IsNullOrEmpty(clientIdString))

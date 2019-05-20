@@ -47,7 +47,7 @@ namespace Core.DAL.Services
 
         public List<Venta> GetVentaByCajaId(int cajaId, DateTime date)
         {
-            var ventas = _context.Set<Venta>().Where(x => x.DateCreated == date && x.CajaId == cajaId);
+            var ventas = _context.Set<Venta>().Where(x => x.DateCreated.Date == date.Date && x.CajaId == cajaId);
             return ventas.ToList();
         }
 
@@ -64,7 +64,7 @@ namespace Core.DAL.Services
                 return new SystemValidationModel() { Success = false, Message = "No existen numeros validos para el timbrado actual" };
             
             venta.NroFactura = nroFactura.Value;
-            //DescontarStock(viewModel.DetalleVenta);
+            DescontarStock(viewModel.DetalleVenta, viewModel.SucursalId);
             _context.Entry(venta).State = EntityState.Added;
             foreach (var detalle in venta.DetalleVenta)
             {
@@ -83,9 +83,9 @@ namespace Core.DAL.Services
            
             venta.Estado = viewModel.PagoVenta.Monto == venta.MontoTotal ? Constants.EstadoVenta.Pagado : Constants.EstadoVenta.Pendiente;
            
-            if (viewModel.PedidoId != 0)
+            if (viewModel.PedidoId != null)
             {
-                var pedido = _pediddos.GetById(viewModel.PedidoId);
+                var pedido = _pediddos.GetById(viewModel.PedidoId.Value);
                 pedido.Estado = Constants.EstadoPedido.Finalizado;
                 _context.Entry(pedido).State = EntityState.Deleted;
             }
@@ -102,19 +102,19 @@ namespace Core.DAL.Services
 
         }
 
-        //private void DescontarStock(List<VentasDetalleAddViewModel> detallesVenta)
-        //{
-        //    var productoIds = detallesVenta.Select(x => x.ProductoId);
-        //    var productos = _context.Set<Producto>().Where(x => productoIds.Contains(x.Id));
-        //    foreach (var producto in productos)
-        //    {
-        //        var detalleVenta = detallesVenta.FirstOrDefault(x => x.ProductoId == producto.Id);
-        //        if (detalleVenta.Equivalencia == 0)
-        //            producto.Stock -= detalleVenta.Cantidad;
-        //        else
-        //            producto.Stock -= detalleVenta.Cantidad * detalleVenta.Equivalencia;
-        //        _context.Entry(producto).State = EntityState.Modified;
-        //    }
-        //}
+        private void DescontarStock(List<VentasDetalleAddViewModel> detallesVenta, int sucursalId)
+        {
+            var productoIds = detallesVenta.Select(x => x.ProductoId);
+            var productosSucursal = _context.Set<ProductoSucursal>().Where(x => productoIds.Contains(x.Id) && x.SucursalId == sucursalId);
+            foreach (var producto in productosSucursal)
+            {
+                var detalleVenta = detallesVenta.FirstOrDefault(x => x.ProductoId == producto.Id);
+                if (detalleVenta.Equivalencia == 0)
+                    producto.Stock -= detalleVenta.Cantidad;
+                else
+                    producto.Stock -= detalleVenta.Cantidad * detalleVenta.Equivalencia;
+                _context.Entry(producto).State = EntityState.Modified;
+            }
+        }
     }
 }

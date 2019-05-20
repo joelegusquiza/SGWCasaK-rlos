@@ -21,11 +21,13 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
         private readonly IVentas _ventas;
         private readonly IPedidos _pedidos;
         private readonly IProductos _productos;
-        public VentasController(IVentas ventas, IPedidos pedidos, IProductos productos)
+        private readonly ICajaAperturaCierre _cajasAperturaCierre;
+        public VentasController(IVentas ventas, IPedidos pedidos, IProductos productos, ICajaAperturaCierre cajasAperturaCierre)
         {
             _ventas = ventas;
             _pedidos = pedidos;
             _productos = productos;
+            _cajasAperturaCierre = cajasAperturaCierre;
         }
         [Authorize(Policy = "IndexVenta")]
         public IActionResult Index()
@@ -37,10 +39,10 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
             return View(viewModel);
         }
 
-        public IActionResult Add(VentasAddViewModel viewModel)
+        public IActionResult Add()
         {
-            if (viewModel == null)
-                viewModel = new VentasAddViewModel() { SucursalId = SucursalId};
+           
+            var viewModel = new VentasAddViewModel() { SucursalId = SucursalId, CajaId = CajaId};
             return View(viewModel);
         }
 
@@ -65,6 +67,11 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
         [Authorize(Policy = "AddVenta")]
         public SystemValidationModel Save(string model)
         {
+            var lastCajaAperturaCierre = _cajasAperturaCierre.GetLastAperturaCierreByUser(UserId);
+            if (lastCajaAperturaCierre == null || lastCajaAperturaCierre.FechaCierre != null)
+            {
+                return new SystemValidationModel() { Success = false, Message = "Debe registrar la apertura de una Caja" };
+            }
             var viewModel = JsonConvert.DeserializeObject<VentasAddViewModel>(model);
             return _ventas.Save(viewModel);
         }

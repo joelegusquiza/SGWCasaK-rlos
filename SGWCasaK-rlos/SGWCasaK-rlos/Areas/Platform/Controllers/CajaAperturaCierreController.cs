@@ -2,6 +2,8 @@
 using Core.DAL.Interfaces;
 using Core.DTOs.CajaAperturaCierre;
 using Core.DTOs.Shared;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -10,6 +12,9 @@ using SGWCasaK_rlos.SecurityHelpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using static Core.Constants;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -20,14 +25,16 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
     {
         public readonly ICajaAperturaCierre _cajaAperturaCierre;
         public readonly ICajas _cajas;
+        public readonly IUsuarios _usuarios;
         public readonly IVentas _ventas;
         public readonly ICompras _compras;
-        public CajaAperturaCierreController(ICajaAperturaCierre cajaAperturaCierre, ICajas cajas, IVentas ventas, ICompras compras)
+        public CajaAperturaCierreController(ICajaAperturaCierre cajaAperturaCierre, ICajas cajas, IVentas ventas, ICompras compras, IUsuarios usuarios)
         {
             _cajaAperturaCierre = cajaAperturaCierre;
             _cajas = cajas;
             _ventas = ventas;
             _compras = compras;
+            _usuarios = usuarios;
         }
 
         [Authorize(Policy = "IndexAperturaCierreCaja")]
@@ -98,11 +105,20 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
         }
 
         [HttpPost]       
-        public SystemValidationModel Save(string model)
+        public async Task<SystemValidationModel> Save(string model)
         {
             var viewModel = JsonConvert.DeserializeObject<AddCajaAperturaCierreViewModel>(model);
-         
-            return _cajaAperturaCierre.Save(viewModel);
+            var result = _cajaAperturaCierre.Save(viewModel);
+            if (result.Success && viewModel.Tipo == CajaTipoOperacion.Apertura)
+            {
+                var usuario = _usuarios.GetForLogin(Email);
+                var caja = _cajas.GetById(viewModel.CajaId);
+                var claims = new ClaimsIdentity(SecurityHelper.GetUserClaims(usuario, usuario.Sucursal, caja), "Cookie");
+                await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claims));
+            }
+                
+            return result;
         }
 
     }

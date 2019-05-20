@@ -56,7 +56,7 @@
                                            value: rolId,
                                            optionsCaption: 'Seleccione una opcion'"></select>
                         </div>
-                        <div class="form-group m-form__group">
+                        <div data-bind="visible: dataViewModel.needSucursal()" class="form-group m-form__group">
                             <label for="exampleInputEmail1">
                                 Sucursales
                             </label>

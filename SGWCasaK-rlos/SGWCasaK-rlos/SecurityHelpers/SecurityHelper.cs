@@ -19,8 +19,28 @@ namespace SGWCasaK_rlos.SecurityHelpers
                 new Claim(CustomClaims.Permisos, usuario.Rol.Permisos),
                 new Claim(CustomClaims.EmailVerified, usuario.EmailVerified.ToString()),
                 new Claim(CustomClaims.SucursalId, sucursal.Id.ToString()),
-                new Claim(CustomClaims.SucursalNombre, sucursal.Nombre.ToString())
-            };
+                new Claim(CustomClaims.SucursalNombre, sucursal.Nombre.ToString()),
+				new Claim(CustomClaims.RolId, usuario.RolId.ToString())
+			};
+            return claims;
+        }
+
+        public static List<Claim> GetUserClaims(Usuario usuario, Sucursal sucursal, Caja caja)
+        {
+            var claims = new List<Claim>()
+            {
+                new Claim(CustomClaims.UserId, usuario.Id.ToString()),
+                new Claim(ClaimTypes.Email, usuario.Email),
+                new Claim(ClaimTypes.Name, $"{usuario.Nombre} {usuario.Apellido}"),
+                new Claim(CustomClaims.Permisos, usuario.Rol.Permisos),
+                new Claim(CustomClaims.EmailVerified, usuario.EmailVerified.ToString()),
+                new Claim(CustomClaims.SucursalId, sucursal.Id.ToString()),
+                new Claim(CustomClaims.SucursalNombre, sucursal.Nombre.ToString()),
+                new Claim(CustomClaims.CajaId, caja.Id.ToString()),
+                new Claim(CustomClaims.CajaNombre, caja.Nombre.ToString()),
+                new Claim(CustomClaims.SucursalNombre, sucursal.Nombre.ToString()),
+				new Claim(CustomClaims.RolId, usuario.RolId.ToString())
+			};
             return claims;
         }
 
