@@ -43,15 +43,17 @@ namespace ApplicationContext
         public DbSet<Producto> Productos { get; set; }
         public DbSet<Proveedor> Proveedores { get; set; }
         public DbSet<Timbrado> Timbrados { get; set; }
-        public DbSet<PagoVenta> PagosVentas { get; set; }
+
         public DbSet<Rol> Roles { get; set; }
         public DbSet<ProductoPresentacion> ProductoPresentaciones { get; set; }
         public DbSet<Inventario> Inventario { get; set; }
         public DbSet<DetalleInventario> DetalleInventario { get; set; }
         public DbSet<Caja> Cajas { get; set; }
         public DbSet<Sucursal> Sucursales { get; set; }
+		public DbSet<Cuota> Cuotas { get; set; }
+		public DbSet<Recibo> Recibos { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
 
@@ -134,17 +136,7 @@ namespace ApplicationContext
                .HasForeignKey(x => x.ClienteId)
                .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Cliente>()
-                .HasMany(x => x.PagosVenta)
-                .WithOne(x => x.Cliente)
-                .HasForeignKey(x => x.ClienteId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<Venta>()
-                .HasMany(x => x.PagosVenta)
-                .WithOne(x => x.Venta)
-                .HasForeignKey(x => x.VentaId)
-                .OnDelete(DeleteBehavior.Restrict);           
+                      
 
             modelBuilder.Entity<Rol>()
                 .HasMany(x => x.Usuarios)
@@ -259,7 +251,32 @@ namespace ApplicationContext
                  .WithOne(x => x.Caja)
                  .HasForeignKey(x => x.CajaId)
                  .OnDelete(DeleteBehavior.Restrict);
-        }
+
+			modelBuilder.Entity<Sucursal>()
+		   .HasMany(x => x.Pedidos)
+		   .WithOne(x => x.Sucursal)
+		   .HasForeignKey(x => x.SucursalId)
+		   .OnDelete(DeleteBehavior.Restrict);
+
+			modelBuilder.Entity<Recibo>()
+				.HasMany(x => x.Cuotas)
+				.WithOne(x => x.Recibo)
+				.HasForeignKey(x => x.ReciboId)
+				.OnDelete(DeleteBehavior.Restrict);
+
+			modelBuilder.Entity<Cliente>()
+	.HasMany(x => x.Recibos)
+	.WithOne(x => x.Cliente)
+	.HasForeignKey(x => x.ClienteId)
+	.OnDelete(DeleteBehavior.Restrict);
+
+
+			modelBuilder.Entity<Venta>()
+				.HasMany(x => x.Cuotas)
+				.WithOne(x => x.Venta)
+				.HasForeignKey(x => x.VentaId)
+				.OnDelete(DeleteBehavior.Restrict);
+		}
 
         public override int SaveChanges()
         {

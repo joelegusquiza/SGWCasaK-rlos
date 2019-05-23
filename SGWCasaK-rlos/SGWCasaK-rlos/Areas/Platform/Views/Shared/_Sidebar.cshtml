@@ -180,7 +180,7 @@
 				</li>
 
 			}
-			@if (HasPermisos(Constants.AccessFunctions.IndexPedido))
+			@*@if (HasPermisos(Constants.AccessFunctions.IndexPedido))
 			{
 				<li class="m-menu__item " aria-haspopup="true">
 					<a href="@Url.Action("Index", "Pedidos", new { area = "Platform"})" class="m-menu__link ">
@@ -211,7 +211,7 @@
 						</span>
 					</a>
 				</li>
-			}
+			}*@
 			@if (HasPermisos(Constants.AccessFunctions.IndexTimbrado))
 			{
 				<li class="m-menu__item " aria-haspopup="true">

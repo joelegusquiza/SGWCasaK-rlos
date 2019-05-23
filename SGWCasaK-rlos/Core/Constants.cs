@@ -161,6 +161,18 @@ namespace Core
             Pagado,
             Anulado,
         }   
+
+		public enum EstadoCuota 
+		{ 
+			Pendiente,
+			Pagado
+		}
+
+		public enum EstadoRecibo
+		{
+			Pendiente,
+			Pagado
+		}
         
         public enum EstadoPedido
         { 

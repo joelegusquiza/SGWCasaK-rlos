@@ -61,12 +61,7 @@
                         <th title="Field #2">
                             Monto Total
                         </th>
-                        <th title="Field #5">
-                            Total IVA Cinco
-                        </th>
-                        <th title="Field #5">
-                            Total IVA Diez
-                        </th>
+                       <th>Estado</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -75,12 +70,12 @@
                         <td data-bind="text: nroFactura"></td>
                         <td data-bind="text: moment(dateCreated()).format('DD/MM/YYYY')"></td>
                         <td data-bind="text: montoTotal"></td>
-                        <td data-bind="text: ivaCinco"></td>
-                        <td data-bind="text: ivaDiez"></td>
+                        <td data-bind="text: estadoDescription"></td>
+                      
                         <td>     
                             @if (HasPermisos(Core.Constants.AccessFunctions.AnularVenta)) 
                             { 
-                                <a href="#" data-bind="attr: { id: id() }" onClick="javacript: desactivate(this)"><i class="fa fa-trash"></i></a>
+                                <a href="#" data-bind="attr: { id: id() }" onClick="javacript: desactivate(this)"><i class="fa fa-trash"></i> Anular</a>
                             }
                             
                         </td>

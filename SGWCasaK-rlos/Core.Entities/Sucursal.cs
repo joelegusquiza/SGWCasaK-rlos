@@ -19,6 +19,6 @@ namespace Core.Entities
         public ICollection<OrdenPagoCompra> OrdenesPagoCompra { get; set; } = new HashSet<OrdenPagoCompra>();
         public ICollection<Inventario> Inventarios { get; set; } = new HashSet<Inventario>();
         public ICollection<ProductoSucursal> ProductoSucursal { get; set; } = new HashSet<ProductoSucursal>();
-
+		public ICollection<Pedido> Pedidos { get; set; } = new HashSet<Pedido>();
     }
 }

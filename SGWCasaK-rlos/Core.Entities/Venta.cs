@@ -29,6 +29,6 @@ namespace Core.Entities
         public int CajaId { get; set; }
         public Caja Caja { get; set; }
         public ICollection<DetalleVenta> DetalleVenta { get; set; } = new HashSet<DetalleVenta>();
-        public ICollection<PagoVenta> PagosVenta { get; set; } = new HashSet<PagoVenta>();
+        public ICollection<Cuota> Cuotas { get; set; } = new HashSet<Cuota>();
     }
 }

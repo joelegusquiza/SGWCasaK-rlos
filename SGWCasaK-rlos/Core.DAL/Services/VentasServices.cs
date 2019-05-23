@@ -70,16 +70,16 @@ namespace Core.DAL.Services
             {
                 _context.Entry(detalle).State = EntityState.Added;
             }
-            if (viewModel.PagoVenta.Monto > 0){
-                var pagoVenta = new PagoVenta()
-                {
-                    Monto = viewModel.PagoVenta.Monto,
-                    Venta = venta,
-                    ClienteId = venta.ClienteId
-                };
-                venta.Cambio = viewModel.PagoVenta.Cambio;
-                _context.Entry(pagoVenta).State = EntityState.Added;
-            }
+            //if (viewModel.PagoVenta.Monto > 0){
+            //    var pagoVenta = new PagoVenta()
+            //    {
+            //        Monto = viewModel.PagoVenta.Monto,
+            //        Venta = venta,
+            //        ClienteId = venta.ClienteId
+            //    };
+            //    venta.Cambio = viewModel.PagoVenta.Cambio;
+            //    _context.Entry(pagoVenta).State = EntityState.Added;
+            //}
            
             venta.Estado = viewModel.PagoVenta.Monto == venta.MontoTotal ? Constants.EstadoVenta.Pagado : Constants.EstadoVenta.Pendiente;
            
