@@ -200,8 +200,8 @@
         dataViewModel.postDataToController = function () {
 
             if (!$("#form").valid()) return;
-            dataViewModel.productoPresentacion.equivalencia(0);
-            dataViewModel.producto.cantidad(0);
+			dataViewModel.productoPresentacion.equivalencia(0);
+			dataViewModel.productoPresentacion.porcentajeGanancia(0);
             $.ajax({
                 url: "@Url.Action("Save", "Productos")",
                 type: "POST",

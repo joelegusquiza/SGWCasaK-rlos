@@ -51,7 +51,7 @@
                                         Condicion de Venta
                                     </label>
                                     <div class="col-8">
-                                        <select class="form-control m-input m-input--square" id="condicionVentaSelect" data-bind="options: condicionesVenta,
+                                        <select  onchange="clearOptionByCondicionVenta()" class="form-control m-input m-input--square" id="condicionVentaSelect" data-bind="options: condicionesVenta,
                                            optionsValue: 'value',
                                            optionsText: 'text',
                                            value: condicionVenta,
@@ -91,6 +91,7 @@
                                 </div>
                             </div>
                         </div>
+						
                     </div>
                 </form>
             </div>
@@ -124,7 +125,7 @@
                                         Precio
                                     </label>
                                     <div class="col-10">
-                                        <input class="form-control m-input" type="text" id="productoPrecioVenta" data-bind="value: dataViewModel.producto.precioVenta" readonly>
+                                        <input class="form-control m-input" type="text" id="productoPrecioVenta" data-bind="value: dataViewModel.producto.precioVenta">
                                     </div>
                                 </div>
                             </div>
@@ -288,10 +289,11 @@
     </div>
 </div>
 @{
-    Html.RenderPartial("~/Areas/Platform/Views/Shared/_ListaProductoModal.cshtml");
-    Html.RenderPartial("~/Areas/Platform/Views/Shared/_AddProductoModal.cshtml");
-    Html.RenderPartial("~/Areas/Platform/Views/Shared/_ListaClientesModal.cshtml");
-    Html.RenderPartial("~/Areas/Platform/Views/Shared/_AddPagoVentaModal.cshtml");
+	Html.RenderPartial("~/Areas/Platform/Views/Shared/_ListaProductoModal.cshtml");
+	Html.RenderPartial("~/Areas/Platform/Views/Shared/_AddProductoModal.cshtml");
+	Html.RenderPartial("~/Areas/Platform/Views/Shared/_ListaClientesModal.cshtml");
+	Html.RenderPartial("~/Areas/Platform/Views/Shared/_AddPagoVentaModal.cshtml");
+	Html.RenderPartial("~/Areas/Platform/Views/Shared/_AddVentaCuotasModal.cshtml");
 }
 <!-- /content -->
 @section scripts{
@@ -391,9 +393,20 @@
         });
 
         dataViewModel.showPagoVentaModal = function ()
-        {
-            $("#addPagoVentaModal").modal("show");
-        }
+		{
+			if (dataViewModel.detalleVenta().length == 0) {
+				showError("Debe ingresar al menos un producto para la venta");
+				return;
+			}
+			if (dataViewModel.condicionVenta() == 0) {
+				$("#addPagoVentaModal").modal("show");
+			}
+			else
+			{
+				openCuotasModal();
+			}
+            
+		}
 
         dataViewModel.postDataToController = function () {
             if (dataViewModel.cliente.clienteId() == 0)
@@ -430,6 +443,12 @@
             dataViewModel.producto.cantidad("");
         })
 
+		function openCuotasModal()
+		{
+			$("#addVentaCuotasIframe").attr('src', '@Url.Action("VentaAddCuota", "Cuotas", new { area = "Platform"})?montoTotal='+dataViewModel.montoTotal());
+			$("#addVentaCuotasModal").modal("show");
+		}
+
         function showListaProductosModal() {
             $("#listaProductosModalIframe").attr('src', '@Url.Action("ListaProductos", "Productos", new { area = "Platform"})');
             $("#listaProductosModal").modal("show");
@@ -455,7 +474,59 @@
             dataViewModel.producto.precioVenta(0);
             dataViewModel.producto.cantidad(0);
             dataViewModel.producto.productoId(0);
-        }
+		}
+
+		function saveCuotas(data)
+		{
+			$("#addVentaCuotasModal").modal("hide");
+			ko.mapping.fromJS(data, {}, dataViewModel.cuotas);
+			for (var i = 0; i < data.length; i++)
+			{
+				var itemObject = $.grep(dataViewModel.cuotas(), function (item) { return item.numeroCuota() == data[i].numeroCuota; })[0];
+				itemObject.fechaVencimiento = ko.observable(now(data[i].fechaVencimiento))
+			}
+			dataViewModel.postDataToController();
+		}
+
+		function clearOptionByCondicionVenta () {
+			if (dataViewModel.condicionVenta() == 1)
+			{
+				dataViewModel.cuotas([]);
+			}
+				
+		}
+
+		function now(date) {
+
+			var date = new Date();
+			var aaaa = date.getFullYear();
+			var gg = date.getDate();
+			var mm = (date.getMonth() + 1);
+
+			if (gg < 10)
+				gg = "0" + gg;
+
+			if (mm < 10)
+				mm = "0" + mm;
+
+			var cur_day = aaaa + "-" + mm + "-" + gg;
+
+			var hours = date.getHours()
+			var minutes = date.getMinutes()
+			var seconds = date.getSeconds();
+
+			if (hours < 10)
+				hours = "0" + hours;
+
+			if (minutes < 10)
+				minutes = "0" + minutes;
+
+			if (seconds < 10)
+				seconds = "0" + seconds;
+
+			return cur_day + " " + hours + ":" + minutes + ":" + seconds;
+
+		}
         ko.applyBindings(dataViewModel);
     </script>
 }

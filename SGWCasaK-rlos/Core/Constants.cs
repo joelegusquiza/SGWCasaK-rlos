@@ -103,7 +103,9 @@ namespace Core
             AddVenta = 3900,
             [Description("Editar Venta")]
             EditVenta = 4000,
-            [Description("Anular Venta")]
+			[Description("Confirmar Venta")]
+			ConfirmarVenta = 4050,
+			[Description("Anular Venta")]
             AnularVenta = 4100,
             [Description("Ver Reportes")]
             VerReportes = 4200,
@@ -142,13 +144,22 @@ namespace Core
             [Description("Anular Orden de pago de compras")]
             AnularOrdenPagoCompras = 5900,
             [Description("Ver Apertura-Cierre de Caja")]
-            IndexAperturaCierreCaja = 6000           
-        }
+            IndexAperturaCierreCaja = 6000,
+			[Description("Ver Recibo")]
+			IndexRecibo = 6100,
+			[Description("Agregar Recibo")]
+			AddRecibo = 6200,
+			[Description("Editar Recibo")]
+			EditRecibo = 6300,
+			[Description("Eliminar Recibo")]
+			DeleteRecibo = 6400,
+		}
         
         public enum EstadoVenta
         {
             Pendiente,
             Confirmado,
+			PendientedePago,
             Pagado,
             Anulado            
         }

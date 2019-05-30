@@ -72,13 +72,20 @@
                         <td data-bind="text: montoTotal"></td>
                         <td data-bind="text: estadoDescription"></td>
                       
-                        <td>     
-                            @if (HasPermisos(Core.Constants.AccessFunctions.AnularVenta)) 
-                            { 
-                                <a href="#" data-bind="attr: { id: id() }" onClick="javacript: desactivate(this)"><i class="fa fa-trash"></i> Anular</a>
-                            }
-                            
-                        </td>
+						<td>
+							@if (HasPermisos(Core.Constants.AccessFunctions.AnularVenta))
+							{
+								<a href="#" data-bind="attr: { id: id() }" onClick="javacript: desactivate(this)"><i class="fa fa-trash"></i> Anular</a>
+							}
+
+							@if (HasPermisos(Core.Constants.AccessFunctions.ConfirmarVenta))
+							{
+								<!-- ko if: estado() == @((int)Core.Constants.EstadoVenta.Pendiente)  -->
+								<a data-bind="attr: { href: '@Url.Action("Edit", "Ventas", new  { area = "Platform" })?id=' + id() }"><i class="fa fa-edit"></i> Ver</a>
+								<!-- /ko -->
+							}
+
+						</td>
                     </tr>
                 </tbody>
             </table>

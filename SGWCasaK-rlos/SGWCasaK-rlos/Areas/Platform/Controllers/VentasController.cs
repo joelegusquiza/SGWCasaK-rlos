@@ -46,7 +46,12 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
             return View(viewModel);
         }
 
-        public IActionResult GenerateVentaFromPedido(int pedidoId)
+		public IActionResult Edit(int id)
+		{	
+			return View( _ventas.GetForEdit(id));
+		}
+
+		public IActionResult GenerateVentaFromPedido(int pedidoId)
         {
             var pedido = _pedidos.GetById(pedidoId);
             var productosIds = pedido.DetallePedido.Select(x => x.ProductoId).ToList();
@@ -63,7 +68,16 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
             return View("~/Areas/Platform/Views/Ventas/Add.cshtml", viewModel);
         }
 
-        [HttpPost]
+		public IActionResult ListaVentasByClienteId(int clienteId)
+		{
+			var viewModel = new ListaVentasIndexViewModel()
+			{
+				Ventas = Mapper.Map<List<ListaVentasViewModel>>(_ventas.GetVentaConfirmadoByClienteId(clienteId))
+			};
+			return View("~/Areas/Platform/Views/Ventas/ListaVentas.cshtml", viewModel);
+		}
+
+		[HttpPost]
         [Authorize(Policy = "AddVenta")]
         public SystemValidationModel Save(string model)
         {
@@ -75,5 +89,30 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
             var viewModel = JsonConvert.DeserializeObject<VentasAddViewModel>(model);
             return _ventas.Save(viewModel);
         }
-    }
+
+		[HttpPost]
+		[Authorize(Policy = "EditVenta")]
+		public SystemValidationModel Edit(string model)
+		{
+			var lastCajaAperturaCierre = _cajasAperturaCierre.GetLastAperturaCierreByUser(UserId);
+			if (lastCajaAperturaCierre == null || lastCajaAperturaCierre.FechaCierre != null)
+			{
+				return new SystemValidationModel() { Success = false, Message = "Debe registrar la apertura de una Caja" };
+			}
+			var viewModel = JsonConvert.DeserializeObject<VentasEditViewModel>(model);
+			return _ventas.Edit(viewModel);
+		}
+
+		[Authorize(Policy = "ConfirmarVenta")]
+		public SystemValidationModel Confirmar(string model)
+		{
+			var lastCajaAperturaCierre = _cajasAperturaCierre.GetLastAperturaCierreByUser(UserId);
+			if (lastCajaAperturaCierre == null || lastCajaAperturaCierre.FechaCierre != null)
+			{
+				return new SystemValidationModel() { Success = false, Message = "Debe registrar la apertura de una Caja" };
+			}
+			var viewModel = JsonConvert.DeserializeObject<VentasEditViewModel>(model);
+			return _ventas.Confirm(viewModel);
+		}
+	}
 }

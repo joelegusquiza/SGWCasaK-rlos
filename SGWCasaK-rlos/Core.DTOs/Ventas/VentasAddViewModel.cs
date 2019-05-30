@@ -27,7 +27,7 @@ namespace Core.DTOs.Ventas
         }).ToList();
 
         public ListaClienteViewModel Cliente { get; set; } = new ListaClienteViewModel();
-        public AddPagoVentaViewModel PagoVenta { get; set; } = new AddPagoVentaViewModel();
+
         public VentasDetalleAddViewModel Producto { get; set; } = new VentasDetalleAddViewModel();
         public List<VentasDetalleAddViewModel> DetalleVenta { get;  set; } = new List<VentasDetalleAddViewModel>();
 
@@ -41,6 +41,7 @@ namespace Core.DTOs.Ventas
 
     public class VentasDetalleAddViewModel
     {
+		public int Id { get; set; }
         public int ProductoId { get; set; }
         public string Nombre { get; set; }
         public int Cantidad { get; set; }
