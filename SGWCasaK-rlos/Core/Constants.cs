@@ -43,8 +43,8 @@ namespace Core
             ClienteAddPedido = 1100,
             [Description("Cliente Editar Pedido")]
             ClienteEditPedido = 1200,
-            [Description("Cliente Eliminar Pedido")]
-            ClienteDeletePedido = 1300,
+            [Description("Cliente Anular Pedido")]
+            ClienteAnularPedido = 1300,
             [Description("Ver Caregoria")]
             IndexCategoria = 1400,
             [Description("Agregar Categoria")]

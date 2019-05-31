@@ -33,43 +33,55 @@
                 </div>
                 <!--begin::Form-->
                 <form class="m-form m-form--fit m-form--label-align-right">
-                    <div class="m-portlet__body">
-                        <div class="row" style="margin-bottom: 20px;">                                                                                    
-                        </div>
-                        <div class="row" style="margin-bottom: 20px;">
-                            <div class="col-md-4">
-                                <div class="form-group m-form__group row">
-                                    <label for="exampleInputEmail1">
-                                        Delivery
-                                    </label>
-                                    <input type="checkbox" class="form-control m-input" id="delivery" name="delivery" data-bind="checked: delivery, event:{ change: deliveryValues}">
+					<div class="m-portlet__body">
+						<div class="row" style="margin-bottom: 20px;">
+						</div>
+						<div class="row" style="margin-bottom: 20px">
+							<div class="form-group m-form__group">
+								<label for="exampleInputEmail1">
+									Sucursal
+								</label>
+								<select class="form-control m-input m-input--square" id="tipo" name="tipo" data-bind="options: sucursales,
+                                           optionsValue: 'value',
+                                           optionsText: 'text',
+                                           value: sucursalId,
+                                           optionsCaption: 'Seleccione una opcion'"></select>
+							</div>
+						</div>
+						<div class="row" style="margin-bottom: 20px;">
+							<div class="col-md-4">
+								<div class="form-group m-form__group row">
+									<label for="exampleInputEmail1">
+										Delivery
+									</label>
+									<input type="checkbox" class="form-control m-input" id="delivery" name="delivery" data-bind="checked: delivery, event:{ change: deliveryValues}">
 
-                                </div>
+								</div>
 
-                            </div>
-                            <div class="col-md-4"data-bind="visible: delivery()">
-                                <div class="form-group m-form__group row">
-                                    <label for="example-text-input" class="col-4 col-form-label" style="text-align: left">
-                                        Fecha de entrega
-                                    </label>
-                                    <div class="col-3">
-                                        <input class="form-control m-input datepicker" style="width: 100%" type="text" id="example-text-input" data-bind="datepicker: fechaEntrega, datepickerOptions: {language: 'es'}">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4"data-bind="visible: delivery()">
-                                <div class="form-group m-form__group row">
-                                    <label for="example-text-input" class="col-4 col-form-label" style="text-align: left">
-                                        Direccion de Entrega
-                                    </label>
-                                    <div class="col-8">
-                                        <input class="form-control m-input" type="text" id="example-text-input" data-bind="value: dataViewModel.direccionEntrega">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+							</div>
+							<div class="col-md-4" data-bind="visible: delivery()">
+								<div class="form-group m-form__group row">
+									<label for="example-text-input" class="col-4 col-form-label" style="text-align: left">
+										Fecha de entrega
+									</label>
+									<div class="col-3">
+										<input class="form-control m-input datepicker" style="width: 100%" type="text" id="example-text-input" data-bind="datepicker: fechaEntrega, datepickerOptions: {language: 'es'}">
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4" data-bind="visible: delivery()">
+								<div class="form-group m-form__group row">
+									<label for="example-text-input" class="col-4 col-form-label" style="text-align: left">
+										Direccion de Entrega
+									</label>
+									<div class="col-8">
+										<input class="form-control m-input" type="text" id="example-text-input" data-bind="value: dataViewModel.direccionEntrega">
+									</div>
+								</div>
+							</div>
+						</div>
 
-                    </div>
+					</div>
                 </form>
             </div>
             <div class="m-portlet m-portlet--tab">
@@ -123,7 +135,7 @@
                         <div class="m-form__actions">
                             <div class="row">
                                 <div class="col-12">
-                                    <button type="button" class="btn btn-success" onclick="showListaProductosModal()">
+                                    <button type="button" class="btn btn-success" onclick="showListaProductosModal()" data-bind="enable: dataViewModel.sucursalId() != undefined">
                                         Buscar
                                     </button>
                                     <button type="button" class="btn btn-secondary" data-bind="click: agregarDetalle">
@@ -213,17 +225,18 @@
                 resetProductoForm();
                 return;
             }
-            if (dataViewModel.producto.productoId() == 0) {
+			if (parseInt(dataViewModel.producto.productoId()) == 0) {
                 showError("Debe ingresar un producto para agregar al detalle");
                 resetProductoForm();
                 return;
+			}
+
+			var cantidadSeleccionada = dataViewModel.producto.equivalencia() == 0 ? parseInt(dataViewModel.producto.cantidad()) : parseInt(dataViewModel.producto.cantidad() * dataViewModel.producto.equivalencia());
+            if (cantidadSeleccionada > dataViewModel.producto.stock()) {
+                showError("El producto no existe en la cantidad deseada");
+                resetProductoForm();
+                return;
             }
-            //var cantidadSeleccionada = dataViewModel.producto.equivalencia() == 0 ? parseInt(dataViewModel.producto.cantidad()) : parseInt(dataViewModel.producto.cantidad() * dataViewModel.producto.equivalencia());
-            //if (cantidadSeleccionada > dataViewModel.producto.stockActual()) {
-            //    showError("El producto no existe en la cantidad deseada");
-            //    resetProductoForm();
-            //    return;
-            //}
             dataViewModel.producto.montoTotal(dataViewModel.producto.precioVenta() *  dataViewModel.producto.cantidad());
             dataViewModel.detallePedido.push(ko.mapping.fromJS(ko.mapping.toJS(dataViewModel.producto)))
             resetProductoForm();
@@ -276,7 +289,7 @@
         })
 
         function showListaProductosModal() {
-            $("#listaProductosModalIframe").attr('src', '@Url.Action("ListaProductos", "Productos", new { area = "Platform"})');
+			$("#listaProductosModalIframe").attr('src', '@Url.Action("ListaProductos", "Productos", new { area = "Platform"})?sucursalId=' + dataViewModel.sucursalId());
             $("#listaProductosModal").modal("show");
         }
 

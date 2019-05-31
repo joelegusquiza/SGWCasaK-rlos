@@ -89,12 +89,13 @@
 								<a href="#" data-bind="attr: { id: id() }" onClick="javacript: anular(this)"><i class="fa fa-trash"></i> Anular</a>
 							}
 							<!-- /ko -->
-							<!-- ko if: estado() != @((int)Core.Constants.EstadoPedido.Anulado)  && estado() !=@((int)Core.Constants.EstadoPedido.Preparado) -->
+							<!-- ko if: estado() != @((int)Core.Constants.EstadoPedido.Anulado)  && estado() !=@((int)Core.Constants.EstadoPedido.Finalizado) && estado() !=@((int)Core.Constants.EstadoPedido.EntregadoPorDelivery)-->
 							@if (HasPermisos(Core.Constants.AccessFunctions.GenerateVentaPedido))
 							{
 								<a href="#" data-bind="attr: { id: id() }" onClick="javacript: generarVenta(this)"><i class="fa fa-edit"></i>Generar Venta</a>
 							}
-
+							<!-- /ko -->
+							<!-- ko if: estado() !=@((int)Core.Constants.EstadoPedido.EntregadoPorDelivery) -->
 							@if (HasPermisos(Core.Constants.AccessFunctions.ChangeEstadoPedido))
 							{
 								<a href="#" data-bind="attr: { id: id() }" onClick="javacript: openCambiarEstadoModal(this)"><i class="fa fa-edit"></i> Cambiar Estado</a>

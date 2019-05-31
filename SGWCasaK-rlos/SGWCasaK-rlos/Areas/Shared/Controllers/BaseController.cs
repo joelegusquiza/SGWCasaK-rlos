@@ -33,7 +33,7 @@ namespace SGWCasaK_rlos.Areas.Shared.Controllers
         {
             get
             {
-                return _sucursalId > 0 ? _sucursalId : (_sucursalId = Convert.ToInt32(User.Claims.FirstOrDefault(x => x.Type == CustomClaims.SucursalId).Value));
+                return _sucursalId > 0 ? _sucursalId : (_sucursalId = Convert.ToInt32(User.Claims.FirstOrDefault(x => x.Type == CustomClaims.SucursalId)?.Value));
             }
         }
 

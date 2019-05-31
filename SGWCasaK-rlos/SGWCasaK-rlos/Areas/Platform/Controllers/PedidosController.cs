@@ -45,6 +45,7 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
         public IActionResult Edit(int id)
         {
             var viewModel = Mapper.Map<PedidosEditViewModel>(_pedidos.GetById(id));
+			viewModel.SucursalId = SucursalId;
             return View(viewModel);
         }
 

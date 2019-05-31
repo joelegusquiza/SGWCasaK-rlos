@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using SGWCasaK_rlos.Areas.Shared.Controllers;
 using SGWCasaK_rlos.SecurityHelpers;
+using static Core.Constants;
 
 namespace SGWCasaK_rlos.Areas.Platform.Controllers
 {
@@ -18,10 +19,11 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
     public class PedidosClienteController : BaseController
     {
         private readonly IPedidos _pedidos;
-
-        public PedidosClienteController(IPedidos pedidos)
+		private readonly ISucursales _sucursales;
+		public PedidosClienteController(IPedidos pedidos, ISucursales sucursales)
         {
             _pedidos = pedidos;
+			_sucursales = sucursales;
         }
         [Authorize(Policy = "ClienteIndexPedido")]
         public IActionResult Index()
@@ -35,14 +37,15 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
 
         public IActionResult Add()
         {
-            var viewModel = new PedidosClienteAddViewModel();
+            var viewModel = new PedidosClienteAddViewModel() {Sucursales = _sucursales.GetAll().Select(x => new DropDownViewModel<int>() { Text = x.Nombre, Value = x.Id}).ToList()};
             return View(viewModel);
         }
 
         public IActionResult Edit(int id)
         {
             var viewModel = Mapper.Map<PedidosClienteEditViewModel>(_pedidos.GetById(id));
-            return View(viewModel);
+			viewModel.Sucursales = _sucursales.GetAll().Select(x => new DropDownViewModel<int>() { Text = x.Nombre, Value = x.Id }).ToList();
+			return View(viewModel);
         }
     
         [HttpPost]
@@ -61,5 +64,12 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
             var viewModel = JsonConvert.DeserializeObject<PedidosClienteEditViewModel>(model);
             return _pedidos.Edit(viewModel);
         }
-    }
+
+		[HttpPost]
+		[Authorize(Policy = "ClienteAnularPedido")]
+		public SystemValidationModel Anular(int pedidoId)
+		{			
+			return _pedidos.ChangeEstado(pedidoId, EstadoPedido.Anulado);
+		}
+	}
 }
