@@ -73,6 +73,7 @@
                         <td data-bind="text: estadoDescription"></td>
                       
 						<td>
+							<!-- ko if: estado() == @((int)Core.Constants.EstadoVenta.Pendiente)  -->
 							@if (HasPermisos(Core.Constants.AccessFunctions.AnularVenta))
 							{
 								<a href="#" data-bind="attr: { id: id() }" onClick="javacript: desactivate(this)"><i class="fa fa-trash"></i> Anular</a>
@@ -80,11 +81,11 @@
 
 							@if (HasPermisos(Core.Constants.AccessFunctions.ConfirmarVenta))
 							{
-								<!-- ko if: estado() == @((int)Core.Constants.EstadoVenta.Pendiente)  -->
-								<a data-bind="attr: { href: '@Url.Action("Edit", "Ventas", new  { area = "Platform" })?id=' + id() }"><i class="fa fa-edit"></i> Ver</a>
-								<!-- /ko -->
-							}
 
+								<a data-bind="attr: { href: '@Url.Action("Edit", "Ventas", new  { area = "Platform" })?id=' + id() }"><i class="fa fa-edit"></i> Ver</a>
+
+							}
+							<!-- /ko -->
 						</td>
                     </tr>
                 </tbody>
@@ -103,7 +104,7 @@
             //bootbox.confirm("Estas seguro?", function (result) {
                 //if (result) {
                     $.ajax({
-                        url: "@Url.Action("Desactivate")",
+                        url: "@Url.Action("Anular")",
                         type: "POST",
                         data: { id: id},
                         success: function (response) {
@@ -125,7 +126,11 @@
         }
         ko.applyBindings(dataViewModel);
         $(document).ready(function () {            
-
+			var show = localStorage.getItem('show');
+			if (show === 'true') {
+				showSuccess("Se ha anulado correctamente la venta");
+				localStorage.setItem('show', 'false');
+			}
         });
     </script>
 }

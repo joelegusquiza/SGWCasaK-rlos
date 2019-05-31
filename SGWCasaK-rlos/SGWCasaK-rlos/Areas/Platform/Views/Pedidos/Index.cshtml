@@ -78,25 +78,29 @@
                         <!-- ko if: delivery() != true -->
                         <td data-bind="text:'No'"></td>
                         <!-- /ko -->
-                        <td>
-                            @if (HasPermisos(Core.Constants.AccessFunctions.EditPedido))
-                            {
-                                <a data-bind="attr: { href: '@Url.Action("Edit", "Pedidos", new  { area = "Platform" })?id=' + id() }"><i class="fa fa-edit"></i> Editar</a>
-                            }
-                            @if (HasPermisos(Core.Constants.AccessFunctions.DeletePedido))
-                            {
-                                <a href="#" data-bind="attr: { id: id() }" onClick="javacript: anular(this)"><i class="fa fa-trash"></i> Eliminar</a>
-                            }
-                            @if (HasPermisos(Core.Constants.AccessFunctions.GenerateVentaPedido))
-                            {
-                                <a href="#" data-bind="attr: { id: id() }" onClick="javacript: generarVenta(this)"><i class="fa fa-edit"></i>Generar Venta</a>
-                            }
-                            @if (HasPermisos(Core.Constants.AccessFunctions.ChangeEstadoPedido))
-                            {
-                                <a href="#" data-bind="attr: { id: id() }" onClick="javacript: openCambiarEstadoModal(this)"><i class="fa fa-edit"></i> Cambiar Estado</a>
-                            }
+						<td>
+							<!-- ko if: estado() == @((int)Core.Constants.EstadoPedido.Pendiente)  -->
+							@if (HasPermisos(Core.Constants.AccessFunctions.EditPedido))
+							{
+								<a data-bind="attr: { href: '@Url.Action("Edit", "Pedidos", new  { area = "Platform" })?id=' + id() }"><i class="fa fa-edit"></i> Editar</a>
+							}
+							@if (HasPermisos(Core.Constants.AccessFunctions.AnularPedido))
+							{
+								<a href="#" data-bind="attr: { id: id() }" onClick="javacript: anular(this)"><i class="fa fa-trash"></i> Anular</a>
+							}
+							<!-- /ko -->
+							<!-- ko if: estado() != @((int)Core.Constants.EstadoPedido.Anulado)  && estado() !=@((int)Core.Constants.EstadoPedido.Preparado) -->
+							@if (HasPermisos(Core.Constants.AccessFunctions.GenerateVentaPedido))
+							{
+								<a href="#" data-bind="attr: { id: id() }" onClick="javacript: generarVenta(this)"><i class="fa fa-edit"></i>Generar Venta</a>
+							}
 
-                        </td>
+							@if (HasPermisos(Core.Constants.AccessFunctions.ChangeEstadoPedido))
+							{
+								<a href="#" data-bind="attr: { id: id() }" onClick="javacript: openCambiarEstadoModal(this)"><i class="fa fa-edit"></i> Cambiar Estado</a>
+							}
+							<!-- /ko -->
+						</td>
                     </tr>
                 </tbody>
             </table>

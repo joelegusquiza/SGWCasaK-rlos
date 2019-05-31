@@ -1,4 +1,5 @@
 ﻿using Core.DTOs.Clientes;
+using Core.DTOs.Shared;
 using Core.DTOs.Ventas;
 using System;
 using System.Collections.Generic;
@@ -13,9 +14,11 @@ namespace Core.DTOs.Pedidos
         public DateTimeOffset? FechaEntrega { get; set; }
         public decimal MontoTotal { get; set; }
         public int ClienteId { get; set; }
+		public int SucursalId { get; set; }
         public ListaClienteViewModel Cliente { get; set; } = new ListaClienteViewModel();
         public VentasDetalleAddViewModel Producto { get; set; } = new VentasDetalleAddViewModel();
         public List<PedidosDetalleViewModel> DetallePedido { get; set; } = new List<PedidosDetalleViewModel>();
+		public List<DropDownViewModel<int>> Sucursales { get; set; } = new List<DropDownViewModel<int>>();
     }
 
     public class PedidosDetalleViewModel

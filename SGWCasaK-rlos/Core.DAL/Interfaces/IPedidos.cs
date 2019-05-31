@@ -11,7 +11,8 @@ namespace Core.DAL.Interfaces
     public interface IPedidos
     {
         List<Pedido> GetAll();
-        List<Pedido> GetByClientId(int clienteId);
+		List<Pedido> GetBySucursalId(int sucursalId);
+		List<Pedido> GetByClientId(int clienteId);
         Pedido GetById(int id);
         SystemValidationModel Save(PedidosAddViewModel viewModel);
         SystemValidationModel Save(PedidosClienteAddViewModel viewModel);

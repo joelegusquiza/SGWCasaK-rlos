@@ -15,13 +15,14 @@ namespace Core.DAL.Services
 	public class VentasServices : IVentas
 	{
 		private readonly ITimbrados _timbrados;
-		private readonly IPedidos _pediddos;
+		private readonly IPedidos _pedidos;
 		private readonly DataContext _context;
 
-		public VentasServices(DataContext context, IPedidos pediddos, ITimbrados timbrados)
+		public VentasServices(DataContext context, IPedidos pedidos, ITimbrados timbrados)
 		{
 			_context = context;
 			_timbrados = timbrados;
+			_pedidos = pedidos;
 		}
 
 		public List<Venta> GetAll()
@@ -76,7 +77,7 @@ namespace Core.DAL.Services
 
 		public List<Venta> GetVentaConfirmadoByClienteId(int clienteId)
 		{
-			var ventas = _context.Set<Venta>().Where(x => x.Active && x.Estado == Constants.EstadoVenta.Pendiente && x.ClienteId == clienteId);
+			var ventas = _context.Set<Venta>().Where(x => x.Active && x.Estado == Constants.EstadoVenta.PendientedePago && x.ClienteId == clienteId);
 			return ventas.ToList();
 		}
 
@@ -106,9 +107,10 @@ namespace Core.DAL.Services
 
 			if (viewModel.PedidoId != null)
 			{
-				var pedido = _pediddos.GetById(viewModel.PedidoId.Value);
+				var pedido = _pedidos.GetById(viewModel.PedidoId.Value);
+				ChecForUpdatePedido(pedido, venta.DetalleVenta);
 				pedido.Estado = Constants.EstadoPedido.Finalizado;
-				_context.Entry(pedido).State = EntityState.Deleted;
+				_context.Entry(pedido).State = EntityState.Modified;
 			}
 
 			var success = _context.SaveChanges() > 0;
@@ -123,6 +125,30 @@ namespace Core.DAL.Services
 
 		}
 
+		private void ChecForUpdatePedido(Pedido pedido, ICollection<DetalleVenta> detallesVenta)
+		{
+			var productoPedidoIds = pedido.DetallePedido.Select(x => x.ProductoId);
+			var productoVentIds = detallesVenta.Select(x => x.ProductoId);
+
+			var productoIdsToDelete = productoPedidoIds.Except(productoVentIds);
+			var productoIdsToAdd = productoVentIds.Except(productoPedidoIds);
+
+			foreach (var productoId in productoIdsToDelete)
+			{
+				var detalle = pedido.DetallePedido.FirstOrDefault(x => x.ProductoId == productoId);
+				_context.Entry(detalle).State = EntityState.Deleted;
+			}
+			foreach (var productoId in productoIdsToAdd)
+			{
+				var detalle = detallesVenta.FirstOrDefault(x => x.ProductoId == productoId);
+				var newDetalle = Mapper.Map<DetallePedido>(detalle);
+				newDetalle.Pedido = pedido;
+				_context.Entry(newDetalle).State = EntityState.Added;
+				
+			
+			}
+		}
+
 		public SystemValidationModel Edit(VentasEditViewModel viewModel)
 		{
 			var venta = GetById(viewModel.Id);
@@ -130,14 +156,6 @@ namespace Core.DAL.Services
 
 			UpdateDetalle(venta, viewModel);
 			_context.Entry(venta).State = EntityState.Modified;			
-
-			
-			if (viewModel.PedidoId != null)
-			{
-				var pedido = _pediddos.GetById(viewModel.PedidoId.Value);
-				pedido.Estado = Constants.EstadoPedido.Finalizado;
-				_context.Entry(pedido).State = EntityState.Deleted;
-			}
 
 			var success = _context.SaveChanges() > 0;
 			var validation = new SystemValidationModel()
@@ -168,11 +186,12 @@ namespace Core.DAL.Services
 			_context.Entry(venta).State = EntityState.Modified;
 			venta.Estado = viewModel.CondicionVenta == Constants.CondicionVenta.Contado ? Constants.EstadoVenta.Pagado : Constants.EstadoVenta.PendientedePago;
 			UpdateDetalle(venta, viewModel);
-			DescontarStock(viewModel.DetalleVenta, viewModel.SucursalId);
+			//DescontarStock(viewModel.DetalleVenta, viewModel.SucursalId);
 			if (viewModel.PedidoId != null)
 			{
-				var pedido = _pediddos.GetById(viewModel.PedidoId.Value);
+				var pedido = _pedidos.GetById(viewModel.PedidoId.Value);
 				pedido.Estado = Constants.EstadoPedido.Finalizado;
+				ChecForUpdatePedido(pedido, venta.DetalleVenta);
 				_context.Entry(pedido).State = EntityState.Modified;
 			}
 		
@@ -193,11 +212,11 @@ namespace Core.DAL.Services
 			var detalleIds = viewModel.DetalleVenta.Select(x => x.Id).ToList();
 			var detalleIdsToDelete = ventaDetalleIds.Except(detalleIds).ToList();
 			var detallesToDelete = _context.Set<DetalleVenta>().Where(x => x.Active && detalleIdsToDelete.Contains(x.Id)).ToList();
-			foreach (var detalle in viewModel.DetalleVenta)
+			foreach (var detalle in viewModel.DetalleVenta.Where(x => x.Id == 0))
 			{
 				var item = Mapper.Map<DetalleVenta>(detalle);
 				_context.Entry(item).State = EntityState.Added;
-				venta.DetalleVenta.Add(item);
+				item.Venta = venta;
 			}
 
 			foreach (var detalle in detallesToDelete)
@@ -207,23 +226,31 @@ namespace Core.DAL.Services
 
 		}
 
-		public SystemValidationModel Anular(VentasAddViewModel viewModel)
-		{
-			var validation = new SystemValidationModel() { };
-		
+		public SystemValidationModel Anular(int id)
+		{			
+		    var venta = GetById(id);
+			venta.Estado = Constants.EstadoVenta.Anulado;
+			_context.Entry(venta).State = EntityState.Modified;
+			var success = _context.SaveChanges() > 0;
+			var validation = new SystemValidationModel()
+			{
+				Message = success ? "Se ha confirmado correctamente la venta" : "No se pudo confirmar la venta",
+				Success = success
+			};
+
 			return validation;
 		}
 
         private void DescontarStock(List<VentasDetalleAddViewModel> detallesVenta, int sucursalId)
         {
-            var productoIds = detallesVenta.Select(x => x.ProductoId);
-            var productosSucursal = _context.Set<ProductoSucursal>().Where(x => productoIds.Contains(x.Id) && x.SucursalId == sucursalId);
+            var productoIds = detallesVenta.Select(x => x.ProductoId).ToList();
+			var all = _context.Set<ProductoSucursal>().ToList();
+
+			var productosSucursal = _context.Set<ProductoSucursal>().Where(x => productoIds.Contains(x.ProductoId) && x.SucursalId == sucursalId);
             foreach (var producto in productosSucursal)
             {
-                var detalleVenta = detallesVenta.FirstOrDefault(x => x.ProductoId == producto.Id);
-                if (detalleVenta.Equivalencia == 0)
-                    producto.Stock -= detalleVenta.Cantidad;
-                else
+                var detalleVenta = detallesVenta.FirstOrDefault(x => x.ProductoId == producto.ProductoId);
+
                     producto.Stock -= detalleVenta.Cantidad * detalleVenta.Equivalencia;
                 _context.Entry(producto).State = EntityState.Modified;
             }

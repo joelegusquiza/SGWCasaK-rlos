@@ -56,14 +56,16 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
             var pedido = _pedidos.GetById(pedidoId);
             var productosIds = pedido.DetallePedido.Select(x => x.ProductoId).ToList();
             var productos = _productos.GetAll().Where(x => productosIds.Contains(x.Id));
-           
-            var viewModel = Mapper.Map<VentasAddViewModel>(pedido);           
-            foreach (var detalle in viewModel.DetalleVenta)
+            
+            var viewModel = Mapper.Map<VentasAddViewModel>(pedido);
+			viewModel.CajaId = CajaId;
+			foreach (var detalle in viewModel.DetalleVenta)
             {
                 var producto = productos.FirstOrDefault(x => x.Id == detalle.ProductoId);
                 var detallePedido = pedido.DetallePedido.FirstOrDefault(x => x.ProductoId == detalle.ProductoId);
                 detalle.PorcentajeIva = producto.PorcentajeIva;
                 detalle.Nombre = detallePedido.Descripcion;
+				detalle.Id = 0;
             }
             return View("~/Areas/Platform/Views/Ventas/Add.cshtml", viewModel);
         }
@@ -113,6 +115,13 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
 			}
 			var viewModel = JsonConvert.DeserializeObject<VentasEditViewModel>(model);
 			return _ventas.Confirm(viewModel);
+		}
+
+		[Authorize(Policy = "AnularVenta")]
+		public SystemValidationModel Anular(int id)
+		{
+			
+			return _ventas.Anular(id);
 		}
 	}
 }

@@ -28,7 +28,11 @@ namespace Core.DAL.Services
             return _context.Set<Pedido>().Where(x => x.Active).ToList();
         }
 
-        public Pedido GetById(int id)
+		public List<Pedido> GetBySucursalId(int sucursalId)
+		{
+			return _context.Set<Pedido>().Where(x => x.Active && x.SucursalId == sucursalId).Include(x => x.Cliente).ToList();
+		}
+		public Pedido GetById(int id)
         {
             return _context.Set<Pedido>().Include(x => x.DetallePedido).Include(x => x.Cliente).FirstOrDefault(x => x.Active && x.Id == id);
         }
@@ -163,6 +167,8 @@ namespace Core.DAL.Services
             var pedido = GetById(id);
             pedido.Estado = estado;
             _context.Entry(pedido).State = EntityState.Modified;
+			if (estado == EstadoPedido.EntregadoPorDelivery && !pedido.Delivery)
+				return new SystemValidationModel() {Success = false, Message = "El pedido no cuenta con deliver" };
             var success = _context.SaveChanges() > 0;
             var validation = new SystemValidationModel()
             {

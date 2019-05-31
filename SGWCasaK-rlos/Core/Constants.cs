@@ -31,8 +31,8 @@ namespace Core
             AddPedido = 799,
             [Description("Editar Pedido")]
             EditPedido = 800,
-            [Description("Eliminar Pedido")]
-            DeletePedido = 900,
+            [Description("Anular Pedido")]
+			AnularPedido = 900,
             [Description("Generar Venta del Pedido")]
             GenerateVentaPedido = 901,
             [Description("Cambiar Estado del Pedido")]
@@ -159,6 +159,7 @@ namespace Core
         {
             Pendiente,
             Confirmado,
+			[Description("Pendiente de Pago")]
 			PendientedePago,
             Pagado,
             Anulado            
@@ -194,8 +195,12 @@ namespace Core
             [Description("Preparado")]
             Preparado,
             [Description("Finalizado")]
-            Finalizado
-        }
+            Finalizado,
+			[Description("Entregado por delivery")]
+			EntregadoPorDelivery,
+			[Description("Anulado")]
+			Anulado
+		}
 
         public enum PorcIva
         {

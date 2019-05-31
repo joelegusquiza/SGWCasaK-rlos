@@ -17,6 +17,7 @@ namespace Core.DAL.Interfaces
 		SystemValidationModel Edit(VentasEditViewModel viewModel);
 		SystemValidationModel Confirm(VentasEditViewModel viewModel);
 		VentasEditViewModel GetForEdit(int id);
+		SystemValidationModel Anular(int id);
 
 	}
 }

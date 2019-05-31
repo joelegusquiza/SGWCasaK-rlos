@@ -31,14 +31,14 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
         {
             var viewModel = new PedidosIndexViewModel()
             {
-                Pedidos = Mapper.Map<List<PedidoViewModel>>(_pedidos.GetAll())
+                Pedidos = Mapper.Map<List<PedidoViewModel>>(_pedidos.GetBySucursalId(SucursalId))
             };
             return View(viewModel);
         }
 
         public IActionResult Add()
         {
-            var viewModel = new PedidosAddViewModel();
+            var viewModel = new PedidosAddViewModel() { SucursalId = SucursalId};
             return View(viewModel);
         }        
 
@@ -100,11 +100,11 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
         //}
 
         [HttpPost]
-        [Authorize(Policy = "DeletePedido")]
+        [Authorize(Policy = "AnularPedido")]
         public SystemValidationModel Desactivate(int id)
         {
 
-            return _pedidos.Desactivate(id);
+            return _pedidos.ChangeEstado(id, EstadoPedido.Anulado);
         }
 
     }
