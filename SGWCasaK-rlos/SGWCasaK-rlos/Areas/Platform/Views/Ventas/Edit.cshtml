@@ -60,6 +60,7 @@
 									</div>
 								</div>
 							</div>
+							<!-- ko if: estado() == @((int)Core.Constants.EstadoVenta.Pendiente)  -->
 							<div class="col-md-6">
 								<div class="form-group m-form__group row">
 									<label for="example-text-input" class="col-4 col-form-label" style="text-align: left">
@@ -70,10 +71,11 @@
                                            optionsValue: 'value',
                                            optionsText: 'text',
                                            value: condicionVenta,
-                                           optionsCaption: 'Seleccione una opcion'" disabled></select>
+                                           optionsCaption: 'Seleccione una opcion'"></select>
 									</div>
 								</div>
 							</div>
+							<!-- /ko -->
 						</div>
 						<div class="row" style="margin-bottom: 20px;">
 							<div class="col-md-6">
@@ -496,7 +498,7 @@
 		}
 
         function showListaProductosModal() {
-            $("#listaProductosModalIframe").attr('src', '@Url.Action("ListaProductos", "Productos", new { area = "Platform"})');
+			$("#listaProductosModalIframe").attr('src', '@Url.Action("ListaProductos", "Productos", new { area = "Platform"})?sucursalId=' + dataViewModel.sucursalId());
             $("#listaProductosModal").modal("show");
         }
 
@@ -541,6 +543,38 @@
 			}
 
 		}
-        ko.applyBindings(dataViewModel);
+		ko.applyBindings(dataViewModel);
+
+		function now(date) {
+
+			var date = new Date();
+			var aaaa = date.getFullYear();
+			var gg = date.getDate();
+			var mm = (date.getMonth() + 1);
+
+			if (gg < 10)
+				gg = "0" + gg;
+
+			if (mm < 10)
+				mm = "0" + mm;
+
+			var cur_day = aaaa + "-" + mm + "-" + gg;
+
+			var hours = date.getHours()
+			var minutes = date.getMinutes()
+			var seconds = date.getSeconds();
+
+			if (hours < 10)
+				hours = "0" + hours;
+
+			if (minutes < 10)
+				minutes = "0" + minutes;
+
+			if (seconds < 10)
+				seconds = "0" + seconds;
+
+			return cur_day + " " + hours + ":" + minutes + ":" + seconds;
+
+		}
 	</script>
 }

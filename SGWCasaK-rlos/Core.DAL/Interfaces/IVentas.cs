@@ -11,7 +11,7 @@ namespace Core.DAL.Interfaces
     {
         List<Venta> GetAll();
 		Venta GetById(int id);	
-		List<Venta> GetVentaByCajaId(int cajaId, DateTime date);
+		List<Venta> GetVentaByCajaId(int cajaId, DateTime date, Constants.EstadoVenta estado);
 		List<Venta> GetVentaConfirmadoByClienteId(int clienteId);
 		SystemValidationModel Save(VentasAddViewModel viewModel);
 		SystemValidationModel Edit(VentasEditViewModel viewModel);

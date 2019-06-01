@@ -69,9 +69,9 @@ namespace Core.DAL.Services
 			}
 		}
 
-		public List<Venta> GetVentaByCajaId(int cajaId, DateTime date)
+		public List<Venta> GetVentaByCajaId(int cajaId, DateTime date, Constants.EstadoVenta estado)
 		{
-			var ventas = _context.Set<Venta>().Where(x => x.DateCreated.Date == date.Date && x.CajaId == cajaId);
+			var ventas = _context.Set<Venta>().Where(x => x.DateCreated.Date == date.Date && x.CajaId == cajaId && x.Estado == estado);
 			return ventas.ToList();
 		}
 

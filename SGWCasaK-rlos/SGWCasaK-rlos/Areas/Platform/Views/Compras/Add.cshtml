@@ -435,7 +435,7 @@
         })
 
         function showListaProductosModal() {
-            $("#listaProductosModalIframe").attr('src', '@Url.Action("ListaProductos", "Productos", new { area = "Platform"})');
+			$("#listaProductosModalIframe").attr('src', '@Url.Action("ListaProductos", "Productos", new { area = "Platform"})?sucursalId=' + dataViewModel.sucursalId());
             $("#listaProductosModal").modal("show");
         }
 

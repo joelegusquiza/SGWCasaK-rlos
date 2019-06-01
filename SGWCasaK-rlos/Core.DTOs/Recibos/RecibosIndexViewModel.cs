@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Core.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using static Core.Constants;
@@ -14,7 +15,7 @@ namespace Core.DTOs.Recibos
 	{
 		public int Id { get; set; }
 		public EstadoRecibo Estado { get; set; }
-		public string EstadoDescription { get; set; }
+		public string EstadoDescription => Estado.GetDescription();
 		public decimal MontoTotal { get; set; }
 		public string Nombre { get; set; }
 		public string Apellido { get; set; }

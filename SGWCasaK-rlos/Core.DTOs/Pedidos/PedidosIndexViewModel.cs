@@ -11,11 +11,7 @@ namespace Core.DTOs.Pedidos
     public class PedidosIndexViewModel
     {
         public List<PedidoViewModel> Pedidos { get; set; } = new List<PedidoViewModel>();
-        public List<DropDownViewModel<EstadoPedido>> Estados { get; set; } = Enum.GetValues(typeof(EstadoPedido)).Cast<EstadoPedido>().Where(x => x != EstadoPedido.Anulado).Select(x => new DropDownViewModel<EstadoPedido>
-        {
-            Text = x.GetDescription(),
-            Value = x
-        }).ToList();
+       
     }
 
     public class PedidoViewModel

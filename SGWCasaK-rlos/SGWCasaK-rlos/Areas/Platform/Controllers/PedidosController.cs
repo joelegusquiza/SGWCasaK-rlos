@@ -7,6 +7,7 @@ using Core.DAL.Interfaces;
 using Core.DTOs.Pedidos;
 using Core.DTOs.Shared;
 using Core.DTOs.Ventas;
+using Core.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -33,10 +34,35 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
             {
                 Pedidos = Mapper.Map<List<PedidoViewModel>>(_pedidos.GetBySucursalId(SucursalId))
             };
-            return View(viewModel);
+		
+		
+			return View(viewModel);
         }
 
-        public IActionResult Add()
+		[Authorize(Policy = "IndexPedido")]
+		public IActionResult IndexDelivery()
+		{
+			var viewModel = new PedidosIndexViewModel()
+			{
+				Pedidos = Mapper.Map<List<PedidoViewModel>>(_pedidos.GetAllWithDelivery(SucursalId))
+			};
+			return View(viewModel);
+		}
+
+		[Authorize(Policy = "ChangeEstadoPedido")]
+		public IActionResult ChangeEstadoPedidoIFrame(int id)
+		{
+			var viewModel = new PedidosChangeEstadoViewModel()
+			{
+				Id = id,
+			};
+			var estados = _pedidos.GetEstadoAvailable(id, Permisos.Contains(((int)AccessFunctions.AnularPedido).ToString()));
+			viewModel.Estados = estados.Select(x => new DropDownViewModel<EstadoPedido>() { Text = x.GetDescription(), Value = x }).ToList();
+			viewModel.Estado = estados.FirstOrDefault();
+			return View(viewModel);
+		}
+
+		public IActionResult Add()
         {
             var viewModel = new PedidosAddViewModel() { SucursalId = SucursalId};
             return View(viewModel);
@@ -49,7 +75,15 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
             return View(viewModel);
         }
 
-        [HttpPost]
+		public IActionResult View(int id)
+		{
+			var viewModel = Mapper.Map<PedidosEditViewModel>(_pedidos.GetById(id));
+			viewModel.SucursalId = SucursalId;
+			return View(viewModel);
+		}
+
+
+		[HttpPost]
         [Authorize(Policy = "GenerateVentaPedido")]
         public SystemValidationModel ValidarPedido(int pedidoId)
         {
@@ -100,13 +134,13 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
         //    return _pedidos.ChangeEstado(id, estado);
         //}
 
-        [HttpPost]
-        [Authorize(Policy = "AnularPedido")]
-        public SystemValidationModel Desactivate(int id)
-        {
+        //[HttpPost]
+        //[Authorize(Policy = "AnularPedido")]
+        //public SystemValidationModel Desactivate(int id)
+        //{
 
-            return _pedidos.ChangeEstado(id, EstadoPedido.Anulado);
-        }
+        //    return _pedidos.ChangeEstado(id, EstadoPedido.Anulado);
+        //}
 
     }
 }

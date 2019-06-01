@@ -5,16 +5,19 @@ using Core.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using static Core.Constants;
 
 namespace Core.DAL.Interfaces
 {
     public interface IPedidos
     {
         List<Pedido> GetAll();
+		List<Pedido> GetAllWithDelivery(int sucursaId);
 		List<Pedido> GetBySucursalId(int sucursalId);
 		List<Pedido> GetByClientId(int clienteId);
         Pedido GetById(int id);
-        SystemValidationModel Save(PedidosAddViewModel viewModel);
+		List<EstadoPedido> GetEstadoAvailable(int id, bool anularPedidoPermiso);
+		SystemValidationModel Save(PedidosAddViewModel viewModel);
         SystemValidationModel Save(PedidosClienteAddViewModel viewModel);
         SystemValidationModel Edit(PedidosEditViewModel viewModel);
         SystemValidationModel Edit(PedidosClienteEditViewModel viewModel);

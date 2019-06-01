@@ -28,14 +28,48 @@ namespace Core.DAL.Services
             return _context.Set<Pedido>().Where(x => x.Active).ToList();
         }
 
+		public List<Pedido> GetAllWithDelivery(int sucursaId)
+		{
+			return _context.Set<Pedido>().Where(x => x.Active&& x.Delivery && x.SucursalId == sucursaId).OrderBy(x => x.FechaEntrega).ToList();
+		}
+
 		public List<Pedido> GetBySucursalId(int sucursalId)
 		{
 			return _context.Set<Pedido>().Where(x => x.Active && x.SucursalId == sucursalId).Include(x => x.Cliente).ToList();
 		}
+
 		public Pedido GetById(int id)
         {
             return _context.Set<Pedido>().Include(x => x.DetallePedido).Include(x => x.Cliente).FirstOrDefault(x => x.Active && x.Id == id);
         }
+
+		public List<EstadoPedido> GetEstadoAvailable(int id, bool anularPedidoPermiso)
+		{
+			var listToReturn = new List<EstadoPedido>();
+			var pedido = GetById(id);
+			if (pedido.Estado == EstadoPedido.Anulado || pedido.Estado == EstadoPedido.Finalizado || pedido.Estado == EstadoPedido.EntregadoPorDelivery)
+				return listToReturn;
+
+			if (pedido.Estado == EstadoPedido.Pendiente)
+			{
+				listToReturn.Add(EstadoPedido.Preparado);
+				if (anularPedidoPermiso)
+					listToReturn.Add(EstadoPedido.Anulado);
+
+			}
+			if (pedido.Estado == EstadoPedido.Preparado)
+			{
+				if (pedido.Delivery)
+					listToReturn.Add(EstadoPedido.EntregadoPorDelivery);
+				else
+					listToReturn.Add(EstadoPedido.Finalizado);
+				if (anularPedidoPermiso)
+					listToReturn.Add(EstadoPedido.Anulado);
+
+			}
+
+			return listToReturn;
+		}
 
         public List<Pedido> GetByClientId (int clienteId)
         {

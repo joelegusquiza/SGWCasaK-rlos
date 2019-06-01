@@ -71,5 +71,16 @@ namespace SGWCasaK_rlos.Areas.Shared.Controllers
                 return Convert.ToInt32(clientIdString);
             return 0;
         }
-    }
+
+		private List<string> _permisos { get; set; } = new List<string>();
+		public List<string> Permisos  
+		{
+			get
+			{
+				return _permisos.Count() > 0 ? _permisos : (_permisos = User.Claims.FirstOrDefault(x => x.Type == CustomClaims.Permisos).Value.Split(',').ToList());
+			}
+		}
+		
+
+	}
 }

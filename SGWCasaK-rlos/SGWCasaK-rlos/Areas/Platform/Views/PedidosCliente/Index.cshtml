@@ -73,6 +73,7 @@
                         <td data-bind="text:'No'"></td>
                         <!-- /ko -->
 						<td>
+							<a data-bind="attr: { href: '@Url.Action("View", "PedidosCliente", new  { area = "Platform" })?id=' + id() }"><i class="fa fa-edit"></i> Ver</a>
 							<!-- ko if: estado() == @((int)Core.Constants.EstadoPedido.Pendiente)  -->
 							@if (HasPermisos(Core.Constants.AccessFunctions.ClienteEditPedido))
 							{

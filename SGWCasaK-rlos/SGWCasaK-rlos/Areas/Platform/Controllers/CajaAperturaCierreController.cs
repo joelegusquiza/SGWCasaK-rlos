@@ -16,8 +16,6 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using static Core.Constants;
 
-// For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace SGWCasaK_rlos.Areas.Platform.Controllers
 {
     [Area("Platform"), Authorize, ServiceFilter(typeof(UserEmailActiveFilter))]
@@ -75,7 +73,7 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
                     Cajas = _cajas.GetAllBySucusalId(SucursalId).Select(x => new DropDownViewModel<int>() { Text = $"{x.Nombre}", Value = x.Id }).ToList(),
                     CajaId = cajaAperturaCierre.CajaId,
                     Id = cajaAperturaCierre.Id,
-                    Monto = _ventas.GetVentaByCajaId(cajaAperturaCierre.CajaId, DateTime.UtcNow).Sum(x => x.MontoTotal)
+                    Monto = _ventas.GetVentaByCajaId(cajaAperturaCierre.CajaId, DateTime.UtcNow, EstadoVenta.Pagado).Sum(x => x.MontoTotal)
 
                 };
                 return View(viewModel);

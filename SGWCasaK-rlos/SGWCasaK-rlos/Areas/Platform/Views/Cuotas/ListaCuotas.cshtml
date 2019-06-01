@@ -58,8 +58,15 @@
           
         })
 
-		dataViewModel.seleccionarCuotas = function()
-        {
+		dataViewModel.seleccionarCuotas = function () {
+			for (var i = 1; i < dataViewModel.cuotas().length; i++)
+			{
+				if (!dataViewModel.cuotas()[i - 1].seleccionar() && dataViewModel.cuotas()[i].seleccionar())
+				{
+					showError("Debe seleccionar cuotas consecutivas");
+					return;
+				}
+			}
 			var cuotas = $.grep(dataViewModel.cuotas(), function (item) { return item.seleccionar() === true; });
             parent.seleccionarCuotas(ko.mapping.toJS(cuotas));
         }

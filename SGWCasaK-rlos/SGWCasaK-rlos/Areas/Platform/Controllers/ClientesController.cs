@@ -49,10 +49,16 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
             {
                 Clientes = Mapper.Map<List<ListaClienteViewModel>>(_clientes.GetAll())
             };
-            return View("~/Areas/Platform/Views/Clientes/Shared/ListaClientes.cshtml", viewModel);
+            return View(viewModel);
         }
 
-        [HttpPost]
+		public IActionResult AddClienteIFrame()
+		{
+			var viewModel = new ClientesEditViewModel();
+			return View(viewModel);
+		}
+
+		[HttpPost]
         [Authorize(Policy = "AddCliente")]
         public SystemValidationModel Save(string model)
         {

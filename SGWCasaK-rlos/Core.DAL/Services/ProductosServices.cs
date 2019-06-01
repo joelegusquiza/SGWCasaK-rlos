@@ -43,7 +43,7 @@ namespace Core.DAL.Services
                 foreach (var sucursal in producto.ProductoSucursal.Where(x => sucursalesIds.Contains(x.SucursalId)))
                 {
                     var item = Mapper.Map<ProductoSucursalViewModel>(producto);
-                    item.StockString = Helpers.Helpers.FormatStock(sucursal.Stock, producto.ProductoPresentaciones.ToDictionary(x => x.Nombre, x => x.Equivalencia));
+                    item.StockString = Helpers.Helpers.FormatStock(sucursal.Stock, producto.ProductoPresentaciones.ToDictionary(x => x.Nombre, x => x.Equivalencia), producto.UnidadMedida);
                     item.SucursalId = sucursal.SucursalId;
                     item.SucursalNombre = sucursales.FirstOrDefault(x => x.Id == sucursal.SucursalId)?.Nombre;
                     listToReturn.Add(item);
@@ -63,7 +63,7 @@ namespace Core.DAL.Services
                 if (productoSucursal != null)
                     item.Stock = productoSucursal.Stock;
                 item.IsInSucursal = productoSucursal != null;
-                item.StockString = Helpers.Helpers.FormatStock(item.Stock, producto.ProductoPresentaciones.ToDictionary(x => x.Nombre, x => x.Equivalencia));
+                item.StockString = Helpers.Helpers.FormatStock(item.Stock, producto.ProductoPresentaciones.ToDictionary(x => x.Nombre, x => x.Equivalencia), producto.UnidadMedida);
                 listToReturn.Add(item);
             }
             return listToReturn;
@@ -93,7 +93,7 @@ namespace Core.DAL.Services
 
         public Producto GetById(int id)
         {
-            return _context.Set<Producto>().Include(X => X.ProductoPresentaciones).FirstOrDefault(x => x.Active && x.Id == id);
+            return _context.Set<Producto>().Include(X => X.ProductoPresentaciones).Include(x => x.ProductoSucursal).FirstOrDefault(x => x.Active && x.Id == id);
         }
 
         public SystemValidationModel UpdatePrecioVenta(List<int> productoIds, int sucursalId)

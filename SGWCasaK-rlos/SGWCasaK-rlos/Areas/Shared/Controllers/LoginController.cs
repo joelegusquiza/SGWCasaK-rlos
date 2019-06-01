@@ -84,11 +84,11 @@ namespace SGWCasaK_rlos.Areas.Shared.Controllers
 			
 			var claims = new ClaimsIdentity();
 			if (CajaId == 0)
-				claims = new ClaimsIdentity(SecurityHelper.GetUserClaims(user, user.Sucursal), "Cookie");
+				claims = new ClaimsIdentity(SecurityHelper.GetUserClaims(user, sucursal), "Cookie");
 			else
 			{
 				var caja = _cajas.GetById(CajaId);
-				claims = new ClaimsIdentity(SecurityHelper.GetUserClaims(user, user.Sucursal, caja), "Cookie");
+				claims = new ClaimsIdentity(SecurityHelper.GetUserClaims(user, sucursal, caja), "Cookie");
 			}
 				                  
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claims));

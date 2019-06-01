@@ -47,8 +47,16 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
 			viewModel.Sucursales = _sucursales.GetAll().Select(x => new DropDownViewModel<int>() { Text = x.Nombre, Value = x.Id }).ToList();
 			return View(viewModel);
         }
-    
-        [HttpPost]
+
+		public IActionResult View(int id)
+		{
+			var viewModel = Mapper.Map<PedidosClienteEditViewModel>(_pedidos.GetById(id));
+			viewModel.Sucursales = _sucursales.GetAll().Select(x => new DropDownViewModel<int>() { Text = x.Nombre, Value = x.Id }).ToList();
+			return View(viewModel);
+		}
+
+
+		[HttpPost]
         [Authorize(Policy = "ClienteAddPedido")]
         public SystemValidationModel Save(string model)
         {

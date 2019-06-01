@@ -189,17 +189,15 @@ namespace Core
         public enum EstadoPedido
         { 
             [Description("Pendiente")]
-            Pendiente,
-            [Description("En Proceso")]
-            EnProceso,
+            Pendiente,           
             [Description("Preparado")]
             Preparado,
             [Description("Finalizado")]
             Finalizado,
-			[Description("Entregado por delivery")]
+			[Description("Finalizado y Entregado")]
 			EntregadoPorDelivery,
 			[Description("Anulado")]
-			Anulado
+			Anulado = 99
 		}
 
         public enum PorcIva

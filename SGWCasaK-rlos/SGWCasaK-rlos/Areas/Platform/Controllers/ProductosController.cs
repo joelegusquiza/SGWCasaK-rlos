@@ -53,18 +53,19 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
                 dictionary.Add(presentacion.Nombre, presentacion.Equivalencia);
             }
             var productoSucursal = producto.ProductoSucursal.FirstOrDefault(x => x.Active && x.SucursalId == SucursalId);
-            viewModel.StockString = Helpers.FormatStock(productoSucursal != null ? productoSucursal.Stock : 0, dictionary );
+			viewModel.Stock = productoSucursal.Stock;
+            viewModel.StockString = Helpers.FormatStock(productoSucursal != null ? productoSucursal.Stock : 0, dictionary, producto.UnidadMedida);
             viewModel.CategoriasProducto = _categoriaProductos.GetAll().Select(x => new DropDownViewModel<int>() { Text = x.Nombre, Value = x.Id }).ToList();
             return View(viewModel);
-        }
+        }	
 
-        public IActionResult ListaProductos(int sucursalId)
+		public IActionResult ListaProductos(int sucursalId)
         {
             var viewModel = new ListaProductosIndexViewModel()
             {
                 Productos = Mapper.Map<List<ListaProductoViewModel>>(_productos.GetAllWithFormatedStock(sucursalId))
             };
-            return View("~/Areas/Platform/Views/Productos/Shared/ListaProductos.cshtml", viewModel);
+            return View(viewModel);
         }
 
         [HttpPost]
