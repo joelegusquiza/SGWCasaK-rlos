@@ -103,8 +103,8 @@ namespace Core
             AddVenta = 3900,
             [Description("Editar Venta")]
             EditVenta = 4000,
-			[Description("Confirmar Venta")]
-			ConfirmarVenta = 4050,
+			//[Description("Confirmar Venta")]
+			//ConfirmarVenta = 4050,
 			[Description("Anular Venta")]
             AnularVenta = 4100,
             [Description("Ver Reportes")]

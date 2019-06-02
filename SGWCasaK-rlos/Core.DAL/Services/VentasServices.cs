@@ -94,7 +94,8 @@ namespace Core.DAL.Services
 				return new SystemValidationModel() { Success = false, Message = "No existen numeros validos para el timbrado actual" };
 
 			venta.NroFactura = nroFactura.Value;
-
+			DescontarStock(viewModel.DetalleVenta, viewModel.SucursalId);
+			venta.Estado = Constants.EstadoVenta.Confirmado;
 			_context.Entry(venta).State = EntityState.Added;
 			foreach (var detalle in venta.DetalleVenta)
 			{

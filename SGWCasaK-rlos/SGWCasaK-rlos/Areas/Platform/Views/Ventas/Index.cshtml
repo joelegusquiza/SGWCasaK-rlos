@@ -73,7 +73,7 @@
                         <td data-bind="text: estadoDescription"></td>
                       
 						<td>
-							<!-- ko if: estado() == @((int)Core.Constants.EstadoVenta.Pendiente)  -->
+							@*<!-- ko if: estado() == @((int)Core.Constants.EstadoVenta.Pendiente)  -->
 							@if (HasPermisos(Core.Constants.AccessFunctions.AnularVenta))
 							{
 								<a href="#" data-bind="attr: { id: id() }" onClick="javacript: desactivate(this)"><i class="fa fa-trash"></i> Anular</a>
@@ -85,7 +85,7 @@
 								<a data-bind="attr: { href: '@Url.Action("Edit", "Ventas", new  { area = "Platform" })?id=' + id() }"><i class="fa fa-edit"></i> Ver</a>
 
 							}
-							<!-- /ko -->
+							<!-- /ko -->*@
 						</td>
                     </tr>
                 </tbody>

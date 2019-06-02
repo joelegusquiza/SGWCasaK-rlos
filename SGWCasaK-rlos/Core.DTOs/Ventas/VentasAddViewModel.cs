@@ -1,4 +1,5 @@
 ﻿using Core.DTOs.Clientes;
+using Core.DTOs.Cuotas;
 using Core.DTOs.Shared;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,10 @@ namespace Core.DTOs.Ventas
 {
     public class VentasAddViewModel : BaseViewModel
     {
-        public DateTime DateCreated { get; set; } = DateTime.UtcNow;        
+        public DateTime DateCreated { get; set; } = DateTime.UtcNow;  
+		public DateTime FechaInicio { get; set; }
+		public DateTime FechaFin { get; set; }
+		public string NroTimbrado { get; set; }
         public int NroFactura { get; set; }
         public int TimbradoId { get; set; }
         public decimal MontoTotal { get; set; }
@@ -27,8 +31,9 @@ namespace Core.DTOs.Ventas
         }).ToList();
 
         public ListaClienteViewModel Cliente { get; set; } = new ListaClienteViewModel();
-
-        public VentasDetalleAddViewModel Producto { get; set; } = new VentasDetalleAddViewModel();
+		public AddPagoVentaViewModel PagoVenta { get; set; } = new AddPagoVentaViewModel();
+		public List<CuotaAddViewModel> Cuotas { get; set; } = new List<CuotaAddViewModel>();
+		public VentasDetalleAddViewModel Producto { get; set; } = new VentasDetalleAddViewModel();
         public List<VentasDetalleAddViewModel> DetalleVenta { get;  set; } = new List<VentasDetalleAddViewModel>();
 
     }

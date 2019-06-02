@@ -1,57 +1,86 @@
 ﻿@model Core.DTOs.Ventas.VentasAddViewModel
 <div class="m-content" style="width: 100%">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="m-portlet m-portlet--tab">
-                <div class="m-portlet__head">
-                    <div class="row">
-                        <div class="col-md-6 col-sm-4">
-                            <div class="m-portlet__head-caption">
-                                <div class="m-portlet__head-title" style="margin-top: 20px;">
-                                    <h3 class="m-portlet__head-text">
-                                        Agregar Venta
-                                    </h3>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-sm-4" align="right">
-                            <div class="m-portlet__head-title" style="margin-top: 20px;">
-                                <button type="button" class="btn btn-success" data-bind="click: postDataToController">
-                                    Guardar
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    @*<div >
-                    <div class="m-portlet__head-title">
+	<div class="row">
+		
+		<div class="col-md-12">
+			<div class="m-portlet m-portlet--tab">
+				<div class="m-portlet__head">
+					<div class="row">
+						<div class="col-md-6 col-sm-4">
+							<div class="m-portlet__head-caption">
+								<div class="m-portlet__head-title" style="margin-top: 20px;">
+									<h3 class="m-portlet__head-text">
+										Agregar Venta
+									</h3>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-4" align="right">
+							<div class="m-portlet__head-title" style="margin-top: 20px;">
+								<button type="button" class="btn btn-success" data-bind="click: showPagoVentaModal">
+									Guardar
+								</button>
+							</div>
+						</div>
+					</div>
+					@*<div >
+					<div class="m-portlet__head-title">
 
-                        <h3 class="m-portlet__head-text">
-                            Agregar Venta
-                        </h3>
-                    </div>
-                </div>*@
-                </div>
-                <!--begin::Form-->
-                <form class="m-form m-form--fit m-form--label-align-right">
-                    <div class="m-portlet__body">
-                        <div class="row" style="margin-bottom: 20px;">
-                            <div class="col-md-6">
-                                <div class="form-group m-form__group row">
-                                    <label for="example-text-input" class="col-2 col-form-label" style="text-align: left">
-                                        Fecha
-                                    </label>
-                                    <div class="col-10">
-                                        <input class="form-control m-input" type="text" id="example-text-input" readonly data-bind="value: moment(dateCreated()).format('DD/MM/YYYY')">
-                                    </div>
-                                </div>
-                            </div>
+						<h3 class="m-portlet__head-text">
+							Agregar Venta
+						</h3>
+					</div>
+				</div>*@
+				</div>
+				<!--begin::Form-->
+				<form class="m-form m-form--fit m-form--label-align-right">
+					<div class="m-portlet__body">
+						<div class="row" style="margin-bottom: 20px;">
+							<div class="col-md-6">
+								<div class="form-group m-form__group row">
+									<p>Casa K-rlos</p> <br />
+									<p>Ferreteria y deposito de materiales</p> <br />
+									<span>Ruta 3 Gral Elizardo Aquino Km 325</span> <br />
+									<span>Telefono (097122233)</span>
+
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group m-form__group row">
+									RUC 12345-6 <br />
+									Timbrado <span data-bind="text: nroTimbrado"></span> <br />
+									Inicio Vigencia: <span data-bind="text: moment(fechaInicio()).format('DD/MM/YYYY')"></span> <br />
+									Fin Vigencia: <span data-bind="text: moment(fechaFin()).format('DD/MM/YYYY')"></span> <br />
+									Factura
+									001-001-0000001
+								</div>
+							</div>
+						</div>						
+					</div>
+				</form>
+			</div>
+			<div class="m-portlet m-portlet--tab">				
+				<!--begin::Form-->
+				<form class="m-form m-form--fit m-form--label-align-right">
+					<div class="m-portlet__body">
+						<div class="row" style="margin-bottom: 20px;">
+							<div class="col-md-6">
+								<div class="form-group m-form__group row">
+									<label for="example-text-input" class="col-2 col-form-label" style="text-align: left">
+										Fecha
+									</label>
+									<div class="col-10">
+										<input class="form-control m-input" type="text" id="example-text-input" readonly data-bind="value: moment(dateCreated()).format('DD/MM/YYYY')">
+									</div>
+								</div>
+							</div>
 							<div class="col-md-6">
 								<div class="form-group m-form__group row">
 									<label for="example-text-input" class="col-4 col-form-label" style="text-align: left">
 										Condicion de Venta
 									</label>
 									<div class="col-8">
-										<select  class="form-control m-input m-input--square" id="condicionVentaSelect" data-bind="options: condicionesVenta,
+										<select class="form-control m-input m-input--square" id="condicionVentaSelect" data-bind="options: condicionesVenta,
                                            optionsValue: 'value',
                                            optionsText: 'text',
                                            value: condicionVenta,
@@ -59,239 +88,241 @@
 									</div>
 								</div>
 							</div>
-                        </div>
-                        <div class="row" style="margin-bottom: 20px;">
-                            <div class="col-md-6">
-                                <div class="form-group m-form__group row">
-                                    <label for="example-text-input" class="col-2 col-form-label" style="text-align: left">
-                                        Ruc
-                                    </label>
-                                    <div class="col-6">
-                                        <input class="form-control m-input" type="text" id="example-text-input" data-bind="value: dataViewModel.cliente.ruc">
-                                    </div>
-                                    <div class="col-4" align="right">
-                                        @*<button  class="btn btn-success">
-                                        Agregar
-                                    </button>*@
-                                        <button type="button" class="btn btn-success" onclick="showListaClientesModal()">
-                                            Buscar
-                                        </button>
+						</div>
+						<div class="row" style="margin-bottom: 20px;">
+							<div class="col-md-6">
+								<div class="form-group m-form__group row">
+									<label for="example-text-input" class="col-2 col-form-label" style="text-align: left">
+										Ruc
+									</label>
+									<div class="col-6">
+										<input class="form-control m-input" type="text" id="example-text-input" data-bind="value: dataViewModel.cliente.ruc">
+									</div>
+									<div class="col-4" align="right">
+										@*<button  class="btn btn-success">
+										Agregar
+									</button>*@
+										<button type="button" class="btn btn-success" onclick="showListaClientesModal()">
+											Buscar
+										</button>
 
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group m-form__group row">
-                                    <label for="example-text-input" class="col-4 col-form-label" style="text-align: left">
-                                        Nombre o Razon Social
-                                    </label>
-                                    <div class="col-8">
-                                        <input class="form-control m-input" type="text" id="example-text-input" data-bind="value: dataViewModel.cliente.displayName">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-						
-                    </div>
-                </form>
-            </div>
-            <div class="m-portlet m-portlet--tab">
-                <div class="m-portlet__head">
-                    <div class="m-portlet__head-caption">
-                        <div class="m-portlet__head-title">
-                            <h3 class=" m-portlet__head-text">
-                                Productos
-                            </h3>
-                        </div>
-                    </div>
-                </div>
-                <!--begin::Form-->
-                <form class="m-form m-form--fit m-form--label-align-right" id="productoAddDetalleForm">
-                    <div class="m-portlet__body">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="form-group m-form__group row">
-                                    <label for="example-text-input" class="col-2 col-form-label">
-                                        Nombre
-                                    </label>
-                                    <div class="col-10">
-                                        <input class="form-control m-input" type="text" id="productoNombre" data-bind="value: dataViewModel.producto.nombre">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group m-form__group row">
-                                    <label for="example-text-input" class="col-2 col-form-label">
-                                        Precio
-                                    </label>
-                                    <div class="col-10">
-                                        <input class="form-control m-input" type="text" id="productoPrecioVenta" data-bind="value: dataViewModel.producto.precioVentaToAdd">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group m-form__group row">
-                                    <label for="example-text-input" class="col-2 col-form-label">
-                                        Cantidad
-                                    </label>
-                                    <div class="col-10">
-                                        <input class="form-control m-input" type="text" id="productoCantidad" data-bind="value: dataViewModel.producto.cantidad">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group m-form__group row">
+									<label for="example-text-input" class="col-4 col-form-label" style="text-align: left">
+										Nombre o Razon Social
+									</label>
+									<div class="col-8">
+										<input class="form-control m-input" type="text" id="example-text-input" data-bind="value: dataViewModel.cliente.displayName">
+									</div>
+								</div>
+							</div>
+						</div>
 
-                    </div>
-                    <div class="m-portlet__foot m-portlet__foot--fit">
-                        <div class="m-form__actions">
-                            <div class="row">
-                                <div class="col-12">
-                                    <button type="button" class="btn btn-success" onclick="showListaProductosModal()">
-                                        Buscar
-                                    </button>
-                                    <button type="button" class="btn btn-secondary" data-bind="click: agregarDetalle">
-                                        Agregar
-                                    </button>
+					</div>
+				</form>
+			</div>
+			<div class="m-portlet m-portlet--tab">
+				<div class="m-portlet__head">
+					<div class="m-portlet__head-caption">
+						<div class="m-portlet__head-title">
+							<h3 class=" m-portlet__head-text">
+								Productos
+							</h3>
+						</div>
+					</div>
+				</div>
+				<!--begin::Form-->
+				<form class="m-form m-form--fit m-form--label-align-right" id="productoAddDetalleForm">
+					<div class="m-portlet__body">
+						<div class="row">
+							<div class="col-md-4">
+								<div class="form-group m-form__group row">
+									<label for="example-text-input" class="col-2 col-form-label">
+										Nombre
+									</label>
+									<div class="col-10">
+										<input class="form-control m-input" type="text" id="productoNombre" data-bind="value: dataViewModel.producto.nombre">
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group m-form__group row">
+									<label for="example-text-input" class="col-2 col-form-label">
+										Precio
+									</label>
+									<div class="col-10">
+										<input class="form-control m-input" type="text" id="productoPrecioVenta" data-bind="value: dataViewModel.producto.precioVentaToAdd">
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group m-form__group row">
+									<label for="example-text-input" class="col-2 col-form-label">
+										Cantidad
+									</label>
+									<div class="col-10">
+										<input class="form-control m-input" type="text" id="productoCantidad" data-bind="value: dataViewModel.producto.cantidad">
+									</div>
+								</div>
+							</div>
+						</div>
 
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="m-portlet m-portlet--tab">
-                <div class="m-portlet__head">
-                    <div class="m-portlet__head-caption">
-                        <div class="m-portlet__head-title">
-                            <h3 class="m-portlet__head-text">
-                                Detalle
-                            </h3>
-                        </div>
-                    </div>
-                </div>
+					</div>
+					<div class="m-portlet__foot m-portlet__foot--fit">
+						<div class="m-form__actions">
+							<div class="row">
+								<div class="col-12">
+									<button type="button" class="btn btn-success" onclick="showListaProductosModal()">
+										Buscar
+									</button>
+									<button type="button" class="btn btn-secondary" data-bind="click: agregarDetalle">
+										Agregar
+									</button>
 
-                <div class="m-portlet__body">
-                    <!--begin: Datatable -->
-                    <table id="detalleAddVentaTable" class="table m-table m-table--head-bg-success">
-                        <thead>
-                            <tr>
-                                <th>
-                                    Cant
-                                </th>
-                                <th>
-                                    Descripcion
-                                </th>
-                                <th>
-                                    Precio Venta
-                                </th>
-                                <th colspan="3" style=" text-align : center">
-                                    Totales
-                                </th>
-                                <th></th>
-                            </tr>
-                            <tr>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th>
-                                    Excenta
-                                </th>
-                                <th>
-                                    5%
-                                </th>
-                                <th>
-                                    10%
-                                </th>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="m-portlet m-portlet--tab">
+				<div class="m-portlet__head">
+					<div class="m-portlet__head-caption">
+						<div class="m-portlet__head-title">
+							<h3 class="m-portlet__head-text">
+								Detalle
+							</h3>
+						</div>
+					</div>
+				</div>
 
-                                <th></th>
+				<div class="m-portlet__body">
+					<!--begin: Datatable -->
+					<table id="detalleAddVentaTable" class="table m-table m-table--head-bg-success">
+						<thead>
+							<tr>
+								<th>
+									Cant
+								</th>
+								<th>
+									Descripcion
+								</th>
+								<th>
+									Precio Venta
+								</th>
+								<th colspan="3" style=" text-align : center">
+									Totales
+								</th>
+								<th></th>
+							</tr>
+							<tr>
+								<th></th>
+								<th></th>
+								<th></th>
+								<th>
+									Excenta
+								</th>
+								<th>
+									5%
+								</th>
+								<th>
+									10%
+								</th>
 
-                            </tr>
-                        </thead>
-                        <tbody data-bind="foreach: detalleVenta">
-                            <tr>
-                                <td data-bind="text: cantidad"></td>
-                                <td data-bind="text: nombre"></td>
-                                <td data-bind="text: precioVenta"></td>
-                                <td><span data-bind="visible: porcentajeIva() == 1, text: montoTotal"></span></td>
-                                <td><span data-bind="visible: porcentajeIva() == 2, text: montoTotal"></span></td>
-                                <td><span data-bind="visible: porcentajeIva() == 3, text: montoTotal"></span></td>
-                                <td><a href="#" data-bind="attr: { id: productoId() }, click: $parent.eliminarDetalle"><i class="fa fa-trash"></i></a></td>
-                            </tr>
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <td colspan="3" style="text-align : center"> Totales </td>
-                                <td data-bind="text: totalExcenta"></td>
-                                <td data-bind="text: totalCinco"></td>
-                                <td data-bind="text: totalDiez"></td>
-                            </tr>
-                            <tr>
-                                <td colspan="3" style="text-align : center">Monto Total </td>
-                                <td></td>
-                                <td></td>
-                                <td data-bind="text: montoTotal"></td>
-                            </tr>
-                        </tfoot>
-                    </table>
-                    <!--end: Datatable -->
-                </div>
-            </div>
-            <div class="m-portlet m-portlet--tab">
-               
-                <!--begin::Form-->
-                <form class="m-form m-form--fit m-form--label-align-right" id="productoAddDetalleForm">
-                    <div class="m-portlet__body">
-                        <div class="row">
-                            <div class="col-md-3">
-                                <div class="form-group m-form__group row">
-                                    <label for="example-text-input" class="col-12 col-form-label">
-                                        Total Iva
-                                    </label>
+								<th></th>
 
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group m-form__group row">
-                                    <label for="example-text-input" class="col-4 col-form-label">
-                                        IVA Cinco
-                                    </label>
-                                    <div class="col-8">
-                                        <input class="form-control m-input" type="text" id="productoPrecioVenta" data-bind="value: dataViewModel.ivaCinco" readonly>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group m-form__group row">
-                                    <label for="example-text-input" class="col-4 col-form-label">
-                                        IVA Diez
-                                    </label>
-                                    <div class="col-8">
-                                        <input class="form-control m-input" type="text" id="productoCantidad" data-bind="value: dataViewModel.ivaDiez" readonly>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group m-form__group row">
-                                    <label for="example-text-input" class="col-4 col-form-label">
-                                        IVA Total
-                                    </label>
-                                    <div class="col-8">
-                                        <input class="form-control m-input" type="text" id="productoCantidad" data-bind="value: dataViewModel.ivaTotal" readonly>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+							</tr>
+						</thead>
+						<tbody data-bind="foreach: detalleVenta">
+							<tr>
+								<td data-bind="text: cantidad"></td>
+								<td data-bind="text: nombre"></td>
+								<td data-bind="text: precioVenta"></td>
+								<td><span data-bind="visible: porcentajeIva() == 1, text: montoTotal"></span></td>
+								<td><span data-bind="visible: porcentajeIva() == 2, text: montoTotal"></span></td>
+								<td><span data-bind="visible: porcentajeIva() == 3, text: montoTotal"></span></td>
+								<td><a href="#" data-bind="attr: { id: productoId() }, click: $parent.eliminarDetalle"><i class="fa fa-trash"></i></a></td>
+							</tr>
+						</tbody>
+						<tfoot>
+							<tr>
+								<td colspan="3" style="text-align : center"> Totales </td>
+								<td data-bind="text: totalExcenta"></td>
+								<td data-bind="text: totalCinco"></td>
+								<td data-bind="text: totalDiez"></td>
+							</tr>
+							<tr>
+								<td colspan="3" style="text-align : center">Monto Total </td>
+								<td></td>
+								<td></td>
+								<td data-bind="text: montoTotal"></td>
+							</tr>
+						</tfoot>
+					</table>
+					<!--end: Datatable -->
+				</div>
+			</div>
+			<div class="m-portlet m-portlet--tab">
 
-                    </div>                   
-                </form>
-            </div>
-        </div>
-    </div>
+				<!--begin::Form-->
+				<form class="m-form m-form--fit m-form--label-align-right" id="productoAddDetalleForm">
+					<div class="m-portlet__body">
+						<div class="row">
+							<div class="col-md-3">
+								<div class="form-group m-form__group row">
+									<label for="example-text-input" class="col-12 col-form-label">
+										Total Iva
+									</label>
+
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group m-form__group row">
+									<label for="example-text-input" class="col-4 col-form-label">
+										IVA Cinco
+									</label>
+									<div class="col-8">
+										<input class="form-control m-input" type="text" id="productoPrecioVenta" data-bind="value: dataViewModel.ivaCinco" readonly>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group m-form__group row">
+									<label for="example-text-input" class="col-4 col-form-label">
+										IVA Diez
+									</label>
+									<div class="col-8">
+										<input class="form-control m-input" type="text" id="productoCantidad" data-bind="value: dataViewModel.ivaDiez" readonly>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group m-form__group row">
+									<label for="example-text-input" class="col-4 col-form-label">
+										IVA Total
+									</label>
+									<div class="col-8">
+										<input class="form-control m-input" type="text" id="productoCantidad" data-bind="value: dataViewModel.ivaTotal" readonly>
+									</div>
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
 </div>
 @{
 	Html.RenderPartial("~/Areas/Platform/Views/Shared/_ListaProductoModal.cshtml");
 	Html.RenderPartial("~/Areas/Platform/Views/Shared/_AddProductoModal.cshtml");
 	Html.RenderPartial("~/Areas/Platform/Views/Shared/_ListaClientesModal.cshtml");
+	Html.RenderPartial("~/Areas/Platform/Views/Shared/_AddPagoVentaModal.cshtml");
+	Html.RenderPartial("~/Areas/Platform/Views/Shared/_AddVentaCuotasModal.cshtml");
 }
 <!-- /content -->
 @section scripts{
@@ -306,8 +337,8 @@
 
 				return;
 			}
-            if (parseInt(dataViewModel.producto.cantidad()) == 0) {
-                showError("Debe introducir la cantidad para agregar a la venta");
+            if (parseInt(dataViewModel.producto.cantidad()) <= 0) {
+                showError("Debe introducir una cantidad valida para agregar");
 
                 return;
             }
@@ -386,6 +417,28 @@
             return dataViewModel.totalExcenta() + dataViewModel.totalCinco() + dataViewModel.totalDiez();
         })
 
+		dataViewModel.pagoVenta.cambio = ko.pureComputed(function () {
+			if (dataViewModel.pagoVenta.monto() > dataViewModel.montoTotal()) {
+				return dataViewModel.pagoVenta.monto() - dataViewModel.montoTotal();
+			} else {
+				return 0;
+			}
+
+		});
+
+		dataViewModel.showPagoVentaModal = function () {
+			if (dataViewModel.detalleVenta().length == 0) {
+				showError("Debe ingresar al menos un producto para la venta");
+				return;
+			}
+			if (dataViewModel.condicionVenta() == 0) {
+				$("#addPagoVentaModal").modal("show");
+			}
+			else {
+				openCuotasModal();
+			}
+
+		}
 
         dataViewModel.postDataToController = function () {
             if (dataViewModel.cliente.clienteId() == 0)
@@ -396,7 +449,9 @@
             if (dataViewModel.detalleVenta().length == 0) {
                 showError("Debe ingresar al menos un producto para la venta");
                 return;
-            }
+			}
+
+			if (!$("#pagoVentaForm").valid()) return;
             dataViewModel.producto.cantidad(0);
             $.ajax({
                 url: "@Url.Action("Save", "Ventas")",
@@ -441,7 +496,13 @@
         function seleccionarCliente(cliente) {
             ko.mapping.fromJS(cliente, {}, dataViewModel.cliente);        
             $("#listaClientesModal").modal("hide");
-        }
+		}
+
+		function openCuotasModal()
+		{
+			$("#addVentaCuotasIframe").attr('src', '@Url.Action("VentaAddCuota", "Cuotas", new { area = "Platform"})?montoTotal='+dataViewModel.montoTotal());
+			$("#addVentaCuotasModal").modal("show");
+		}
 
         function resetProductoForm() {
             dataViewModel.producto.nombre("");
@@ -449,6 +510,21 @@
             dataViewModel.producto.cantidad(0);
             dataViewModel.producto.productoId(0);
 		}
+		jQuery.validator.addMethod("pagoVentaMontoValid", function (value, element) {
+			return parseInt(value) >= parseInt($("#pagoVentaMontoTotal").val()) 
+		}, "El monto a pagar debe ser mayor o igual al total");
+
+		$('#pagoVentaForm').validate({
+			rules: {
+				pagoVentaMonto: {
+					pagoVentaMontoValid: true
+				}
+			},
+			errorPlacement: function (error, element) {
+				var span = element.siblings('span');
+				error.appendTo(span);
+			}
+		});
         ko.applyBindings(dataViewModel);
     </script>
 }
