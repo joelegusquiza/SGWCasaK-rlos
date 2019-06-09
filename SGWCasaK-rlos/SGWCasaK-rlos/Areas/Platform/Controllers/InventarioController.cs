@@ -21,7 +21,8 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
         private readonly IInventario _inventario;
         private readonly IUsuarios _usuarios;
         private readonly IProductos _productos;
-        public InventarioController(IInventario inventario, IUsuarios usuarios, IProductos productos)
+
+		public InventarioController(IInventario inventario, IUsuarios usuarios, IProductos productos)
         {
             _inventario = inventario;
             _usuarios = usuarios;
@@ -38,34 +39,41 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
             return View(viewModel);
         }
 
-        public IActionResult Upsert(int? id)
+		public IActionResult Add()
+		{
+			var viewModel = new InventarioAddViewModel() { SucursalId = SucursalId , UsuarioId = UserId};
+			viewModel.DetalleInventario = Mapper.Map<List<InventarioDetalleViewModel>>(_productos.GetAllBySucursales(new List<int>() { SucursalId }).OrderBy(x => x.Nombre));
+			return View(viewModel);
+		}
+
+		public IActionResult Edit(int id)
         {
-            var viewModel = new InventariosUpsertViewModel() { SucursalId = SucursalId};
-            if (id == null)
-                viewModel.DetalleInventario = Mapper.Map<List<InventarioDetalleViewModel>>(_productos.GetAllBySucursales(new List<int>() { SucursalId }).OrderBy(x=> x.Nombre));
-            else 
-            {
-                var inventario = _inventario.GetById(id.Value);
-                viewModel = Mapper.Map(inventario, viewModel);
+            var viewModel = new InventariosEditViewModel() { SucursalId = SucursalId, UsuarioId = UserId};
+           
+                var inventario = _inventario.GetById(id);
+                
                 
                 viewModel.DetalleInventario = GetDetalleInventario(inventario);
-            }
-            return View(viewModel);
+				viewModel = Mapper.Map(inventario, viewModel);
+
+			return View(viewModel);
         }
 
         private List<InventarioDetalleViewModel> GetDetalleInventario(Inventario inventario)
         {
             var listToReturn = new List<InventarioDetalleViewModel>();
-            var productoIds = inventario.DetalleInventario.Select(x => x.ProductoId);
+            var productoIds = inventario.DetalleInventario.Select(x => x.ProductoId).ToList();
             var productos = _productos.GetAll().Where(x => productoIds.Contains(x.Id));
+			var stockProductos = _productos.GetProductoSucursal(productoIds, SucursalId);
             foreach (var producto in productos)
             {
                 var detalleInventario = inventario.DetalleInventario.FirstOrDefault(x => x.ProductoId == producto.Id);
+				var stockActual = stockProductos.FirstOrDefault(x => x.ProductoId == producto.Id);
                 var item = new InventarioDetalleViewModel()
                 {
                     ProductoId = producto.Id,
                     ProductoNombre = producto.Nombre, 
-                    StockActual = detalleInventario.StockActual,
+                    StockActual = stockActual.Stock,
                     StockEncontrado = detalleInventario.StockEncontrado,
                     Id = detalleInventario.Id
                 };
@@ -74,28 +82,28 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
             return listToReturn.OrderBy(x => x.ProductoNombre).ToList();
         }
 
-        [HttpPost]
-        [Authorize(Policy = "Upsertnventario")]
-        public SystemValidationModel Upsert(string model)
+		[HttpPost]
+		[Authorize(Policy = "AddInventario")]
+		public SystemValidationModel Add(string model)
+		{
+			var viewModel = JsonConvert.DeserializeObject<InventarioAddViewModel>(model);
+			return _inventario.Save(viewModel);
+		}
+
+		[HttpPost]
+        [Authorize(Policy = "EditInventario")]
+        public SystemValidationModel Edit(string model)
         {
-            var viewModel = JsonConvert.DeserializeObject<InventariosUpsertViewModel>(model);
-            return _inventario.Upsert(viewModel);
+            var viewModel = JsonConvert.DeserializeObject<InventariosEditViewModel>(model);
+            return _inventario.Edit(viewModel);
         }
-        [HttpPost]
-        [Authorize(Policy = "ConfirmInventario")]
-        public SystemValidationModel Confirmar(string model)
-        {
-            var viewModel = JsonConvert.DeserializeObject<InventariosUpsertViewModel>(model);
-            viewModel.Estado = Core.Constants.InventarioEstado.Terminado;
-            return _inventario.Upsert(viewModel);
-        }
+
 
         [HttpPost]
         [Authorize(Policy = "AnularInventario")]
-        public SystemValidationModel Anular(int id)
-        {
-          
-            return _inventario.Anular(id);
+        public SystemValidationModel Anular(int id, string razon)
+        {          
+            return _inventario.Anular(id, razon);
         }
     }
 }

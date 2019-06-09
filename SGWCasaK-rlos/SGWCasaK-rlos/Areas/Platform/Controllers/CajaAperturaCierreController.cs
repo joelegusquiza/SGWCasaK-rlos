@@ -46,13 +46,13 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
         }
 
 
-        public IActionResult CajaAperturaCierre(int id)
+        public IActionResult CajaApertura(int id)
         {
             
             var aperturaCierre = _cajaAperturaCierre.GetLastAperturaCierreByUser(UserId);
             if (aperturaCierre == null || aperturaCierre.FechaCierre != null)
             {
-                var viewModel = new AddCajaAperturaCierreViewModel()
+                var viewModel = new AddCajaAperturaViewModel()
                 {
                     Tipo = Core.Constants.CajaTipoOperacion.Apertura,
                     Cajas = _cajas.GetAllBySucusalId(SucursalId).Select(x => new DropDownViewModel<int>() { Text = $"{x.Nombre}", Value = x.Id }).ToList(),
@@ -65,7 +65,7 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
             else
             {
                 var cajaAperturaCierre = _cajaAperturaCierre.GetById(id);
-                var viewModel = new AddCajaAperturaCierreViewModel()
+                var viewModel = new AddCajaAperturaViewModel()
                 {
                     Tipo = Core.Constants.CajaTipoOperacion.Cierre,                    
                     FechaCierre = DateTimeOffset.Now,
@@ -81,32 +81,57 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
            
         }
 
-        public List<DropDownViewModel<int>> GetLastAperturaCierre()
+		public IActionResult CajaCierre(int id)
+		{
+			var cajaAperturaCierre = _cajaAperturaCierre.GetById(id);
+			var viewModel = new AddCajaCierreViewModel()
+			{
+				Tipo = CajaTipoOperacion.Cierre,
+				FechaCierre = DateTimeOffset.Now,
+				UsuarioId = UserId,
+				Cajas = _cajas.GetAllBySucusalId(SucursalId).Select(x => new DropDownViewModel<int>() { Text = $"{x.Nombre}", Value = x.Id }).ToList(),
+				CajaId = cajaAperturaCierre.CajaId,
+				Id = cajaAperturaCierre.Id,				
+				Detalle = _cajaAperturaCierre.GetCajaDetalle(id)
+			};
+			viewModel.Monto = viewModel.Detalle.Sum(x => x.Monto);
+			return View(viewModel);
+		}
+
+		public SystemValidationModel IsAnyCajaOpen()
+		{
+			var aperturaCierre = _cajaAperturaCierre.GetLastAperturaCierreByUser(UserId);
+			if (aperturaCierre == null || aperturaCierre.FechaCierre != null)
+				return new SystemValidationModel() { Success = false, Message = "Debe abrir una caja para agregar una venta" };
+			return new SystemValidationModel() { Success = true};
+		}
+
+        public List<AdditionalData> GetLastAperturaCierre()
         {
-            var listToReturn = new List<DropDownViewModel<int>>();
-            var item = new DropDownViewModel<int>();
+            var listToReturn = new List<AdditionalData>();
+            var item = new AdditionalData();
             var aperturaCierre = _cajaAperturaCierre.GetLastAperturaCierreByUser(UserId);
             if (aperturaCierre == null || aperturaCierre.FechaCierre != null)
             {
                 item.Text = $"Abrir Caja";
                 item.Value = 0;
-                
-            }
+				item.AdditionalString = CajaTipoOperacion.Apertura.ToString();
+			}
             else
             {
                 item.Text = $"Cerrar Caja {aperturaCierre.Caja.Nombre}";
                 item.Value = aperturaCierre.Id;
-
-            }
+				item.AdditionalString = CajaTipoOperacion.Cierre.ToString();
+			}
             listToReturn.Add(item);
             return listToReturn;
         }
 
         [HttpPost]       
-        public async Task<SystemValidationModel> Save(string model)
+        public async Task<SystemValidationModel> SaveApertura(string model)
         {
-            var viewModel = JsonConvert.DeserializeObject<AddCajaAperturaCierreViewModel>(model);
-            var result = _cajaAperturaCierre.Save(viewModel);
+            var viewModel = JsonConvert.DeserializeObject<AddCajaAperturaViewModel>(model);
+            var result = _cajaAperturaCierre.SaveApertura(viewModel);
             if (result.Success && viewModel.Tipo == CajaTipoOperacion.Apertura)
             {
                 var usuario = _usuarios.GetForLogin(Email);
@@ -119,5 +144,14 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
             return result;
         }
 
-    }
+
+		[HttpPost]
+		public SystemValidationModel SaveCierre(string model)
+		{
+			var viewModel = JsonConvert.DeserializeObject<AddCajaCierreViewModel>(model);
+			var result = _cajaAperturaCierre.SaveCierre(viewModel);
+
+			return result;
+		}
+	}
 }

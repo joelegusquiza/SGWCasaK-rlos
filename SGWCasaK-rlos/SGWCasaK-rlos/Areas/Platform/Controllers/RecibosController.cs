@@ -6,6 +6,7 @@ using AutoMapper;
 using Core.DAL.Interfaces;
 using Core.DTOs.Recibos;
 using Core.DTOs.Shared;
+using Core.DTOs.Ventas;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -17,9 +18,11 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
 	public class RecibosController : Controller
     {
 		private readonly IRecibos _recibos;
-		public RecibosController(IRecibos recibos)
+		private readonly IVentas _ventas;
+		public RecibosController(IRecibos recibos, IVentas ventas)
 		{
 			_recibos = recibos;
+			_ventas = ventas;
 		}
 		[Authorize(Policy = "IndexRecibo")]
 		public IActionResult Index()
@@ -39,7 +42,10 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
 
 		public IActionResult Edit(int id)
 		{
-			var viewModel = Mapper.Map<RecibosEditViewModel>(_recibos.GetByIdWithCliente(id));
+			var recibo = _recibos.GetByIdWithCliente(id);
+			var viewModel = Mapper.Map<RecibosEditViewModel>(recibo);
+			var venta = _ventas.GetById(recibo.Cuotas.FirstOrDefault().VentaId);
+			viewModel.Venta = Mapper.Map<ListaVentasViewModel>(venta);
 			return View(viewModel);
 		}
 

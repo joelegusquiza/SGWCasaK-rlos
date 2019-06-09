@@ -27,7 +27,7 @@ namespace Core.DAL.Services
 
 		public List<Venta> GetAll()
 		{
-			return _context.Set<Venta>().Where(x => x.Active).ToList();
+			return _context.Set<Venta>().Where(x => x.Active).OrderByDescending(x => x.DateCreated).ToList();
 		}
 
 		public Venta GetById(int id)
@@ -35,13 +35,13 @@ namespace Core.DAL.Services
 			return _context.Set<Venta>().Include(x => x.DetalleVenta).FirstOrDefault(x => x.Active && x.Id == id);
 		}
 
-		public VentasEditViewModel GetForEdit(int id)
+		public VentasViewViewModel GetForView(int id)
 		{
-			var viewModel = new VentasEditViewModel() { };
+			var viewModel = new VentasViewViewModel() { };
 			
 			var venta = _context.Set<Venta>().Include(x => x.DetalleVenta).Include(x => x.Cliente).FirstOrDefault(x => x.Active && x.Id == id);
 			venta.DetalleVenta = venta.DetalleVenta.Where(x => x.Active).ToList();
-			viewModel = Mapper.Map<VentasEditViewModel>(GetById(id));
+			viewModel = Mapper.Map<VentasViewViewModel>(GetById(id));
 			var productosIds = venta.DetalleVenta.Select(x => x.ProductoId).ToList();
 			var productos = _context.Set<Producto>().Where(x => productosIds.Contains(x.Id));
 			foreach (var detalle in viewModel.DetalleVenta)
@@ -94,8 +94,11 @@ namespace Core.DAL.Services
 				return new SystemValidationModel() { Success = false, Message = "No existen numeros validos para el timbrado actual" };
 
 			venta.NroFactura = nroFactura.Value;
+			venta.NroFacturaString = GetNroFacturaString(venta, viewModel);
+			if (viewModel.PagoVenta.Cambio != 0)
+				venta.Cambio = viewModel.PagoVenta.Cambio;
 			DescontarStock(viewModel.DetalleVenta, viewModel.SucursalId);
-			venta.Estado = Constants.EstadoVenta.Confirmado;
+			venta.Estado = viewModel.CondicionVenta == Constants.CondicionVenta.Contado ? Constants.EstadoVenta.Pagado : Constants.EstadoVenta.PendientedePago;
 			_context.Entry(venta).State = EntityState.Added;
 			foreach (var detalle in venta.DetalleVenta)
 			{
@@ -126,6 +129,52 @@ namespace Core.DAL.Services
 
 		}
 
+		private string GetNroFacturaString(Venta venta, VentasAddViewModel viewModel)
+		{
+			var codigoEstablecimiento = _context.Set<Sucursal>().FirstOrDefault(x => x.Id == viewModel.SucursalId).CodigoEstablecimiento;
+			var puntoExpedicion = _context.Set<Caja>().FirstOrDefault(x => x.Id == viewModel.CajaId).PuntoExpedicion;
+			var stringInicio = "";
+			var stringMedio = "";
+			var stringFinal = "";
+			var MAX = 1000000;
+			if (Math.Round((float)(codigoEstablecimiento / 100)) == 0)
+			{
+				stringInicio += "0";
+			}
+			if (Math.Round((float)(codigoEstablecimiento / 10)) == 0)
+			{
+				stringInicio += "0";
+			}
+			if (Math.Round((float)(puntoExpedicion / 100)) == 0)
+			{
+				stringMedio += "0";
+			}
+			if (Math.Round((float)(puntoExpedicion / 10)) == 0)
+			{
+				stringMedio += "0";
+			}
+
+			while (MAX > 0)
+			{
+				if (Math.Round((float)venta.NroFactura / MAX) == 0)
+				{
+					stringFinal += "0";
+				}
+				else
+				{
+					MAX = 0;
+				}
+				MAX = MAX / 10;
+			}
+			stringMedio += puntoExpedicion;
+			stringInicio += codigoEstablecimiento;
+			stringFinal += venta.NroFactura;
+
+			return stringInicio + "-" + stringMedio + "-" + stringFinal;
+
+
+		}
+
 		private void ChecForUpdatePedido(Pedido pedido, ICollection<DetalleVenta> detallesVenta)
 		{
 			var productoPedidoIds = pedido.DetallePedido.Select(x => x.ProductoId);
@@ -150,7 +199,8 @@ namespace Core.DAL.Services
 			}
 		}
 
-		public SystemValidationModel Edit(VentasEditViewModel viewModel)
+		//ya no se usa
+		public SystemValidationModel Edit(VentasViewViewModel viewModel)
 		{
 			var venta = GetById(viewModel.Id);
 			venta = Mapper.Map(viewModel, venta);
@@ -169,7 +219,7 @@ namespace Core.DAL.Services
 
 		}
 
-		public SystemValidationModel Confirm(VentasEditViewModel viewModel)
+		public SystemValidationModel Confirm(VentasViewViewModel viewModel)
 		{
 
 			var venta = GetById(viewModel.Id);
@@ -207,7 +257,7 @@ namespace Core.DAL.Services
 
 		}
 
-		private void UpdateDetalle(Venta venta, VentasEditViewModel viewModel)
+		private void UpdateDetalle(Venta venta, VentasViewViewModel viewModel)
 		{
 			var ventaDetalleIds = venta.DetalleVenta.Select(x => x.Id);
 			var detalleIds = viewModel.DetalleVenta.Select(x => x.Id).ToList();
@@ -252,7 +302,7 @@ namespace Core.DAL.Services
             {
                 var detalleVenta = detallesVenta.FirstOrDefault(x => x.ProductoId == producto.ProductoId);
 
-                    producto.Stock -= detalleVenta.Cantidad * detalleVenta.Equivalencia;
+                   producto.Stock -= detalleVenta.Cantidad * detalleVenta.Equivalencia;
                 _context.Entry(producto).State = EntityState.Modified;
             }
         }

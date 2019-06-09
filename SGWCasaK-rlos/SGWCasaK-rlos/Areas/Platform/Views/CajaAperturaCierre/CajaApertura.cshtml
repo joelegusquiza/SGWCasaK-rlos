@@ -1,4 +1,4 @@
-﻿@model Core.DTOs.CajaAperturaCierre.AddCajaAperturaCierreViewModel
+﻿@model Core.DTOs.CajaAperturaCierre.AddCajaAperturaViewModel
 @using Core
 @{
     ViewData["Title"] = "ListaClientes";
@@ -86,7 +86,7 @@
             if (!$("#form").valid()) return;
 
             $.ajax({
-                url: "@Url.Action("Save", "CajaAperturaCierre")",
+                url: "@Url.Action("SaveApertura", "CajaAperturaCierre")",
                 type: "POST",
                 data: { model: ko.toJSON(dataViewModel) },
                 success: function (response) {

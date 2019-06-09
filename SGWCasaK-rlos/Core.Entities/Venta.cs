@@ -16,8 +16,10 @@ namespace Core.Entities
         public decimal IvaDiez { get; set; }
         public decimal Excenta { get; set; }
         public int NroFactura { get; set; }
+		public string NroFacturaString { get; set; }
         public EstadoVenta Estado { get; set; }
 		public string RazonAnulado { get; set; }
+		public bool Impreso { get; set; }
 
 		public int ClienteId { get; set; }
         public Cliente Cliente { get; set; }

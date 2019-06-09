@@ -43,10 +43,10 @@ namespace Core.DAL.Services
 
         public SystemValidationModel Edit(CajasEditViewModel viewModel)
         {
-            var checkCaja= GetByName(viewModel.Nombre);
-            if (checkCaja != null && checkCaja.Id != viewModel.Id && viewModel.SucursalId == checkCaja.SucursalId)
-                return new SystemValidationModel() { Success = false, Message = "Ya existe una caja con el mismo nombre" };
-            var rol = GetById(viewModel.Id);
+			var checkCaja = VerifiyCaja(viewModel.Nombre, viewModel.PuntoExpedicion, viewModel.SucursalId);
+			if (!checkCaja.Success)
+				return checkCaja;
+			var rol = GetById(viewModel.Id);
             rol = Mapper.Map(viewModel, rol);
          
             _context.Entry(rol).State = EntityState.Modified;
@@ -65,10 +65,16 @@ namespace Core.DAL.Services
             return _context.Set<Caja>().Where(x => x.Active);
         }
 
-        public IQueryable<Caja> GetAllBySucusalId(int sucursalId)
+		public IQueryable<Caja> GetAllWithSucursal()
+		{
+			return _context.Set<Caja>().Include(x => x.Sucursal).Where(x => x.Active);
+		}
+
+		public IQueryable<Caja> GetAllBySucusalId(int sucursalId)
         {
             return _context.Set<Caja>().Include(x => x.Sucursal).Where(x => x.Active && x.SucursalId == sucursalId);
         }
+
 
         public Caja GetById(int id)
         {
@@ -77,9 +83,9 @@ namespace Core.DAL.Services
 
         public SystemValidationModel Save(CajasAddViewModel viewModel)
         {
-            var checkCaja = GetByName(viewModel.Nombre);
-            if (checkCaja != null && viewModel.SucursalId == checkCaja.SucursalId) 
-                return new SystemValidationModel() { Success = false, Message = "Ya existe una caja con el mismo nombre" };
+            var checkCaja = VerifiyCaja(viewModel.Nombre, viewModel.PuntoExpedicion, viewModel.SucursalId);
+			if (!checkCaja.Success)
+				return checkCaja;
 
             var caja = Mapper.Map<Caja>(viewModel);
          
@@ -94,9 +100,17 @@ namespace Core.DAL.Services
             return validation;
         }
 
-        private Caja GetByName(string nombre)
+        private SystemValidationModel VerifiyCaja(string nombre, int puntoExpedicion, int sucursalId)
         {
-            return GetAll().FirstOrDefault(x => x.Nombre.ToLower().TryTrim() == nombre.ToLower().TryTrim());
-        }
-    }
+			var caja = GetAll().FirstOrDefault(x => x.PuntoExpedicion == puntoExpedicion && x.SucursalId == sucursalId);
+			if (caja != null)
+				return new SystemValidationModel() { Success = false, Message = "Ya existe una caja con el mismo punto de expedicion" };
+			caja = GetAll().FirstOrDefault(x => x.Nombre.ToLower().TryTrim() == nombre.ToLower().TryTrim() && x.SucursalId == sucursalId);
+			if (caja != null)
+				return new SystemValidationModel() { Success = false, Message = "Ya existe una caja con el mismo nombre" };
+			return new SystemValidationModel() { Success = true };
+		}
+
+		
+	}
 }

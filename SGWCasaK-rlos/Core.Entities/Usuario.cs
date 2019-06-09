@@ -32,8 +32,9 @@ namespace Core.Entities
         public int? SucursalId { get; set; }
         public Sucursal Sucursal { get; set; }
         public ICollection<CajaAperturaCierre> CajaAperturasCierres { get; set; } = new HashSet<CajaAperturaCierre>();
-
-        public void SetPassword(string password)
+		public ICollection<Inventario> InventarioIniciado { get; set; } = new HashSet<Inventario>();
+		public ICollection<Inventario> InventarioTerminado { get; set; } = new HashSet<Inventario>();
+		public void SetPassword(string password)
         {
             var salt = new byte[128 / 8];
             using (var rng = RandomNumberGenerator.Create())

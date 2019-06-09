@@ -1,0 +1,161 @@
+﻿@model Core.DTOs.CajaAperturaCierre.AddCajaCierreViewModel
+@using Core.Helpers
+@using Core
+<div class="m-content" style="width: 100%">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="m-portlet m-portlet--tab">
+				<div class="m-portlet__head">
+					<div class="m-portlet__head-caption">
+						<div class="m-portlet__head-title">
+							<span class="m-portlet__head-icon m--hide">
+								<i class="la la-gear"></i>
+							</span>
+							<h3 class="m-portlet__head-text">
+								Cerrar Caja
+							</h3>
+						</div>
+					</div>
+				</div>
+				<!--begin::Form-->
+				<form class="m-form m-form--fit m-form--label-align-right" id="form" data-bind="submit: postDataToController">
+					<div class="m-portlet__body">
+						<div class="form-group m-form__group">
+							<label for="exampleInputEmail1">
+								Usuario
+							</label>
+							<input type="text" class="form-control m-input" id="nombre" name="fecha" value="@User.Claims.FirstOrDefault(x => x.Type == CustomClaims.UserName).Value" readonly>
+							<span class="alert-danger"></span>
+						</div>
+
+						<div class="form-group m-form__group">
+							<label for="exampleInputEmail1">
+								Fecha Cierre
+							</label>
+							<input type="text" class="form-control m-input" id="nombre" name="fecha" data-bind="value: moment(fechaCierre()).format('DD/MM/YYYY')" readonly>
+							<span class="alert-danger"></span>
+						</div>
+						<div class="form-group m-form__group">
+							<label for="exampleInputEmail1">
+								Monto
+							</label>
+							<input type="text" class="form-control m-input" id="codigoEstablecimiento" name="monto" data-bind="value: monto" readonly>
+							<span class="alert-danger"></span>
+						</div>
+						<div class="form-group m-form__group">
+							<label for="exampleInputEmail1">
+								Cajas
+							</label>
+							<select class="form-control m-input m-input--square" id="roles" name="caja" data-bind="options: cajas,
+                                               optionsValue: 'value',
+                                               optionsText: 'text',
+                                               value: cajaId,
+                                               optionsCaption: 'Seleccione una opcion'" disabled></select>
+						</div>
+					</div>
+					<div class="m-portlet__foot m-portlet__foot--fit">
+						<div class="m-form__actions">
+							<button type="submit" class="btn btn-primary">
+								Guardar
+							</button>
+
+						</div>
+					</div>
+				</form>
+				<!--end::Form-->
+			</div>
+			<div class="m-portlet m-portlet--tab">
+				<div class="m-portlet__head">
+					<div class="m-portlet__head-caption">
+						<div class="m-portlet__head-title">
+							<h3 class="m-portlet__head-text">
+								Detalle
+							</h3>
+						</div>
+					</div>
+				</div>
+
+				<div class="m-portlet__body">
+					<!--begin: Datatable -->
+					<table id="detalleAddCompraTable" class="table m-table m-table--head-bg-success">
+						<thead>
+							<tr>
+								<th>
+									Operacion
+								</th>
+								<th>
+									Fecha
+								</th>
+								<th>
+									Monto
+								</th>
+								<th>
+									Vuelto
+								</th>
+
+							</tr>
+						</thead>
+						<tbody data-bind="foreach: detalle">
+							<tr>
+								<td data-bind="text: tipoOperacionDescripcion"></td>
+								<td data-bind="text: moment(fechaCreacion()).format('DD/MM/YYYY HH:mm')"></td>
+								<td data-bind="text: monto"></td>
+								<td><span data-bind="text: cambio"></span></td>
+							</tr>
+						</tbody>
+					</table>
+					<!--end: Datatable -->
+				</div>
+			</div>
+		</div>
+
+	</div>
+</div>
+@section scripts{
+	<script>
+        var model = @Html.Raw(Json.Serialize(Model));
+        var dataViewModel = ko.mapping.fromJS(model);
+         dataViewModel.postDataToController = function () {
+
+
+            if (!$("#form").valid()) return;
+
+            $.ajax({
+                url: "@Url.Action("SaveCierre", "CajaAperturaCierre")",
+                type: "POST",
+                data: { model: ko.toJSON(dataViewModel) },
+                success: function (response) {
+
+                    parent.aperturaCierreCajaResult(response)
+                },
+                error: function () {
+                    showError();
+                }
+            });
+            return false;
+        }
+        ko.applyBindings(dataViewModel);
+
+
+        $('#form').validate({
+            rules: {
+                fecha: {
+                    required: true
+                },
+                monto:
+                {
+                    required: true,
+                    number: true,
+                    min: 0
+                },
+                caja: {required : true}
+            },
+            errorPlacement: function (error, element) {
+                var span = element.siblings('span');
+                error.appendTo(span);
+            }
+        });
+
+
+	</script>
+}

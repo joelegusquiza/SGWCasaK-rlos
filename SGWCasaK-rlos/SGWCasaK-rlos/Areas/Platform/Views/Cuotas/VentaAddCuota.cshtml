@@ -98,10 +98,9 @@
         var dataViewModel = ko.mapping.fromJS(model);
 
 		dataViewModel.saveCuotas = function () {
-			if (dataViewModel.cuotas().length > 0)
-			{
+			
 				parent.saveCuotas(ko.mapping.toJS(dataViewModel.cuotas()));
-			}
+			
 			
         }
 		dataViewModel.generarCuotas = function () {

@@ -17,25 +17,32 @@
                 </div>
                 <!--begin::Form-->
                 <form class="m-form m-form--fit m-form--label-align-right" id="form" data-bind="submit: postDataToController">
-                    <div class="m-portlet__body">
-                        <div class="form-group m-form__group">
-                            <label for="exampleInputEmail1">
-                                Nombre
-                            </label>
-                            <input type="text" class="form-control m-input" id="nombre" name="nombre" data-bind="value: nombre">
-                            <span class="alert-danger"></span>
-                        </div>
-                        <div class="form-group m-form__group">
-                            <label for="exampleInputEmail1">
-                                Sucursal
-                            </label>
-                            <select class="form-control m-input m-input--square" id="sucursal" name="sucursal" data-bind="options: sucursales,
+					<div class="m-portlet__body">
+						<div class="form-group m-form__group">
+							<label for="exampleInputEmail1">
+								Nombre
+							</label>
+							<input type="text" class="form-control m-input" id="nombre" name="nombre" data-bind="value: nombre">
+							<span class="alert-danger"></span>
+						</div>
+						<div class="form-group m-form__group">
+							<label for="exampleInputEmail1">
+								Punto Expedicion
+							</label>
+							<input type="text" class="form-control m-input" id="puntoExpedicion" name="puntoExpedicion" data-bind="value: puntoExpedicion">
+							<span class="alert-danger"></span>
+						</div>
+						<div class="form-group m-form__group">
+							<label for="exampleInputEmail1">
+								Sucursal
+							</label>
+							<select class="form-control m-input m-input--square" id="sucursal" name="sucursal" data-bind="options: sucursales,
                                            optionsValue: 'value',
                                            optionsText: 'text',
                                            value: sucursalId,
                                            optionsCaption: 'Seleccione una opcion'"></select>
-                        </div>
-                    </div>
+						</div>
+					</div>
                     <div class="m-portlet__foot m-portlet__foot--fit">
                         <div class="m-form__actions">
                             <button type="submit" class="btn btn-primary">

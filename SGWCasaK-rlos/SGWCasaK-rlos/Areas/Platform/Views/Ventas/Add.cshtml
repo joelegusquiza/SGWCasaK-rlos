@@ -1,7 +1,8 @@
 ﻿@model Core.DTOs.Ventas.VentasAddViewModel
+
 <div class="m-content" style="width: 100%">
 	<div class="row">
-		
+
 		<div class="col-md-12">
 			<div class="m-portlet m-portlet--tab">
 				<div class="m-portlet__head">
@@ -24,13 +25,13 @@
 						</div>
 					</div>
 					@*<div >
-					<div class="m-portlet__head-title">
+							<div class="m-portlet__head-title">
 
-						<h3 class="m-portlet__head-text">
-							Agregar Venta
-						</h3>
-					</div>
-				</div>*@
+								<h3 class="m-portlet__head-text">
+									Agregar Venta
+								</h3>
+							</div>
+						</div>*@
 				</div>
 				<!--begin::Form-->
 				<form class="m-form m-form--fit m-form--label-align-right">
@@ -55,11 +56,11 @@
 									001-001-0000001
 								</div>
 							</div>
-						</div>						
+						</div>
 					</div>
 				</form>
 			</div>
-			<div class="m-portlet m-portlet--tab">				
+			<div class="m-portlet m-portlet--tab">
 				<!--begin::Form-->
 				<form class="m-form m-form--fit m-form--label-align-right">
 					<div class="m-portlet__body">
@@ -80,7 +81,7 @@
 										Condicion de Venta
 									</label>
 									<div class="col-8">
-										<select class="form-control m-input m-input--square" id="condicionVentaSelect" data-bind="options: condicionesVenta,
+										<select onchange="clearOptionByCondicionVenta()" class="form-control m-input m-input--square" id="condicionVentaSelect" data-bind="options: condicionesVenta,
                                            optionsValue: 'value',
                                            optionsText: 'text',
                                            value: condicionVenta,
@@ -96,12 +97,12 @@
 										Ruc
 									</label>
 									<div class="col-6">
-										<input class="form-control m-input" type="text" id="example-text-input" data-bind="value: dataViewModel.cliente.ruc">
+										<input class="form-control m-input" type="text" id="example-text-input" data-bind="value: dataViewModel.cliente.ruc" readonly>
 									</div>
 									<div class="col-4" align="right">
 										@*<button  class="btn btn-success">
-										Agregar
-									</button>*@
+												Agregar
+											</button>*@
 										<button type="button" class="btn btn-success" onclick="showListaClientesModal()">
 											Buscar
 										</button>
@@ -115,7 +116,7 @@
 										Nombre o Razon Social
 									</label>
 									<div class="col-8">
-										<input class="form-control m-input" type="text" id="example-text-input" data-bind="value: dataViewModel.cliente.displayName">
+										<input class="form-control m-input" type="text" id="example-text-input" data-bind="value: dataViewModel.cliente.displayName" readonly>
 									</div>
 								</div>
 							</div>
@@ -144,7 +145,7 @@
 										Nombre
 									</label>
 									<div class="col-10">
-										<input class="form-control m-input" type="text" id="productoNombre" data-bind="value: dataViewModel.producto.nombre">
+										<input class="form-control m-input" type="text" id="productoNombre" data-bind="value: dataViewModel.producto.nombre" readonly>
 									</div>
 								</div>
 							</div>
@@ -249,7 +250,7 @@
 						</tbody>
 						<tfoot>
 							<tr>
-								<td colspan="3" style="text-align : center"> Totales </td>
+								<td colspan="3" style="text-align : center"> Subtotal </td>
 								<td data-bind="text: totalExcenta"></td>
 								<td data-bind="text: totalCinco"></td>
 								<td data-bind="text: totalDiez"></td>
@@ -326,7 +327,7 @@
 }
 <!-- /content -->
 @section scripts{
-    <script>
+	<script>
         var model = @Html.Raw(Json.Serialize(Model));
         var dataViewModel = ko.mapping.fromJS(model);
 
@@ -361,7 +362,7 @@
             dataViewModel.producto.montoTotal(dataViewModel.producto.precioVenta() *  dataViewModel.producto.cantidad());
             dataViewModel.detalleVenta.push(ko.mapping.fromJS(ko.mapping.toJS(dataViewModel.producto)))
             resetProductoForm();
-           
+
         }
 
         dataViewModel.eliminarDetalle = function ()
@@ -372,9 +373,9 @@
 
         dataViewModel.totalExcenta = ko.pureComputed(function () {
             var total = $.grep(dataViewModel.detalleVenta(), function (item) { return item.porcentajeIva() === 1; }).reduce(function (a, b) {
-               
+
                     return a + b.montoTotal();
-                
+
             }, 0)
             return total;
         })
@@ -382,21 +383,21 @@
         dataViewModel.totalCinco = ko.pureComputed(function ()
         {
             var total = $.grep(dataViewModel.detalleVenta(), function (item) { return item.porcentajeIva() === 2; }).reduce(function (a, b) {
-               
+
                     return a + b.montoTotal();
-                
+
             }, 0)
             return total;
         })
 
         dataViewModel.totalDiez = ko.pureComputed(function () {
             var total = $.grep(dataViewModel.detalleVenta(), function (item) { return item.porcentajeIva() === 3; }).reduce(function (a, b)
-            {               
+            {
                 ////if (a == 0) {
                 ////    return b.montoTotal();
                 ////} else {
                     return a + b.montoTotal();
-                //}                
+                //}
             }, 0)
             return total;
         })
@@ -451,7 +452,8 @@
                 return;
 			}
 
-			if (!$("#pagoVentaForm").valid()) return;
+
+			if (dataViewModel.condicionVenta() == 0 && !$("#pagoVentaForm").valid()) return;
             dataViewModel.producto.cantidad(0);
             $.ajax({
                 url: "@Url.Action("Save", "Ventas")",
@@ -459,7 +461,7 @@
                 data: { model: ko.toJSON(dataViewModel) },
                 success: function (response) {
                     if (response.success) {
-                        showSuccessAndGoToUrl(response.message, '@Url.Action("Index", "Ventas", new { area = "Platform"})');                          
+                        showSuccessAndGoToUrl(response.message, '@Url.Action("Index", "Ventas", new { area = "Platform"})');
                     } else {
                         showError(response.message);
                     }
@@ -471,9 +473,11 @@
 
 
             return false;
-        }
+		}
 
-        $(document).ready(function () {
+		ko.applyBindings(dataViewModel);
+
+		$(document).ready(function () {
             dataViewModel.producto.cantidad("");
         })
 
@@ -482,10 +486,10 @@
             $("#listaProductosModal").modal("show");
         }
 
-        function seleccionarProducto(producto) {            
+        function seleccionarProducto(producto) {
 			ko.mapping.fromJS(producto, {}, dataViewModel.producto);
 			dataViewModel.producto.precioVentaToAdd(dataViewModel.producto.precioVenta());
-			$("#listaProductosModal").modal("hide");                                                     
+			$("#listaProductosModal").modal("hide");
         }
 
        function showListaClientesModal() {
@@ -494,7 +498,7 @@
         }
 
         function seleccionarCliente(cliente) {
-            ko.mapping.fromJS(cliente, {}, dataViewModel.cliente);        
+            ko.mapping.fromJS(cliente, {}, dataViewModel.cliente);
             $("#listaClientesModal").modal("hide");
 		}
 
@@ -510,8 +514,62 @@
             dataViewModel.producto.cantidad(0);
             dataViewModel.producto.productoId(0);
 		}
+
+		function saveCuotas(data) {
+			$("#addVentaCuotasModal").modal("hide");
+			if (data.length > 0) {
+				ko.mapping.fromJS(data, {}, dataViewModel.cuotas);
+				for (var i = 0; i < data.length; i++) {
+					var itemObject = $.grep(dataViewModel.cuotas(), function (item) { return item.numeroCuota() == data[i].numeroCuota; })[0];
+					itemObject.fechaVencimiento = ko.observable(now(data[i].fechaVencimiento))
+				}
+				dataViewModel.postDataToController();
+			}
+			else {
+				showError("Debe generar cuotas si la venta es a credito");
+			}
+		}
+		function clearOptionByCondicionVenta() {
+			if (dataViewModel.condicionVenta() == 1) {
+				dataViewModel.cuotas([]);
+			}
+
+		}
+
+		function now(date) {
+
+			var date = new Date();
+			var aaaa = date.getFullYear();
+			var gg = date.getDate();
+			var mm = (date.getMonth() + 1);
+
+			if (gg < 10)
+				gg = "0" + gg;
+
+			if (mm < 10)
+				mm = "0" + mm;
+
+			var cur_day = aaaa + "-" + mm + "-" + gg;
+
+			var hours = date.getHours()
+			var minutes = date.getMinutes()
+			var seconds = date.getSeconds();
+
+			if (hours < 10)
+				hours = "0" + hours;
+
+			if (minutes < 10)
+				minutes = "0" + minutes;
+
+			if (seconds < 10)
+				seconds = "0" + seconds;
+
+			return cur_day + " " + hours + ":" + minutes + ":" + seconds;
+
+		}
+
 		jQuery.validator.addMethod("pagoVentaMontoValid", function (value, element) {
-			return parseInt(value) >= parseInt($("#pagoVentaMontoTotal").val()) 
+			return parseInt(value) >= parseInt($("#pagoVentaMontoTotal").val())
 		}, "El monto a pagar debe ser mayor o igual al total");
 
 		$('#pagoVentaForm').validate({
@@ -525,6 +583,6 @@
 				error.appendTo(span);
 			}
 		});
-        ko.applyBindings(dataViewModel);
-    </script>
+
+	</script>
 }

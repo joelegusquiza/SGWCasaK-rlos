@@ -168,17 +168,30 @@ License: You must have a valid license purchased only from themeforest(the above
                 async: false,
                 success: function (response) {
 
-						for (var i = 0; i < response.length; i++) {
-                        $("#listAperturaCierre").append(
-                            `<li id="` + response[i].value + `"class="m-menu__item " aria-haspopup="true">
-                                            <a onclick = "javascript: registerAperturaCierre(`+ response[i].value + `)" href="#" class="m-menu__link ">
-
-                                                <span class="m-menu__link-text">
-                                                    `+ response[i].text + `
-                                                </span>
-                                            </a>
-                                        </li>`
-                        );
+					for (var i = 0; i < response.length; i++) {
+						if (response[i].additionalString == '@Constants.CajaTipoOperacion.Apertura.ToString()') {
+							$("#listAperturaCierre").append(
+								`<li id="` + response[i].value + `"class="m-menu__item " aria-haspopup="true">
+                                <a onclick = "javascript: registerApertura(`+ response[i].value + `)" href="#" class="m-menu__link ">
+                                    <span class="m-menu__link-text">
+                                        `+ response[i].text + `
+                                    </span>
+                                </a>
+                            </li>`
+							);
+						} else
+						{
+							$("#listAperturaCierre").append(
+								`<li id="` + response[i].value + `"class="m-menu__item " aria-haspopup="true">
+                                <a onclick = "javascript: registerCierre(`+ response[i].value + `)" href="#" class="m-menu__link ">
+                                    <span class="m-menu__link-text">
+                                        `+ response[i].text + `
+                                    </span>
+                                </a>
+                            </li>`
+							);
+						}
+                        
                     }
                 },
                 error: function () {
@@ -201,20 +214,25 @@ License: You must have a valid license purchased only from themeforest(the above
 				});
 			}
 
-			function registerAperturaCierre(id) {
-            $("#aperturaCierreCajaIFrame").attr('src', '@Url.Action("CajaAperturaCierre", "CajaAperturaCierre", new { area = "Platform"})'+"?id="+id);
-            $("#aperturaCierreCajaModal").modal("show");
-			}
+		function registerApertura(id) {
+			$("#aperturaCierreCajaIFrame").attr('src', '@Url.Action("CajaApertura", "CajaAperturaCierre", new { area = "Platform"})'+"?id="+id);
+			$("#aperturaCierreCajaModal").modal("show");
+		}
 
-			function aperturaCierreCajaResult(response)
-			{
-				if (response.success) {
-					showSuccess(response.message);
-					window.location.reload();
-				} else {
-					showError(response.message);
-				}
+		function registerCierre(id)
+		{
+			window.location.replace('@Url.Action("CajaCierre", "CajaAperturaCierre", new { area = "Platform"})?id=' + id);
+		}
+
+		function aperturaCierreCajaResult(response)
+		{
+			if (response.success) {
+				showSuccess(response.message);
+				window.location.reload();
+			} else {
+				showError(response.message);
 			}
+		}
 
 	</script>
 	@RenderSection("scripts", required: false)

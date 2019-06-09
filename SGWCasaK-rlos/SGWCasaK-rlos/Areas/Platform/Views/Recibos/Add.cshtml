@@ -37,12 +37,10 @@
 										Ruc
 									</label>
 									<div class="col-6">
-										<input class="form-control m-input" type="text" id="example-text-input" data-bind="value: dataViewModel.cliente.ruc">
+										<input class="form-control m-input" type="text" id="example-text-input" data-bind="value: dataViewModel.cliente.ruc" readonly>
 									</div>
 									<div class="col-4" align="right">
-										@*<button  class="btn btn-success">
-												Agregar
-											</button>*@
+
 										<button type="button" class="btn btn-success" onclick="showListaClientesModal()">
 											Buscar
 										</button>
@@ -56,36 +54,95 @@
 										Nombre o Razon Social
 									</label>
 									<div class="col-8">
-										<input class="form-control m-input" type="text" id="example-text-input" data-bind="value: dataViewModel.cliente.displayName">
+										<input class="form-control m-input" type="text" id="example-text-input" data-bind="value: dataViewModel.cliente.displayName" readonly>
 									</div>
 								</div>
 							</div>
-							<div class="row" style="margin-bottom: 20px;">
-								<div class="col-md-12">
-									<div class="form-group m-form__group row">
-										<label for="example-text-input" class="col-2 col-form-label" style="text-align: left">
-											Monto Venta
-										</label>
-										<div class="col-6">
-											<input class="form-control m-input" type="text" id="example-text-input" data-bind="value: dataViewModel.venta.monto" readonly>
-										</div>
-										<div class="col-4" align="right">
-											@*<button  class="btn btn-success">
-												Agregar
-											</button>*@
-											<button type="button" class="btn btn-success" onclick="showListaVentaModal()" data-bind="enable: dataViewModel.cliente.clienteId() != 0">
-												Buscar
-											</button>
+						</div>
+						<div class="row" style="margin-bottom: 20px;">
+							<div class="col-md-6">
+								<div class="form-group m-form__group row">
+									<label for="example-text-input" class="col-2 col-form-label" style="text-align: left">
+										Nro Factura
+									</label>
+									<div class="col-6">
+										<input class="form-control m-input" type="text" id="example-text-input" data-bind="value: dataViewModel.venta.nroFacturaString" readonly>
+									</div>
+									<div class="col-4" align="right">
 
-										</div>
+										<button type="button" class="btn btn-success" onclick="showListaVentaModal()" data-bind="enable: dataViewModel.cliente.clienteId() != 0">
+											Buscar
+										</button>
+
 									</div>
 								</div>
 							</div>
-							
+							<div class="col-md-6">
+								<div class="form-group m-form__group row">
+									<label for="example-text-input" class="col-4 col-form-label" style="text-align: left">
+										Monto Total
+									</label>
+									<div class="col-8">
+										<input class="form-control m-input" type="text" id="example-text-input" data-bind="value: dataViewModel.venta.monto" readonly>
+									</div>
+								</div>
+							</div>
 						</div>
 
 					</div>
-					
+					@*<div class="m-portlet__body">
+			<div class="row" style="margin-bottom: 20px;">
+				<div class="col-md-6">
+					<div class="form-group m-form__group row">
+						<label for="example-text-input" class="col-2 col-form-label" style="text-align: left">
+							Ruc
+						</label>
+						<div class="col-6">
+							<input class="form-control m-input" type="text" id="example-text-input" data-bind="value: dataViewModel.cliente.ruc">
+						</div>
+						<div class="col-4" align="right">
+
+							<button type="button" class="btn btn-success" onclick="showListaClientesModal()">
+								Buscar
+							</button>
+
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="form-group m-form__group row">
+						<label for="example-text-input" class="col-4 col-form-label" style="text-align: left">
+							Nombre o Razon Social
+						</label>
+						<div class="col-8">
+							<input class="form-control m-input" type="text" id="example-text-input" data-bind="value: dataViewModel.cliente.displayName">
+						</div>
+					</div>
+				</div>
+
+					<div class="col-md-12">
+						<div class="form-group m-form__group row">
+							<label for="example-text-input" class="col-2 col-form-label" style="text-align: left">
+								Monto Venta
+							</label>
+							<div class="col-6">
+								<input class="form-control m-input" type="text" id="example-text-input" data-bind="value: dataViewModel.venta.monto" readonly>
+							</div>
+							<div class="col-4" align="right">
+
+								<button type="button" class="btn btn-success" onclick="showListaVentaModal()" data-bind="enable: dataViewModel.cliente.clienteId() != 0">
+									Buscar
+								</button>
+
+							</div>
+						</div>
+					</div>
+
+
+			</div>
+
+		</div>*@
+
 				</form>
 			</div>
 			<div class="m-portlet m-portlet--tab">
@@ -201,6 +258,9 @@
 			return total;
 		})
 
+		
+
+		ko.applyBindings(dataViewModel);
 
         $(document).ready(function () {
             $('#form').validate({
@@ -253,6 +313,8 @@
 			//dataViewModel.cuotas([])
 			$("#listaCuotasModal").modal("hide");
 		}
-        ko.applyBindings(dataViewModel);
+
+		
+       
 	</script>
 }

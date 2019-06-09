@@ -35,7 +35,7 @@ namespace Core.DAL.Services
             return timbrados.FirstOrDefault();
         }
 
-        public SystemValidationModel VerifyTimbrado(DateTimeOffset inicio, DateTimeOffset fin, int puntoExpedicion, int nroInicio, int nroFin, int nroTimbrado)
+        public SystemValidationModel VerifyTimbrado(DateTimeOffset inicio, DateTimeOffset fin, int nroInicio, int nroFin, int nroTimbrado)
         {
             var timbrado = _context.Set<Timbrado>().FirstOrDefault(x => x.Active &&(inicio >= x.FechaInicio && fin <= x.FechaFin) 
                                                                                 || (inicio >= x.FechaInicio && inicio <= x.FechaFin) 
@@ -44,8 +44,7 @@ namespace Core.DAL.Services
             
             if (timbrado != null)
                 return new SystemValidationModel() { Id = timbrado.Id, Message = "Ya existe un timbrado en el rango" };
-            timbrado = _context.Set<Timbrado>().FirstOrDefault(x => x.Active && x.PuntoExpedicion == puntoExpedicion && 
-                                                                                   (nroInicio >= x.NroInicio && nroFin <= x.NroFin)
+            timbrado = _context.Set<Timbrado>().FirstOrDefault(x => x.Active &&  (nroInicio >= x.NroInicio && nroFin <= x.NroFin)
                                                                                 || (nroInicio >= x.NroInicio && nroInicio <= x.NroFin)
                                                                                 || (nroFin >= x.NroInicio && nroFin <= x.NroFin)
                                                                                 || (x.NroInicio >= nroInicio && x.NroFin <= nroFin));
@@ -57,7 +56,7 @@ namespace Core.DAL.Services
         public SystemValidationModel Save(TimbradosAddViewModel viewModel)
         {
 
-            var validation = VerifyTimbrado(viewModel.FechaInicio, viewModel.FechaFin, viewModel.PuntoExpedicion, viewModel.NroInicio, viewModel.NroFin, viewModel.NroTimbrado);
+            var validation = VerifyTimbrado(viewModel.FechaInicio, viewModel.FechaFin, viewModel.NroInicio, viewModel.NroFin, viewModel.NroTimbrado);
             if (validation != null)
                 return validation;
 
@@ -76,7 +75,7 @@ namespace Core.DAL.Services
         public SystemValidationModel Edit(TimbradosEditViewModel viewModel)
         {
             var timbrado = GetById(viewModel.Id);
-            var validation = VerifyTimbrado(viewModel.FechaInicio, viewModel.FechaFin, viewModel.PuntoExpedicion, viewModel.NroInicio, viewModel.NroFin, viewModel.NroTimbrado);
+            var validation = VerifyTimbrado(viewModel.FechaInicio, viewModel.FechaFin, viewModel.NroInicio, viewModel.NroFin, viewModel.NroTimbrado);
             if (validation != null && validation.Id != viewModel.Id)
                 return validation;
             timbrado = Mapper.Map(viewModel, timbrado);

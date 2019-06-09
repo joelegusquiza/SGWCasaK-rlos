@@ -19,7 +19,7 @@
 						<div class="col-md-6 col-sm-4" align="right">
 							<div class="m-portlet__head-title" style="margin-top: 20px;">
 
-								<button type="button" class="btn btn-success" data-bind="click: postDataToController, enable: dataViewModel.cuotas().length > 0">
+								<button type="button" class="btn btn-success" data-bind="click: showPagoReciboModal, enable: dataViewModel.cuotas().length > 0">
 									Confirmar
 								</button>
 
@@ -38,9 +38,9 @@
 										Ruc
 									</label>
 									<div class="col-6">
-										<input class="form-control m-input" type="text" id="example-text-input" data-bind="value: dataViewModel.cliente.ruc">
+										<input class="form-control m-input" type="text" id="example-text-input" data-bind="value: dataViewModel.cliente.ruc" readonly>
 									</div>
-									
+
 								</div>
 							</div>
 							<div class="col-md-6">
@@ -49,12 +49,42 @@
 										Nombre o Razon Social
 									</label>
 									<div class="col-8">
-										<input class="form-control m-input" type="text" id="example-text-input" data-bind="value: dataViewModel.cliente.displayName">
+										<input class="form-control m-input" type="text" id="example-text-input" data-bind="value: dataViewModel.cliente.displayName" readonly>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row" style="margin-bottom: 20px;">
+							<div class="col-md-6">
+								<div class="form-group m-form__group row">
+									<label for="example-text-input" class="col-2 col-form-label" style="text-align: left">
+										Nro Factura
+									</label>
+									<div class="col-6">
+										<input class="form-control m-input" type="text" id="example-text-input" data-bind="value: dataViewModel.venta.nroFacturaString" readonly>
+									</div>
+									@*<div class="col-4" align="right">
+
+										<button type="button" class="btn btn-success" onclick="showListaVentaModal()" data-bind="enable: dataViewModel.cliente.clienteId() != 0">
+											Buscar
+										</button>
+
+									</div>*@
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group m-form__group row">
+									<label for="example-text-input" class="col-4 col-form-label" style="text-align: left">
+										Monto Total
+									</label>
+									<div class="col-8">
+										<input class="form-control m-input" type="text" id="example-text-input" data-bind="value: dataViewModel.venta.monto" readonly>
 									</div>
 								</div>
 							</div>
 						</div>
 
+				
 					</div>
 				</form>
 			</div>
@@ -131,6 +161,7 @@
 @{
 	Html.RenderPartial("~/Areas/Platform/Views/Shared/_ListaClientesModal.cshtml");
 	Html.RenderPartial("~/Areas/Platform/Views/Shared/_ListaCuotasModal.cshtml");
+	Html.RenderPartial("~/Areas/Platform/Views/Shared/_AddPagoReciboModal.cshtml");
 }
 <!-- /content -->
 @section scripts{
@@ -139,7 +170,8 @@
         var dataViewModel = ko.mapping.fromJS(model);
 
 
-        dataViewModel.postDataToController = function () {
+		dataViewModel.postDataToController = function () {
+			if (!$("#pagoReciboForm").valid()) return;
             $.ajax({
                 url: "@Url.Action("Edit", "Recibos")",
                 type: "POST",
@@ -172,6 +204,26 @@
 			return total;
 		})
 
+		dataViewModel.showPagoReciboModal = function () {
+			if (dataViewModel.cuotas().length == 0) {
+				showError("Debe ingresar al menos una cuota");
+				return;
+			}
+			$("#addPagoReciboModal").modal("show");
+		}
+
+		dataViewModel.pagoRecibo.cambio = ko.pureComputed(function () {
+			if (dataViewModel.pagoRecibo.monto() > dataViewModel.montoTotal()) {
+				return dataViewModel.pagoRecibo.monto() - dataViewModel.montoTotal();
+			} else {
+				return 0;
+			}
+
+		});
+
+
+		ko.applyBindings(dataViewModel);
+
         $(document).ready(function () {
             $('#form').validate({
                 rules: {
@@ -202,6 +254,22 @@
 			
 			$("#listaCuotasModal").modal("hide");
 		}
-        ko.applyBindings(dataViewModel);
+
+		jQuery.validator.addMethod("pagoReciboMontoValid", function (value, element) {
+			return parseInt(value) >= parseInt($("#pagoReciboMontoTotal").val())
+		}, "El monto a pagar debe ser mayor o igual al total");
+
+		$('#pagoReciboForm').validate({
+			rules: {
+				pagoReciboMonto: {
+					pagoReciboMontoValid: true
+				}
+			},
+			errorPlacement: function (error, element) {
+				var span = element.siblings('span');
+				error.appendTo(span);
+			}
+		});
+
 	</script>
 }

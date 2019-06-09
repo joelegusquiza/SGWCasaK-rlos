@@ -52,6 +52,7 @@ namespace ApplicationContext
         public DbSet<Sucursal> Sucursales { get; set; }
 		public DbSet<Cuota> Cuotas { get; set; }
 		public DbSet<Recibo> Recibos { get; set; }
+		public DbSet<DetalleCajaAperturaCierre> DetalleCajaAperturaCierre { get; set; }
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -276,6 +277,29 @@ namespace ApplicationContext
 				.WithOne(x => x.Venta)
 				.HasForeignKey(x => x.VentaId)
 				.OnDelete(DeleteBehavior.Restrict);
+			modelBuilder.Entity<Caja>()
+				.HasMany(x => x.Recibos)
+				.WithOne(x => x.Caja)
+				.HasForeignKey(x => x.CajaId)
+				.OnDelete(DeleteBehavior.Restrict);
+			modelBuilder.Entity<CajaAperturaCierre>()
+			.HasMany(x => x.Detalle)
+			.WithOne(x => x.CajaAperturaCierre)
+			.HasForeignKey(x => x.CajaAperturaCierreId)
+			.OnDelete(DeleteBehavior.Restrict);
+
+			modelBuilder.Entity<Usuario>()
+						.HasMany(x => x.InventarioIniciado)
+						.WithOne(x => x.UsuarioInicio)
+						.HasForeignKey(x => x.UsuarioInicioId)
+						.OnDelete(DeleteBehavior.Restrict);
+
+			modelBuilder.Entity<Usuario>()
+					.HasMany(x => x.InventarioTerminado)
+					.WithOne(x => x.UsuarioFin)
+					.HasForeignKey(x => x.UsuarioFinId)
+					.OnDelete(DeleteBehavior.Restrict);
+
 		}
 
         public override int SaveChanges()

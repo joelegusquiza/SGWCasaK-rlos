@@ -9,6 +9,7 @@ namespace Core.DTOs.Recibos
 	public class RecibosAddViewModel
 	{
 		public decimal MontoTotal { get; set; }
+		
 		public ListaClienteViewModel Cliente { get; set; } = new ListaClienteViewModel();
 		public ListaVentasViewModel Venta { get; set; } = new ListaVentasViewModel();
 		public List<RecibosItemViewModel> Cuotas { get; set; } = new List<RecibosItemViewModel>();
@@ -21,5 +22,7 @@ namespace Core.DTOs.Recibos
 		public decimal Monto { get; set; }
 		public DateTime FechaVencimiento { get; set; }
 	}
+
+	
 }
 

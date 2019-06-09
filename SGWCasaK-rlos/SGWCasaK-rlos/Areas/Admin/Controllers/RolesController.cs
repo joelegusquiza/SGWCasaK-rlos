@@ -63,7 +63,8 @@ namespace SGWCasaK_rlos.Areas.Admin.Controllers
             foreach (var p in viewModel.Permisos.Split(",").Select(x =>  ((AccessFunctions)Convert.ToInt32(x))))
             {
                 var permiso = viewModel.PermisosList.FirstOrDefault(x => x.Permiso == p);
-                permiso.Selected = true;
+				if (permiso != null)
+					permiso.Selected = true;
             }
             return View(viewModel);
         }

@@ -30,15 +30,18 @@ namespace Core.DAL.Services
 		{
 			return _context.Set<Recibo>().Include(x => x.Cliente).Where(x => x.Active).ToList();
 		}
+
 		public Recibo GetById(int id)
 		{
 			return _context.Set<Recibo>().Include(x => x.Cuotas).FirstOrDefault(x => x.Id == id);
 		}
+
 		public Recibo GetByIdWithCliente(int id)
 		{
 			var recibo = _context.Set<Recibo>().Include(x => x.Cliente).Include(x => x.Cuotas).FirstOrDefault(x => x.Id == id);
 			return recibo;
 		}
+
 		public SystemValidationModel Save(RecibosAddViewModel viewModel)
 		{
 			var recibo = Mapper.Map<Recibo>(viewModel);
@@ -66,14 +69,18 @@ namespace Core.DAL.Services
 		{
 			var recibo = GetById(viewModel.Id);
 			recibo.Estado = Constants.EstadoRecibo.Pagado;
+			if (viewModel.PagoRecibo.Cambio != 0)
+				recibo.Cambio = viewModel.PagoRecibo.Cambio;
 			_context.Entry(recibo).State = EntityState.Modified;
 			var reciboCuotaIds = recibo.Cuotas.Select(x => x.Id);
 			var cuotasIds = viewModel.Cuotas.Select(x => x.CuotaId).ToList();
 			var cuotasToDeleteIds = reciboCuotaIds.Except(cuotasIds).ToList();
 			var cuotasToAdd = cuotasIds.Except(reciboCuotaIds).ToList();
-			var cuotas = _context.Set<Cuota>().Where(x => x.Active && (cuotasToAdd.Contains(x.Id) || (x.ReciboId == viewModel.Id && !cuotasToDeleteIds.Contains(x.Id)))).ToList();
+			var cuotas = _context.Set<Cuota>().Where(x => x.Active && x.VentaId == viewModel.Venta.VentaId).ToList();
+			var cuotasToConfirm = cuotas.Where(x => x.Active && (cuotasToAdd.Contains(x.Id) || (x.ReciboId == viewModel.Id && !cuotasToDeleteIds.Contains(x.Id)))).ToList();
+			
 			var cuotasToDelete = _context.Set<Cuota>().Where(x => x.Active && cuotasToDeleteIds.Contains(x.Id)).ToList();
-			foreach (var cuota in cuotas)
+			foreach (var cuota in cuotasToConfirm)
 			{
 				cuota.Estado = Constants.EstadoCuota.Pagado;
 				if (cuota.ReciboId == null)
@@ -86,9 +93,9 @@ namespace Core.DAL.Services
 				cuota.Recibo = null;
 				_context.Entry(cuota).State = EntityState.Modified;
 			}
-			var ventaId = cuotasToDelete.FirstOrDefault().VentaId;
-			var venta = _context.Set<Venta>().FirstOrDefault(x => x.Id == ventaId);
-			var totalCuotas = recibo.Cuotas.Sum(x => x.Monto);
+
+			var venta = _context.Set<Venta>().FirstOrDefault(x => x.Id == viewModel.Venta.VentaId);
+			var totalCuotas = cuotas.Where(x => x.Estado == Constants.EstadoCuota.Pagado).Sum(x => x.Monto);
 			if (venta.MontoTotal == totalCuotas)
 			{
 				venta.Estado = Constants.EstadoVenta.Pagado;
@@ -106,6 +113,7 @@ namespace Core.DAL.Services
 			return validation;
 
 		}
+
 		public SystemValidationModel Desactivate(int id)
 		{
 			var recibo = GetById(id);

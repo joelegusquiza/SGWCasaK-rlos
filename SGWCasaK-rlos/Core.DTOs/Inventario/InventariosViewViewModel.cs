@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Core.DTOs.Inventario
 {
-    public class InventariosViewViewModel : InventariosUpsertViewModel
+    public class InventariosViewViewModel : InventariosEditViewModel
     {
         public string UserName{ get; set; }
     }

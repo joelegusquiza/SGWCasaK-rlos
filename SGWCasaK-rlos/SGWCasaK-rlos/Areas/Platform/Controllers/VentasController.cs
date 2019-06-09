@@ -51,9 +51,9 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
             return View(viewModel);
         }
 
-		public IActionResult Edit(int id)
+		public IActionResult View(int id)
 		{	
-			return View( _ventas.GetForEdit(id));
+			return View( _ventas.GetForView(id));
 		}
 
 		public IActionResult GenerateVentaFromPedido(int pedidoId)
@@ -97,6 +97,7 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
             return _ventas.Save(viewModel);
         }
 
+		//ya no se usa
 		[HttpPost]
 		[Authorize(Policy = "EditVenta")]
 		public SystemValidationModel Edit(string model)
@@ -106,7 +107,7 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
 			{
 				return new SystemValidationModel() { Success = false, Message = "Debe registrar la apertura de una Caja" };
 			}
-			var viewModel = JsonConvert.DeserializeObject<VentasEditViewModel>(model);
+			var viewModel = JsonConvert.DeserializeObject<VentasViewViewModel>(model);
 			return _ventas.Edit(viewModel);
 		}
 

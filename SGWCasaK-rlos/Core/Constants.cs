@@ -110,10 +110,12 @@ namespace Core
             [Description("Ver Reportes")]
             VerReportes = 4200,
             [Description("Ver Inventarios")]
-            IndexInventario = 4300,
-            [Description("Agregar, editar Inventario")]
-            Upsertnventario = 4400,                        
-            [Description("Confirmar Inventario")]
+            IndexInventario = 4300 ,          
+			[Description("Agregar Inventario")]
+			AddInventario = 4400,
+			[Description("Editar Inventario")]
+			EditInventario = 4450,
+			[Description("Confirmar Inventario")]
             ConfirmInventario = 4500,
             [Description("Anular Inventario")]
             AnularInventario = 4600,
@@ -257,6 +259,12 @@ namespace Core
             Confirmado,
             Anulado
         }
+
+		public enum TipoCajaAperturaCierreOperacion
+		{
+			Venta,
+			Recibo
+		}
 
 
         public static class CustomClaimTypes

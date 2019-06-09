@@ -18,5 +18,6 @@ namespace Core.Entities
         public Caja Caja { get; set; }
         public int UsuarioId { get; set; } 
         public Usuario Usuario { get; set; }
+		public ICollection<DetalleCajaAperturaCierre> Detalle { get; set; } = new HashSet<DetalleCajaAperturaCierre>();
     }
 }

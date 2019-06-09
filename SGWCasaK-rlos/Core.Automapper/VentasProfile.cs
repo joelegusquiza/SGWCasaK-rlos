@@ -20,7 +20,7 @@ namespace Core.Automapper
 			CreateMap<Timbrado, VentasAddViewModel>()
 			   .ReverseMap();
 
-			CreateMap<VentasEditViewModel, Venta>()
+			CreateMap<VentasViewViewModel, Venta>()
 				.ForMember(dest => dest.DetalleVenta, opt => opt.Ignore())
 				.ForMember(dest => dest.Cliente, opt => opt.Ignore())
 				.ReverseMap();

@@ -45,17 +45,11 @@ namespace Core.DAL.Services
             }
             return inventario;
         }
-        public SystemValidationModel Upsert(InventariosUpsertViewModel viewModel)
-        {
-            if (viewModel.Id == 0)
-                return Save(viewModel);
-            else
-                return Edit(viewModel);
-           
-        }
-        public SystemValidationModel Save(InventariosUpsertViewModel viewModel)
+        
+        public SystemValidationModel Save(InventarioAddViewModel viewModel)
         {            
             var inventario = Mapper.Map<Inventario>(viewModel);
+			inventario.UsuarioInicioId = viewModel.UsuarioId;
             _context.Entry(inventario).State = EntityState.Added;
             foreach (var detalle in inventario.DetalleInventario)
             {
@@ -74,11 +68,10 @@ namespace Core.DAL.Services
             return validation;
         }
 
-        public SystemValidationModel Edit(InventariosUpsertViewModel viewModel)
+        public SystemValidationModel Edit(InventariosEditViewModel viewModel)
         {
             var inventario = GetById(viewModel.Id);
-
-            inventario.Estado = viewModel.Estado;
+			inventario.Estado = GetEstado(inventario);
             _context.Entry(inventario).State = EntityState.Modified;
             foreach (var detalle in viewModel.DetalleInventario)
             {
@@ -87,8 +80,10 @@ namespace Core.DAL.Services
                 _context.Entry(item).State = EntityState.Modified;
 
             }
-            if (viewModel.Estado == Constants.InventarioEstado.Terminado)
+            if (inventario.Estado == Constants.InventarioEstado.Confirmado)
                 UpdateStock(viewModel);
+			if (inventario.Estado == Constants.InventarioEstado.Terminado)
+				inventario.UsuarioFinId = viewModel.UsuarioId;
             
             var success = _context.SaveChanges() > 0;
             var validation = new SystemValidationModel()
@@ -100,7 +95,20 @@ namespace Core.DAL.Services
             return validation;
         }
 
-        private void UpdateStock(InventariosUpsertViewModel viewModel)
+		private Constants.InventarioEstado GetEstado(Inventario inventario)
+		{
+			switch(inventario.Estado)
+			{
+				case Constants.InventarioEstado.Pendiente:
+					return Constants.InventarioEstado.Terminado;
+				case Constants.InventarioEstado.Terminado:
+					return Constants.InventarioEstado.Confirmado;
+				default:
+					throw new NotImplementedException();
+			}
+		}
+
+		private void UpdateStock(InventariosEditViewModel viewModel)
         {
             var productosIds = viewModel.DetalleInventario.Select(x => x.ProductoId).ToList();
             var productosSucursal = _productos.GetProductoSucursal(productosIds, viewModel.SucursalId);
@@ -113,10 +121,11 @@ namespace Core.DAL.Services
 
         }
 
-        public SystemValidationModel Anular(int id)
+        public SystemValidationModel Anular(int id, string razon)
         {
             var inventario = GetById(id);
             inventario.Estado = Constants.InventarioEstado.Anulado;
+			inventario.RazonAnulado = razon;
             _context.Entry(inventario).State = EntityState.Modified;
             var success = _context.SaveChanges() > 0;
             var validation = new SystemValidationModel()

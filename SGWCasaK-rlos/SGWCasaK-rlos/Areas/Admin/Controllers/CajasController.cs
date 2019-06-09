@@ -28,7 +28,7 @@ namespace SGWCasaK_rlos.Areas.Admin.Controllers
         {
             var viewModel = new CajasIndexViewModel()
             {
-                Cajas = Mapper.Map<List<CajaViewModel>>(_cajas.GetAll())
+                Cajas = Mapper.Map<List<CajaViewModel>>(_cajas.GetAllWithSucursal())
             };
             return View(viewModel);
         }

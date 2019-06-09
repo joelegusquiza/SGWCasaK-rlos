@@ -14,14 +14,15 @@ namespace Core.Automapper
         {
             CreateMap<Inventario, InventarioViewModel>().ReverseMap();
 
-            CreateMap<Inventario, InventariosUpsertViewModel>()
+            CreateMap<Inventario, InventariosEditViewModel>()
                 .ForMember(x => x.DetalleInventario, opt => opt.Ignore());
 
-            CreateMap<InventariosUpsertViewModel, Inventario>()
-                .ForMember(x => x.DetalleInventario, opt => opt.Ignore());
+			CreateMap<DetalleInventario, InventarioDetalleViewModel>().ReverseMap();
 
-            CreateMap<DetalleInventario, InventarioDetalleViewModel>()
-                .ReverseMap();
+			CreateMap<InventarioAddViewModel, Inventario>();
+
+			CreateMap<InventariosEditViewModel, Inventario>()
+                .ForMember(x => x.DetalleInventario, opt => opt.Ignore());
 
             CreateMap<Inventario, InventariosViewViewModel>().ReverseMap();
 

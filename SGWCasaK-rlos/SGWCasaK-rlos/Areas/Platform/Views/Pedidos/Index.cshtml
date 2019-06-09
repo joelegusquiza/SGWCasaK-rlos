@@ -86,15 +86,15 @@
 							@if (HasPermisos(Core.Constants.AccessFunctions.EditPedido))
 							{
 								<a data-bind="attr: { href: '@Url.Action("Edit", "Pedidos", new  { area = "Platform" })?id=' + id() }"><i class="fa fa-edit"></i> Editar</a>
-							}							
-							<!-- /ko -->
-							<!-- ko if: estado() != @((int)Core.Constants.EstadoPedido.Anulado)  && estado() !=@((int)Core.Constants.EstadoPedido.Finalizado) && estado() !=@((int)Core.Constants.EstadoPedido.EntregadoPorDelivery)-->
-							@if (HasPermisos(Core.Constants.AccessFunctions.GenerateVentaPedido))
-							{
-								<a href="#" data-bind="attr: { id: id() }" onClick="javacript: generarVenta(this)"><i class="fa fa-edit"></i>Generar Venta</a>
 							}
 							<!-- /ko -->
-							<!-- ko if: estado() !=@((int)Core.Constants.EstadoPedido.EntregadoPorDelivery) -->
+							<!-- ko if: estado() ==  @((int)Core.Constants.EstadoPedido.Preparado)-->
+							@if (HasPermisos(Core.Constants.AccessFunctions.GenerateVentaPedido))
+							{
+								<a href="#" data-bind="attr: { id: id() }" onClick="javacript: validarCajaAbierta(this)"><i class="fa fa-edit"></i>Generar Venta</a>
+							}
+							<!-- /ko -->
+							<!-- ko if: estado() !=@((int)Core.Constants.EstadoPedido.EntregadoPorDelivery) || estado() !=@((int)Core.Constants.EstadoPedido.Finalizado) -->
 							@if (HasPermisos(Core.Constants.AccessFunctions.ChangeEstadoPedido))
 							{
 								<a href="#" data-bind="attr: { id: id() }" onClick="javacript: openCambiarEstadoModal(this)"><i class="fa fa-edit"></i> Cambiar Estado</a>
@@ -120,7 +120,23 @@
         dataViewModel.pedidoId = ko.observable();
         dataViewModel.estado = ko.observable();
 
-       
+		function validarCajaAbierta(element) {
+				$.ajax({
+                    url: "@Url.Action("IsAnyCajaOpen", "CajaAperturaCierre")",
+                    type: "POST",
+
+                    success: function (response) {
+						if (response.success) {
+							generarVenta(element);
+                        } else {
+                            showError(response.message);
+                        }
+                    },
+                    error: function () {
+                        showError("Error!");
+                    }
+                });
+		}
 
         function generarVenta (element)
         {

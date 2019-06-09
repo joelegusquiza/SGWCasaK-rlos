@@ -6,7 +6,7 @@ using static Core.Constants;
 
 namespace Core.DTOs.CajaAperturaCierre
 {
-    public class AddCajaAperturaCierreViewModel
+    public class AddCajaAperturaViewModel
     {  
         public int Id { get; set; }
         public DateTimeOffset? FechaApertura { get; set; }

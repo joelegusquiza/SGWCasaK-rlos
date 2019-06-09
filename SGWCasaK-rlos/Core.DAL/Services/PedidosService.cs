@@ -35,7 +35,7 @@ namespace Core.DAL.Services
 
 		public List<Pedido> GetBySucursalId(int sucursalId)
 		{
-			return _context.Set<Pedido>().Where(x => x.Active && x.SucursalId == sucursalId).Include(x => x.Cliente).ToList();
+			return _context.Set<Pedido>().Where(x => x.Active && x.SucursalId == sucursalId).Include(x => x.Cliente).OrderByDescending(x => x.Id).ToList();
 		}
 
 		public Pedido GetById(int id)

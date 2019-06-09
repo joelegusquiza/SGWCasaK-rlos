@@ -1,4 +1,4 @@
-﻿@model Core.DTOs.Ventas.VentasEditViewModel
+﻿@model Core.DTOs.Ventas.VentasViewViewModel
 <div class="m-content" style="width: 100%">
 	<div class="row">
 		<div class="col-md-12">
@@ -60,7 +60,7 @@
 									</div>
 								</div>
 							</div>
-							<!-- ko if: estado() == @((int)Core.Constants.EstadoVenta.Pendiente)  -->
+						
 							<div class="col-md-6">
 								<div class="form-group m-form__group row">
 									<label for="example-text-input" class="col-4 col-form-label" style="text-align: left">
@@ -71,12 +71,13 @@
                                            optionsValue: 'value',
                                            optionsText: 'text',
                                            value: condicionVenta,
-                                           optionsCaption: 'Seleccione una opcion'"></select>
+                                           optionsCaption: 'Seleccione una opcion'" disabled></select>
 									</div>
 								</div>
 							</div>
-							<!-- /ko -->
+				
 						</div>
+
 						<div class="row" style="margin-bottom: 20px;">
 							<div class="col-md-6">
 								<div class="form-group m-form__group row">

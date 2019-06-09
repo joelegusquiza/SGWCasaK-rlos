@@ -32,11 +32,14 @@
 								Id
 							</th>
 							<th title="Field #2">
+								NroFactura
+							</th>
+							<th title="Field #2">
 								Fecha
 							</th>
 							<th title="Field #5">
 								Monto
-							</th>						
+							</th>
 							<th title="Field #5">
 								Estado
 							</th>
@@ -45,8 +48,9 @@
 					<tbody data-bind="foreach: ventas">
 						<tr data-bind=" attr: { id : ventaId()}">
 							<td data-bind="text: ventaId"></td>
+							<td data-bind="text: nroFacturaString"></td>
 							<td data-bind="text: moment(dateCreated()).format('DD/MM/YYYY')"></td>
-							<td data-bind="text: monto"></td>							
+							<td data-bind="text: monto"></td>
 							<td data-bind="text: estadoDescripcion"></td>
 						</tr>
 					</tbody>

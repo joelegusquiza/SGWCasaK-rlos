@@ -14,7 +14,7 @@ namespace Core.DTOs.Ventas
     public class VentaViewModel
     {
         public int Id { get; set; }
-        public int NroFactura { get; set; }
+        public string NroFacturaString { get; set; }
         public DateTime DateCreated { get; set; }
         public decimal MontoTotal { get; set; }
 		public EstadoVenta Estado { get; set; }

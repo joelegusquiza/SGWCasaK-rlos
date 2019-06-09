@@ -7,6 +7,7 @@ namespace Core.Helpers
     public class CustomClaims
     {
         public const string UserId = "UserId";
+		public const string UserName = "UserName";
         public const string ClientId = "ClientId";
 		public const string RolId = "RolId";
         public const string Permisos = "Permisos";

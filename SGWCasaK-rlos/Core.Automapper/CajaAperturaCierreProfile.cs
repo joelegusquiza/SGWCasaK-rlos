@@ -11,12 +11,15 @@ namespace Core.Automapper
     {
         public CajaAperturaCierreProfile()
         {
-            CreateMap<CajaAperturaCierre, AddCajaAperturaCierreViewModel>()
+            CreateMap<CajaAperturaCierre, AddCajaAperturaViewModel>()
                 .ReverseMap();
 
             CreateMap<CajaAperturaCierre, CajaAperturaCierreViewModel>()
                  .ForMember(dest => dest.Caja, opt => opt.MapFrom(src => src.Caja.Nombre))
                  .ReverseMap();
-        }
+
+			CreateMap<DetalleCajaAperturaCierre, CajaCierreDetalleViewModel>()
+				 .ReverseMap();
+		}
     }
 }

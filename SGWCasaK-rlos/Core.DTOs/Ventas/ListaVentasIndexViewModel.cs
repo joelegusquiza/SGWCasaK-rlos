@@ -15,6 +15,7 @@ namespace Core.DTOs.Ventas
 	public class ListaVentasViewModel
 	{
 		public int VentaId { get; set; }
+		public string NroFacturaString { get; set; }
 		public decimal Monto { get; set; }		
 		public DateTimeOffset DateCreated { get; set; }	
 		public EstadoVenta Estado { get; set; }

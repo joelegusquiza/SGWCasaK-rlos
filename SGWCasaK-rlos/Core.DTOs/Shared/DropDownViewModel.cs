@@ -12,6 +12,7 @@ namespace Core.DTOs.Shared
 
     public class AdditionalData : DropDownViewModel<int>
     {
+		public string AdditionalString { get; set; }
         public bool AdditionalBool { get; set; }
     }
 }
