@@ -44,9 +44,14 @@ namespace Core.DAL.Services
 
         public SystemValidationModel Save(ClientesAddViewModel viewModel)
         {
-            var cliente = GetByRazonSocial(viewModel.RazonSocial);
-            if (cliente != null)
-                return new SystemValidationModel() { Success = false, Message = "Ya existe un cliente registrado con el mismo razon social" };
+			var cliente = new Cliente();
+			if (!string.IsNullOrEmpty(viewModel.RazonSocial))
+			{
+				cliente = GetByRazonSocial(viewModel.RazonSocial);
+				if (cliente != null)
+					return new SystemValidationModel() { Success = false, Message = "Ya existe un cliente registrado con el mismo razon social" };
+			}
+           
             cliente = GetByRuc(viewModel.Ruc);
             if (cliente != null)
                 return new SystemValidationModel() { Success = false, Message = "Ya existe un cliente registrado con el mismo RUC" };

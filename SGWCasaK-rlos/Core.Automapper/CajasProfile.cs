@@ -12,6 +12,7 @@ namespace Core.Automapper
         public CajasProfile()
         {
             CreateMap<Caja, CajaViewModel>()
+				.ForMember(dest => dest.SucursalNombre, opt => opt.MapFrom(src => src.Sucursal.Nombre))
                 .ReverseMap();
 
             CreateMap<Caja, CajasAddViewModel>()

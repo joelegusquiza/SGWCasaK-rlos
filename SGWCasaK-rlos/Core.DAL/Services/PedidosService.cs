@@ -28,10 +28,48 @@ namespace Core.DAL.Services
             return _context.Set<Pedido>().Where(x => x.Active).ToList();
         }
 
-        public Pedido GetById(int id)
+		public List<Pedido> GetAllWithDelivery(int sucursaId)
+		{
+			return _context.Set<Pedido>().Where(x => x.Active&& x.Delivery && x.SucursalId == sucursaId).OrderBy(x => x.FechaEntrega).ToList();
+		}
+
+		public List<Pedido> GetBySucursalId(int sucursalId)
+		{
+			return _context.Set<Pedido>().Where(x => x.Active && x.SucursalId == sucursalId).Include(x => x.Cliente).OrderByDescending(x => x.Id).ToList();
+		}
+
+		public Pedido GetById(int id)
         {
             return _context.Set<Pedido>().Include(x => x.DetallePedido).Include(x => x.Cliente).FirstOrDefault(x => x.Active && x.Id == id);
         }
+
+		public List<EstadoPedido> GetEstadoAvailable(int id, bool anularPedidoPermiso)
+		{
+			var listToReturn = new List<EstadoPedido>();
+			var pedido = GetById(id);
+			if (pedido.Estado == EstadoPedido.Anulado || pedido.Estado == EstadoPedido.Finalizado || pedido.Estado == EstadoPedido.EntregadoPorDelivery)
+				return listToReturn;
+
+			if (pedido.Estado == EstadoPedido.Pendiente)
+			{
+				listToReturn.Add(EstadoPedido.Preparado);
+				if (anularPedidoPermiso)
+					listToReturn.Add(EstadoPedido.Anulado);
+
+			}
+			if (pedido.Estado == EstadoPedido.Preparado)
+			{
+				if (pedido.Delivery)
+					listToReturn.Add(EstadoPedido.EntregadoPorDelivery);
+				else
+					listToReturn.Add(EstadoPedido.Finalizado);
+				if (anularPedidoPermiso)
+					listToReturn.Add(EstadoPedido.Anulado);
+
+			}
+
+			return listToReturn;
+		}
 
         public List<Pedido> GetByClientId (int clienteId)
         {
@@ -163,6 +201,8 @@ namespace Core.DAL.Services
             var pedido = GetById(id);
             pedido.Estado = estado;
             _context.Entry(pedido).State = EntityState.Modified;
+			if (estado == EstadoPedido.EntregadoPorDelivery && !pedido.Delivery)
+				return new SystemValidationModel() {Success = false, Message = "El pedido no cuenta con deliver" };
             var success = _context.SaveChanges() > 0;
             var validation = new SystemValidationModel()
             {

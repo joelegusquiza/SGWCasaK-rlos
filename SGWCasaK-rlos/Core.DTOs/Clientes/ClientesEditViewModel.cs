@@ -12,6 +12,7 @@ namespace Core.DTOs.Clientes
         public string RazonSocial { get; set; }
         public string Telefono { get; set; }
         public string Ruc { get; set; }
+		public string DisplayName { get; set; }
 
         public ClientesDireccionesViewModel Direccion { get; set; } = new ClientesDireccionesViewModel();
         public List<ClientesDireccionesViewModel> Direcciones { get; set; } = new List<ClientesDireccionesViewModel>();

@@ -23,12 +23,16 @@ namespace SGWCasaK_rlos.Areas.Shared.Controllers
         private readonly IEmailSender _emailSender;
         private readonly IEnvironmentContext _environment;
         private readonly ISucursales _sucursales;
-        public LoginController(IUsuarios usuarios, IEnvironmentContext environment, IEmailSender emailSender, ISucursales sucursales)
+		private readonly ICajas _cajas;
+		private readonly ICajaAperturaCierre _cajaAperturaCierre;
+        public LoginController(IUsuarios usuarios, IEnvironmentContext environment, IEmailSender emailSender, ISucursales sucursales, ICajaAperturaCierre cajaAperturaCierre, ICajas cajas)
         {
             _usuarios = usuarios;
             _emailSender = emailSender;
             _environment = environment;
             _sucursales = sucursales;
+            _cajaAperturaCierre = cajaAperturaCierre;
+			_cajas = cajas;
         }
 
         public IActionResult Index()
@@ -74,13 +78,20 @@ namespace SGWCasaK_rlos.Areas.Shared.Controllers
         [Authorize(Policy = "ChangeSucursal")]
         public async Task<SystemValidationModel> ChangeSucursal(int id)
         {
-            var user = _usuarios.GetById(UserId);                        
+            var user = _usuarios.GetForLogin(Email);                        
             var sucursal = _sucursales.GetById(id);
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            var claims = new ClaimsIdentity(SecurityHelper.GetUserClaims(user, sucursal), "Cookie");
-                   
+			
+			var claims = new ClaimsIdentity();
+			if (CajaId == 0)
+				claims = new ClaimsIdentity(SecurityHelper.GetUserClaims(user, sucursal), "Cookie");
+			else
+			{
+				var caja = _cajas.GetById(CajaId);
+				claims = new ClaimsIdentity(SecurityHelper.GetUserClaims(user, sucursal, caja), "Cookie");
+			}
+				                  
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claims));
-
             var validation = new SystemValidationModel()
             {
                 Success = true
@@ -103,9 +114,16 @@ namespace SGWCasaK_rlos.Areas.Shared.Controllers
                 {
                     ClaimsIdentity claims;
                     if (usuario.Cliente == null)
-                        claims = new ClaimsIdentity(SecurityHelper.GetUserClaims(usuario, usuario.Sucursal), "Cookie");
-                    else
-                        claims = new ClaimsIdentity(SecurityHelper.GetUserClaims(usuario, usuario.Cliente), "Cookie");
+					{
+						var aperturaCierre = _cajaAperturaCierre.GetLastAperturaCierreByUser(usuario.Id);
+						if (aperturaCierre == null || aperturaCierre.FechaCierre != null)
+							claims = new ClaimsIdentity(SecurityHelper.GetUserClaims(usuario, usuario.Sucursal), "Cookie");
+						else
+							claims = new ClaimsIdentity(SecurityHelper.GetUserClaims(usuario, usuario.Sucursal, aperturaCierre.Caja), "Cookie");
+					}                        
+                    else                    
+                        claims = new ClaimsIdentity(SecurityHelper.GetUserClaims(usuario, usuario.Cliente), "Cookie");                    
+                        
 
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claims));
                     return new SystemValidationModel() { Success = true, Message = "Login Exitoso", Url = Url.Action("Index", "Dashboard", new { area = "platform" }) };

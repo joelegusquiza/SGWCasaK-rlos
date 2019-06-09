@@ -8,322 +8,448 @@
          class="m-aside-menu  m-aside-menu--skin-dark m-aside-menu--submenu-skin-dark "
          data-menu-vertical="true"
          data-menu-scrollable="false" data-menu-dropdown-timeout="500">
-        <ul class="m-menu__nav  m-menu__nav--dropdown-submenu-arrow ">
-            <li class="m-menu__item " aria-haspopup="true">
-                <a href="@Url.Action("Index", "Dashboard", new { area = "Platform"})" class="m-menu__link ">
-                    <i class="m-menu__link-icon flaticon-line-graph"></i>
-                    <span class="m-menu__link-title">
-                        <span class="m-menu__link-wrap">
-                            <span class="m-menu__link-text">
-                                Dashboard
-                            </span>
+		<ul class="m-menu__nav  m-menu__nav--dropdown-submenu-arrow ">
+			<li class="m-menu__item " aria-haspopup="true">
+				<a href="@Url.Action("Index", "Dashboard", new { area = "Platform"})" class="m-menu__link ">
+					<i class="m-menu__link-icon flaticon-line-graph"></i>
+					<span class="m-menu__link-title">
+						<span class="m-menu__link-wrap">
+							<span class="m-menu__link-text">
+								Dashboard
+							</span>
 
-                        </span>
-                    </span>
-                </a>
-            </li>
-            @*@if (HasPermisos(Constants.AccessFunctions.IndexVenta))
-        {
-            <li class="m-menu__item " aria-haspopup="true">
-                <a href="@Url.Action("Index", "Ventas", new { area = "Platform"})" class="m-menu__link ">
-                    <i class="m-menu__link-icon flaticon-line-graph"></i>
-                    <span class="m-menu__link-title">
-                        <span class="m-menu__link-wrap">
-                            <span class="m-menu__link-text">
-                                Ventas
-                            </span>
-
-                        </span>
-                    </span>
-                </a>
-            </li>
-        }
-        @if (HasPermisos(Constants.AccessFunctions.IndexPedido))
-        {
-            <li class="m-menu__item " aria-haspopup="true">
-                <a href="@Url.Action("Index", "Pedidos", new { area = "Platform"})" class="m-menu__link ">
-                    <i class="m-menu__link-icon flaticon-line-graph"></i>
-                    <span class="m-menu__link-title">
-                        <span class="m-menu__link-wrap">
-                            <span class="m-menu__link-text">
-                                Pedidos
-                            </span>
-
-                        </span>
-                    </span>
-                </a>
-            </li>
-        }
-        @if (HasPermisos(Constants.AccessFunctions.ClienteIndexPedido))
-        {
-            <li class="m-menu__item " aria-haspopup="true">
-                <a href="@Url.Action("Index", "PedidosCliente", new { area = "Platform"})" class="m-menu__link ">
-                    <i class="m-menu__link-icon flaticon-line-graph"></i>
-                    <span class="m-menu__link-title">
-                        <span class="m-menu__link-wrap">
-                            <span class="m-menu__link-text">
-                                Pedidos
-                            </span>
-
-                        </span>
-                    </span>
-                </a>
-            </li>
-        }
-
-        @if (HasPermisos(Constants.AccessFunctions.IndexCliente))
-        {
-            <li class="m-menu__item " aria-haspopup="true">
-                <a href="@Url.Action("Index", "Clientes", new { area = "Platform"})" class="m-menu__link ">
-                    <i class="m-menu__link-icon flaticon-line-graph"></i>
-                    <span class="m-menu__link-title">
-                        <span class="m-menu__link-wrap">
-                            <span class="m-menu__link-text">
-                                Clientes
-                            </span>
-
-                        </span>
-                    </span>
-                </a>
-            </li>
-        }
+						</span>
+					</span>
+				</a>
+			</li>
+			@*
 
 
-        @if (HasPermisos(Constants.AccessFunctions.VerReportes))
-        {
-            <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" data-menu-submenu-toggle="hover">
-                <a href="#" class="m-menu__link m-menu__toggle">
-                    <i class="m-menu__link-icon flaticon-interface-9"></i>
-                    <span class="m-menu__link-text">
-                        Reportes
-                    </span>
-                    <i class="m-menu__ver-arrow la la-angle-right"></i>
-                </a>
-                <div class="m-menu__submenu ">
-                    <span class="m-menu__arrow"></span>
-                    <ul class="m-menu__subnav">
-                        <li class="m-menu__item  m-menu__item--parent" aria-haspopup="true">
-                            <span class="m-menu__link">
-                                <span class="m-menu__link-text">
-                                    Pricing Tables
-                                </span>
-                            </span>
-                        </li>
-                        <li class="m-menu__item " aria-haspopup="true">
-                            <a href="snippets/general/pricing-tables/pricing-table-1.html" class="m-menu__link ">
-                                <i class="m-menu__link-bullet m-menu__link-bullet--dot">
-                                    <span></span>
-                                </i>
-                                <span class="m-menu__link-text">
-                                    Pricing Tables v1
-                                </span>
-                            </a>
-                        </li>
-                        <li class="m-menu__item " aria-haspopup="true">
-                            <a href="snippets/general/pricing-tables/pricing-table-2.html" class="m-menu__link ">
-                                <i class="m-menu__link-bullet m-menu__link-bullet--dot">
-                                    <span></span>
-                                </i>
-                                <span class="m-menu__link-text">
-                                    Pricing Tables v2
-                                </span>
-                            </a>
-                        </li>
-                        <li class="m-menu__item " aria-haspopup="true">
-                            <a href="snippets/general/pricing-tables/pricing-table-3.html" class="m-menu__link ">
-                                <i class="m-menu__link-bullet m-menu__link-bullet--dot">
-                                    <span></span>
-                                </i>
-                                <span class="m-menu__link-text">
-                                    Pricing Tables v3
-                                </span>
-                            </a>
-                        </li>
-                        <li class="m-menu__item " aria-haspopup="true">
-                            <a href="snippets/general/pricing-tables/pricing-table-4.html" class="m-menu__link ">
-                                <i class="m-menu__link-bullet m-menu__link-bullet--dot">
-                                    <span></span>
-                                </i>
-                                <span class="m-menu__link-text">
-                                    Pricing Tables v4
-                                </span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </li>
-        }*@
-            @if (HasPermisos(Constants.AccessFunctions.IndexCompra))
-            {
-                <li class="m-menu__item " aria-haspopup="true">
-                    <a href="@Url.Action("Index", "Compras", new { area = "Platform"})" class="m-menu__link ">
-                        <i class="m-menu__link-icon flaticon-line-graph"></i>
-                        <span class="m-menu__link-title">
-                            <span class="m-menu__link-wrap">
-                                <span class="m-menu__link-text">
-                                    Compras
-                                </span>
-
-                            </span>
-                        </span>
-                    </a>
-                </li>
-            }
-            @if (HasPermisos(Constants.AccessFunctions.IndexTimbrado))
-            {
-                <li class="m-menu__item " aria-haspopup="true">
-                    <a href="@Url.Action("Index", "Timbrados", new { area = "Platform"})" class="m-menu__link ">
-                        <i class="m-menu__link-icon flaticon-line-graph"></i>
-                        <span class="m-menu__link-title">
-                            <span class="m-menu__link-wrap">
-                                <span class="m-menu__link-text">
-                                    Timbrados
-                                </span>
-
-                            </span>
-                        </span>
-                    </a>
-                </li>
-            }
-
-            @if (HasPermisos(Constants.AccessFunctions.IndexCategoria))
-            {
-                <li class="m-menu__item " aria-haspopup="true">
-                    <a href="@Url.Action("Index", "CategoriaProductos", new { area = "Platform"})" class="m-menu__link ">
-                        <i class="m-menu__link-icon flaticon-line-graph"></i>
-                        <span class="m-menu__link-title">
-                            <span class="m-menu__link-wrap">
-                                <span class="m-menu__link-text">
-                                    Categoria Productos
-                                </span>
-
-                            </span>
-                        </span>
-                    </a>
-                </li>
-            }
-
-            @if (HasPermisos(Constants.AccessFunctions.IndexProducto))
-            {
-                <li class="m-menu__item " aria-haspopup="true">
-                    <a href="@Url.Action("Index", "Productos", new { area = "Platform"})" class="m-menu__link ">
-                        <i class="m-menu__link-icon flaticon-line-graph"></i>
-                        <span class="m-menu__link-title">
-                            <span class="m-menu__link-wrap">
-                                <span class="m-menu__link-text">
-                                    Productos
-                                </span>
-
-                            </span>
-                        </span>
-                    </a>
-                </li>
-            }
-
-            @if (HasPermisos(Constants.AccessFunctions.IndexInventario))
-            {
-                <li class="m-menu__item " aria-haspopup="true">
-                    <a href="@Url.Action("Index", "Inventario", new { area = "Platform"})" class="m-menu__link ">
-                        <i class="m-menu__link-icon flaticon-line-graph"></i>
-                        <span class="m-menu__link-title">
-                            <span class="m-menu__link-wrap">
-                                <span class="m-menu__link-text">
-                                    Inventario
-                                </span>
-
-                            </span>
-                        </span>
-                    </a>
-                </li>
-            }
-
-            @if (HasPermisos(Constants.AccessFunctions.IndexProveedor))
-            {
-                <li class="m-menu__item " aria-haspopup="true">
-                    <a href="@Url.Action("Index", "Proveedores", new { area = "Platform"})" class="m-menu__link ">
-                        <i class="m-menu__link-icon flaticon-line-graph"></i>
-                        <span class="m-menu__link-title">
-                            <span class="m-menu__link-wrap">
-                                <span class="m-menu__link-text">
-                                    Proveedores
-                                </span>
-
-                            </span>
-                        </span>
-                    </a>
-                </li>
-            }
-
-            @if (HasPermisos(Constants.AccessFunctions.IndexCaja))
-            {
-                <li class="m-menu__item " aria-haspopup="true">
-                    <a href="@Url.Action("Index", "Cajas", new { area = "Admin"})" class="m-menu__link ">
-                        <i class="m-menu__link-icon flaticon-line-graph"></i>
-                        <span class="m-menu__link-title">
-                            <span class="m-menu__link-wrap">
-                                <span class="m-menu__link-text">
-                                    Cajas
-                                </span>
-
-                            </span>
-                        </span>
-                    </a>
-                </li>
-            }
-
-            @if (HasPermisos(Constants.AccessFunctions.IndexSucursal))
-            {
-                <li class="m-menu__item " aria-haspopup="true">
-                    <a href="@Url.Action("Index", "Sucursales", new { area = "Admin"})" class="m-menu__link ">
-                        <i class="m-menu__link-icon flaticon-line-graph"></i>
-                        <span class="m-menu__link-title">
-                            <span class="m-menu__link-wrap">
-                                <span class="m-menu__link-text">
-                                    Sucursales
-                                </span>
-
-                            </span>
-                        </span>
-                    </a>
-                </li>
-            }
 
 
-            @if (HasPermisos(Core.Constants.AccessFunctions.IndexUsuario))
-            {
-                <li class="m-menu__item " aria-haspopup="true">
-                    <a href="@Url.Action("Index", "Usuarios", new { area = "Admin"})" class="m-menu__link ">
-                        <i class="m-menu__link-icon flaticon-line-graph"></i>
-                        <span class="m-menu__link-title">
-                            <span class="m-menu__link-wrap">
-                                <span class="m-menu__link-text">
-                                    Usuarios
-                                </span>
+		@if (HasPermisos(Constants.AccessFunctions.VerReportes))
+		{
+			<li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" data-menu-submenu-toggle="hover">
+				<a href="#" class="m-menu__link m-menu__toggle">
+					<i class="m-menu__link-icon flaticon-interface-9"></i>
+					<span class="m-menu__link-text">
+						Reportes
+					</span>
+					<i class="m-menu__ver-arrow la la-angle-right"></i>
+				</a>
+				<div class="m-menu__submenu ">
+					<span class="m-menu__arrow"></span>
+					<ul class="m-menu__subnav">
+						<li class="m-menu__item  m-menu__item--parent" aria-haspopup="true">
+							<span class="m-menu__link">
+								<span class="m-menu__link-text">
+									Pricing Tables
+								</span>
+							</span>
+						</li>
+						<li class="m-menu__item " aria-haspopup="true">
+							<a href="snippets/general/pricing-tables/pricing-table-1.html" class="m-menu__link ">
+								<i class="m-menu__link-bullet m-menu__link-bullet--dot">
+									<span></span>
+								</i>
+								<span class="m-menu__link-text">
+									Pricing Tables v1
+								</span>
+							</a>
+						</li>
+						<li class="m-menu__item " aria-haspopup="true">
+							<a href="snippets/general/pricing-tables/pricing-table-2.html" class="m-menu__link ">
+								<i class="m-menu__link-bullet m-menu__link-bullet--dot">
+									<span></span>
+								</i>
+								<span class="m-menu__link-text">
+									Pricing Tables v2
+								</span>
+							</a>
+						</li>
+						<li class="m-menu__item " aria-haspopup="true">
+							<a href="snippets/general/pricing-tables/pricing-table-3.html" class="m-menu__link ">
+								<i class="m-menu__link-bullet m-menu__link-bullet--dot">
+									<span></span>
+								</i>
+								<span class="m-menu__link-text">
+									Pricing Tables v3
+								</span>
+							</a>
+						</li>
+						<li class="m-menu__item " aria-haspopup="true">
+							<a href="snippets/general/pricing-tables/pricing-table-4.html" class="m-menu__link ">
+								<i class="m-menu__link-bullet m-menu__link-bullet--dot">
+									<span></span>
+								</i>
+								<span class="m-menu__link-text">
+									Pricing Tables v4
+								</span>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</li>
+		}*@
+			@if (HasPermisos(Constants.AccessFunctions.IndexCompra) || HasPermisos(Constants.AccessFunctions.IndexComprasPending) || HasPermisos(Constants.AccessFunctions.IndexOrdenPagoCompras))
+			{
+				<li class="m-menu__item m-menu__item--submenu m-menu__item--open" aria-haspopup="true" data-menu-submenu-toggle="hover">
+					<a href="#" class="m-menu__link m-menu__toggle">
+						<i class="m-menu__link-icon flaticon-diagram"></i>
+						<span class="m-menu__link-text">
+							Compras
+						</span>
+						<i class="m-menu__ver-arrow la la-angle-right"></i>
+					</a>
+					<div class="m-menu__submenu " style="display: block;">
+						<span class="m-menu__arrow"></span>
+						<ul class="m-menu__subnav">
+							@if (HasPermisos(Constants.AccessFunctions.IndexCompra))
+							{
+								<li class="m-menu__item " aria-haspopup="true">
+									<a href="@Url.Action("Index", "Compras", new { area = "Platform"})" class="m-menu__link ">
+										<i class="m-menu__link-bullet m-menu__link-bullet--dot">
+											<span></span>
+										</i>
+										<span class="m-menu__link-text">
+											Listar
+										</span>
+									</a>
+								</li>
+							}
+							@if (HasPermisos(Constants.AccessFunctions.IndexComprasPending))
+							{
+								<li class="m-menu__item " aria-haspopup="true">
+									<a href="@Url.Action("IndexPending", "Compras", new { area = "Platform"})" class="m-menu__link ">
+										<i class="m-menu__link-bullet m-menu__link-bullet--dot">
+											<span></span>
+										</i>
+										<span class="m-menu__link-text">
+											Pendientes
+										</span>
+									</a>
+								</li>
+							}
+							@if (HasPermisos(Constants.AccessFunctions.IndexOrdenPagoCompras))
+							{
+								<li class="m-menu__item " aria-haspopup="true">
+									<a href="@Url.Action("Index", "OrdenPagoCompras", new { area = "Platform"})" class="m-menu__link ">
+										<i class="m-menu__link-bullet m-menu__link-bullet--dot">
+											<span></span>
+										</i>
+										<span class="m-menu__link-text">
+											Orden de Pagos
+										</span>
+									</a>
+								</li>
+							}
+						</ul>
+					</div>
+				</li>
+			}
+			@if (HasPermisos(Constants.AccessFunctions.IndexVenta))
+			{
+				<li class="m-menu__item m-menu__item--submenu m-menu__item--open" aria-haspopup="true" data-menu-submenu-toggle="hover">
+					<a href="#" class="m-menu__link m-menu__toggle">
+						<i class="m-menu__link-icon flaticon-diagram"></i>
+						<span class="m-menu__link-text">
+							Ventas
+						</span>
+						<i class="m-menu__ver-arrow la la-angle-right"></i>
+					</a>
+					<div class="m-menu__submenu " style="display: block;">
+						<span class="m-menu__arrow"></span>
+						<ul class="m-menu__subnav">
+							@if (HasPermisos(Constants.AccessFunctions.IndexVenta))
+							{
 
-                            </span>
-                        </span>
-                    </a>
-                </li>
-            }
+								<li class="m-menu__item " aria-haspopup="true">
+									<a href="@Url.Action("Index", "Ventas", new { area = "Platform"})" class="m-menu__link ">
+										<i class="m-menu__link-bullet m-menu__link-bullet--dot">
+											<span></span>
+										</i>
+										<span class="m-menu__link-text">
+											Listar
+										</span>
+									</a>
+								</li>
+							}
+							<li class="m-menu__item " aria-haspopup="true">
+								<a href="@Url.Action("Index", "Recibos", new { area = "Platform"})" class="m-menu__link ">
+									<i class="m-menu__link-bullet m-menu__link-bullet--dot">
+										<span></span>
+									</i>
+									<span class="m-menu__link-text">
+										Recibos
+									</span>
+								</a>
+							</li>
+						</ul>
+					</div>
+				</li>
+
+			}			
+			@if (HasPermisos(Constants.AccessFunctions.IndexPedido))
+			{
+				<li class="m-menu__item m-menu__item--submenu m-menu__item--open" aria-haspopup="true" data-menu-submenu-toggle="hover">
+					<a href="#" class="m-menu__link m-menu__toggle">
+						<i class="m-menu__link-icon flaticon-diagram"></i>
+						<span class="m-menu__link-text">
+							Pedidos
+						</span>
+						<i class="m-menu__ver-arrow la la-angle-right"></i>
+					</a>
+					<div class="m-menu__submenu " style="display: block;">
+						<span class="m-menu__arrow"></span>
+						<ul class="m-menu__subnav">
+
+							<li class="m-menu__item " aria-haspopup="true">
+								<a href="@Url.Action("Index", "Pedidos", new { area = "Platform"})" class="m-menu__link ">
+									<i class="m-menu__link-bullet m-menu__link-bullet--dot">
+										<span></span>
+									</i>
+									<span class="m-menu__link-text">
+										Listar
+									</span>
+								</a>
+							</li>
+							<li class="m-menu__item " aria-haspopup="true">
+								<a href="@Url.Action("IndexDelivery", "Pedidos", new { area = "Platform"})" class="m-menu__link ">
+									<i class="m-menu__link-bullet m-menu__link-bullet--dot">
+										<span></span>
+									</i>
+									<span class="m-menu__link-text">
+										Con Delivery
+									</span>
+								</a>
+							</li>
+						</ul>
+					</div>
+				</li>
+
+			}
+			@if (HasPermisos(Constants.AccessFunctions.ClienteIndexPedido))
+			{
+				<li class="m-menu__item " aria-haspopup="true">
+					<a href="@Url.Action("Index", "PedidosCliente", new { area = "Platform"})" class="m-menu__link ">
+						<i class="m-menu__link-icon flaticon-line-graph"></i>
+						<span class="m-menu__link-title">
+							<span class="m-menu__link-wrap">
+								<span class="m-menu__link-text">
+									Pedidos
+								</span>
+
+							</span>
+						</span>
+					</a>
+				</li>
+			}
+			@if (HasPermisos(Constants.AccessFunctions.IndexTimbrado))
+			{
+				<li class="m-menu__item " aria-haspopup="true">
+					<a href="@Url.Action("Index", "Timbrados", new { area = "Platform"})" class="m-menu__link ">
+						<i class="m-menu__link-icon flaticon-line-graph"></i>
+						<span class="m-menu__link-title">
+							<span class="m-menu__link-wrap">
+								<span class="m-menu__link-text">
+									Timbrados
+								</span>
+
+							</span>
+						</span>
+					</a>
+				</li>
+			}
+
+			@if (HasPermisos(Constants.AccessFunctions.IndexCategoria))
+			{
+				<li class="m-menu__item " aria-haspopup="true">
+					<a href="@Url.Action("Index", "CategoriaProductos", new { area = "Platform"})" class="m-menu__link ">
+						<i class="m-menu__link-icon flaticon-line-graph"></i>
+						<span class="m-menu__link-title">
+							<span class="m-menu__link-wrap">
+								<span class="m-menu__link-text">
+									Categoria Productos
+								</span>
+
+							</span>
+						</span>
+					</a>
+				</li>
+			}
+
+			@if (HasPermisos(Constants.AccessFunctions.IndexProducto))
+			{
+				<li class="m-menu__item " aria-haspopup="true">
+					<a href="@Url.Action("Index", "Productos", new { area = "Platform"})" class="m-menu__link ">
+						<i class="m-menu__link-icon flaticon-line-graph"></i>
+						<span class="m-menu__link-title">
+							<span class="m-menu__link-wrap">
+								<span class="m-menu__link-text">
+									Productos
+								</span>
+
+							</span>
+						</span>
+					</a>
+				</li>
+			}
+
+			@if (HasPermisos(Constants.AccessFunctions.IndexInventario))
+			{
+				<li class="m-menu__item " aria-haspopup="true">
+					<a href="@Url.Action("Index", "Inventario", new { area = "Platform"})" class="m-menu__link ">
+						<i class="m-menu__link-icon flaticon-line-graph"></i>
+						<span class="m-menu__link-title">
+							<span class="m-menu__link-wrap">
+								<span class="m-menu__link-text">
+									Inventario
+								</span>
+
+							</span>
+						</span>
+					</a>
+				</li>
+			}
+
+			@if (HasPermisos(Constants.AccessFunctions.IndexProveedor))
+			{
+				<li class="m-menu__item " aria-haspopup="true">
+					<a href="@Url.Action("Index", "Proveedores", new { area = "Platform"})" class="m-menu__link ">
+						<i class="m-menu__link-icon flaticon-line-graph"></i>
+						<span class="m-menu__link-title">
+							<span class="m-menu__link-wrap">
+								<span class="m-menu__link-text">
+									Proveedores
+								</span>
+
+							</span>
+						</span>
+					</a>
+				</li>
+			}
+			@if (HasPermisos(Constants.AccessFunctions.IndexAperturaCierreCaja) || HasPermisos(Constants.AccessFunctions.IndexCaja))
+			{
+				<li class="m-menu__item m-menu__item--submenu m-menu__item--open" aria-haspopup="true" data-menu-submenu-toggle="hover">
+					<a href="#" class="m-menu__link m-menu__toggle">
+						<i class="m-menu__link-icon flaticon-diagram"></i>
+						<span class="m-menu__link-text">
+							Cajas
+						</span>
+						<i class="m-menu__ver-arrow la la-angle-right"></i>
+					</a>
+					<div class="m-menu__submenu " style="display: block;">
+						<span class="m-menu__arrow"></span>
+						<ul class="m-menu__subnav">
+
+							@if (HasPermisos(Constants.AccessFunctions.IndexCaja))
+							{
+								<li class="m-menu__item " aria-haspopup="true">
+									<a href="@Url.Action("Index", "Cajas", new { area = "Admin"})" class="m-menu__link ">
+										<i class="m-menu__link-icon flaticon-line-graph"></i>
+										<span class="m-menu__link-title">
+											<span class="m-menu__link-wrap">
+												<span class="m-menu__link-text">
+													Listar Cajas
+												</span>
+
+											</span>
+										</span>
+									</a>
+								</li>
+							}
+							@if (HasPermisos(Constants.AccessFunctions.IndexAperturaCierreCaja))
+							{
+								<li class="m-menu__item " aria-haspopup="true">
+									<a href="@Url.Action("Index", "CajaAperturaCierre", new { area = "Platform"})" class="m-menu__link ">
+										<i class="m-menu__link-icon flaticon-line-graph"></i>
+										<span class="m-menu__link-title">
+											<span class="m-menu__link-wrap">
+												<span class="m-menu__link-text">
+													Listar Apertura y Cierre
+												</span>
+
+											</span>
+										</span>
+									</a>
+								</li>
+
+							}
+						</ul>
+					</div>
+				</li>
+			}
 
 
-            @if (HasPermisos(Core.Constants.AccessFunctions.IndexRole))
-            {
-                <li class="m-menu__item " aria-haspopup="true">
-                    <a href="@Url.Action("Index", "Roles", new { area = "Admin"})" class="m-menu__link ">
-                        <i class="m-menu__link-icon flaticon-line-graph"></i>
-                        <span class="m-menu__link-title">
-                            <span class="m-menu__link-wrap">
-                                <span class="m-menu__link-text">
-                                    Roles
-                                </span>
+			@if (HasPermisos(Constants.AccessFunctions.IndexSucursal))
+			{
+				<li class="m-menu__item " aria-haspopup="true">
+					<a href="@Url.Action("Index", "Sucursales", new { area = "Admin"})" class="m-menu__link ">
+						<i class="m-menu__link-icon flaticon-line-graph"></i>
+						<span class="m-menu__link-title">
+							<span class="m-menu__link-wrap">
+								<span class="m-menu__link-text">
+									Sucursales
+								</span>
 
-                            </span>
-                        </span>
-                    </a>
-                </li>
-            }
-        </ul>
+							</span>
+						</span>
+					</a>
+				</li>
+			}
+
+
+			@if (HasPermisos(Core.Constants.AccessFunctions.IndexUsuario))
+			{
+				<li class="m-menu__item " aria-haspopup="true">
+					<a href="@Url.Action("Index", "Usuarios", new { area = "Admin"})" class="m-menu__link ">
+						<i class="m-menu__link-icon flaticon-line-graph"></i>
+						<span class="m-menu__link-title">
+							<span class="m-menu__link-wrap">
+								<span class="m-menu__link-text">
+									Usuarios
+								</span>
+
+							</span>
+						</span>
+					</a>
+				</li>
+			}
+			@if (HasPermisos(Constants.AccessFunctions.IndexCliente))
+			{
+				<li class="m-menu__item " aria-haspopup="true">
+					<a href="@Url.Action("Index", "Clientes", new { area = "Platform"})" class="m-menu__link ">
+						<i class="m-menu__link-icon flaticon-line-graph"></i>
+						<span class="m-menu__link-title">
+							<span class="m-menu__link-wrap">
+								<span class="m-menu__link-text">
+									Clientes
+								</span>
+
+							</span>
+						</span>
+					</a>
+				</li>
+			}
+
+
+			@if (HasPermisos(Core.Constants.AccessFunctions.IndexRole))
+			{
+				<li class="m-menu__item " aria-haspopup="true">
+					<a href="@Url.Action("Index", "Roles", new { area = "Admin"})" class="m-menu__link ">
+						<i class="m-menu__link-icon flaticon-line-graph"></i>
+						<span class="m-menu__link-title">
+							<span class="m-menu__link-wrap">
+								<span class="m-menu__link-text">
+									Roles
+								</span>
+
+							</span>
+						</span>
+					</a>
+				</li>
+			}
+		</ul>
     </div>
     <!-- END: Aside Menu -->
 </div>

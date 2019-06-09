@@ -36,11 +36,13 @@ namespace Core.Automapper
             CreateMap<DetallePedido, VentasDetalleAddViewModel>()
                 .ReverseMap();
 
+			CreateMap<DetalleVenta,DetallePedido >()
+			.ForMember(dest => dest.Id, opt => opt.Ignore())
+				.ReverseMap();
 
+			#region Clientes
 
-            #region Clientes
-
-            CreateMap<Pedido, PedidoClienteViewModel>()              
+			CreateMap<Pedido, PedidoClienteViewModel>()              
                .ReverseMap();
 
             CreateMap<Pedido, PedidosClienteAddViewModel>()

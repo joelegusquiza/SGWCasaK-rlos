@@ -28,7 +28,7 @@ namespace SGWCasaK_rlos.Areas.Admin.Controllers
         {
             var viewModel = new CajasIndexViewModel()
             {
-                Cajas = Mapper.Map<List<CajaViewModel>>(_cajas.GetAll())
+                Cajas = Mapper.Map<List<CajaViewModel>>(_cajas.GetAllWithSucursal())
             };
             return View(viewModel);
         }
@@ -69,6 +69,12 @@ namespace SGWCasaK_rlos.Areas.Admin.Controllers
         public SystemValidationModel Desactivate(int id)
         {
             return _cajas.Desactivate(id);
+        }
+
+        public List<DropDownViewModel<int>> GetCajas()
+        {
+            var cajas = _cajas.GetAll().Select(x => new DropDownViewModel<int>() { Text = x.Nombre, Value = x.Id }).ToList();
+            return cajas;
         }
     }
 }

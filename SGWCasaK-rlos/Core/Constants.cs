@@ -31,8 +31,8 @@ namespace Core
             AddPedido = 799,
             [Description("Editar Pedido")]
             EditPedido = 800,
-            [Description("Eliminar Pedido")]
-            DeletePedido = 900,
+            [Description("Anular Pedido")]
+			AnularPedido = 900,
             [Description("Generar Venta del Pedido")]
             GenerateVentaPedido = 901,
             [Description("Cambiar Estado del Pedido")]
@@ -43,8 +43,8 @@ namespace Core
             ClienteAddPedido = 1100,
             [Description("Cliente Editar Pedido")]
             ClienteEditPedido = 1200,
-            [Description("Cliente Eliminar Pedido")]
-            ClienteDeletePedido = 1300,
+            [Description("Cliente Anular Pedido")]
+            ClienteAnularPedido = 1300,
             [Description("Ver Caregoria")]
             IndexCategoria = 1400,
             [Description("Agregar Categoria")]
@@ -63,12 +63,16 @@ namespace Core
             DeleteCliente = 2100,
             [Description("Ver Compras")]
             IndexCompra = 2200,
+            [Description("Ver Compras Pendientes")]
+            IndexComprasPending = 2250,
             [Description("Agregar Compra")]
             AddCompra = 2300,
             [Description("Editar Compra")]
             EditCompra = 2400,
-            [Description("Eliminar Compra")]
-            DeleteCompra = 2500,
+            [Description("Anular Compra")]
+            AnularCompra = 2500,
+            [Description("Confirmar Compra")]
+            ConfirmCompra = 2550,
             [Description("Ver Productos")]
             IndexProducto = 2600,
             [Description("Agregar Producto")]
@@ -99,18 +103,22 @@ namespace Core
             AddVenta = 3900,
             [Description("Editar Venta")]
             EditVenta = 4000,
-            [Description("Anular Venta")]
+			//[Description("Confirmar Venta")]
+			//ConfirmarVenta = 4050,
+			[Description("Anular Venta")]
             AnularVenta = 4100,
             [Description("Ver Reportes")]
             VerReportes = 4200,
             [Description("Ver Inventarios")]
-            IndexInventario = 4300,
-            [Description("Agregar Inventario")]
-            AddInventario = 4400,                        
-            [Description("Eliminar Inventario")]
-            DeleteInventario = 4500,
-            [Description("Ver Detalle Inventario")]
-            ViewInventario = 4600,
+            IndexInventario = 4300 ,          
+			[Description("Agregar Inventario")]
+			AddInventario = 4400,
+			[Description("Editar Inventario")]
+			EditInventario = 4450,
+			[Description("Confirmar Inventario")]
+            ConfirmInventario = 4500,
+            [Description("Anular Inventario")]
+            AnularInventario = 4600,
             [Description("Ver Cajas")]
             IndexCaja = 4700,
             [Description("Agregar Cajas")]
@@ -129,33 +137,70 @@ namespace Core
             DeleteSucursal = 5400,
             [Description("Cambiar de Sucursal")]
             ChangeSucursal = 5500,
-        }
+            [Description("Ver Orden de Pago de Compras")]
+            IndexOrdenPagoCompras = 5600,
+            [Description("Agregar Orden de Pago de Compras")]
+            AddOrdenPagoCompras = 5700,
+            [Description("Editar Orden de pago de Compras")]
+            EditOrdenPagoCompras = 5800,
+            [Description("Anular Orden de pago de compras")]
+            AnularOrdenPagoCompras = 5900,
+            [Description("Ver Apertura-Cierre de Caja")]
+            IndexAperturaCierreCaja = 6000,
+			[Description("Ver Recibo")]
+			IndexRecibo = 6100,
+			[Description("Agregar Recibo")]
+			AddRecibo = 6200,
+			[Description("Editar Recibo")]
+			EditRecibo = 6300,
+			[Description("Eliminar Recibo")]
+			DeleteRecibo = 6400,
+		}
         
         public enum EstadoVenta
         {
+            Pendiente,
+            Confirmado,
+			[Description("Pendiente de Pago")]
+			PendientedePago,
             Pagado,
-            Anulado,
-            Pendiente
+            Anulado            
         }
 
         public enum EstadoCompra
         {
+            Pendiente,
+            Confirmado,
+            PendientedePago,
             Pagado,
             Anulado,
-            Pendiente
         }   
+
+		public enum EstadoCuota 
+		{ 
+			Pendiente,
+			Pagado
+		}
+
+		public enum EstadoRecibo
+		{
+			Pendiente,
+			Pagado
+		}
         
         public enum EstadoPedido
         { 
             [Description("Pendiente")]
-            Pendiente,
-            [Description("En Proceso")]
-            EnProceso,
+            Pendiente,           
             [Description("Preparado")]
             Preparado,
             [Description("Finalizado")]
-            Finalizado
-        }
+            Finalizado,
+			[Description("Finalizado y Entregado")]
+			EntregadoPorDelivery,
+			[Description("Anulado")]
+			Anulado = 99
+		}
 
         public enum PorcIva
         {
@@ -193,6 +238,34 @@ namespace Core
             Fisica,
             Juridica
         }
+
+        public enum OrdenPagoCompraEstado
+        {
+            Pendiente,
+            Pagado,
+            Anulado
+        }
+
+        public enum CajaTipoOperacion
+        {
+            Apertura,
+            Cierre
+        }
+
+        public enum InventarioEstado
+        { 
+            Pendiente,
+            Terminado,
+            Confirmado,
+            Anulado
+        }
+
+		public enum TipoCajaAperturaCierreOperacion
+		{
+			Venta,
+			Recibo
+		}
+
 
         public static class CustomClaimTypes
         {

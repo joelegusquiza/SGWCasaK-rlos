@@ -47,27 +47,33 @@
             <!--begin: Datatable -->
             <table class="m-datatable" id="rolesIndexTable" width="100%">
                 <thead>
-                    <tr>
-                        <th title="Field #1">
-                            Id
-                        </th>
-                        <th title="Field #2">
-                            Nombre
-                        </th>
-            
-                        <th></th>
-                    </tr>
+					<tr>
+						<th title="Field #1">
+							Id
+						</th>
+						<th title="Field #2">
+							Nombre
+						</th>
+						<th title="Field #2">
+							Punto Expedicion
+						</th>
+						<th title="Field #2">
+							Sucursal
+						</th>
+						<th></th>
+					</tr>
                 </thead>
                 <tbody data-bind="foreach: cajas">
-                    <tr>
-                        <td data-bind="text: id"></td>
-                        <td data-bind="text: nombre"></td>
-            
-                        <td>
-                            <a data-bind="attr: { href: '@Url.Action("Edit", "Cajas", new  { area = "Admin" })?id=' + id() }"><i class="fa fa-edit"></i></a>
-                            <a href="#" data-bind="attr: { id: id() }" onClick="javacript: desactivate(this)"><i class="fa fa-trash"></i></a>
-                        </td>
-                    </tr>
+					<tr>
+						<td data-bind="text: id"></td>
+						<td data-bind="text: nombre"></td>
+						<td data-bind="text: puntoExpedicion"></td>
+						<td data-bind="text: sucursalNombre"></td>
+						<td>
+							<a data-bind="attr: { href: '@Url.Action("Edit", "Cajas", new  { area = "Admin" })?id=' + id() }"><i class="fa fa-edit"></i></a>
+							<a href="#" data-bind="attr: { id: id() }" onClick="javacript: desactivate(this)"><i class="fa fa-trash"></i></a>
+						</td>
+					</tr>
                 </tbody>
             </table>
             <!--end: Datatable -->

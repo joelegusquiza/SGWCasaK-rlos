@@ -22,6 +22,11 @@ namespace Core.Automapper
             CreateMap<ComprasDetalleAddViewModel, DetalleCompra>()
                 .ForMember(dest => dest.Descripcion, opt => opt.MapFrom(src => src.Nombre))
                .ReverseMap();
+
+            CreateMap<Compra, ListaComprasViewModel>()
+               .ForMember(dest => dest.CompraId, opt => opt.MapFrom(src => src.Id))
+               .ForMember(dest => dest.Monto, opt => opt.MapFrom(src => src.MontoTotal))
+               .ReverseMap();
         }
 
         public int? GetProveedorId(int proveedorId)

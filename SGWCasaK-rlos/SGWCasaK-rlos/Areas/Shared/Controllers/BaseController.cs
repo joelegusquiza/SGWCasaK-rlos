@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Core.Helpers;
 using Microsoft.AspNetCore.Mvc;
@@ -32,17 +33,54 @@ namespace SGWCasaK_rlos.Areas.Shared.Controllers
         {
             get
             {
-                return _sucursalId > 0 ? _sucursalId : (_sucursalId = Convert.ToInt32(User.Claims.FirstOrDefault(x => x.Type == CustomClaims.SucursalId).Value));
+                return _sucursalId > 0 ? _sucursalId : (_sucursalId = Convert.ToInt32(User.Claims.FirstOrDefault(x => x.Type == CustomClaims.SucursalId)?.Value));
             }
         }
 
+        private int _cajaId { get; set; }
+        public int CajaId
+        {
+            get
+            {
+                return User.Claims.FirstOrDefault(x => x.Type == CustomClaims.CajaId) == null? 0 : Convert.ToInt32(User.Claims.FirstOrDefault(x => x.Type == CustomClaims.CajaId).Value);
+            }
+        }
 
-        private int GetClientId()
+        private string _email { get; set; }
+        public string Email
+        {
+            get
+            {
+                return !string.IsNullOrEmpty(_email) ? _email : (_email = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email).Value);
+            }
+        }
+
+		private int _rolId { get; set; }
+		public int RolId
+		{
+			get
+			{
+				return _cajaId > 0 ? _cajaId : (_cajaId = Convert.ToInt32(User.Claims.FirstOrDefault(x => x.Type == CustomClaims.RolId).Value));
+			}
+		}
+
+		private int GetClientId()
         {
             var clientIdString = User.Claims.FirstOrDefault(x => x.Type == CustomClaims.ClientId).Value;
             if (!string.IsNullOrEmpty(clientIdString))
                 return Convert.ToInt32(clientIdString);
             return 0;
         }
-    }
+
+		private List<string> _permisos { get; set; } = new List<string>();
+		public List<string> Permisos  
+		{
+			get
+			{
+				return _permisos.Count() > 0 ? _permisos : (_permisos = User.Claims.FirstOrDefault(x => x.Type == CustomClaims.Permisos).Value.Split(',').ToList());
+			}
+		}
+		
+
+	}
 }

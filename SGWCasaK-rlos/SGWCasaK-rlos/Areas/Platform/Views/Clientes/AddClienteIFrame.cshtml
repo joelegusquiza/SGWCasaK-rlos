@@ -1,0 +1,119 @@
+﻿@model Core.DTOs.Clientes.ClientesEditViewModel
+@{
+	
+	Layout = "~/Areas/Shared/Views/Shared/_EmptyLayout.cshtml";
+}
+
+<div class="m-portlet__body--no-padding">
+	<!--begin::Portlet-->
+	<div class="m-portlet m-portlet--tab" style="margin-bottom: 0px !important">
+		<!--begin::Form-->
+		<form class="m-form m-form--fit m-form--label-align-right" id="form" data-bind="submit: postDataToController">
+			<div class="m-portlet__body">
+				<div class="form-group m-form__group">
+					<label for="exampleInputEmail1">
+						Nombre
+					</label>
+					<input type="text" class="form-control m-input" id="nombre" name="nombre" data-bind="value: nombre">
+					<span class="alert-danger"></span>
+				</div>
+				<div class="form-group m-form__group">
+					<label for="exampleInputEmail1">
+						Apellido
+					</label>
+					<input type="text" class="form-control m-input" id="apellido" name="apellido" data-bind="value: apellido">
+					<span class="alert-danger"></span>
+				</div>
+				<div class="form-group m-form__group">
+					<label for="exampleInputEmail1">
+						Razon Social
+					</label>
+					<input type="text" class="form-control m-input" id="razonSocial" name="razonSocial" data-bind="value: razonSocial">
+					<span class="alert-danger"></span>
+				</div>
+				<div class="form-group m-form__group">
+					<label for="exampleInputEmail1">
+						Ruc
+					</label>
+					<input type="text" class="form-control m-input" id="ruc" name="ruc" data-bind="value: ruc">
+					<span class="alert-danger"></span>
+				</div>
+				<div class="form-group m-form__group">
+					<label for="exampleInputEmail1">
+						Telefono
+					</label>
+					<input type="text" class="form-control m-input" id="telefono" name="telefono" data-bind="value: telefono">
+					<span class="alert-danger"></span>
+				</div>
+			</div>
+			<div class="m-portlet__foot m-portlet__foot--fit">
+				<div class="m-form__actions">
+					<button type="submit" class="btn btn-primary">
+						Guardar
+					</button>
+
+				</div>
+			</div>
+		</form>
+		<!--end::Form-->
+	</div>
+</div>
+@section scripts{
+	<script>
+        var model = @Html.Raw(Json.Serialize(Model));
+		var dataViewModel = ko.mapping.fromJS(model);
+
+		dataViewModel.displayName = ko.pureComputed(function ()
+		{
+			if (dataViewModel.razonSocial() != null)
+				return dataViewModel.razonSocial();
+			else
+				return dataViewModel.nombre() + " " + dataViewModel.apellido();
+		})
+
+        dataViewModel.postDataToController = function () {
+
+			if (!$("#form").valid()) return;
+			if ((dataViewModel.apellido() == null && dataViewModel.nombre() == null) && dataViewModel.razonSocial() == null)
+			{
+				showError("Debe ingresar la razon social o el nombre del cliente");
+				return;
+			}
+            $.ajax({
+                url: "@Url.Action("Save", "Clientes")",
+                type: "POST",
+                data: { model: ko.toJSON(dataViewModel) },
+                success: function (response) {
+					if (response.success) {
+						dataViewModel.id(response.id);
+						parent.seleccionarAddCliente(ko.mapping.toJS(dataViewModel));
+                    } else {
+                        showError(response.message);
+                    }
+                },
+                error: function () {
+                    showError();
+                }
+            });
+            return false;
+        }
+
+		ko.applyBindings(dataViewModel);
+
+		$('#form').validate({
+			rules: {
+				ruc: {
+					required: true
+				},
+				telefono: {
+					required: true
+				}
+			},
+			errorPlacement: function (error, element) {
+				var span = element.siblings('span');
+				error.appendTo(span);
+			}
+		});
+	</script>
+
+}

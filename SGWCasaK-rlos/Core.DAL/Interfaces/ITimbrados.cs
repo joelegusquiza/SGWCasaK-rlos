@@ -11,7 +11,7 @@ namespace Core.DAL.Interfaces
     {
         List<Timbrado> GetAll();
         Timbrado GetById(int id);
-        Timbrado GetValidTimbrado();
+        Timbrado GetValidTimbrado(int sucursalId, int cajaId);
         SystemValidationModel Edit(TimbradosEditViewModel viewModel);
         SystemValidationModel Save(TimbradosAddViewModel viewModel);
         SystemValidationModel Desactivate(int id);

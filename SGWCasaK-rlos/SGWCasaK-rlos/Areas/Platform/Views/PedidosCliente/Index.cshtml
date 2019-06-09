@@ -72,13 +72,23 @@
                         <!-- ko if: delivery() != true -->
                         <td data-bind="text:'No'"></td>
                         <!-- /ko -->
-                        <td>
-                            @if (HasPermisos(Core.Constants.AccessFunctions.ClienteEditPedido))
-                            {
-                                <a data-bind="attr: { href: '@Url.Action("Edit", "PedidosCliente", new  { area = "Platform" })?id=' + id() }"><i class="fa fa-edit"></i> Editar</a>
-                            }
+						<td>
+							<a data-bind="attr: { href: '@Url.Action("View", "PedidosCliente", new  { area = "Platform" })?id=' + id() }"><i class="fa fa-edit"></i> Ver</a>
+							<!-- ko if: estado() == @((int)Core.Constants.EstadoPedido.Pendiente)  -->
+							@if (HasPermisos(Core.Constants.AccessFunctions.ClienteEditPedido))
+							{
 
-                        </td>
+								<a data-bind="attr: { href: '@Url.Action("Edit", "PedidosCliente", new  { area = "Platform" })?id=' + id() }"><i class="fa fa-edit"></i> Editar</a>
+
+							}
+							@if (HasPermisos(Core.Constants.AccessFunctions.ClienteAnularPedido))
+							{
+
+								<a data-bind="attr: { href: '@Url.Action("Anular", "PedidosCliente", new  { area = "Platform" })?id=' + id() }"><i class="fa fa-trash"></i> Anular</a>
+
+							}
+							<!-- /ko -->
+						</td>
                     </tr>
                 </tbody>
             </table>

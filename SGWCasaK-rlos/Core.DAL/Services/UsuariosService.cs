@@ -34,9 +34,9 @@ namespace Core.DAL.Services
             return _context.Set<Usuario>().Where(x => x.Active).ToList();
         }
 
-        public async Task<bool> CheckPermissionForUser(int userId, AccessFunctions permission)
+        public bool CheckPermissionForUser(int userId, AccessFunctions permission)
         {
-            var usuario = await _context.Set<Usuario>().Include(x => x.Rol).FirstOrDefaultAsync(x => x.Id == userId);
+            var usuario = _context.Set<Usuario>().Include(x => x.Rol).FirstOrDefault(x => x.Id == userId);
             return usuario.Rol.Permisos.Contains(((int)permission).ToString());
         }
 

@@ -10,6 +10,14 @@ namespace Core.DAL.Interfaces
     public interface IVentas
     {
         List<Venta> GetAll();
-        SystemValidationModel Save(VentasAddViewModel viewModel);
-    }
+		Venta GetById(int id);	
+		List<Venta> GetVentaByCajaId(int cajaId, DateTime date, Constants.EstadoVenta estado);
+		List<Venta> GetVentaConfirmadoByClienteId(int clienteId);
+		SystemValidationModel Save(VentasAddViewModel viewModel);
+		SystemValidationModel Edit(VentasViewViewModel viewModel);
+		SystemValidationModel Confirm(VentasViewViewModel viewModel);
+		VentasViewViewModel GetForView(int id);
+		SystemValidationModel Anular(int id);
+
+	}
 }

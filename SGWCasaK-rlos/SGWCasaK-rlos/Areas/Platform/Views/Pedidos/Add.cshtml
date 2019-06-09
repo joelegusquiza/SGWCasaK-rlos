@@ -33,72 +33,95 @@
                 </div>
                 <!--begin::Form-->
                 <form class="m-form m-form--fit m-form--label-align-right">
-                    <div class="m-portlet__body">
-                        <div class="row" style="margin-bottom: 20px;">
-                            <div class="col-md-6">
-                                <div class="form-group m-form__group row">
-                                    <label for="example-text-input" class="col-2 col-form-label" style="text-align: left">
-                                        Ruc
-                                    </label>
-                                    <div class="col-6">
-                                        <input class="form-control m-input" type="text" id="example-text-input" data-bind="value: dataViewModel.cliente.ruc">
-                                    </div>
-                                    <div class="col-4" align="right">
-                                        @*<button  class="btn btn-success">
-                                        Agregar
-                                    </button>*@
-                                        <button type="button" class="btn btn-success" onclick="showListaClientesModal()">
-                                            Buscar
-                                        </button>
+					<div class="m-portlet__body">
+						<div class="row" style="margin-bottom: 20px;">
+							<div class="col-md-6">
+								<div class="form-group m-form__group row">
 
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group m-form__group row">
-                                    <label for="example-text-input" class="col-4 col-form-label" style="text-align: left">
-                                        Nombre o Razon Social
-                                    </label>
-                                    <div class="col-8">
-                                        <input class="form-control m-input" type="text" id="example-text-input" data-bind="value: dataViewModel.cliente.displayName">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row" style="margin-bottom: 20px;">
-                            <div class="col-md-4">
-                                <div class="form-group m-form__group row">
-                                    <label for="exampleInputEmail1">
-                                        Delivery
-                                    </label>
-                                    <input type="checkbox" class="form-control m-input" id="delivery" name="delivery" data-bind="checked: delivery, event:{ change: deliveryValues}">
+									<label class="col-form-label col-md-6 " style="text-align: left">
+										Fecha y Hora de Pedido
+									</label>
+									<div class="col-md-6">
+										<div class='input-group date'>
+											<input type='text' class="form-control" data-bind="datetimepicker: dateCreated"  disabled/>
+										</div>
+										
+									</div>
+								</div>
 
-                                </div>
 
-                            </div>
-                            <div class="col-md-4" data-bind="visible: delivery()">
-                                <div class="form-group m-form__group row">
-                                    <label for="example-text-input" class="col-4 col-form-label" style="text-align: left">
-                                        Fecha de entrega
-                                    </label>
-                                    <div class="col-3">
-                                        <input class="form-control m-input datepicker" style="width: 100%" type="text" id="example-text-input" data-bind="datepicker: fechaEntrega, datepickerOptions: {language: 'es'}">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4" data-bind="visible: delivery()">
-                                <div class="form-group m-form__group row">
-                                    <label for="example-text-input" class="col-4 col-form-label" style="text-align: left">
-                                        Direccion de Entrega
-                                    </label>
-                                    <div class="col-8">
-                                        <input class="form-control m-input" type="text" id="example-text-input" data-bind="value: dataViewModel.direccionEntrega">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group m-form__group row">
+									<label for="example-text-input" class="col-2 col-form-label" style="text-align: left">
+										Delivery
+									</label>
+									<input type="checkbox" class="form-control m-input" id="delivery" name="delivery" data-bind="checked: delivery, event:{ change: deliveryValues}">
 
-                    </div>
+								</div>
+
+							</div>
+						</div>
+						
+						<div class="row" style="margin-bottom: 20px;">
+							<div class="col-md-6">
+								<div class="form-group m-form__group row">
+									<label for="example-text-input" class="col-2 col-form-label" style="text-align: left">
+										Ruc
+									</label>
+									<div class="col-6">
+										<input class="form-control m-input" type="text" id="example-text-input" data-bind="value: dataViewModel.cliente.ruc" readonly>
+									</div>
+									<div class="col-4" align="right">
+										<button type="button" class="btn btn-success" onclick="showAddClienteModal()">
+											Agregar
+										</button>
+										<button type="button" class="btn btn-success" onclick="showListaClientesModal()">
+											Buscar
+										</button>
+
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group m-form__group row">
+									<label for="example-text-input" class="col-4 col-form-label" style="text-align: left">
+										Nombre o Razon Social
+									</label>
+									<div class="col-8">
+										<input class="form-control m-input" type="text" id="example-text-input" data-bind="value: dataViewModel.cliente.displayName" readonly>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row" style="margin-bottom: 20px;">
+							
+							<div class="col-md-6" data-bind="visible: delivery()">
+								<div class="form-group m-form__group row">
+									<label class="col-form-label col-md-6 " style="text-align: left">
+										Fecha y Hora de Entrega
+									</label>
+									<div class="col-md-6">
+										<div class='input-group date'>
+											<input type='text' id="fechaEntrega" class="form-control" data-bind="datetimepicker: fechaEntrega" readonly />
+										</div>
+
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6" data-bind="visible: delivery()">
+								<div class="form-group m-form__group row">
+									<label for="example-text-input" class="col-6 col-form-label" style="text-align: left">
+										Direccion de Entrega
+									</label>
+									<div class="col-6">
+										<input class="form-control m-input" type="text" id="example-text-input" data-bind="value: dataViewModel.direccionEntrega">
+									</div>
+								</div>
+							</div>
+						</div>
+
+					</div>
                 </form>
             </div>
             <div class="m-portlet m-portlet--tab">
@@ -114,38 +137,39 @@
                 <!--begin::Form-->
                 <form class="m-form m-form--fit m-form--label-align-right" id="productoAddDetalleForm">
                     <div class="m-portlet__body">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="form-group m-form__group row">
-                                    <label for="example-text-input" class="col-2 col-form-label">
-                                        Nombre
-                                    </label>
-                                    <div class="col-10">
-                                        <input class="form-control m-input" type="text" id="productoNombre" data-bind="value: dataViewModel.producto.nombre">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group m-form__group row">
-                                    <label for="example-text-input" class="col-2 col-form-label">
-                                        Precio
-                                    </label>
-                                    <div class="col-10">
-                                        <input class="form-control m-input" type="text" id="productoPrecioVenta" data-bind="value: dataViewModel.producto.precioVenta" readonly>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group m-form__group row">
-                                    <label for="example-text-input" class="col-2 col-form-label">
-                                        Cantidad
-                                    </label>
-                                    <div class="col-10">
-                                        <input class="form-control m-input" type="text" id="productoCantidad" data-bind="value: dataViewModel.producto.cantidad">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+						<div class="row">
+							<div class="col-md-4">
+								<div class="form-group m-form__group row">
+									<label for="example-text-input" class="col-2 col-form-label">
+										Nombre
+									</label>
+									<div class="col-10">
+										<input class="form-control m-input" type="text" id="productoNombre" data-bind="value: dataViewModel.producto.nombre">
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group m-form__group row">
+									<label for="example-text-input" class="col-2 col-form-label">
+										Precio
+									</label>
+									<div class="col-10">
+										<input class="form-control m-input" type="text" id="productoPrecioVenta" data-bind="value: dataViewModel.producto.precioVenta" readonly>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group m-form__group row">
+									<label for="example-text-input" class="col-2 col-form-label">
+										Cantidad
+									</label>
+									<div class="col-10">
+										<input class="form-control m-input" type="text" id="productoCantidad" data-bind="value: dataViewModel.producto.cantidad">
+									</div>
+								</div>
+							</div>
+						
+						</div>
 
                     </div>
                     <div class="m-portlet__foot m-portlet__foot--fit">
@@ -221,8 +245,9 @@
     </div>
 </div>
 @{
-    Html.RenderPartial("~/Areas/Platform/Views/Shared/_ListaProductoModal.cshtml");   
-    Html.RenderPartial("~/Areas/Platform/Views/Shared/_ListaClientesModal.cshtml");
+	Html.RenderPartial("~/Areas/Platform/Views/Shared/_ListaProductoModal.cshtml");
+	Html.RenderPartial("~/Areas/Platform/Views/Shared/_ListaClientesModal.cshtml");
+	Html.RenderPartial("~/Areas/Platform/Views/Shared/_AddClienteModal.cshtml");
 }
 <!-- /content -->
 @section scripts{
@@ -248,12 +273,12 @@
                 resetProductoForm();
                 return;
             }
-            //var cantidadSeleccionada = dataViewModel.producto.equivalencia() == 0 ? parseInt(dataViewModel.producto.cantidad()) : parseInt(dataViewModel.producto.cantidad() * dataViewModel.producto.equivalencia());
-            //if (cantidadSeleccionada > dataViewModel.producto.stockActual()) {
-            //    showError("El producto no existe en la cantidad deseada");
-            //    resetProductoForm();
-            //    return;
-            //}
+			var cantidadSeleccionada =  /* dataViewModel.producto.equivalencia() == 0 ? parseInt(dataViewModel.producto.cantidad()) : */parseInt(dataViewModel.producto.cantidad() * dataViewModel.producto.equivalencia());
+            if (cantidadSeleccionada > dataViewModel.producto.stock()) {
+                showError("El producto no existe en la cantidad deseada");
+                resetProductoForm();
+                return;
+            }
             dataViewModel.producto.montoTotal(dataViewModel.producto.precioVenta() *  dataViewModel.producto.cantidad());
             dataViewModel.detallePedido.push(ko.mapping.fromJS(ko.mapping.toJS(dataViewModel.producto)))
             resetProductoForm();
@@ -280,7 +305,8 @@
                 
             }
             else {
-                dataViewModel.fechaEntrega(null);
+				dataViewModel.fechaEntrega(null);
+				$("#fechaEntrega").val("");
                 dataViewModel.direccionEntrega("");  
             }
                 
@@ -322,7 +348,7 @@
         })
 
         function showListaProductosModal() {
-            $("#listaProductosModalIframe").attr('src', '@Url.Action("ListaProductos", "Productos", new { area = "Platform"})');
+			$("#listaProductosModalIframe").attr('src', '@Url.Action("ListaProductos", "Productos", new { area = "Platform"})?sucursalId=' + dataViewModel.sucursalId());
             $("#listaProductosModal").modal("show");
         }
 
@@ -342,7 +368,17 @@
         function seleccionarCliente(cliente) {
             ko.mapping.fromJS(cliente, {}, dataViewModel.cliente);
             $("#listaClientesModal").modal("hide");
+		}
+
+		function showAddClienteModal() {
+			$("#addClienteIFrame").attr('src', '@Url.Action("AddClienteIFrame", "Clientes", new { area = "Platform"})');
+			$("#addClienteModal").modal("show");
         }
+        
+		function seleccionarAddCliente(cliente) {
+			ko.mapping.fromJS(cliente, {}, dataViewModel.cliente);
+			$("#addClienteModal").modal("hide");
+		}
 
         function resetProductoForm() {
             dataViewModel.producto.nombre("");

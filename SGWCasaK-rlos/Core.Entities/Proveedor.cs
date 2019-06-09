@@ -20,6 +20,6 @@ namespace Core.Entities
         public TiposProveedores Tipo { get; set; }
 
         public ICollection<Compra> Compras { get; set; } = new HashSet<Compra>();
-        public ICollection<PagoCompra> PagosCompra { get; set; } = new HashSet<PagoCompra>();
+        public ICollection<OrdenPagoCompra> PagosCompra { get; set; } = new HashSet<OrdenPagoCompra>();
     }
 }

@@ -78,8 +78,13 @@ namespace SGWCasaK_rlos
             services.AddSingleton<IInventario, InventarioService>();
             services.AddSingleton<ICajas, CajasService>();
             services.AddSingleton<ISucursales, SucursalesService>();
-            services.AddScoped<UserEmailActiveFilter>();
-            return services.BuildServiceProvider();
+            services.AddSingleton<IOrdenPagoCompras, OrdenPagoComprasService>();
+            services.AddSingleton<ICajaAperturaCierre, CajaAperturaCierreService>();
+			services.AddSingleton<IRecibos, RecibosService>();
+			services.AddSingleton<ICuotas, CuotasService>();
+			services.AddScoped<UserEmailActiveFilter>();
+			
+			return services.BuildServiceProvider();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -100,7 +105,11 @@ namespace SGWCasaK_rlos
                 cfg.AddProfile<InventarioProfile>();
                 cfg.AddProfile<CajasProfile>();
                 cfg.AddProfile<SucursalesProfile>();
-            });
+                cfg.AddProfile<OrdenPagoCompraProfile>();
+                cfg.AddProfile<CajaAperturaCierreProfile>();
+				cfg.AddProfile<RecibosProfile>();
+				cfg.AddProfile<CuotasProfile>();
+			});
             if (env.IsDevelopment())
             {
                 app.UseBrowserLink();

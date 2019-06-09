@@ -33,6 +33,8 @@ namespace ApplicationContext.Migrations
 
                     b.Property<string>("Nombre");
 
+                    b.Property<int>("PuntoExpedicion");
+
                     b.Property<int>("SucursalId");
 
                     b.Property<int>("UserCreatedId");
@@ -44,6 +46,45 @@ namespace ApplicationContext.Migrations
                     b.HasIndex("SucursalId");
 
                     b.ToTable("Cajas");
+                });
+
+            modelBuilder.Entity("Core.Entities.CajaAperturaCierre", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("Active");
+
+                    b.Property<int>("CajaId");
+
+                    b.Property<DateTime>("DateCreated");
+
+                    b.Property<DateTime?>("DateModified");
+
+                    b.Property<DateTimeOffset?>("FechaApertura");
+
+                    b.Property<DateTimeOffset?>("FechaCierre");
+
+                    b.Property<decimal>("MontoApertura");
+
+                    b.Property<decimal>("MontoCierre");
+
+                    b.Property<int>("Tipo");
+
+                    b.Property<int>("UserCreatedId");
+
+                    b.Property<int>("UserModifiedId");
+
+                    b.Property<int>("UsuarioId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CajaId");
+
+                    b.HasIndex("UsuarioId");
+
+                    b.ToTable("CajaAperturaCierre");
                 });
 
             modelBuilder.Entity("Core.Entities.CategoriaProducto", b =>
@@ -126,6 +167,10 @@ namespace ApplicationContext.Migrations
 
                     b.Property<decimal>("Excenta");
 
+                    b.Property<DateTimeOffset>("FechaFin");
+
+                    b.Property<DateTimeOffset>("FechaInicio");
+
                     b.Property<decimal>("IvaCinco");
 
                     b.Property<decimal>("IvaDiez");
@@ -136,7 +181,11 @@ namespace ApplicationContext.Migrations
 
                     b.Property<int?>("ProveedorId");
 
+                    b.Property<string>("RazonAnulado");
+
                     b.Property<int>("SucursalId");
+
+                    b.Property<string>("Timbrado");
 
                     b.Property<int>("UserCreatedId");
 
@@ -149,6 +198,74 @@ namespace ApplicationContext.Migrations
                     b.HasIndex("SucursalId");
 
                     b.ToTable("Compras");
+                });
+
+            modelBuilder.Entity("Core.Entities.Cuota", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("Active");
+
+                    b.Property<DateTime>("DateCreated");
+
+                    b.Property<DateTime?>("DateModified");
+
+                    b.Property<int>("Estado");
+
+                    b.Property<DateTime>("FechaVencimiento");
+
+                    b.Property<decimal>("Monto");
+
+                    b.Property<int>("NumeroCuota");
+
+                    b.Property<int?>("ReciboId");
+
+                    b.Property<int>("UserCreatedId");
+
+                    b.Property<int>("UserModifiedId");
+
+                    b.Property<int>("VentaId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ReciboId");
+
+                    b.HasIndex("VentaId");
+
+                    b.ToTable("Cuotas");
+                });
+
+            modelBuilder.Entity("Core.Entities.DetalleCajaAperturaCierre", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("Active");
+
+                    b.Property<int>("CajaAperturaCierreId");
+
+                    b.Property<decimal>("Cambio");
+
+                    b.Property<DateTime>("DateCreated");
+
+                    b.Property<DateTime?>("DateModified");
+
+                    b.Property<decimal>("Monto");
+
+                    b.Property<int>("TipoOperacion");
+
+                    b.Property<int>("UserCreatedId");
+
+                    b.Property<int>("UserModifiedId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CajaAperturaCierreId");
+
+                    b.ToTable("DetalleCajaAperturaCierre");
                 });
 
             modelBuilder.Entity("Core.Entities.DetalleCompra", b =>
@@ -170,6 +287,8 @@ namespace ApplicationContext.Migrations
                     b.Property<string>("Descripcion");
 
                     b.Property<int>("Equivalencia");
+
+                    b.Property<decimal>("MontoTotal");
 
                     b.Property<decimal>("PrecioCompra");
 
@@ -206,7 +325,7 @@ namespace ApplicationContext.Migrations
 
                     b.Property<int>("StockActual");
 
-                    b.Property<int>("StockAnterior");
+                    b.Property<int>("StockEncontrado");
 
                     b.Property<int>("UserCreatedId");
 
@@ -342,16 +461,65 @@ namespace ApplicationContext.Migrations
 
                     b.Property<DateTime?>("DateModified");
 
+                    b.Property<int>("Estado");
+
+                    b.Property<string>("RazonAnulado");
+
+                    b.Property<int>("SucursalId");
+
+                    b.Property<int>("UserCreatedId");
+
+                    b.Property<int>("UserModifiedId");
+
+                    b.Property<int?>("UsuarioFinId");
+
+                    b.Property<int>("UsuarioInicioId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SucursalId");
+
+                    b.HasIndex("UsuarioFinId");
+
+                    b.HasIndex("UsuarioInicioId");
+
+                    b.ToTable("Inventario");
+                });
+
+            modelBuilder.Entity("Core.Entities.OrdenPagoCompra", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("Active");
+
+                    b.Property<DateTime>("DateCreated");
+
+                    b.Property<DateTime?>("DateModified");
+
+                    b.Property<int>("Estado");
+
+                    b.Property<decimal>("MontoTotal");
+
+                    b.Property<int>("ProveedorId");
+
+                    b.Property<int>("SucursalId");
+
                     b.Property<int>("UserCreatedId");
 
                     b.Property<int>("UserModifiedId");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Inventario");
+                    b.HasIndex("ProveedorId");
+
+                    b.HasIndex("SucursalId");
+
+                    b.ToTable("OrdenPagoCompra");
                 });
 
-            modelBuilder.Entity("Core.Entities.PagoCompra", b =>
+            modelBuilder.Entity("Core.Entities.OrdenPagoCompraDetalle", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -367,7 +535,7 @@ namespace ApplicationContext.Migrations
 
                     b.Property<decimal>("Monto");
 
-                    b.Property<int?>("ProveedorId");
+                    b.Property<int>("OrdenPagoCompraId");
 
                     b.Property<int>("UserCreatedId");
 
@@ -377,40 +545,9 @@ namespace ApplicationContext.Migrations
 
                     b.HasIndex("CompraId");
 
-                    b.HasIndex("ProveedorId");
+                    b.HasIndex("OrdenPagoCompraId");
 
-                    b.ToTable("PagosCompras");
-                });
-
-            modelBuilder.Entity("Core.Entities.PagoVenta", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<bool>("Active");
-
-                    b.Property<int>("ClienteId");
-
-                    b.Property<DateTime>("DateCreated");
-
-                    b.Property<DateTime?>("DateModified");
-
-                    b.Property<decimal>("Monto");
-
-                    b.Property<int>("UserCreatedId");
-
-                    b.Property<int>("UserModifiedId");
-
-                    b.Property<int>("VentaId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClienteId");
-
-                    b.HasIndex("VentaId");
-
-                    b.ToTable("PagosVentas");
+                    b.ToTable("OrdenPagoCompraDetalle");
                 });
 
             modelBuilder.Entity("Core.Entities.Pedido", b =>
@@ -437,6 +574,10 @@ namespace ApplicationContext.Migrations
 
                     b.Property<decimal>("MontoTotal");
 
+                    b.Property<string>("RazonAnulado");
+
+                    b.Property<int>("SucursalId");
+
                     b.Property<int>("UserCreatedId");
 
                     b.Property<int>("UserModifiedId");
@@ -444,6 +585,8 @@ namespace ApplicationContext.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ClienteId");
+
+                    b.HasIndex("SucursalId");
 
                     b.ToTable("Pedidos");
                 });
@@ -470,7 +613,7 @@ namespace ApplicationContext.Migrations
 
                     b.Property<int>("PorcentajeIva");
 
-                    b.Property<int>("Stock");
+                    b.Property<decimal>("PrecioVenta");
 
                     b.Property<int>("UnidadMedida");
 
@@ -505,6 +648,8 @@ namespace ApplicationContext.Migrations
 
                     b.Property<double>("PorcentajeGanancia");
 
+                    b.Property<decimal>("PrecioVenta");
+
                     b.Property<int>("ProductoId");
 
                     b.Property<int>("UserCreatedId");
@@ -516,6 +661,37 @@ namespace ApplicationContext.Migrations
                     b.HasIndex("ProductoId");
 
                     b.ToTable("ProductoPresentaciones");
+                });
+
+            modelBuilder.Entity("Core.Entities.ProductoSucursal", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("Active");
+
+                    b.Property<DateTime>("DateCreated");
+
+                    b.Property<DateTime?>("DateModified");
+
+                    b.Property<int>("ProductoId");
+
+                    b.Property<int>("Stock");
+
+                    b.Property<int>("SucursalId");
+
+                    b.Property<int>("UserCreatedId");
+
+                    b.Property<int>("UserModifiedId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductoId");
+
+                    b.HasIndex("SucursalId");
+
+                    b.ToTable("ProductoSucursal");
                 });
 
             modelBuilder.Entity("Core.Entities.Proveedor", b =>
@@ -555,6 +731,41 @@ namespace ApplicationContext.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Proveedores");
+                });
+
+            modelBuilder.Entity("Core.Entities.Recibo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("Active");
+
+                    b.Property<int>("CajaId");
+
+                    b.Property<decimal>("Cambio");
+
+                    b.Property<int>("ClienteId");
+
+                    b.Property<DateTime>("DateCreated");
+
+                    b.Property<DateTime?>("DateModified");
+
+                    b.Property<int>("Estado");
+
+                    b.Property<decimal>("MontoTotal");
+
+                    b.Property<int>("UserCreatedId");
+
+                    b.Property<int>("UserModifiedId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CajaId");
+
+                    b.HasIndex("ClienteId");
+
+                    b.ToTable("Recibos");
                 });
 
             modelBuilder.Entity("Core.Entities.Rol", b =>
@@ -643,8 +854,6 @@ namespace ApplicationContext.Migrations
 
                     b.Property<int>("NroTimbrado");
 
-                    b.Property<int>("PuntoExpedicion");
-
                     b.Property<int>("SucursalId");
 
                     b.Property<int>("UserCreatedId");
@@ -695,7 +904,7 @@ namespace ApplicationContext.Migrations
 
                     b.Property<string>("Salt");
 
-                    b.Property<int>("SucursalId");
+                    b.Property<int?>("SucursalId");
 
                     b.Property<string>("Telefono");
 
@@ -726,6 +935,8 @@ namespace ApplicationContext.Migrations
 
                     b.Property<bool>("Active");
 
+                    b.Property<int>("CajaId");
+
                     b.Property<decimal>("Cambio");
 
                     b.Property<int>("ClienteId");
@@ -740,6 +951,8 @@ namespace ApplicationContext.Migrations
 
                     b.Property<decimal>("Excenta");
 
+                    b.Property<bool>("Impreso");
+
                     b.Property<decimal>("IvaCinco");
 
                     b.Property<decimal>("IvaDiez");
@@ -748,7 +961,11 @@ namespace ApplicationContext.Migrations
 
                     b.Property<int>("NroFactura");
 
+                    b.Property<string>("NroFacturaString");
+
                     b.Property<int?>("PedidoId");
+
+                    b.Property<string>("RazonAnulado");
 
                     b.Property<int>("SucursalId");
 
@@ -759,6 +976,8 @@ namespace ApplicationContext.Migrations
                     b.Property<int>("UserModifiedId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CajaId");
 
                     b.HasIndex("ClienteId");
 
@@ -779,6 +998,19 @@ namespace ApplicationContext.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
+            modelBuilder.Entity("Core.Entities.CajaAperturaCierre", b =>
+                {
+                    b.HasOne("Core.Entities.Caja", "Caja")
+                        .WithMany("CajaAperturasCierres")
+                        .HasForeignKey("CajaId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Core.Entities.Usuario", "Usuario")
+                        .WithMany("CajaAperturasCierres")
+                        .HasForeignKey("UsuarioId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
             modelBuilder.Entity("Core.Entities.Compra", b =>
                 {
                     b.HasOne("Core.Entities.Proveedor", "Proveedor")
@@ -790,6 +1022,27 @@ namespace ApplicationContext.Migrations
                         .WithMany("Compras")
                         .HasForeignKey("SucursalId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Core.Entities.Cuota", b =>
+                {
+                    b.HasOne("Core.Entities.Recibo", "Recibo")
+                        .WithMany("Cuotas")
+                        .HasForeignKey("ReciboId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Core.Entities.Venta", "Venta")
+                        .WithMany("Cuotas")
+                        .HasForeignKey("VentaId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("Core.Entities.DetalleCajaAperturaCierre", b =>
+                {
+                    b.HasOne("Core.Entities.CajaAperturaCierre", "CajaAperturaCierre")
+                        .WithMany("Detalle")
+                        .HasForeignKey("CajaAperturaCierreId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Core.Entities.DetalleCompra", b =>
@@ -852,29 +1105,47 @@ namespace ApplicationContext.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
-            modelBuilder.Entity("Core.Entities.PagoCompra", b =>
+            modelBuilder.Entity("Core.Entities.Inventario", b =>
                 {
-                    b.HasOne("Core.Entities.Compra", "Compra")
-                        .WithMany("PagosCompra")
-                        .HasForeignKey("CompraId")
+                    b.HasOne("Core.Entities.Sucursal", "Sucursal")
+                        .WithMany("Inventarios")
+                        .HasForeignKey("SucursalId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Core.Entities.Proveedor", "Proveedor")
-                        .WithMany("PagosCompra")
-                        .HasForeignKey("ProveedorId")
+                    b.HasOne("Core.Entities.Usuario", "UsuarioFin")
+                        .WithMany("InventarioTerminado")
+                        .HasForeignKey("UsuarioFinId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Core.Entities.Usuario", "UsuarioInicio")
+                        .WithMany("InventarioIniciado")
+                        .HasForeignKey("UsuarioInicioId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
-            modelBuilder.Entity("Core.Entities.PagoVenta", b =>
+            modelBuilder.Entity("Core.Entities.OrdenPagoCompra", b =>
                 {
-                    b.HasOne("Core.Entities.Cliente", "Cliente")
-                        .WithMany("PagosVenta")
-                        .HasForeignKey("ClienteId")
+                    b.HasOne("Core.Entities.Proveedor", "Proveedor")
+                        .WithMany("PagosCompra")
+                        .HasForeignKey("ProveedorId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Core.Entities.Sucursal", "Sucursal")
+                        .WithMany("OrdenesPagoCompra")
+                        .HasForeignKey("SucursalId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("Core.Entities.OrdenPagoCompraDetalle", b =>
+                {
+                    b.HasOne("Core.Entities.Compra", "Compra")
+                        .WithMany("OrdenPagoDetalle")
+                        .HasForeignKey("CompraId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Core.Entities.Venta", "Venta")
-                        .WithMany("PagosVenta")
-                        .HasForeignKey("VentaId")
+                    b.HasOne("Core.Entities.OrdenPagoCompra", "OrdenPagoCompra")
+                        .WithMany("OrdenPagoDetalle")
+                        .HasForeignKey("OrdenPagoCompraId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
@@ -883,6 +1154,11 @@ namespace ApplicationContext.Migrations
                     b.HasOne("Core.Entities.Cliente", "Cliente")
                         .WithMany("Pedidos")
                         .HasForeignKey("ClienteId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Core.Entities.Sucursal", "Sucursal")
+                        .WithMany("Pedidos")
+                        .HasForeignKey("SucursalId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
@@ -899,6 +1175,32 @@ namespace ApplicationContext.Migrations
                     b.HasOne("Core.Entities.Producto", "Producto")
                         .WithMany("ProductoPresentaciones")
                         .HasForeignKey("ProductoId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("Core.Entities.ProductoSucursal", b =>
+                {
+                    b.HasOne("Core.Entities.Producto", "Producto")
+                        .WithMany("ProductoSucursal")
+                        .HasForeignKey("ProductoId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Core.Entities.Sucursal", "Sucursal")
+                        .WithMany("ProductoSucursal")
+                        .HasForeignKey("SucursalId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("Core.Entities.Recibo", b =>
+                {
+                    b.HasOne("Core.Entities.Caja", "Caja")
+                        .WithMany("Recibos")
+                        .HasForeignKey("CajaId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Core.Entities.Cliente", "Cliente")
+                        .WithMany("Recibos")
+                        .HasForeignKey("ClienteId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
@@ -939,6 +1241,11 @@ namespace ApplicationContext.Migrations
 
             modelBuilder.Entity("Core.Entities.Venta", b =>
                 {
+                    b.HasOne("Core.Entities.Caja", "Caja")
+                        .WithMany("Ventas")
+                        .HasForeignKey("CajaId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("Core.Entities.Cliente", "Cliente")
                         .WithMany("Ventas")
                         .HasForeignKey("ClienteId")

@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Core.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Text;
+using static Core.Constants;
 
 namespace Core.DTOs.Inventario
 {
@@ -13,8 +15,8 @@ namespace Core.DTOs.Inventario
     {
         public int Id { get; set; }
         public DateTime DateCreated { get; set; }
-        public int UserId { get; set; }
-        public string User { get; set; }
+        public InventarioEstado Estado { get; set; }
+        public string EstadoDescription => Estado.GetDescription();
 
     }
 
