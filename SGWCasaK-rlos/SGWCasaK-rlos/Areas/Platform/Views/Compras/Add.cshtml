@@ -1,5 +1,5 @@
 ﻿@model Core.DTOs.Compras.ComprasAddViewModel
-<div class="m-content" style="width: 100%">
+@*<div class="m-content" style="width: 100%">
     <div class="row">
         <div class="col-md-12">
             <div class="m-portlet m-portlet--tab">
@@ -69,9 +69,13 @@
                                         <input class="form-control m-input" type="text" id="example-text-input" data-bind="value: dataViewModel.proveedor.ruc">
                                     </div>
                                     <div class="col-4" align="right">
+<<<<<<< Updated upstream
                                         @*<button  class="btn btn-success">
                             Agregar
                         </button>*@
+=======
+                                        
+>>>>>>> Stashed changes
                                         <button type="button" class="btn btn-success" onclick="showListaProveedoresModal()">
                                             Buscar
                                         </button>
@@ -313,7 +317,7 @@
             </div>
         </div>
     </div>
-</div>
+</div>*@
 @{
     Html.RenderPartial("~/Areas/Platform/Views/Shared/_ListaProductoModal.cshtml");
     Html.RenderPartial("~/Areas/Platform/Views/Shared/_AddProductoModal.cshtml");

@@ -33,11 +33,32 @@
                             <span class="alert-danger"></span>
                         </div>
                         <div class="form-group m-form__group">
-                            <label for="exampleInputEmail1">
-                                Es Cliente
-                            </label>
-                            <input type="checkbox" class="form-control m-input" id="isCliente" name="isCliente" data-bind="checked: isCliente">
-
+                            @*<label for="exampleInputEmail1">
+            Es Cliente
+        </label>
+        <input type="checkbox" class="form-control m-input" id="isCliente" name="isCliente" data-bind="checked: isCliente">*@
+                            <div class="m-radio-list">
+                                <label class="m-radio">
+                                    <input type="radio" name="example_1" value="1">
+                                    Option 1
+                                    <span></span>
+                                </label>
+                                <label class="m-radio">
+                                    <input type="radio" name="example_1" value="2">
+                                    Option 2
+                                    <span></span>
+                                </label>
+                                <label class="m-radio m-radio--disabled">
+                                    <input type="radio" disabled>
+                                    Disabled
+                                    <span></span>
+                                </label>
+                                <label class="m-radio">
+                                    <input type="radio" checked="checked">
+                                    Checked
+                                    <span></span>
+                                </label>
+                            </div>
                         </div>
                         <div class="form-group m-form__group">
                             <label for="exampleInputEmail1">
