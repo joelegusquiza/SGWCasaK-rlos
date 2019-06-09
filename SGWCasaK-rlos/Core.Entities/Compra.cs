@@ -18,12 +18,17 @@ namespace Core.Entities
         public string NroFactura { get; set; }
         public CondicionCompra CondicionCompra { get; set; }
         public EstadoCompra Estado { get; set; }
+        public string RazonAnulado { get; set; }
+
+        public string Timbrado { get; set; }
+        public DateTimeOffset FechaInicio { get; set; }
+        public DateTimeOffset FechaFin { get; set; }
 
         public int? ProveedorId { get; set; }
         public Proveedor Proveedor { get; set; }
         public int SucursalId { get; set; }
         public Sucursal Sucursal { get; set; }
         public ICollection<DetalleCompra> DetalleCompra { get; set; } = new HashSet<DetalleCompra>();
-        public ICollection<PagoCompra> PagosCompra { get; set; } = new HashSet<PagoCompra>();
+        public ICollection<OrdenPagoCompraDetalle> OrdenPagoDetalle { get; set; } = new HashSet<OrdenPagoCompraDetalle>();
     }
 }

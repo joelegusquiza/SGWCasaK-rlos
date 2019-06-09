@@ -14,7 +14,7 @@ namespace Core.DAL.Interfaces
     public interface IUsuarios
     {
         List<Usuario> GetAll();
-        Task<bool> CheckPermissionForUser(int userId, AccessFunctions permission);
+        bool CheckPermissionForUser(int userId, AccessFunctions permission);
         Usuario GetById(int id);
         Usuario GetForLogin(string email);
         Usuario GetByEmail(string email);

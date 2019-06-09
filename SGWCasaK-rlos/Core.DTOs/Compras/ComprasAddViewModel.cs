@@ -11,6 +11,7 @@ namespace Core.DTOs.Compras
 {
     public class ComprasAddViewModel
     {
+        public int Id { get; set; }
         public int SucursalId { get; set; }
         public DateTimeOffset DateCompra { get; set; } = DateTime.UtcNow;
         public string NroFactura { get; set; }
@@ -18,6 +19,9 @@ namespace Core.DTOs.Compras
         public decimal IvaCinco { get; set; }
         public decimal IvaDiez { get; set; }
         public decimal Excenta { get; set; }
+        public string Timbrado { get; set; }
+        public DateTimeOffset FechaInicio { get; set; }
+        public DateTimeOffset FechaFin { get; set; }
 
         public CondicionCompra CondicionCompra { get; set; }
         public List<DropDownViewModel<CondicionCompra>> CondicionesCompra = Enum.GetValues(typeof(CondicionCompra)).Cast<CondicionCompra>().Select(x => new DropDownViewModel<CondicionCompra>

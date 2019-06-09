@@ -17,7 +17,15 @@ namespace Core.Automapper
             CreateMap<Venta, VentasAddViewModel>()
                 .ReverseMap();
 
-            CreateMap<VentasDetalleAddViewModel, DetalleVenta>()
+			CreateMap<Timbrado, VentasAddViewModel>()
+			   .ReverseMap();
+
+			CreateMap<VentasViewViewModel, Venta>()
+				.ForMember(dest => dest.DetalleVenta, opt => opt.Ignore())
+				.ForMember(dest => dest.Cliente, opt => opt.Ignore())
+				.ReverseMap();
+
+			CreateMap<VentasDetalleAddViewModel, DetalleVenta>()
                 .ForMember(dest => dest.Descripcion, opt => opt.MapFrom(src => src.Nombre))
                 .ReverseMap();
 
@@ -28,8 +36,14 @@ namespace Core.Automapper
 
             CreateMap<DetallePedido, VentasDetalleAddViewModel>()
                 .ForMember(dest => dest.Nombre, opt => opt.MapFrom(src => src.Descripcion))
-                .ReverseMap();
+				.ForMember(dest => dest.Id, opt => opt.Ignore())
+				.ReverseMap();
 
-        }
+			CreateMap<Venta, ListaVentasViewModel>()
+			  .ForMember(dest => dest.VentaId, opt => opt.MapFrom(src => src.Id))
+			  .ForMember(dest => dest.Monto, opt => opt.MapFrom(src => src.MontoTotal))
+			  .ReverseMap();
+
+		}
     }
 }

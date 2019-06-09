@@ -71,36 +71,37 @@ ko.bindingHandlers.timepicker = {
     }
 };
 
-ko.bindingHandlers.editableText = {
-    init: function (element, valueAccessor) {
-        $(element).on("blur", function () {
-            var observable = valueAccessor();
-            if (observable != null) {
-                observable($(this).text());
-            }
-           
-        });
-    },
-    update: function (element, valueAccessor) {
-        var value = ko.utils.unwrapObservable(valueAccessor());
-        $(element).text(value);
-    }
+ko.bindingHandlers.datetimepicker = {
+	init: function (element, valueAccessor, allBindings) {
+		//initialize datepicker with some optional options
+		var format;
+		var defaultFormat = 'yyyy-mm-ddThh:ii:ss a';
+		if (typeof allBindings == 'function') {
+			format = allBindings().format || defaultFormat;
+		}
+		else {
+			format = allBindings.get('format') || defaultFormat;
+		}
+		$(element).datetimepicker({
+			autoclose: true,
+			todayBtn: true,
+			'format': 'yyyy-mm-dd HH:mm ' 
+		})
+
+		//when a user changes the date, update the view model
+		ko.utils.registerEventHandler(element, "changeDate", function (event) {
+			var value = valueAccessor();
+			if (ko.isObservable(value)) {
+				var dateObject = new Date($(element).datetimepicker("getFormattedDate"));
+				console.log((new Date(dateObject.getTime() - new Date().getTimezoneOffset() * 60000)).toISOString().split('Z')[0] + '-0' + new Date().getTimezoneOffset() / 60+":00");
+				value((new Date(dateObject.getTime() - new Date().getTimezoneOffset() * 60000)).toISOString().split('Z')[0] + '-0' + new Date().getTimezoneOffset() / 60 + ":00");
+			}
+		});
+	},
+	update: function (element, valueAccessor) {
+		var date = ko.unwrap(valueAccessor());
+		if (date) {
+			$(element).datetimepicker('setValue', date);
+		}
+	}
 };
-
-ko.bindingHandlers.footable = {
-    init: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
-        $(element).closest("table").footable();
-    },
-    update: function (element, valueAccessor) {
-        //this is called when the observableArray changes
-        //and after the foreach has rendered the contents       
-        ko.unwrap(valueAccessor()); //needed so that update is called
-        $(element).closest("table").trigger('footable_redraw');
-    }
-}
-
-ko.bindingHandlers.footable.preprocess = function (value, name, addBindingCallback) {
-    //add foreach binding
-    addBindingCallback('foreach', '{ data: ' + value + '}');
-    return value;
-}

@@ -29,10 +29,12 @@ namespace Core.Entities
         public Cliente Cliente { get; set; }
         public int RolId { get; set; }
         public Rol Rol { get; set; }
-        public int SucursalId { get; set; }
+        public int? SucursalId { get; set; }
         public Sucursal Sucursal { get; set; }
-
-        public void SetPassword(string password)
+        public ICollection<CajaAperturaCierre> CajaAperturasCierres { get; set; } = new HashSet<CajaAperturaCierre>();
+		public ICollection<Inventario> InventarioIniciado { get; set; } = new HashSet<Inventario>();
+		public ICollection<Inventario> InventarioTerminado { get; set; } = new HashSet<Inventario>();
+		public void SetPassword(string password)
         {
             var salt = new byte[128 / 8];
             using (var rng = RandomNumberGenerator.Create())

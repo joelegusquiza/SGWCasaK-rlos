@@ -11,11 +11,11 @@ namespace Core.Entities
     {
         public string Nombre { get; set; }
         public string Descripcion { get; set; }
-        public int Stock { get; set; }
+        //public int Stock { get; set; }
         public PorcIva PorcentajeIva { get; set; }
         public UnidadesMedida UnidadMedida { get; set; }
         public double PorcentajeGanancia { get; set; }
-        //public decimal PrecioVenta { get; set; }
+        public decimal PrecioVenta { get; set; }
 
         public int CategoriaProductoId { get; set; }
         public CategoriaProducto CategoriaProducto { get; set; }               
@@ -24,7 +24,6 @@ namespace Core.Entities
         public ICollection<DetalleVenta> DetalleVenta { get; set; } = new HashSet<DetalleVenta>();
         public ICollection<DetalleInventario> DetalleInventario { get; set; } = new HashSet<DetalleInventario>();
         public ICollection<ProductoPresentacion> ProductoPresentaciones { get; set; } = new HashSet<ProductoPresentacion>();
-        
-
+        public ICollection<ProductoSucursal> ProductoSucursal { get; set; } = new HashSet<ProductoSucursal>();        
     }
 }

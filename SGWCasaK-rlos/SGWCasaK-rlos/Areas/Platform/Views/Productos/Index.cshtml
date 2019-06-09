@@ -80,7 +80,11 @@
                             {
                                 <a href="#" data-bind="attr: { id: id() }" onClick="javacript: desactivate(this)"><i class="fa fa-trash"></i></a>
                             }
-
+                            <!-- ko if: isInSucursal() == false -->
+                            
+                                <a href="#" data-bind="attr: { id: id() }" onClick="javacript: addToSucursal(this)"><i class="fa fa-plus"></i> Agregar a Sucursal</a>
+                            
+                            <!-- /ko -->
                         </td>
                     </tr>
                 </tbody>
@@ -100,6 +104,32 @@
                 //if (result) {
                     $.ajax({
                         url: "@Url.Action("Desactivate")",
+                        type: "POST",
+                        data: { id: id},
+                        success: function (response) {
+                            if (response.success) {
+
+                                localStorage.setItem('show', 'true');
+                                window.location.reload();
+                            } else {
+                                showError(response.message);
+                            }
+                        },
+                        error: function () {
+                            showError("Error!");
+                        }
+                    });
+                //}
+            //});
+            return false;
+        }
+
+         function addToSucursal(element){
+            var id = $(element).attr('id');
+            //bootbox.confirm("Estas seguro?", function (result) {
+                //if (result) {
+                    $.ajax({
+                        url: "@Url.Action("AddToSucursal")",
                         type: "POST",
                         data: { id: id},
                         success: function (response) {

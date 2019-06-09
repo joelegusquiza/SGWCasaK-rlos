@@ -13,7 +13,8 @@ namespace Core.DTOs.Usuarios
         public string Apellido { get; set; }
         public string Password { get; set; }
         public int RolId { get; set; }
-        public List<DropDownViewModel<int>> Roles { get; set; } = new List<DropDownViewModel<int>>();
-        
+        public int? SucursalId { get; set; }
+        public List<AdditionalData> Roles { get; set; } = new List<AdditionalData>();
+        public List<DropDownViewModel<int>> Sucursales { get; set; } = new List<DropDownViewModel<int>>();
     }
 }

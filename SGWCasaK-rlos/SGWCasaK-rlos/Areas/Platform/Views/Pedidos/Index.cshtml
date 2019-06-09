@@ -52,6 +52,7 @@
             <table class="m-datatable" id="pedidosIndexTable" width="100%">
                 <thead>
                     <tr>
+						<th>#</th>
                         <th title="Field #1">
                             Cliente
                         </th>
@@ -69,6 +70,7 @@
                 </thead>
                 <tbody data-bind="foreach: pedidos">
                     <tr>
+						<td data-bind="text: id"></td>
                         <td data-bind="text: displayName"></td>
                         <td data-bind="text: montoTotal"></td>
                         <td data-bind="text: estadoDescripcion"></td>
@@ -78,25 +80,27 @@
                         <!-- ko if: delivery() != true -->
                         <td data-bind="text:'No'"></td>
                         <!-- /ko -->
-                        <td>
-                            @if (HasPermisos(Core.Constants.AccessFunctions.EditPedido))
-                            {
-                                <a data-bind="attr: { href: '@Url.Action("Edit", "Pedidos", new  { area = "Platform" })?id=' + id() }"><i class="fa fa-edit"></i> Editar</a>
-                            }
-                            @if (HasPermisos(Core.Constants.AccessFunctions.DeletePedido))
-                            {
-                                <a href="#" data-bind="attr: { id: id() }" onClick="javacript: anular(this)"><i class="fa fa-trash"></i> Eliminar</a>
-                            }
-                            @if (HasPermisos(Core.Constants.AccessFunctions.GenerateVentaPedido))
-                            {
-                                <a href="#" data-bind="attr: { id: id() }" onClick="javacript: generarVenta(this)"><i class="fa fa-edit"></i>Generar Venta</a>
-                            }
-                            @if (HasPermisos(Core.Constants.AccessFunctions.ChangeEstadoPedido))
-                            {
-                                <a href="#" data-bind="attr: { id: id() }" onClick="javacript: openCambiarEstadoModal(this)"><i class="fa fa-edit"></i> Cambiar Estado</a>
-                            }
-
-                        </td>
+						<td>
+							<a data-bind="attr: { href: '@Url.Action("View", "Pedidos", new  { area = "Platform" })?id=' + id() }"><i class="fa fa-eye"></i> View</a>
+							<!-- ko if: estado() == @((int)Core.Constants.EstadoPedido.Pendiente)  -->
+							@if (HasPermisos(Core.Constants.AccessFunctions.EditPedido))
+							{
+								<a data-bind="attr: { href: '@Url.Action("Edit", "Pedidos", new  { area = "Platform" })?id=' + id() }"><i class="fa fa-edit"></i> Editar</a>
+							}
+							<!-- /ko -->
+							<!-- ko if: estado() ==  @((int)Core.Constants.EstadoPedido.Preparado)-->
+							@if (HasPermisos(Core.Constants.AccessFunctions.GenerateVentaPedido))
+							{
+								<a href="#" data-bind="attr: { id: id() }" onClick="javacript: validarCajaAbierta(this)"><i class="fa fa-edit"></i>Generar Venta</a>
+							}
+							<!-- /ko -->
+							<!-- ko if: estado() !=@((int)Core.Constants.EstadoPedido.EntregadoPorDelivery) || estado() !=@((int)Core.Constants.EstadoPedido.Finalizado) -->
+							@if (HasPermisos(Core.Constants.AccessFunctions.ChangeEstadoPedido))
+							{
+								<a href="#" data-bind="attr: { id: id() }" onClick="javacript: openCambiarEstadoModal(this)"><i class="fa fa-edit"></i> Cambiar Estado</a>
+							}
+							<!-- /ko -->
+						</td>
                     </tr>
                 </tbody>
             </table>
@@ -106,7 +110,7 @@
 </div>
 
 @{
-    Html.RenderPartial("~/Areas/Platform/Views/Shared/_ChangeEstadoPedidoModal.cshtml");
+    Html.RenderPartial("~/Areas/Platform/Views/Shared/_ChangeEstadoModal.cshtml");
 }
 @section scripts{
     <script>
@@ -116,19 +120,14 @@
         dataViewModel.pedidoId = ko.observable();
         dataViewModel.estado = ko.observable();
 
-        dataViewModel.changeEstadoPedido = function ()
-        {
-                $.ajax({
-                    url: "@Url.Action("CambiarEstado")",
+		function validarCajaAbierta(element) {
+				$.ajax({
+                    url: "@Url.Action("IsAnyCajaOpen", "CajaAperturaCierre")",
                     type: "POST",
-                    data: { id: dataViewModel.pedidoId(), estado: dataViewModel.estado()},
+
                     success: function (response) {
-                        if (response.success) {
-                            localStorage.setItem('message', response.message);
-                            localStorage.setItem('show', 'true');
-                            dataViewModel.pedidoId(0);
-                            dataViewModel.estado(0);
-                            window.location.reload();
+						if (response.success) {
+							generarVenta(element);
                         } else {
                             showError(response.message);
                         }
@@ -137,7 +136,7 @@
                         showError("Error!");
                     }
                 });
-        }
+		}
 
         function generarVenta (element)
         {
@@ -158,13 +157,21 @@
                     }
                 });
         }
+		function openCambiarEstadoModal(element) {
+			var id = $(element).attr('id');
+			$("#cambiarEstadoIFrame").attr('src', '@Url.Action("ChangeEstadoPedidoIFrame", "Pedidos", new { area = "Platform"})?id=' + id);
+			$("#cambiarEstadoModal").modal("show");
+        }
 
-        function openCambiarEstadoModal(element)
-        {
-            dataViewModel.pedidoId($(element).attr('id'));
-            //dataViewModel.Estado($("#pedidosEstadosSelect").val())
-            $("#changeEstadoPedidoModal").modal("show");
-        }       
+
+		function changeEstadoPedido(result) {
+			$("#cambiarEstadoModal").modal("hide");
+			if (result.success)
+				window.location.reload()
+			else
+				showError(result.message);
+        }
+          
 
         function anular(element){
             var id = $(element).attr('id');

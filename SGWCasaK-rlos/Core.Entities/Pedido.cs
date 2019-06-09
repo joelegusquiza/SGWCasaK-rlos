@@ -14,9 +14,12 @@ namespace Core.Entities
         public string DireccionEntrega { get; set; }
         public DateTimeOffset? FechaEntrega { get; set; }
         public EstadoPedido Estado { get; set; }
+		public string RazonAnulado { get; set; }
 
         public Cliente Cliente { get; set; }
         public int ClienteId { get; set; }
+		public int SucursalId { get; set; }
+		public Sucursal Sucursal { get; set; }
         public ICollection<Venta> Ventas { get; set; } = new HashSet<Venta>();
         public ICollection<DetallePedido> DetallePedido { get; set; } = new HashSet<DetallePedido>();
     }

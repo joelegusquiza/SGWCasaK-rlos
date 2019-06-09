@@ -8,8 +8,8 @@ namespace Core.DTOs.Cajas
     public class CajasAddViewModel
     {
         public string Nombre { get; set; }
-
-        public int SucursalId { get; set; }
+		public int PuntoExpedicion { get; set; }
+		public int SucursalId { get; set; }
         public List<DropDownViewModel<int>> Sucursales = new List<DropDownViewModel<int>>();
     }
 }

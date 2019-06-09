@@ -36,7 +36,7 @@ namespace SGWCasaK_rlos.SecurityHelpers
             }
            
             var userId = Int32.Parse(context.User.Claims.FirstOrDefault(x => x.Type == CustomClaims.UserId).Value.ToString());
-            bool hasPermission = await _usuarios.CheckPermissionForUser(userId, requirement.Permission);
+            bool hasPermission = _usuarios.CheckPermissionForUser(userId, requirement.Permission);
             if (hasPermission)
             {
                 context.Succeed(requirement);

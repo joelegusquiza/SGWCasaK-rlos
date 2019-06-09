@@ -55,7 +55,17 @@
                                            optionsText: 'text',
                                            value: rolId,
                                            optionsCaption: 'Seleccione una opcion'"></select>
-                                    
+
+                        </div>                       
+                        <div data-bind="visible: dataViewModel.needSucursal()"class="form-group m-form__group">
+                            <label for="exampleInputEmail1">
+                                Sucursales
+                            </label>
+                            <select class="form-control m-input m-input--square" id="sucursales" name="sucursales" data-bind="options: sucursales,
+                                           optionsValue: 'value',
+                                           optionsText: 'text',
+                                           value: sucursalId,
+                                           optionsCaption: 'Seleccione una opcion'"></select>
                         </div>
                         <div class="form-group m-form__group">
                             <label for="exampleInputEmail1">
@@ -90,10 +100,19 @@
     <script>
         var model = @Html.Raw(Json.Serialize(Model));
         var dataViewModel = ko.mapping.fromJS(model);
+
+        dataViewModel.needSucursal = ko.pureComputed(function ()
+        {
+            var rol = $.grep(dataViewModel.roles(), function (item) { return item.value() === dataViewModel.rolId(); })[0]
+            if (rol == undefined)
+                return true;
+            return !rol.additionalBool();
+        });
         dataViewModel.postDataToController = function () {
 
+            if (dataViewModel.needSucursal() && $.grep(dataViewModel.roles(), function (item) { return item.additionalBool() === true; })[0].value() != dataViewModel.rolId()) { showError("Necesita agregar una sucursal al usuario") }
             if (!$("#form").valid()) return;
-
+            
             $.ajax({
                 url: "@Url.Action("Save", "Usuarios")",
                 type: "POST",
@@ -113,7 +132,7 @@
         }
         ko.applyBindings(dataViewModel);
 
-
+       
         $('#form').validate({
             rules: {
                 nombre: {

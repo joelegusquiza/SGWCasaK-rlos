@@ -1,5 +1,5 @@
 ﻿@model Core.DTOs.Compras.ComprasIndexViewModel
-
+@using Core;
 <div class="m-content" style="width: 100%">
     <div class="m-portlet m-portlet--mobile">
         <div class="m-portlet__head">
@@ -59,12 +59,15 @@
                             Fecha
                         </th>
                         <th title="Field #2">
-                           Proeedor
+                            Proveedor
                         </th>
                         <th title="Field #5">
-                           Monto Total
+                            Monto Total
                         </th>
-                        <th></th>
+                        <th title="Field #5">
+                            Estado
+                        </th>
+                        @*<th></th>*@
                     </tr>
                 </thead>
                 <tbody data-bind="foreach: compras">
@@ -73,13 +76,7 @@
                         <td data-bind="text: moment(dateCompra()).format('DD/MM/YYYY')"></td>
                         <td data-bind="text: proveedor"></td>
                         <td data-bind="text: montoTotal"></td>
-                        <td>
-                            @if (HasPermisos(Core.Constants.AccessFunctions.DeleteCompra))
-                            {
-                                <a href="#" data-bind="attr: { id: id() }" onClick="javacript: desactivate(this)"><i class="fa fa-trash"></i></a>
-                            }
-
-                        </td>
+                        <td data-bind="text: estadoDescripcion"></td>
                     </tr>
                 </tbody>
             </table>
@@ -91,32 +88,7 @@
     <script>
 
         var model = @Html.Raw(Json.Serialize(Model));
-        var dataViewModel = ko.mapping.fromJS(model);
-        function desactivate(element){
-            var id = $(element).attr('id');
-            //bootbox.confirm("Estas seguro?", function (result) {
-                //if (result) {
-                    $.ajax({
-                        url: "@Url.Action("Desactivate")",
-                        type: "POST",
-                        data: { id: id},
-                        success: function (response) {
-                            if (response.success) {
-
-                                localStorage.setItem('show', 'true');
-                                window.location.reload();
-                            } else {
-                                showError(response.message);
-                            }
-                        },
-                        error: function () {
-                            showError("Error!");
-                        }
-                    });
-                //}
-            //});
-            return false;
-        }
+        var dataViewModel = ko.mapping.fromJS(model);        
         ko.applyBindings(dataViewModel);
         $(document).ready(function () {
 
