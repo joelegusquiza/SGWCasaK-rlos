@@ -359,8 +359,10 @@
                 resetProductoForm();
                 return;
             }
+            var productoToAdd = ko.mapping.fromJS(ko.mapping.toJS(dataViewModel.producto));
+            productoToAdd.precioVenta(dataViewModel.producto.precioVentaToAdd());
             dataViewModel.producto.montoTotal(dataViewModel.producto.precioVenta() *  dataViewModel.producto.cantidad());
-            dataViewModel.detalleVenta.push(ko.mapping.fromJS(ko.mapping.toJS(dataViewModel.producto)))
+            dataViewModel.detalleVenta.push(ko.mapping.fromJS(ko.mapping.toJS(productoToAdd)))
             resetProductoForm();
 
         }
@@ -510,7 +512,7 @@
 
         function resetProductoForm() {
             dataViewModel.producto.nombre("");
-            dataViewModel.producto.precioVenta(0);
+            dataViewModel.producto.precioVentaToAdd(0);
             dataViewModel.producto.cantidad(0);
             dataViewModel.producto.productoId(0);
 		}
