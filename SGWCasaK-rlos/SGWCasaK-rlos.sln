@@ -17,6 +17,18 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Automapper", "Core.Aut
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.DAL", "Core.DAL\Core.DAL.csproj", "{0D659760-922A-42EC-8F81-C432EA671314}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MigradoFiles", "MigradoFiles", "{39257DAF-178E-4897-9E16-2C96920AB0E9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MigraDoc.DocumentObjectModel", "MigradocFiles\MigraDoc.DocumentObjectModel\MigraDoc.DocumentObjectModel.csproj", "{05A3FB9C-4934-445D-B3C2-4992C821ED65}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MigraDoc.Rendering", "MigradocFiles\MigraDoc.Rendering\MigraDoc.Rendering.csproj", "{65197DA6-A3EF-4910-B926-74D1C5D7C36E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PdfSharp", "MigradocFiles\PdfSharp\PdfSharp.csproj", "{64BECD6B-F806-4FBF-B76C-3CDD42D2A991}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PdfSharp.Charting", "MigradocFiles\PdfSharp.Charting\PdfSharp.Charting.csproj", "{8464BFC4-8763-4468-B136-346DA3D985C2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PdfServices", "PdfServices\PdfServices.csproj", "{B5354BE5-4958-4863-9DBA-07445F98D0C7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,9 +63,35 @@ Global
 		{0D659760-922A-42EC-8F81-C432EA671314}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0D659760-922A-42EC-8F81-C432EA671314}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0D659760-922A-42EC-8F81-C432EA671314}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05A3FB9C-4934-445D-B3C2-4992C821ED65}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05A3FB9C-4934-445D-B3C2-4992C821ED65}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05A3FB9C-4934-445D-B3C2-4992C821ED65}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05A3FB9C-4934-445D-B3C2-4992C821ED65}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65197DA6-A3EF-4910-B926-74D1C5D7C36E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65197DA6-A3EF-4910-B926-74D1C5D7C36E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65197DA6-A3EF-4910-B926-74D1C5D7C36E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65197DA6-A3EF-4910-B926-74D1C5D7C36E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64BECD6B-F806-4FBF-B76C-3CDD42D2A991}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64BECD6B-F806-4FBF-B76C-3CDD42D2A991}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64BECD6B-F806-4FBF-B76C-3CDD42D2A991}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64BECD6B-F806-4FBF-B76C-3CDD42D2A991}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8464BFC4-8763-4468-B136-346DA3D985C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8464BFC4-8763-4468-B136-346DA3D985C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8464BFC4-8763-4468-B136-346DA3D985C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8464BFC4-8763-4468-B136-346DA3D985C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B5354BE5-4958-4863-9DBA-07445F98D0C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B5354BE5-4958-4863-9DBA-07445F98D0C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B5354BE5-4958-4863-9DBA-07445F98D0C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B5354BE5-4958-4863-9DBA-07445F98D0C7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{05A3FB9C-4934-445D-B3C2-4992C821ED65} = {39257DAF-178E-4897-9E16-2C96920AB0E9}
+		{65197DA6-A3EF-4910-B926-74D1C5D7C36E} = {39257DAF-178E-4897-9E16-2C96920AB0E9}
+		{64BECD6B-F806-4FBF-B76C-3CDD42D2A991} = {39257DAF-178E-4897-9E16-2C96920AB0E9}
+		{8464BFC4-8763-4468-B136-346DA3D985C2} = {39257DAF-178E-4897-9E16-2C96920AB0E9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {453C52E7-79BD-4F48-80A3-04675424524A}

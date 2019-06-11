@@ -91,8 +91,9 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
 				UsuarioId = UserId,
 				Cajas = _cajas.GetAllBySucusalId(SucursalId).Select(x => new DropDownViewModel<int>() { Text = $"{x.Nombre}", Value = x.Id }).ToList(),
 				CajaId = cajaAperturaCierre.CajaId,
-				Id = cajaAperturaCierre.Id,				
-				Detalle = _cajaAperturaCierre.GetCajaDetalle(id)
+				Id = cajaAperturaCierre.Id,
+				Detalle = Mapper.Map<List<CajaCierreDetalleViewModel>>(cajaAperturaCierre.Detalle)
+				
 			};
 			viewModel.Monto = viewModel.Detalle.Sum(x => x.Monto);
 			return View(viewModel);
@@ -136,7 +137,7 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
             {
                 var usuario = _usuarios.GetForLogin(Email);
                 var caja = _cajas.GetById(viewModel.CajaId);
-                var claims = new ClaimsIdentity(SecurityHelper.GetUserClaims(usuario, usuario.Sucursal, caja), "Cookie");
+                var claims = new ClaimsIdentity(SecurityHelper.GetUserClaims(usuario, usuario.Sucursal, caja, result.Id), "Cookie");
                 await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claims));
             }

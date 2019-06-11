@@ -32,7 +32,7 @@ namespace Core.DAL.Services
 
         public CajaAperturaCierre GetById(int id)
         {
-            var item = _context.Set<CajaAperturaCierre>().FirstOrDefault(x => x.Active && x.Id == id);
+            var item = _context.Set<CajaAperturaCierre>().Include(x => x.Detalle).FirstOrDefault(x => x.Active && x.Id == id);
             return item;
         }
 
@@ -41,26 +41,7 @@ namespace Core.DAL.Services
             var item = _context.Set<CajaAperturaCierre>().Include(x => x.Caja).Where(x => x.Active && x.UsuarioId == usuarioId).OrderByDescending(x => x.DateCreated).FirstOrDefault();
             return item;
         }
-
-		public List<CajaCierreDetalleViewModel> GetCajaDetalle(int id)
-		{
-			var aperturaCierre = GetById(id);
-			var ventas = _context.Set<Venta>().Where(x => x.Active && x.Estado == Constants.EstadoVenta.Pagado && x.CajaId == aperturaCierre.CajaId );
-			var recibos = _context.Set<Recibo>().Where(x => x.Active && x.Estado == Constants.EstadoRecibo.Pendiente && x.CajaId == aperturaCierre.CajaId);
-			var listToReturn = new List<CajaCierreDetalleViewModel>();
-			foreach (var venta in ventas)
-			{
-				var item = new CajaCierreDetalleViewModel() { Monto = venta.MontoTotal, FechaCreacion = venta.DateCreated, TipoOperacion = TipoCajaAperturaCierreOperacion.Venta, Cambio = venta.Cambio};
-				listToReturn.Add(item);
-			}
-
-			foreach (var recibo in recibos)
-			{
-				var item = new CajaCierreDetalleViewModel() { Monto = recibo.MontoTotal, FechaCreacion = recibo.DateCreated, TipoOperacion = TipoCajaAperturaCierreOperacion.Recibo, Cambio = recibo.Cambio };
-				listToReturn.Add(item);
-			}
-			return listToReturn;
-		}
+		
 
         public SystemValidationModel SaveApertura(AddCajaAperturaViewModel viewModel)
         {
@@ -87,7 +68,7 @@ namespace Core.DAL.Services
 			var cajaAperturaCierre = GetById(viewModel.Id);
 			cajaAperturaCierre.MontoCierre = viewModel.Monto;
 			cajaAperturaCierre.FechaCierre = viewModel.FechaCierre;
-			cajaAperturaCierre.Detalle = Mapper.Map<List<DetalleCajaAperturaCierre>>(viewModel.Detalle);
+			
 
 			_context.Entry(cajaAperturaCierre).State = EntityState.Modified;
 			

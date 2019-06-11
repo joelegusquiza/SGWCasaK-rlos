@@ -42,11 +42,20 @@ namespace SGWCasaK_rlos.Areas.Shared.Controllers
         {
             get
             {
-                return User.Claims.FirstOrDefault(x => x.Type == CustomClaims.CajaId) == null? 0 : Convert.ToInt32(User.Claims.FirstOrDefault(x => x.Type == CustomClaims.CajaId).Value);
+                return _cajaId > 0 ? _cajaId : _cajaId = Convert.ToInt32(User.Claims.FirstOrDefault(x => x.Type == CustomClaims.CajaId).Value);
             }
         }
 
-        private string _email { get; set; }
+		private int _cajaAperturaCierreId { get; set; }
+		public int CajaAperturaCierreId
+		{
+			get
+			{
+				return _cajaAperturaCierreId > 0 ? _cajaAperturaCierreId : _cajaAperturaCierreId = Convert.ToInt32(User.Claims.FirstOrDefault(x => x.Type == CustomClaims.CajaAperturaCierreId).Value);
+			}
+		}
+
+		private string _email { get; set; }
         public string Email
         {
             get

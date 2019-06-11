@@ -14,5 +14,6 @@ namespace Core.DTOs.Shared
     {
 		public string AdditionalString { get; set; }
         public bool AdditionalBool { get; set; }
+		public int AdditionalInt { get; set; }
     }
 }

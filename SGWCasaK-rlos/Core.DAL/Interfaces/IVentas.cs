@@ -15,9 +15,12 @@ namespace Core.DAL.Interfaces
 		List<Venta> GetVentaConfirmadoByClienteId(int clienteId);
 		SystemValidationModel Save(VentasAddViewModel viewModel);
 		SystemValidationModel Edit(VentasViewViewModel viewModel);
+		SystemValidationModel Edit(Venta venta);
 		SystemValidationModel Confirm(VentasViewViewModel viewModel);
 		VentasViewViewModel GetForView(int id);
 		SystemValidationModel Anular(int id);
+		int GetValidNroFactura(int sucursalId, int cajaId);
+		string GetNroFacturaString(int sucursalId, int cajaId, int nroFactura);
 
 	}
 }

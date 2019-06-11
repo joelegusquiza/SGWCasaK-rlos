@@ -126,7 +126,7 @@
                 data: { model: ko.toJSON(dataViewModel) },
                 success: function (response) {
 
-                    parent.aperturaCierreCajaResult(response)
+                    showSuccessAndGoToUrl(response.message, '@Url.Action("Index", "CajaAperturaCierre", new { area = "Platform"})');
                 },
                 error: function () {
                     showError();

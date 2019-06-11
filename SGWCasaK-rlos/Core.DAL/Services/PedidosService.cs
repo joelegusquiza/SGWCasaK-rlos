@@ -43,6 +43,12 @@ namespace Core.DAL.Services
             return _context.Set<Pedido>().Include(x => x.DetallePedido).Include(x => x.Cliente).FirstOrDefault(x => x.Active && x.Id == id);
         }
 
+		public PedidosPdfModel GetPdfModel(int id)
+		{
+			var pedido = Mapper.Map<PedidosPdfModel>(GetById(id));
+			return pedido;
+		}
+
 		public List<EstadoPedido> GetEstadoAvailable(int id, bool anularPedidoPermiso)
 		{
 			var listToReturn = new List<EstadoPedido>();

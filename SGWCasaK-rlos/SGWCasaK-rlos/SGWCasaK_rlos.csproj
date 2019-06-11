@@ -23,6 +23,7 @@
     <ProjectReference Include="..\Core.DTOs\Core.DTOs.csproj" />
     <ProjectReference Include="..\Core.Entities\Core.Entities.csproj" />
     <ProjectReference Include="..\Core\Core.csproj" />
+    <ProjectReference Include="..\PdfServices\PdfServices.csproj" />
   </ItemGroup>
 
   <ItemGroup>

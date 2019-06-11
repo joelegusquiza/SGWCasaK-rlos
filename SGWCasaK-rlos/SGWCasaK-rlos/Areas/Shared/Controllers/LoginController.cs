@@ -119,7 +119,7 @@ namespace SGWCasaK_rlos.Areas.Shared.Controllers
 						if (aperturaCierre == null || aperturaCierre.FechaCierre != null)
 							claims = new ClaimsIdentity(SecurityHelper.GetUserClaims(usuario, usuario.Sucursal), "Cookie");
 						else
-							claims = new ClaimsIdentity(SecurityHelper.GetUserClaims(usuario, usuario.Sucursal, aperturaCierre.Caja), "Cookie");
+							claims = new ClaimsIdentity(SecurityHelper.GetUserClaims(usuario, usuario.Sucursal, aperturaCierre.Caja, aperturaCierre.Id), "Cookie");
 					}                        
                     else                    
                         claims = new ClaimsIdentity(SecurityHelper.GetUserClaims(usuario, usuario.Cliente), "Cookie");                    

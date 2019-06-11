@@ -15,6 +15,8 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using PdfServices.Interfaces;
+using PdfServices.Services;
 using SGWCasaK_rlos.SecurityHelpers;
 using static Core.Constants;
 
@@ -82,6 +84,7 @@ namespace SGWCasaK_rlos
             services.AddSingleton<ICajaAperturaCierre, CajaAperturaCierreService>();
 			services.AddSingleton<IRecibos, RecibosService>();
 			services.AddSingleton<ICuotas, CuotasService>();
+			services.AddSingleton<IPdfCreation, PdfCreationServices>();
 			services.AddScoped<UserEmailActiveFilter>();
 			
 			return services.BuildServiceProvider();

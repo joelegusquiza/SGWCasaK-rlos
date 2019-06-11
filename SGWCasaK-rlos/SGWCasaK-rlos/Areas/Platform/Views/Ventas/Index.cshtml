@@ -74,6 +74,7 @@
                       
 						<td>
 						<a data-bind="attr: { href: '@Url.Action("View", "Ventas", new  { area = "Platform" })?id=' + id() }"><i class="fa fa-edit"></i> Ver</a>
+						<button data-bind="attr: {id : id()}" onclick="javacript:getFacturaPdf(this)"><i class="fa fa-edit"></i> Imprimir</button>
 							@*<!-- ko if: estado() == @((int)Core.Constants.EstadoVenta.Pendiente)  -->
 							@if (HasPermisos(Core.Constants.AccessFunctions.AnularVenta))
 							{
@@ -126,7 +127,7 @@
             return false;
 		}
 
-			function validarCajaAbierta(element) {
+			function validarCajaAbierta() {
 				$.ajax({
                     url: "@Url.Action("IsAnyCajaOpen", "CajaAperturaCierre")",
                     type: "GET",
@@ -143,6 +144,24 @@
                     }
                 });
 		}
+		function getFacturaPdf(element) {          
+			var id = $(element).attr('id');
+            $.ajax({
+                url: "@Url.Action("GetFacturaPdf")",
+                type: "POST",
+                data: { id: id },
+                success: function (response) {
+                    printFacturaCaida(response);
+                    window.location.replace("@Url.Action("index", "ventas", new { area = "platform"})");
+                },
+                error: function () {
+                    showError();
+                    $("#pagosFactura").modal("hide");
+                }
+            });
+
+            return false;
+        } 
         ko.applyBindings(dataViewModel);
         $(document).ready(function () {            
 			var show = localStorage.getItem('show');

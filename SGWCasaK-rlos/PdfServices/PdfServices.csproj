@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Core.DTOs\Core.DTOs.csproj" />
+    <ProjectReference Include="..\MigradocFiles\MigraDoc.DocumentObjectModel\MigraDoc.DocumentObjectModel.csproj" />
+    <ProjectReference Include="..\MigradocFiles\MigraDoc.Rendering\MigraDoc.Rendering.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -76,7 +76,7 @@ namespace Core.DAL.Services
             compra.Estado = Constants.EstadoCompra.Confirmado;
             _context.Entry(compra).State = EntityState.Modified;
             AumentarStock(compra.DetalleCompra.Where(x => x.Active).ToList(), sucursalId);
-           
+			AumetarSaldoProveedor(compra);
             var success = _context.SaveChanges() > 0;
             if (success)
                 _productos.UpdatePrecioVenta(compra.DetalleCompra.Select(x => x.ProductoId).ToList(), sucursalId);
@@ -89,7 +89,14 @@ namespace Core.DAL.Services
             return validation;
         }
 
-        public SystemValidationModel Anular(int id, string razon)
+		private void AumetarSaldoProveedor(Compra compra)
+		{
+			var proveedor = _context.Set<Proveedor>().FirstOrDefault(x => x.Id == compra.ProveedorId);
+			proveedor.Saldo += compra.MontoTotal;
+			_context.Entry(proveedor).State = EntityState.Modified;
+		}
+
+		public SystemValidationModel Anular(int id, string razon)
         {
             var compra = _context.Set<Compra>().Include(x => x.DetalleCompra).FirstOrDefault(x => x.Active && x.Id == id);
             compra.Estado = Constants.EstadoCompra.Anulado;
