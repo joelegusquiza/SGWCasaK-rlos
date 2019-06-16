@@ -6,6 +6,8 @@ namespace Core.DTOs.Pdf
 {
 	public class FacturaPdfModel
 	{
+		public bool Success { get; set; }
+		public string Message { get; set; }
 		public string RazonSocial { get; set; }
 		public string Ruc { get; set; }
 		public string NombreSucursal { get; set; }

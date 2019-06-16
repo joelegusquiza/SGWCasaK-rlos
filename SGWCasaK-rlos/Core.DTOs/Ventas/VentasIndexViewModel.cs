@@ -18,6 +18,8 @@ namespace Core.DTOs.Ventas
         public DateTime DateCreated { get; set; }
         public decimal MontoTotal { get; set; }
 		public EstadoVenta Estado { get; set; }
+		public bool Impreso { get; set; }
+		public string ImpresoString => Impreso ? "Impreso" : "No impreso";
 		public string EstadoDescription => Estado.GetDescription();
     }
 }

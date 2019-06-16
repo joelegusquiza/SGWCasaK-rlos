@@ -149,63 +149,74 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
 				var numString = new NumLetra();
 				var venta = _ventas.GetById(id);
 				venta.Impreso = true;
-				var sucursal = _sucursales.GetById(venta.SucursalId);
-				var timbrado = _timbrados.GetById(venta.TimbradoId);
-				data.RazonSocial = "Casa K-rlos S.A.";
-				data.Ruc = "1234567-5";
-				data.NombreSucursal = sucursal.Nombre;
-				data.Direccion = "Ruta 3 Gral Elizardo Aquino Km 325";
-				data.Telefono = "(0971) - 222 333";
-				data.Timbrado = timbrado.NroTimbrado;
-				data.InicioTimbrado = timbrado.FechaInicio.ToString("dd/MM/yyyy");
-				data.FinTimbrado = timbrado.FechaFin.ToString("dd/MM/yyyy");
-				data.Fecha = venta.DateCreated.ToString("dd/MM/yyyy");
-				data.Hora = venta.DateCreated.Hour + ":" + venta.DateCreated.Minute;
-				data.TipoFactura = venta.CondicionVenta == Core.Constants.CondicionVenta.Credito ? "Credito" : "Contado";
-				
-				data.NroFactura = venta.NroFacturaString;
-				var entitie = _clientes.GetById(venta.ClienteId);
-				data.DisplayName = !string.IsNullOrEmpty(entitie.RazonSocial) ? entitie.RazonSocial : $"{entitie.Nombre} {entitie.Apellido}";
-				data.RUCEntitie = entitie.Ruc ;
-				data.TelefonoEntitie = string.IsNullOrEmpty(entitie.Telefono) ? "" : entitie.Telefono;
-				data.DireccionEntitie = "";				
-				
-				foreach (var detalle in venta.DetalleVenta)
+				var result = _ventas.Edit(venta);
+				data.Success = result.Success;
+				if (result.Success)
 				{
-					var temp = new DetalleFacturaPdfModel()
-					{
-						Cantidad = detalle.Cantidad,
-						Descripcion = detalle.Descripcion,
-						PrecioUnitario = detalle.PrecioVenta,
+					var sucursal = _sucursales.GetById(venta.SucursalId);
+					var timbrado = _timbrados.GetById(venta.TimbradoId);
+					data.RazonSocial = "Casa K-rlos S.A.";
+					data.Ruc = "1234567-5";
+					data.NombreSucursal = sucursal.Nombre;
+					data.Direccion = "Ruta 3 Gral Elizardo Aquino Km 325";
+					data.Telefono = "(0971) - 222 333";
+					data.Timbrado = timbrado.NroTimbrado;
+					data.InicioTimbrado = timbrado.FechaInicio.ToString("dd/MM/yyyy");
+					data.FinTimbrado = timbrado.FechaFin.ToString("dd/MM/yyyy");
+					data.Fecha = venta.DateCreated.ToString("dd/MM/yyyy");
+					data.Hora = venta.DateCreated.Hour + ":" + venta.DateCreated.Minute;
+					data.TipoFactura = venta.CondicionVenta == Core.Constants.CondicionVenta.Credito ? "Credito" : "Contado";
 
-					};
-					var producto = _productos.GetById(detalle.ProductoId);
-					if (producto.PorcentajeIva == Core.Constants.PorcIva.Excento)
+					data.NroFactura = venta.NroFacturaString;
+					var entitie = _clientes.GetById(venta.ClienteId);
+					data.DisplayName = !string.IsNullOrEmpty(entitie.RazonSocial) ? entitie.RazonSocial : $"{entitie.Nombre} {entitie.Apellido}";
+					data.RUCEntitie = entitie.Ruc;
+					data.TelefonoEntitie = string.IsNullOrEmpty(entitie.Telefono) ? "" : entitie.Telefono;
+					data.DireccionEntitie = "";
+
+					foreach (var detalle in venta.DetalleVenta)
 					{
-						temp.PrecioTotalExcenta = detalle.MontoTotal;
-						data.SubTotalExcenta += detalle.MontoTotal;
+						var temp = new DetalleFacturaPdfModel()
+						{
+							Cantidad = detalle.Cantidad,
+							Descripcion = detalle.Descripcion,
+							PrecioUnitario = detalle.PrecioVenta,
+
+						};
+						var producto = _productos.GetById(detalle.ProductoId);
+						if (producto.PorcentajeIva == Core.Constants.PorcIva.Excento)
+						{
+							temp.PrecioTotalExcenta = detalle.MontoTotal;
+							data.SubTotalExcenta += detalle.MontoTotal;
+						}
+
+						if (producto.PorcentajeIva == Core.Constants.PorcIva.Cinco)
+						{
+							temp.PrecioTotalCinco = detalle.MontoTotal;
+							data.SubTotalCinco += detalle.MontoTotal;
+						}
+
+						if (producto.PorcentajeIva == Core.Constants.PorcIva.Diez)
+						{
+							temp.PrecioTotalDiez = detalle.MontoTotal;
+							data.SubTotalDiez += detalle.MontoTotal;
+						}
+
+						data.MontoTotal += detalle.MontoTotal;
+						data.MontoTotalString = numString.Convertir(data.MontoTotal.ToString(), true);
+						data.Detalles.Add(temp);
+						data.IvaDiez = venta.IvaDiez;
+						data.IvaCinco = venta.IvaCinco;
+						data.IvaTotal = venta.IvaCinco + venta.IvaDiez;
+
 					}
-
-					if (producto.PorcentajeIva == Core.Constants.PorcIva.Cinco)
-					{
-						temp.PrecioTotalCinco = detalle.MontoTotal;
-						data.SubTotalCinco += detalle.MontoTotal;						
-					}
-
-					if (producto.PorcentajeIva == Core.Constants.PorcIva.Diez)
-					{
-						temp.PrecioTotalDiez = detalle.MontoTotal;
-						data.SubTotalDiez += detalle.MontoTotal;						
-					}
-
-					data.MontoTotal += detalle.MontoTotal;
-					data.MontoTotalString = numString.Convertir(data.MontoTotal.ToString(), true);
-					data.Detalles.Add(temp);
-					data.IvaDiez = venta.IvaDiez;
-					data.IvaCinco = venta.IvaCinco;
-					data.IvaTotal = venta.IvaCinco + venta.IvaDiez;
-					_ventas.Edit(venta);
+					
 				}
+				else
+				{
+					data.Message = "No se pudo imprimir la venta";
+				}
+
 				return data;
 			}
 			catch (Exception ex)

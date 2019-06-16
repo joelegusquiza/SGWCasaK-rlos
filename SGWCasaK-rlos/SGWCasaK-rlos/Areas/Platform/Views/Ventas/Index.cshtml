@@ -51,19 +51,20 @@
             <!--begin: Datatable -->
             <table class="m-datatable" id="ventasIndexTable" width="100%">
                 <thead>
-                    <tr>
-                        <th title="Field #1">
-                            Nro de Factura
-                        </th>
-                        <th title="Field #2">
-                            Fecha
-                        </th>
-                        <th title="Field #2">
-                            Monto Total
-                        </th>
-                       <th>Estado</th>
-                        <th></th>
-                    </tr>
+					<tr>
+						<th title="Field #1">
+							Nro de Factura
+						</th>
+						<th title="Field #2">
+							Fecha
+						</th>
+						<th title="Field #2">
+							Monto Total
+						</th>
+						<th>Estado</th>
+						<th>Impreso</th>
+						<th></th>
+					</tr>
                 </thead>
                 <tbody data-bind="foreach: ventas">
                     <tr>
@@ -71,10 +72,12 @@
                         <td data-bind="text: moment(dateCreated()).format('DD/MM/YYYY')"></td>
                         <td data-bind="text: montoTotal"></td>
                         <td data-bind="text: estadoDescription"></td>
-                      
+						<td data-bind="text: impresoString"></td>
 						<td>
 						<a data-bind="attr: { href: '@Url.Action("View", "Ventas", new  { area = "Platform" })?id=' + id() }"><i class="fa fa-edit"></i> Ver</a>
+						<!-- ko if: impreso() != true  -->
 						<button data-bind="attr: {id : id()}" onclick="javacript:getFacturaPdf(this)"><i class="fa fa-edit"></i> Imprimir</button>
+						<!-- /ko -->
 							@*<!-- ko if: estado() == @((int)Core.Constants.EstadoVenta.Pendiente)  -->
 							@if (HasPermisos(Core.Constants.AccessFunctions.AnularVenta))
 							{
@@ -150,9 +153,17 @@
                 url: "@Url.Action("GetFacturaPdf")",
                 type: "POST",
                 data: { id: id },
-                success: function (response) {
-                    printFacturaCaida(response);
-                    window.location.replace("@Url.Action("index", "ventas", new { area = "platform"})");
+				success: function (response) {
+					if (response.success)
+					{
+						printFacturaCaida(response);
+						window.location.replace("@Url.Action("index", "ventas", new { area = "platform"})");
+					}
+					else
+					{
+						showError(response.message);
+					}
+                    
                 },
                 error: function () {
                     showError();

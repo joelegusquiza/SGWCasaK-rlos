@@ -1,13 +1,13 @@
 ﻿@using Core
 <button class="m-aside-left-close  m-aside-left-close--skin-dark " id="m_aside_left_close_btn">
-    <i class="la la-close"></i>
+	<i class="la la-close"></i>
 </button>
 <div id="m_aside_left" class="m-grid__item	m-aside-left  m-aside-left--skin-dark ">
-    <!-- BEGIN: Aside Menu -->
-    <div id="m_ver_menu"
-         class="m-aside-menu  m-aside-menu--skin-dark m-aside-menu--submenu-skin-dark "
-         data-menu-vertical="true"
-         data-menu-scrollable="false" data-menu-dropdown-timeout="500">
+	<!-- BEGIN: Aside Menu -->
+	<div id="m_ver_menu"
+		 class="m-aside-menu  m-aside-menu--skin-dark m-aside-menu--submenu-skin-dark "
+		 data-menu-vertical="true"
+		 data-menu-scrollable="false" data-menu-dropdown-timeout="500">
 		<ul class="m-menu__nav  m-menu__nav--dropdown-submenu-arrow ">
 			<li class="m-menu__item " aria-haspopup="true">
 				<a href="@Url.Action("Index", "Dashboard", new { area = "Platform"})" class="m-menu__link ">
@@ -22,75 +22,61 @@
 					</span>
 				</a>
 			</li>
-			@*
 
 
 
 
-		@if (HasPermisos(Constants.AccessFunctions.VerReportes))
-		{
-			<li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" data-menu-submenu-toggle="hover">
-				<a href="#" class="m-menu__link m-menu__toggle">
-					<i class="m-menu__link-icon flaticon-interface-9"></i>
-					<span class="m-menu__link-text">
-						Reportes
-					</span>
-					<i class="m-menu__ver-arrow la la-angle-right"></i>
-				</a>
-				<div class="m-menu__submenu ">
-					<span class="m-menu__arrow"></span>
-					<ul class="m-menu__subnav">
-						<li class="m-menu__item  m-menu__item--parent" aria-haspopup="true">
-							<span class="m-menu__link">
-								<span class="m-menu__link-text">
-									Pricing Tables
-								</span>
-							</span>
-						</li>
-						<li class="m-menu__item " aria-haspopup="true">
-							<a href="snippets/general/pricing-tables/pricing-table-1.html" class="m-menu__link ">
-								<i class="m-menu__link-bullet m-menu__link-bullet--dot">
-									<span></span>
-								</i>
-								<span class="m-menu__link-text">
-									Pricing Tables v1
-								</span>
-							</a>
-						</li>
-						<li class="m-menu__item " aria-haspopup="true">
-							<a href="snippets/general/pricing-tables/pricing-table-2.html" class="m-menu__link ">
-								<i class="m-menu__link-bullet m-menu__link-bullet--dot">
-									<span></span>
-								</i>
-								<span class="m-menu__link-text">
-									Pricing Tables v2
-								</span>
-							</a>
-						</li>
-						<li class="m-menu__item " aria-haspopup="true">
-							<a href="snippets/general/pricing-tables/pricing-table-3.html" class="m-menu__link ">
-								<i class="m-menu__link-bullet m-menu__link-bullet--dot">
-									<span></span>
-								</i>
-								<span class="m-menu__link-text">
-									Pricing Tables v3
-								</span>
-							</a>
-						</li>
-						<li class="m-menu__item " aria-haspopup="true">
-							<a href="snippets/general/pricing-tables/pricing-table-4.html" class="m-menu__link ">
-								<i class="m-menu__link-bullet m-menu__link-bullet--dot">
-									<span></span>
-								</i>
-								<span class="m-menu__link-text">
-									Pricing Tables v4
-								</span>
-							</a>
-						</li>
-					</ul>
-				</div>
-			</li>
-		}*@
+
+			@if (HasPermisos(Constants.AccessFunctions.VerReportes))
+			{
+				<li class="m-menu__item m-menu__item--submenu m-menu__item--open" aria-haspopup="true" data-menu-submenu-toggle="hover">
+					<a href="#" class="m-menu__link m-menu__toggle">
+						<i class="m-menu__link-icon flaticon-diagram"></i>
+						<span class="m-menu__link-text">
+							Reportes
+						</span>
+						<i class="m-menu__ver-arrow la la-angle-right"></i>
+					</a>
+					<div class="m-menu__submenu " style="display: block;">
+						<span class="m-menu__arrow"></span>
+						<ul class="m-menu__subnav">
+							<li class="m-menu__item " aria-haspopup="true">
+								<a href="@Url.Action("Index", "Reportes", new { area = "Platform"})" class="m-menu__link ">
+									<i class="m-menu__link-bullet m-menu__link-bullet--dot">
+										<span></span>
+									</i>
+									<span class="m-menu__link-text">
+										General
+									</span>
+								</a>
+							</li>
+
+							<li class="m-menu__item " aria-haspopup="true">
+								<a href="@Url.Action("Impuestos", "Reportes", new { area = "Platform"})" class="m-menu__link ">
+									<i class="m-menu__link-bullet m-menu__link-bullet--dot">
+										<span></span>
+									</i>
+									<span class="m-menu__link-text">
+										Impuestos
+									</span>
+								</a>
+							</li>
+
+							<li class="m-menu__item " aria-haspopup="true">
+								<a href="@Url.Action("Productos", "Reportes", new { area = "Platform"})" class="m-menu__link ">
+									<i class="m-menu__link-bullet m-menu__link-bullet--dot">
+										<span></span>
+									</i>
+									<span class="m-menu__link-text">
+										Productos
+									</span>
+								</a>
+							</li>
+
+						</ul>
+					</div>
+				</li>
+			}
 			@if (HasPermisos(Constants.AccessFunctions.IndexCompra) || HasPermisos(Constants.AccessFunctions.IndexComprasPending) || HasPermisos(Constants.AccessFunctions.IndexOrdenPagoCompras))
 			{
 				<li class="m-menu__item m-menu__item--submenu m-menu__item--open" aria-haspopup="true" data-menu-submenu-toggle="hover">
@@ -188,7 +174,7 @@
 					</div>
 				</li>
 
-			}			
+			}
 			@if (HasPermisos(Constants.AccessFunctions.IndexPedido))
 			{
 				<li class="m-menu__item m-menu__item--submenu m-menu__item--open" aria-haspopup="true" data-menu-submenu-toggle="hover">
@@ -450,6 +436,6 @@
 				</li>
 			}
 		</ul>
-    </div>
-    <!-- END: Aside Menu -->
+	</div>
+	<!-- END: Aside Menu -->
 </div>

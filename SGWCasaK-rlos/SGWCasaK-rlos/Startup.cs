@@ -85,6 +85,7 @@ namespace SGWCasaK_rlos
 			services.AddSingleton<IRecibos, RecibosService>();
 			services.AddSingleton<ICuotas, CuotasService>();
 			services.AddSingleton<IPdfCreation, PdfCreationServices>();
+			services.AddSingleton<IReportes, ReportesService>();
 			services.AddScoped<UserEmailActiveFilter>();
 			
 			return services.BuildServiceProvider();
@@ -112,6 +113,8 @@ namespace SGWCasaK_rlos
                 cfg.AddProfile<CajaAperturaCierreProfile>();
 				cfg.AddProfile<RecibosProfile>();
 				cfg.AddProfile<CuotasProfile>();
+				cfg.AddProfile<DashboardProfile>();
+				cfg.AddProfile<ReportesProfile>();
 			});
             if (env.IsDevelopment())
             {
