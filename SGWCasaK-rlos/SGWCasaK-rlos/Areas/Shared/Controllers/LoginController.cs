@@ -106,7 +106,7 @@ namespace SGWCasaK_rlos.Areas.Shared.Controllers
                     ClaimsIdentity claims;
                     if (usuario.Cliente == null)
 					{
-						var aperturaCierre = _cajaAperturaCierre.GetLastAperturaCierreByUser(usuario.Id, SucursalId);
+						var aperturaCierre = _cajaAperturaCierre.GetLastAperturaCierreByUser(usuario.Id, usuario.SucursalId.Value);
 						if (aperturaCierre == null || aperturaCierre.FechaCierre != null)
 							claims = new ClaimsIdentity(SecurityHelper.GetUserClaims(usuario, usuario.Sucursal), "Cookie");
 						else

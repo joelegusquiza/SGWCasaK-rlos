@@ -24,7 +24,7 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
         {
 			if (ClientId != 0)
 			{
-				var viewModelCliente = Mapper.Map<List<DashboardPedidoViewModel>>(_pedidos.GetByClientId(ClientId).Where(x => x.Delivery).OrderBy(x => x.FechaEntrega));		
+				var viewModelCliente = Mapper.Map<List<DashboardPedidoViewModel>>(_pedidos.GetByClientId(ClientId).Where(x => x.Delivery && x.Estado != Core.Constants.EstadoPedido.EntregadoPorDelivery).OrderBy(x => x.FechaEntrega));		
 				return View("~/Areas/Platform/Views/Dashboard/DashboardCliente.cshtml", viewModelCliente);
 			}				
 			var viewModelUser = _reportes.GetDashboardData(SucursalId);
