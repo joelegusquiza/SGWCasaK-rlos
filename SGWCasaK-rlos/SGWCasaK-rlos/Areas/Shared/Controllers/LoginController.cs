@@ -80,17 +80,8 @@ namespace SGWCasaK_rlos.Areas.Shared.Controllers
         {
             var user = _usuarios.GetForLogin(Email);                        
             var sucursal = _sucursales.GetById(id);
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-			
-			var claims = new ClaimsIdentity();
-			if (CajaId == 0)
-				claims = new ClaimsIdentity(SecurityHelper.GetUserClaims(user, sucursal), "Cookie");
-			else
-			{
-				var caja = _cajas.GetById(CajaId);
-				claims = new ClaimsIdentity(SecurityHelper.GetUserClaims(user, sucursal, caja), "Cookie");
-			}
-				                  
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);					
+			var claims = new ClaimsIdentity(SecurityHelper.GetUserClaims(user, sucursal), "Cookie");							                  
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claims));
             var validation = new SystemValidationModel()
             {
@@ -115,7 +106,7 @@ namespace SGWCasaK_rlos.Areas.Shared.Controllers
                     ClaimsIdentity claims;
                     if (usuario.Cliente == null)
 					{
-						var aperturaCierre = _cajaAperturaCierre.GetLastAperturaCierreByUser(usuario.Id);
+						var aperturaCierre = _cajaAperturaCierre.GetLastAperturaCierreByUser(usuario.Id, SucursalId);
 						if (aperturaCierre == null || aperturaCierre.FechaCierre != null)
 							claims = new ClaimsIdentity(SecurityHelper.GetUserClaims(usuario, usuario.Sucursal), "Cookie");
 						else

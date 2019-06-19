@@ -36,9 +36,9 @@ namespace Core.DAL.Services
             return item;
         }
 
-        public CajaAperturaCierre GetLastAperturaCierreByUser(int usuarioId)
+        public CajaAperturaCierre GetLastAperturaCierreByUser(int usuarioId, int sucursalId)
         {
-            var item = _context.Set<CajaAperturaCierre>().Include(x => x.Caja).Where(x => x.Active && x.UsuarioId == usuarioId).OrderByDescending(x => x.DateCreated).FirstOrDefault();
+            var item = _context.Set<CajaAperturaCierre>().Include(x => x.Caja).Where(x => x.Active && x.UsuarioId == usuarioId && x.Caja.SucursalId == sucursalId).OrderByDescending(x => x.DateCreated).FirstOrDefault();
             return item;
         }
 		

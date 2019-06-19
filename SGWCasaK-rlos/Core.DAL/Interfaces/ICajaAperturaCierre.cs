@@ -11,7 +11,7 @@ namespace Core.DAL.Interfaces
     {
         List<CajaAperturaCierre> GetAll();
         CajaAperturaCierre GetById(int id);		
-		CajaAperturaCierre GetLastAperturaCierreByUser(int usuarioId);
+		CajaAperturaCierre GetLastAperturaCierreByUser(int usuarioId, int sucursalId);
         SystemValidationModel SaveApertura(AddCajaAperturaViewModel viewModel);
 		SystemValidationModel SaveCierre(AddCajaCierreViewModel viewModel);
 	}

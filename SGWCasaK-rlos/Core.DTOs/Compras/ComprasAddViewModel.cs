@@ -20,8 +20,8 @@ namespace Core.DTOs.Compras
         public decimal IvaDiez { get; set; }
         public decimal Excenta { get; set; }
         public string Timbrado { get; set; }
-        public DateTimeOffset FechaInicio { get; set; }
-        public DateTimeOffset FechaFin { get; set; }
+		public DateTimeOffset FechaInicio { get; set; } = DateTime.Now;
+		public DateTimeOffset FechaFin { get; set; } = DateTime.Now;
 
         public CondicionCompra CondicionCompra { get; set; }
         public List<DropDownViewModel<CondicionCompra>> CondicionesCompra = Enum.GetValues(typeof(CondicionCompra)).Cast<CondicionCompra>().Select(x => new DropDownViewModel<CondicionCompra>
@@ -40,6 +40,7 @@ namespace Core.DTOs.Compras
     public class AddPagoCompraViewModel
     {
         public decimal Monto { get; set; }
+		public decimal Cambio { get; set; }
     }
 
     public class ComprasDetalleAddViewModel

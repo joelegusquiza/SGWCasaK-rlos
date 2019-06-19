@@ -26,13 +26,15 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
         public readonly IUsuarios _usuarios;
         public readonly IVentas _ventas;
         public readonly ICompras _compras;
-        public CajaAperturaCierreController(ICajaAperturaCierre cajaAperturaCierre, ICajas cajas, IVentas ventas, ICompras compras, IUsuarios usuarios)
+		public readonly ITimbrados _timbrados;
+        public CajaAperturaCierreController(ICajaAperturaCierre cajaAperturaCierre, ICajas cajas, IVentas ventas, ICompras compras, IUsuarios usuarios, ITimbrados timbrados)
         {
             _cajaAperturaCierre = cajaAperturaCierre;
             _cajas = cajas;
             _ventas = ventas;
             _compras = compras;
             _usuarios = usuarios;
+			_timbrados = timbrados;
         }
 
         [Authorize(Policy = "IndexAperturaCierreCaja")]
@@ -49,7 +51,7 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
         public IActionResult CajaApertura(int id)
         {
             
-            var aperturaCierre = _cajaAperturaCierre.GetLastAperturaCierreByUser(UserId);
+            var aperturaCierre = _cajaAperturaCierre.GetLastAperturaCierreByUser(UserId, SucursalId);
             if (aperturaCierre == null || aperturaCierre.FechaCierre != null)
             {
                 var viewModel = new AddCajaAperturaViewModel()
@@ -101,9 +103,15 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
 
 		public SystemValidationModel IsAnyCajaOpen()
 		{
-			var aperturaCierre = _cajaAperturaCierre.GetLastAperturaCierreByUser(UserId);
+			var aperturaCierre = _cajaAperturaCierre.GetLastAperturaCierreByUser(UserId, SucursalId);
 			if (aperturaCierre == null || aperturaCierre.FechaCierre != null)
 				return new SystemValidationModel() { Success = false, Message = "Debe abrir una caja para agregar una venta" };
+			var timbrado = _timbrados.GetValidTimbrado(SucursalId, aperturaCierre.CajaId);
+			if (timbrado == null)
+				return new SystemValidationModel() { Success = false, Message = "Debe introducir un timbrado valido para la venta" };
+			var nroFactura = _ventas.GetValidNroFactura(SucursalId, aperturaCierre.CajaId);
+			if (nroFactura == 0)
+				return new SystemValidationModel() { Success = false, Message = "Debe  introducir un timbrado con numeros disponibles" };
 			return new SystemValidationModel() { Success = true};
 		}
 
@@ -111,7 +119,7 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
         {
             var listToReturn = new List<AdditionalData>();
             var item = new AdditionalData();
-            var aperturaCierre = _cajaAperturaCierre.GetLastAperturaCierreByUser(UserId);
+            var aperturaCierre = _cajaAperturaCierre.GetLastAperturaCierreByUser(UserId, SucursalId);
             if (aperturaCierre == null || aperturaCierre.FechaCierre != null)
             {
                 item.Text = $"Abrir Caja";

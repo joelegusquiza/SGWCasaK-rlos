@@ -24,7 +24,7 @@ namespace SGWCasaK_rlos.Areas.Shared.Controllers
         {
             get
             {
-                return _userId > 0 ? _userId : _userId = GetClientId();
+                return _clientId > 0 ? _clientId : _clientId = GetClientId();
             }
         }
 
@@ -75,7 +75,7 @@ namespace SGWCasaK_rlos.Areas.Shared.Controllers
 
 		private int GetClientId()
         {
-            var clientIdString = User.Claims.FirstOrDefault(x => x.Type == CustomClaims.ClientId).Value;
+            var clientIdString = User.Claims.FirstOrDefault(x => x.Type == CustomClaims.ClientId)?.Value;
             if (!string.IsNullOrEmpty(clientIdString))
                 return Convert.ToInt32(clientIdString);
             return 0;

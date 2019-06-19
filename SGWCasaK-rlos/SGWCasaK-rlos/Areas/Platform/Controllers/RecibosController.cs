@@ -58,7 +58,7 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
 		public SystemValidationModel Save(string model)
 		{
 			var viewModel = JsonConvert.DeserializeObject<RecibosAddViewModel>(model);
-			var lastCajaAperturaCierre = _cajasAperturaCierre.GetLastAperturaCierreByUser(UserId);
+			var lastCajaAperturaCierre = _cajasAperturaCierre.GetLastAperturaCierreByUser(UserId, SucursalId);
 			if (lastCajaAperturaCierre == null || lastCajaAperturaCierre.FechaCierre != null)
 			{
 				return new SystemValidationModel() { Success = false, Message = "Debe registrar la apertura de una Caja" };
@@ -71,7 +71,7 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
 		public SystemValidationModel Edit(string model)
 		{
 			var viewModel = JsonConvert.DeserializeObject<RecibosEditViewModel>(model);
-			var lastCajaAperturaCierre = _cajasAperturaCierre.GetLastAperturaCierreByUser(UserId);
+			var lastCajaAperturaCierre = _cajasAperturaCierre.GetLastAperturaCierreByUser(UserId, SucursalId);
 			if (lastCajaAperturaCierre == null || lastCajaAperturaCierre.FechaCierre != null)
 			{
 				return new SystemValidationModel() { Success = false, Message = "Debe registrar la apertura de una Caja" };
