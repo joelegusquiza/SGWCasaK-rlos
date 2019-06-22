@@ -27,8 +27,10 @@ function printFacturaCaida(data) {
 	cmds += '        <div  style=" border-color: black; border-width: 1px; width: 165px; height: 20px; ">'
 	cmds += ''
 	cmds += '        </div>'
-	cmds += '        <div  style="border-width: 1px; width: 165px; height: 20px;">'
-
+	cmds += '        <div  style="border-width: 1px;width: 335px; height: 20px;">'
+	cmds += '                <div style="text-align: right; width: 98%; font-size: 12px; margin-top: 10px; ">'
+	cmds += data.nroFactura
+	cmds += '                </div>'
 	cmds += '        </div>'
 	cmds += '        <div style="width: 335px;height: 80px;">'
 	cmds += '            <div style="width: 100%;">'
@@ -171,8 +173,10 @@ function printFacturaCaida(data) {
 	cmds += '        <div  style=" border-color: black; border-width: 1px; width: 165px; height: 20px; ">'
 	cmds += ''
 	cmds += '        </div>'
-	cmds += '        <div  style="border-width: 1px; width: 165px; height: 20px;">'
-
+	cmds += '        <div  style="border-width: 1px;width: 335px; height: 20px;">'
+	cmds += '                <div style="text-align: right; width: 98%; font-size: 12px; margin-top: 10px; ">'
+	cmds += data.nroFactura
+	cmds += '                </div>'
 	cmds += '        </div>'
 	cmds += '        <div style="width: 335px;height: 80px;">'
 	cmds += '            <div style="width: 100%;">'
