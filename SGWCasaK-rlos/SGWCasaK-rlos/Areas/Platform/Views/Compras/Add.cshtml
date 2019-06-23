@@ -14,13 +14,6 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6 col-sm-4" align="right">
-                            <div class="m-portlet__head-title" style="margin-top: 20px;">
-                                <button type="button" class="btn btn-success" data-bind="click: showPagoCompraModal">
-                                    Guardar
-                                </button>
-                            </div>
-                        </div>
                     </div>
                    
                 </div>
@@ -72,7 +65,7 @@
                                         @*<button  class="btn btn-success">
                             Agregar
                         </button>*@
-                                        <button type="button" class="btn btn-success" onclick="showListaProveedoresModal()">
+                                        <button type="button" class="m-demo__preview  m-demo__preview btn btn m-btn m-btn--gradient-from-primary m-btn--gradient-to-info" onclick="showListaProveedoresModal()">
                                             Buscar
                                         </button>
 
@@ -94,16 +87,16 @@
                             <div class="col-md-7">
                                 <div class="form-group m-form__group row">
                                     <label for="example-text-input" class="col-1 col-form-label" style="text-align: left">
-                                        Fecha Incio
+                                        Fecha Inicio
                                     </label>
                                     <div class="col-3">
-                                        <input class="form-control m-input datepicker" style="width: 100%" type="text" id="example-text-input" data-bind="datepicker: fechaInicio, datepickerOptions: {language: 'es'}">
+                                        <input class="form-control m-input datepicker" style="width: 80%" type="text" id="example-text-input" data-bind="datepicker: fechaInicio, datepickerOptions: {language: 'es'}">
                                     </div>
                                     <label for="example-text-input" class="col-1 col-form-label" style="text-align: left">
-                                        Fecha Incio
+                                        Fecha Inicio
                                     </label>
                                     <div class="col-3">
-                                        <input class="form-control m-input datepicker" style="width: 100%" type="text" id="example-text-input" data-bind="datepicker: fechaFin, datepickerOptions: {language: 'es'}">
+                                        <input class="form-control m-input datepicker" style="width: 80%" type="text" id="example-text-input" data-bind="datepicker: fechaFin, datepickerOptions: {language: 'es'}">
                                     </div>
                                 </div>
                             </div>
@@ -172,10 +165,10 @@
                         <div class="m-form__actions">
                             <div class="row">
                                 <div class="col-12">
-                                    <button type="button" class="btn btn-success" onclick="showListaProductosModal()">
+                                    <button type="button" class="m-demo__preview  m-demo__preview btn btn m-btn m-btn--gradient-from-primary m-btn--gradient-to-info" onclick="showListaProductosModal()">
                                         Buscar
                                     </button>
-                                    <button type="button" class="btn btn-secondary" data-bind="click: agregarDetalle">
+                                    <button type="button" class="m-demo__preview  m-demo__preview btn btn m-btn m-btn--gradient-from-primary m-btn--gradient-to-info" data-bind="click: agregarDetalle">
                                         Agregar
                                     </button>
 
@@ -304,6 +297,13 @@
                                     <div class="col-8">
                                         <input class="form-control m-input" type="text" id="productoCantidad" data-bind="value: dataViewModel.ivaTotal" readonly>
                                     </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-sm-4" align="right">
+                                <div class="m-portlet__head-title" style="margin-top: 20px;">
+                                    <button type="button" class="m-demo__preview  m-demo__preview btn btn m-btn m-btn--gradient-from-primary m-btn--gradient-to-info" data-bind="click: showPagoCompraModal">
+                                        Guardar
+                                    </button>
                                 </div>
                             </div>
                         </div>
