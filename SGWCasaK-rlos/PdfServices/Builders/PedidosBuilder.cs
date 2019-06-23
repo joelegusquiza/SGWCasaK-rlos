@@ -1,5 +1,6 @@
 ﻿using Core.DTOs.Pedidos;
 using MigraDoc.DocumentObjectModel;
+using MigraDoc.DocumentObjectModel.Tables;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -55,42 +56,45 @@ namespace PdfServices.Builders
 		{
 			//HeaderFooter header = section.Headers.Primary;
 			var table = section.AddTable();
-			table.AddColumn(new Unit(12.8, UnitType.Centimeter));
+			table.AddColumn(new Unit(2.8, UnitType.Centimeter));
+			table.AddColumn(new Unit(10, UnitType.Centimeter));
 			table.AddColumn(new Unit(0.3, UnitType.Centimeter));
 			table.AddColumn(new Unit(3.2, UnitType.Centimeter));
 			table.AddColumn(new Unit(3.2, UnitType.Centimeter));
 
 			var row = table.AddRow();
 			row.Format.Font.Size = new Unit(9, UnitType.Point);
+			var logo = $"{Environment.CurrentDirectory}\\wwwroot\\images\\logo.png";
+			var image = row.Cells[0].AddImage(logo);
+			row.Cells[0].VerticalAlignment = VerticalAlignment.Center;
+			image.LockAspectRatio = true;
+			image.Width = new Unit(2, UnitType.Centimeter);
+			row.Cells[0].Borders.Top.Visible = true;
+			row.Cells[0].Borders.Left.Visible = true;
+			row.Cells[0].Borders.Bottom.Visible = true;
 
-			row.Cells[0].AddParagraph("CASA K-RLOS").Format.Alignment = ParagraphAlignment.Center;
-			row.Cells[0].AddParagraph("Ruta 3 Gral Elizardo Aquino Km 325").Format.Alignment = ParagraphAlignment.Center;
-			row.Cells[0].AddParagraph("Santa Rosa del Aguaray").Format.Alignment = ParagraphAlignment.Center;
-			row.Cells[0].AddParagraph("Telefono 0971 - 222 333").Format.Alignment = ParagraphAlignment.Center;
-			row.Cells[0].Borders.Visible = true;
-			row.Cells[0].Borders.Width = new Unit(.1, UnitType.Millimeter);
+			row.Cells[1].AddParagraph("CASA K-RLOS").Format.Alignment = ParagraphAlignment.Center;
+			row.Cells[1].AddParagraph("Ruta 3 Gral Elizardo Aquino Km 325").Format.Alignment = ParagraphAlignment.Center;
+			row.Cells[1].AddParagraph("Santa Rosa del Aguaray").Format.Alignment = ParagraphAlignment.Center;
+			row.Cells[1].AddParagraph("Telefono 0971 - 222 333").Format.Alignment = ParagraphAlignment.Center;
+			row.Cells[1].Borders.Visible = true;
+			row.Cells[1].Borders.Left.Visible = false;
+			row.Cells[1].Borders.Width = new Unit(.1, UnitType.Millimeter);
 
-			row.Cells[2].AddParagraph("PEDIDO #").Format.Font.Bold = true; ;
-			row.Cells[2].AddParagraph("FECHA");
-			row.Cells[2].Borders.Visible = true;
-			row.Cells[2].Borders.Width = new Unit(.1, UnitType.Millimeter);
-
-			row.Cells[3].AddParagraph(model.Id.ToString().ToUpper()).Format.Font.Bold = true;
-			row.Cells[3].AddParagraph(model.DateCreated.ToString("dd/MM/yyyy").ToUpper());
+			row.Cells[3].AddParagraph("PEDIDO #").Format.Font.Bold = true; ;
+			row.Cells[3].AddParagraph("FECHA");
 			row.Cells[3].Borders.Visible = true;
 			row.Cells[3].Borders.Width = new Unit(.1, UnitType.Millimeter);
+
+			row.Cells[4].AddParagraph(model.Id.ToString().ToUpper()).Format.Font.Bold = true;
+			row.Cells[4].AddParagraph(model.DateCreated.ToString("dd/MM/yyyy").ToUpper());
+			row.Cells[4].Borders.Visible = true;
+			row.Cells[4].Borders.Width = new Unit(.1, UnitType.Millimeter);
 			section.AddParagraph(Environment.NewLine);
 			section.AddParagraph(Environment.NewLine);
 			//Add Image
-			//var fileName = PdfHelpers.DownloadNewLogo(model.Branding);
-			//row.Cells[2].Format.Alignment = ParagraphAlignment.Right;
-			//row.Cells[2].VerticalAlignment = VerticalAlignment.Top;
-			//var par = row.Cells[2].AddParagraph();
-			//par.Format.Borders.DistanceFromTop = new Unit(0.33, UnitType.Centimeter);
-			//var image = par.AddImage(fileName);
-			//image.LockAspectRatio = true;
-			//image.Width = new Unit(6, UnitType.Centimeter);
-			//section.Headers.FirstPage = header.Clone();
+			
+
 
 		}
 

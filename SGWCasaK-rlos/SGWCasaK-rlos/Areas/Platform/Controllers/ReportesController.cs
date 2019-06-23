@@ -14,9 +14,11 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
 	public class ReportesController : BaseController
     {
 		private readonly IReportes _reportes;
-		public ReportesController(IReportes reportes)
+		private readonly ICategoriaProductos _categorias;
+		public ReportesController(IReportes reportes, ICategoriaProductos categorias)
 		{
 			_reportes = reportes;
+			_categorias = categorias;
 		}
         public IActionResult Index()
         {
@@ -31,6 +33,7 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
 		public IActionResult ProductosReportes()
 		{			
 			var viewModel = _reportes.GetReporteProductos(new ProductoParametersViewModel() { FechaInicio = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1), FechaFin = DateTime.Now }, SucursalId);
+			viewModel.Parameters.Categorias = _categorias.GetAll().Select(x => new Core.DTOs.Shared.DropDownViewModel<int>() { Text = x.Nombre, Value = x.Id}).ToList();
 			return View(viewModel);
 		}
 

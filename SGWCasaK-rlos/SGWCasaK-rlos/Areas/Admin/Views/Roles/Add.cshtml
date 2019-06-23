@@ -32,34 +32,46 @@
                             <input type="text" class="form-control m-input" id="descripcion" name="descripcion" data-bind="value: descripcion">
                             <span class="alert-danger"></span>
                         </div>
-                        <div class="form-group m-form__group">
-                            <label for="exampleInputEmail1">
-                                Es Cliente
-                            </label>
-                            <input type="checkbox" class="form-control m-input" id="isCliente" name="isCliente" data-bind="checked: isCliente">
-
-                        </div>
-                        <div class="form-group m-form__group">
-                            <label for="exampleInputEmail1">
-                                Es Cajero
-                            </label>
-                            <input type="checkbox" class="form-control m-input" id="isCajero" name="isCajero" data-bind="checked: isCajero">
-
-                        </div>
+						<div class="form-group m-form__group">
+							@*<label for="exampleInputEmail1">
+								Es Cliente
+							</label>
+							<input type="checkbox" class="form-control m-input" id="isCliente" name="isCliente" data-bind="checked: isCliente">*@
+							<label class="m-checkbox">
+								<input type="checkbox"  data-bind="checked: isCliente">
+								Es Cliente
+								<span></span>
+							</label>
+						</div>
+						<div class="form-group m-form__group">
+							@*<label for="exampleInputEmail1">
+								Es Cajero
+							</label>
+							<input type="checkbox" class="form-control m-input" id="isCajero" name="isCajero" data-bind="checked: isCajero">*@
+							<label class="m-checkbox">
+								<input type="checkbox"  data-bind="checked: isCajero">
+								Es Cajero
+								<span></span>
+							</label>
+						</div>
                         <div class="m-form__group form-group">
                             <label>
                                 Permisos
                             </label>
-                            <div class="m-checkbox-list" style=" list-style: none; overflow-y: scroll; height: 120px; " data-bind="foreach: permisosList">
-
-                                <div class="checkbox">
-                                    <label class="i-checks">
-                                        <input type="checkbox" value="" data-bind="checked: selected">
-                                        <i></i>
-                                        <span data-bind="text: nombre" style="margin-left:20px"></span>
-                                    </label>
-                                </div>
-                            </div>
+							<div class="m-checkbox-list" style=" list-style: none; overflow-y: scroll;    height: 500px; " data-bind="foreach: permisosList">
+								<label class="m-checkbox">
+									<input type="checkbox" data-bind="checked: selected">
+									<label data-bind="text: nombre"> </label>
+									<span></span>
+								</label>
+								@*<div class="checkbox">
+									<label class="i-checks">
+										<input type="checkbox" value="" data-bind="checked: selected">
+										<i></i>
+										<span data-bind="text: nombre" style="margin-left:20px"></span>
+									</label>
+								</div>*@
+							</div>
 
                         </div>
                     </div>

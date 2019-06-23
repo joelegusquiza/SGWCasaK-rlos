@@ -36,27 +36,51 @@
 				<!--begin::Form-->
 				<form class="m-form m-form--fit m-form--label-align-right">
 					<div class="m-portlet__body">
-						<div class="row" style="margin-bottom: 20px;">
-							<div class="col-md-6">
-								<div class="form-group m-form__group row">
-									<p>Casa K-rlos</p> <br />
-									<p>Ferreteria y deposito de materiales</p> <br />
-									<span>Ruta 3 Gral Elizardo Aquino Km 325</span> <br />
-									<span>Telefono (0971222333)</span>
+						<div class="row">
+							
+							<div class="col-md-6 col-sm-6 col-xs-12 row">								
+								<div align="center" class="col-md-8 well m-t  lt cabecera">
+									<h1 style="letter-spacing: 4px">Casa K-rlos</h1>
+									<h4>Ferreteria y Deposito de materiales</h4>
+									<h4>Ruta 3 Gral Elizardo Aquino Km 325</h4>
+									<h4 style="display: inline;">Telefono: </h4><h4 style="display: inline;">Telefono (0971) 222-333</h4>
+								</div>
+							</div>
+							<div class="col-md-6 col-sm-6 col-xs-12 ">
+								<div align="center" class="well m-t lt cabecera">
+									<h4 style="display: inline;">R.U.C.: </h4><h4 style="display: inline;">123456-5</h4>
+									<h4></h4>
+									<label>Fecha Inicio de Vigencia </label> <label data-bind="text:  moment(fechaInicio()).format('DD/MM/YYYY')"></label><br />
+									<label>Fecha Fin de Vigencia </label> <label data-bind="text: moment(fechaFin()).format('DD/MM/YYYY')"></label>
+									<h4></h4>
+									<h4 style="display: inline;">Timbrado N°</h4><h4 data-bind="text: nroTimbrado" style="display: inline;"></h4>
+									<h2 style="letter-spacing: 6px">Factura</h2>
+									<h2 data-bind="text: nroFacturaString" style="display:inline"></h2>
+								</div>
+							</div>
 
-								</div>
-							</div>
-							<div class="col-md-6">
-								<div class="form-group m-form__group row">
-									RUC 12345-6 <br />
-									Timbrado <span data-bind="text: nroTimbrado"></span> <br />
-									Inicio Vigencia: <span data-bind="text: moment(fechaInicio()).format('DD/MM/YYYY')"></span> <br />
-									Fin Vigencia: <span data-bind="text: moment(fechaFin()).format('DD/MM/YYYY')"></span> <br />
-									Factura: <span data-bind="text: nroFacturaString"></span>
-									
-								</div>
-							</div>
 						</div>
+						@*<div class="row" style="margin-bottom: 20px;">
+			<div class="col-md-6">
+				<div class="form-group m-form__group row">
+					<p>Casa K-rlos</p> <br />
+					<p>Ferreteria y deposito de materiales</p> <br />
+					<span>Ruta 3 Gral Elizardo Aquino Km 325</span> <br />
+					<span>Telefono (0971222333)</span>
+
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="form-group m-form__group row">
+					RUC 12345-6 <br />
+					Timbrado <span data-bind="text: nroTimbrado"></span> <br />
+					Inicio Vigencia: <span data-bind="text: moment(fechaInicio()).format('DD/MM/YYYY')"></span> <br />
+					Fin Vigencia: <span data-bind="text: moment(fechaFin()).format('DD/MM/YYYY')"></span> <br />
+					Factura: <span data-bind="text: nroFacturaString"></span>
+
+				</div>
+			</div>
+		</div>*@
 					</div>
 				</form>
 			</div>
