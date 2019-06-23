@@ -4,6 +4,7 @@ using Core.DAL.Interfaces;
 using Core.DTOs.Dashboard;
 using Core.DTOs.Reportes;
 using Core.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,12 +21,61 @@ namespace Core.DAL.Services
 			_context = context;
 		}
 		
-		public ReportesIndexViewModel GetReporteIndex (DateTime inicio, DateTime fin, int sucursalId)
+		public ReportesIndexViewModel GetReporteIndex (ReporteParameterViewModel parameters, int sucursalId)
 		{
 			var data = new ReportesIndexViewModel();
-			data.Ventas = GetReporteVentas(inicio, fin, sucursalId);
-			data.Compras = GetReporteCompras(inicio, fin, sucursalId);
-			data.Pedidos = GetReportePedidos(inicio, fin, sucursalId);
+			data.Parameters = parameters;			
+			data.Ventas = GetReporteVentas(parameters.FechaInicio, parameters.FechaFin, sucursalId);
+			data.Compras = GetReporteCompras(parameters.FechaInicio, parameters.FechaFin, sucursalId);
+			data.Pedidos = GetReportePedidos(parameters.FechaInicio, parameters.FechaFin, sucursalId);
+			return data;
+		}
+
+		public ReporteImpuestosIndexViewModel GetReporteImpuestos(ReporteParameterViewModel parameters, int sucursalId)
+		{
+			var data = new ReporteImpuestosIndexViewModel();
+			data.Parameters = parameters;
+			
+			var ventas = _context.Set<Venta>().Where(x => x.DateCreated.Date >= parameters.FechaInicio.Date && x.DateCreated.Date <= parameters.FechaFin.Date && x.SucursalId == sucursalId && x.Estado == Constants.EstadoVenta.Pagado);
+			var compras = _context.Set<Compra>().Where(x => x.DateCreated.Date >= parameters.FechaInicio.Date && x.DateCreated.Date <= parameters.FechaFin.Date && x.SucursalId == sucursalId && x.Estado == Constants.EstadoCompra.Pagado);
+			data.Reporte.MontoCincoDebito = ventas.Sum(x => x.IvaCinco);
+			data.Reporte.MontoDiezDebito = ventas.Sum(x => x.IvaDiez);
+			data.Reporte.MontoDebito = data.Reporte.MontoCincoDebito + data.Reporte.MontoDiezDebito;
+			data.Reporte.MontoCincoCredito = compras.Sum(x => x.IvaCinco);
+			data.Reporte.MontoDiezCredito = compras.Sum(x => x.IvaDiez);
+			data.Reporte.MontoCredito = data.Reporte.MontoCincoCredito + data.Reporte.MontoDiezCredito;
+			return data;
+		}
+
+		public ReportesProductoIndexViewModel GetReporteProductos(ProductoParametersViewModel parameters, int sucursalId)
+		{
+			var data = new ReportesProductoIndexViewModel();
+			data.Parameters = parameters;
+			var detalleVentas = _context.Set<DetalleVenta>().Where(x => x.Active && x.Venta.Estado == Constants.EstadoVenta.Pagado && x.Venta.SucursalId == sucursalId && x.DateCreated.Date >= parameters.FechaInicio.Date && x.DateCreated.Date <= parameters.FechaFin.Date);
+			var detalleCompras = _context.Set<DetalleCompra>().Where(x => x.Active && x.Compra.Estado == Constants.EstadoCompra.Confirmado && x.Compra.SucursalId == sucursalId && x.DateCreated.Date >= parameters.FechaInicio.Date && x.DateCreated.Date <= parameters.FechaFin.Date);
+			var productosIds = detalleVentas.Select(x => x.ProductoId).Concat(detalleCompras.Select(x => x.ProductoId)).Distinct().ToList();
+			var productos = _context.Set<Producto>().Include(x => x.CategoriaProducto).Where(x => x.Active && productosIds.Contains(x.Id));
+			if (parameters.CategoriaId != 0)
+				productos = productos.Where(x => x.CategoriaProductoId == parameters.CategoriaId);
+			foreach (var producto in productos)
+			{
+				var ventas = detalleVentas.Where(x => x.ProductoId == producto.Id);
+				var compras = detalleCompras.Where(x => x.ProductoId == producto.Id);
+				var item = new ReporteProductoViewModel()
+				{
+					Id = producto.Id,
+					Categoria = producto.CategoriaProducto.Nombre,
+					CategoriaId = producto.CategoriaProducto.Id,
+					Nombre = producto.Nombre,
+					PrecioVenta = producto.PrecioVenta,
+					CantComprada = compras.Count(),
+					CantVendida = ventas.Count(),
+					MontoTotalComprado = compras.Sum(x => x.PrecioCompra),
+					MontoTotalVendido = ventas.Sum(x => x.PrecioVenta),
+				};
+				item.Resultado = item.MontoTotalVendido - item.MontoTotalComprado;
+				data.Reporte.Add(item);
+			}
 			return data;
 		}
 

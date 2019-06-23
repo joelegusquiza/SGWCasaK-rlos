@@ -20,23 +20,41 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
 		}
         public IActionResult Index()
         {
-			var viewModel = _reportes.GetReporteIndex(DateTime.Now, DateTime.Now, SucursalId);
+			var viewModel = _reportes.GetReporteIndex(new ReporteParameterViewModel() { FechaInicio = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1), FechaFin = DateTime.Now}, SucursalId);
             return View(viewModel);
         }
-		public IActionResult ImpuestosReporte()
+		public IActionResult ImpuestosReportes()
 		{
-			return View();
+			var viewModel = _reportes.GetReporteImpuestos(new ReporteParameterViewModel() { FechaInicio = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1), FechaFin = DateTime.Now }, SucursalId);
+			return View(viewModel);
 		}
 		public IActionResult ProductosReportes()
-		{
-			return View();
+		{			
+			var viewModel = _reportes.GetReporteProductos(new ProductoParametersViewModel() { FechaInicio = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1), FechaFin = DateTime.Now }, SucursalId);
+			return View(viewModel);
 		}
 
 		[HttpPost]
 		public ReportesIndexViewModel GetReporteIndex(string model)
 		{
 			var parameter = JsonConvert.DeserializeObject<ReporteParameterViewModel>(model);
-			var viewModel = _reportes.GetReporteIndex(parameter.FechaInicio, parameter.FechaFin, SucursalId);
+			var viewModel = _reportes.GetReporteIndex(parameter, SucursalId);
+			return viewModel;
+		}
+
+		[HttpPost]
+		public ReporteImpuestosIndexViewModel GetReporteImpuestos(string model)
+		{
+			var parameter = JsonConvert.DeserializeObject<ReporteParameterViewModel>(model);
+			var viewModel = _reportes.GetReporteImpuestos(parameter, SucursalId);
+			return viewModel;
+		}
+
+		[HttpPost]
+		public ReportesProductoIndexViewModel GetReporteProductos(string model)
+		{
+			var parameter = JsonConvert.DeserializeObject<ProductoParametersViewModel>(model);
+			var viewModel = _reportes.GetReporteProductos(parameter, SucursalId);
 			return viewModel;
 		}
 

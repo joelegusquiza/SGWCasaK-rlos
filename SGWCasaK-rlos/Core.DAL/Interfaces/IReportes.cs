@@ -8,7 +8,9 @@ namespace Core.DAL.Interfaces
 {
 	public interface IReportes
 	{
-		ReportesIndexViewModel GetReporteIndex(DateTime inicio, DateTime fin, int sucursalId);
+		ReportesIndexViewModel GetReporteIndex(ReporteParameterViewModel parameters, int sucursalId);
+		ReporteImpuestosIndexViewModel GetReporteImpuestos(ReporteParameterViewModel parameters, int sucursalId);
+		ReportesProductoIndexViewModel GetReporteProductos(ProductoParametersViewModel parameters, int sucursalId);
 		DashboardIndexViewModel GetDashboardData(int sucursalId);
 	}
 }
