@@ -15,7 +15,7 @@ namespace Core.DTOs.Timbrados
 
         public int CajaId { get; set; }        
         public int SucursalId { get; set; }
-        public List<DropDownViewModel<int>> Cajas { get; set; } = new List<DropDownViewModel<int>>();
+        public List<AdditionalData> Cajas { get; set; } = new List<AdditionalData>();
         public List<DropDownViewModel<int>> Sucursales { get; set; } = new List<DropDownViewModel<int>>();
     }
 }

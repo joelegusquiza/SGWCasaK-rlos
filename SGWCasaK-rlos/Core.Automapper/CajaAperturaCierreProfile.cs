@@ -20,6 +20,11 @@ namespace Core.Automapper
 
 			CreateMap<DetalleCajaAperturaCierre, CajaCierreDetalleViewModel>()
 				 .ReverseMap();
+
+			CreateMap<DetalleCajaAperturaCierre, CajaCierreDetalleViewModel>()
+				.ForMember(dest => dest.FechaCreacion, opt => opt.MapFrom(src => src.DateCreated))
+				.ReverseMap();
+
 		}
-    }
+	}
 }

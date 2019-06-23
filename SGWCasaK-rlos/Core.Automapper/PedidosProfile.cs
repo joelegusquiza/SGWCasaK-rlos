@@ -21,7 +21,11 @@ namespace Core.Automapper
 
             CreateMap<Pedido, PedidosAddViewModel>().ReverseMap();
 
-            CreateMap<PedidosDetalleViewModel, DetallePedido>()
+			CreateMap<PedidosPdfModel, Pedido>().ReverseMap();
+
+			CreateMap<PedidosDetallePdfModel, DetallePedido>().ReverseMap();
+
+			CreateMap<PedidosDetalleViewModel, DetallePedido>()
              .ForMember(dest => dest.Descripcion, opt => opt.MapFrom(src => src.Nombre))
             .ReverseMap();
 

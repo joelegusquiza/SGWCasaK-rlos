@@ -85,14 +85,14 @@ ko.bindingHandlers.datetimepicker = {
 		$(element).datetimepicker({
 			autoclose: true,
 			todayBtn: true,
-			'format': 'yyyy-mm-dd HH:mm ' 
+			'format': ' dd/mm/yyyy HH:ii ' 
 		})
 
 		//when a user changes the date, update the view model
 		ko.utils.registerEventHandler(element, "changeDate", function (event) {
 			var value = valueAccessor();
 			if (ko.isObservable(value)) {
-				var dateObject = new Date($(element).datetimepicker("getFormattedDate"));
+				var dateObject = new Date(event.date);
 				console.log((new Date(dateObject.getTime() - new Date().getTimezoneOffset() * 60000)).toISOString().split('Z')[0] + '-0' + new Date().getTimezoneOffset() / 60+":00");
 				value((new Date(dateObject.getTime() - new Date().getTimezoneOffset() * 60000)).toISOString().split('Z')[0] + '-0' + new Date().getTimezoneOffset() / 60 + ":00");
 			}

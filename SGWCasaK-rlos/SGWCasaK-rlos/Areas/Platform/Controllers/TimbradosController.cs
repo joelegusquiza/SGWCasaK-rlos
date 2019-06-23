@@ -39,7 +39,7 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
         {
             var viewModel = new TimbradosAddViewModel() 
             {
-                Cajas = _cajas.GetAll().Select(x => new DropDownViewModel<int>() { Value = x.Id, Text = x.Nombre }).ToList(),
+                Cajas = _cajas.GetAll().Select(x => new AdditionalData() { Value = x.Id, Text = x.Nombre, AdditionalInt = x.SucursalId }).ToList(),
                 Sucursales = _sucursales.GetAll().Select(x => new DropDownViewModel<int>() { Value = x.Id, Text = $"{x.Nombre} - Codigo Establecimiento: {x.CodigoEstablecimiento}" }).ToList()
             };
             return View(viewModel);
@@ -48,7 +48,7 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
         public IActionResult Edit(int id)
         {
             var viewModel = Mapper.Map<TimbradosEditViewModel>(_timbrados.GetById(id));
-            viewModel.Cajas = _cajas.GetAll().Select(x => new DropDownViewModel<int>() { Value = x.Id, Text = x.Nombre }).ToList();
+            viewModel.Cajas = _cajas.GetAll().Select(x => new AdditionalData() { Value = x.Id, Text = x.Nombre, AdditionalInt = x.SucursalId }).ToList();
             viewModel.Sucursales = _sucursales.GetAll().Select(x => new DropDownViewModel<int>() { Value = x.Id, Text = $"{x.Nombre} - Codigo Establecimiento: {x.CodigoEstablecimiento}" }).ToList();
             return View(viewModel);
         }

@@ -46,7 +46,28 @@ namespace SGWCasaK_rlos.SecurityHelpers
             return claims;
         }
 
-        public static List<Claim> GetUserClaims(Usuario usuario, Cliente cliente)
+		public static List<Claim> GetUserClaims(Usuario usuario, Sucursal sucursal, Caja caja, int cajaAperturaCierreId)
+		{
+			var claims = new List<Claim>()
+			{
+				new Claim(CustomClaims.UserId, usuario.Id.ToString()),
+				new Claim(ClaimTypes.Email, usuario.Email),
+				new Claim(ClaimTypes.Name, $"{usuario.Nombre} {usuario.Apellido}"),
+				new Claim(CustomClaims.Permisos, usuario.Rol.Permisos),
+				new Claim(CustomClaims.EmailVerified, usuario.EmailVerified.ToString()),
+				new Claim(CustomClaims.SucursalId, sucursal.Id.ToString()),
+				new Claim(CustomClaims.SucursalNombre, sucursal.Nombre.ToString()),
+				new Claim(CustomClaims.CajaId, caja.Id.ToString()),
+				new Claim(CustomClaims.CajaNombre, caja.Nombre.ToString()),
+				new Claim(CustomClaims.SucursalNombre, sucursal.Nombre.ToString()),
+				new Claim(CustomClaims.RolId, usuario.RolId.ToString()),
+				new Claim(CustomClaims.UserName, usuario.Nombre.ToString()+" "+usuario.Apellido.ToString()),
+				new Claim(CustomClaims.CajaAperturaCierreId, cajaAperturaCierreId.ToString())
+			};
+			return claims;
+		}
+
+		public static List<Claim> GetUserClaims(Usuario usuario, Cliente cliente)
         {
             var claims = new List<Claim>()
             {

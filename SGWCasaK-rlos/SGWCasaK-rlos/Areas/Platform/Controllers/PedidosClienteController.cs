@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Core.DAL.Interfaces;
+using Core.DTOs.Dashboard;
 using Core.DTOs.PedidosCliente;
 using Core.DTOs.Shared;
 using Microsoft.AspNetCore.Authorization;
@@ -54,7 +55,6 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
 			viewModel.Sucursales = _sucursales.GetAll().Select(x => new DropDownViewModel<int>() { Text = x.Nombre, Value = x.Id }).ToList();
 			return View(viewModel);
 		}
-
 
 		[HttpPost]
         [Authorize(Policy = "ClienteAddPedido")]

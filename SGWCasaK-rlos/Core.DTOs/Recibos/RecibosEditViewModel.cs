@@ -12,6 +12,7 @@ namespace Core.DTOs.Recibos
 		public int Id { get; set; }
 		public EstadoRecibo Estado { get; set; }
 		public decimal MontoTotal { get; set; }
+		public int CajaAperturaCierreId { get; set; }
 		public AddPagoReciboViewModel PagoRecibo { get; set; } = new AddPagoReciboViewModel();
 		public ListaClienteViewModel Cliente { get; set; } = new ListaClienteViewModel();
 		public ListaVentasViewModel Venta { get; set; } = new ListaVentasViewModel();

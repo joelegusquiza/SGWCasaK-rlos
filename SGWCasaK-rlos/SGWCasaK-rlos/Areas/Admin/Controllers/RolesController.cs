@@ -24,12 +24,14 @@ namespace SGWCasaK_rlos.Areas.Admin.Controllers
     {
         private readonly IRoles _roles;
 		private readonly IUsuarios _usuarios;
+		private readonly ICajaAperturaCierre _cajaAperturaCierre;
 		private readonly ICajas _cajas;
-		public RolesController(IRoles roles, IUsuarios usuarios, ICajas cajas)
+		public RolesController(IRoles roles, IUsuarios usuarios, ICajas cajas, ICajaAperturaCierre cajaAperturaCierre)
         {
             _roles = roles;
 			_usuarios = usuarios;
 			_cajas = cajas;
+			_cajaAperturaCierre = cajaAperturaCierre;
         }
         [Authorize(Policy = "IndexRole")]
         public IActionResult Index()
@@ -88,15 +90,20 @@ namespace SGWCasaK_rlos.Areas.Admin.Controllers
 			{
 				var usuario = _usuarios.GetForLogin(Email);
 				var claims = new ClaimsIdentity();
-				if (CajaId != 0)
-				{
-					var caja = _cajas.GetById(CajaId);
-					claims = new ClaimsIdentity(SecurityHelper.GetUserClaims(usuario, usuario.Sucursal, caja), "Cookie");
-				}
-				else
-				{
+				var aperturaCierre = _cajaAperturaCierre.GetLastAperturaCierreByUser(usuario.Id, SucursalId);
+				if (aperturaCierre == null || aperturaCierre.FechaCierre != null)
 					claims = new ClaimsIdentity(SecurityHelper.GetUserClaims(usuario, usuario.Sucursal), "Cookie");
-				}
+				else
+					claims = new ClaimsIdentity(SecurityHelper.GetUserClaims(usuario, usuario.Sucursal, aperturaCierre.Caja, aperturaCierre.Id), "Cookie");
+				//if (CajaId != 0)
+				//{
+				//	var caja = _cajas.GetById(CajaId);
+				//	claims = new ClaimsIdentity(SecurityHelper.GetUserClaims(usuario, usuario.Sucursal, caja), "Cookie");
+				//}
+				//else
+				//{
+				//	claims = new ClaimsIdentity(SecurityHelper.GetUserClaims(usuario, usuario.Sucursal), "Cookie");
+				//}
 
 				await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 				await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claims));

@@ -17,66 +17,67 @@
                 </div>
                 <!--begin::Form-->
                 <form class="m-form m-form--fit m-form--label-align-right" id="form" data-bind="submit: postDataToController">
-                    <div class="m-portlet__body">
-                        <div class="form-group m-form__group">
-                            <label for="exampleInputEmail1">
-                                Nro Timbrado
-                            </label>
-                            <input type="text" class="form-control m-input" id="nroTimbrado" name="nroTimbrado" data-bind="value: nroTimbrado">
-                            <span class="alert-danger"></span>
-                        </div>
-                        <div class="form-group m-form__group">
-                            <label for="exampleInputEmail1">
-                                Fecha Inicio
-                            </label>
-                            <input value="" class="form-control datepicker" style="width: 100% !important;" data-bind="datepicker: fechaInicio, datepickerOptions: {language: 'es'}">
-                            <span class="alert-danger"></span>
-                        </div>
-                        <div class="form-group m-form__group">
-                            <label for="exampleInputEmail1">
-                                Fecha Fin
-                            </label>
-                            <input value="" class="form-control datepicker" style="width: 100% !important;" data-bind="datepicker: fechaFin, datepickerOptions: {language: 'es'}">
-                            <span class="alert-danger"></span>
-                        </div>
-                        <div class="form-group m-form__group">
-                            <label for="exampleInputEmail1">
-                                Nro Inicio
-                            </label>
-                            <input type="text" class="form-control m-input" id="nombre" name="nroInicio" data-bind="value: nroInicio">
-                            <span class="alert-danger"></span>
-                        </div>
-                        <div class="form-group m-form__group">
-                            <label for="exampleInputEmail1">
-                                Nro Fin
-                            </label>
-                            <input type="text" class="form-control m-input" id="nombre" name="nroFin" data-bind="value: nroFin">
-                            <span class="alert-danger"></span>
-                        </div>
+					<div class="m-portlet__body">
+						<div class="form-group m-form__group">
+							<label for="exampleInputEmail1">
+								Nro Timbrado
+							</label>
+							<input type="text" class="form-control m-input" id="nroTimbrado" name="nroTimbrado" data-bind="value: nroTimbrado">
+							<span class="alert-danger"></span>
+						</div>
+						<div class="form-group m-form__group">
+							<label for="exampleInputEmail1">
+								Fecha Inicio
+							</label>
+							<input value="" class="form-control datepicker" style="width: 100% !important;" data-bind="datepicker: fechaInicio, datepickerOptions: {language: 'es'}">
+							<span class="alert-danger"></span>
+						</div>
+						<div class="form-group m-form__group">
+							<label for="exampleInputEmail1">
+								Fecha Fin
+							</label>
+							<input value="" class="form-control datepicker" style="width: 100% !important;" data-bind="datepicker: fechaFin, datepickerOptions: {language: 'es'}">
+							<span class="alert-danger"></span>
+						</div>
+						<div class="form-group m-form__group">
+							<label for="exampleInputEmail1">
+								Nro Inicio
+							</label>
+							<input type="text" class="form-control m-input" id="nombre" name="nroInicio" data-bind="value: nroInicio">
+							<span class="alert-danger"></span>
+						</div>
+						<div class="form-group m-form__group">
+							<label for="exampleInputEmail1">
+								Nro Fin
+							</label>
+							<input type="text" class="form-control m-input" id="nombre" name="nroFin" data-bind="value: nroFin">
+							<span class="alert-danger"></span>
+						</div>
 
-                      
-                        <div class="form-group m-form__group">
-                            <label for="exampleInputEmail1">
-                                Sucursales
-                            </label>
-                            <select class="form-control m-input m-input--square" id="sucursalId" name="sucursalId" data-bind="options: sucursales,
+
+						<div class="form-group m-form__group">
+							<label for="exampleInputEmail1">
+								Sucursales
+							</label>
+							<select class="form-control m-input m-input--square" id="sucursalId" name="sucursalId" data-bind="options: sucursales,
                                            optionsValue: 'value',
                                            optionsText: 'text',
                                            value: sucursalId,
                                            optionsCaption: 'Seleccione una opcion'"></select>
-                        </div>
-                        <div class="form-group m-form__group">
-                            <label for="exampleInputEmail1">
-                                Cajas
-                            </label>
-                            <select class="form-control m-input m-input--square" id="cajaId" name="cajaId" data-bind="options: cajas,
+						</div>
+						<!-- ko if: sucursalId()  != undefined  -->
+						<div class="form-group m-form__group">
+							<label for="exampleInputEmail1">
+								Cajas
+							</label>
+							<select class="form-control m-input m-input--square" id="cajaId" name="cajaId" data-bind="options: dataViewModel.sucursalId() == undefined ? dataViewModel.cajas() : $.grep(dataViewModel.cajas(), function (item) { return item.additionalInt() === sucursalId(); }),
                                            optionsValue: 'value',
                                            optionsText: 'text',
                                            value: cajaId,
                                            optionsCaption: 'Seleccione una opcion'"></select>
-                        </div>
-
-                    </div>
+						</div>
+						<!-- /ko -->
+					</div>
                     <div class="m-portlet__foot m-portlet__foot--fit">
                         <div class="m-form__actions">
                             <button type="submit" class="btn btn-primary">

@@ -15,7 +15,8 @@ namespace Core.DTOs.Ventas
 		public DateTime FechaInicio { get; set; }
 		public DateTime FechaFin { get; set; }
 		public string NroTimbrado { get; set; }
-        public int NroFactura { get; set; }
+		public int NroFactura { get; set; }
+		public string NroFacturaString { get; set; }
         public int TimbradoId { get; set; }
         public decimal MontoTotal { get; set; }
         public decimal IvaCinco { get; set; }
@@ -23,6 +24,7 @@ namespace Core.DTOs.Ventas
         public decimal Excenta { get; set; }
         public int? PedidoId { get; set; }
         public int CajaId { get; set; }
+		public int CajaAperturaCierreId { get; set; }
         public CondicionVenta CondicionVenta{ get; set; }
         public List<DropDownViewModel<CondicionVenta>> CondicionesVenta = Enum.GetValues(typeof(CondicionVenta)).Cast<CondicionVenta>().Select(x => new DropDownViewModel<CondicionVenta>
         {

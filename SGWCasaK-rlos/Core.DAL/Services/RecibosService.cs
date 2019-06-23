@@ -78,7 +78,9 @@ namespace Core.DAL.Services
 			var cuotasToAdd = cuotasIds.Except(reciboCuotaIds).ToList();
 			var cuotas = _context.Set<Cuota>().Where(x => x.Active && x.VentaId == viewModel.Venta.VentaId).ToList();
 			var cuotasToConfirm = cuotas.Where(x => x.Active && (cuotasToAdd.Contains(x.Id) || (x.ReciboId == viewModel.Id && !cuotasToDeleteIds.Contains(x.Id)))).ToList();
-			
+
+			SaveDetalleCaja(recibo, viewModel);
+			DisminuirSaldoCliente(recibo);
 			var cuotasToDelete = _context.Set<Cuota>().Where(x => x.Active && cuotasToDeleteIds.Contains(x.Id)).ToList();
 			foreach (var cuota in cuotasToConfirm)
 			{
@@ -112,6 +114,25 @@ namespace Core.DAL.Services
 
 			return validation;
 
+		}
+
+		private void DisminuirSaldoCliente(Recibo recibo)
+		{
+			var cliente = _context.Set<Cliente>().FirstOrDefault(x => x.Id == recibo.Cliente.Id);
+			cliente.Saldo -= recibo.MontoTotal;
+			_context.Entry(cliente).State = EntityState.Modified;
+		}
+
+		private void SaveDetalleCaja(Recibo recibo, RecibosEditViewModel viewModel)
+		{
+			var cajaAperturaCierreDetalle = new DetalleCajaAperturaCierre()
+			{
+				CajaAperturaCierreId = viewModel.CajaAperturaCierreId,
+				Monto = recibo.MontoTotal,
+				Cambio = recibo.Cambio,
+				TipoOperacion = Constants.TipoCajaAperturaCierreOperacion.Recibo
+			};
+			_context.Entry(cajaAperturaCierreDetalle).State = EntityState.Added;
 		}
 
 		public SystemValidationModel Desactivate(int id)

@@ -23,6 +23,7 @@
     <ProjectReference Include="..\Core.DTOs\Core.DTOs.csproj" />
     <ProjectReference Include="..\Core.Entities\Core.Entities.csproj" />
     <ProjectReference Include="..\Core\Core.csproj" />
+    <ProjectReference Include="..\PdfServices\PdfServices.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,6 +31,9 @@
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
     <Content Update="Areas\Admin\Views\_ViewStart.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Areas\Platform\Views\Dashboard\DashboardCliente.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
     <Content Update="Areas\Platform\Views\Inventario\Shared\_ReasonAnularInventarioModal.cshtml">

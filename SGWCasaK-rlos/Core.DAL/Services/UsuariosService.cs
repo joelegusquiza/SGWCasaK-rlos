@@ -227,7 +227,7 @@ namespace Core.DAL.Services
                     DateCreated = DateTime.UtcNow,
                     DateModified = DateTime.UtcNow,
                     IsAdmin = true,
-                    Nombre = "Admin2",
+                    Nombre = "Admin",
                     Permisos = string.Join(",", Enum.GetValues(typeof(AccessFunctions)).Cast<AccessFunctions>().Select(x => ((int)x).ToString()))
                 };
                 _context.Entry(rol).State = EntityState.Added;

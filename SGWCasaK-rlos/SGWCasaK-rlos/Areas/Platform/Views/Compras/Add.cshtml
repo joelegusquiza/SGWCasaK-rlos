@@ -14,36 +14,43 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="col-md-6 col-sm-4" align="right">
+                            <div class="m-portlet__head-title" style="margin-top: 20px;">
+                                <button type="button" class="btn btn-success" data-bind="click: postDataToController">
+                                    Guardar
+                                </button>
+                            </div>
+                        </div>
                     </div>
                    
                 </div>
                 <!--begin::Form-->
                 <form class="m-form m-form--fit m-form--label-align-right">
-                    <div class="m-portlet__body">
-                        <div class="row" style="margin-bottom: 20px;">
-                            <div class="col-md-7">
-                                <div class="form-group m-form__group row">
-                                    <label for="example-text-input" class="col-1 col-form-label" style="text-align: left">
-                                        Fecha
-                                    </label>
-                                    <div class="col-3">
-                                        <input class="form-control m-input datepicker" style="width: 100%" type="text" id="example-text-input" data-bind="datepicker: dateCompra, datepickerOptions: {language: 'es'}">
-                                    </div>
-                                    <label for="example-text-input" class="col-2 col-form-label" style="text-align: left">
-                                        Nro Factura
-                                    </label>
-                                    <div class="col-6">
-                                        <input class="form-control m-input" style="width: 100%" type="text" id="example-text-input" data-bind="value: nroFactura">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-5">
-                                <div class="form-group m-form__group row">
-                                    <label for="example-text-input" class="col-4 col-form-label" style="text-align: left">
-                                        Condicion Compra
-                                    </label>
-                                    <div class="col-8">
-                                        <select class="form-control m-input m-input--square" id="condicionCompraSelect" data-bind="options: condicionesCompra,
+					<div class="m-portlet__body">
+						<div class="row" style="margin-bottom: 20px;">
+							<div class="col-md-7">
+								<div class="form-group m-form__group row">
+									<label for="example-text-input" class="col-1 col-form-label" style="text-align: left">
+										Fecha
+									</label>
+									<div class="col-3">
+										<input class="form-control m-input datepicker" style="width: 100%" type="text" id="example-text-input" data-bind="datepicker: dateCompra, datepickerOptions: {language: 'es'}">
+									</div>
+									<label for="example-text-input" class="col-2 col-form-label" style="text-align: left">
+										Nro Factura
+									</label>
+									<div class="col-6">
+										<input class="form-control m-input" style="width: 100%" type="text" id="example-text-input" data-bind="value: nroFactura">
+									</div>
+								</div>
+							</div>
+							<div class="col-md-5">
+								<div class="form-group m-form__group row">
+									<label for="example-text-input" class="col-4 col-form-label" style="text-align: left">
+										Condicion Compra
+									</label>
+									<div class="col-8">
+										<select class="form-control m-input m-input--square" id="condicionCompraSelect" data-bind="options: condicionesCompra,
                                            optionsValue: 'value',
                                            optionsText: 'text',
                                            value: condicionCompra,
@@ -349,6 +356,15 @@
             resetProductoForm();
         }
 
+		dataViewModel.pagoCompra.cambio = ko.pureComputed(function () {
+			if (dataViewModel.pagoCompra.monto() > dataViewModel.montoTotal()) {
+				return dataViewModel.pagoCompra.monto() - dataViewModel.montoTotal();
+			} else {
+				return 0;
+			}
+
+		});
+
         dataViewModel.eliminarDetalle = function ()
         {
             var item = this;
@@ -401,14 +417,14 @@
         {
             $("#addPagoCompraModal").modal("show");
         }
-
+		
         dataViewModel.postDataToController = function () {
             dataViewModel.producto.cantidad(0);
             dataViewModel.producto.precioCompra(0);
             if (dataViewModel.detalleCompra().length == 0) {
                 showError("Debe ingresar al menos un producto para registrar la compra");
                 return;
-            }
+			}			
             $.ajax({
                 url: "@Url.Action("Save", "Compras")",
                 type: "POST",
@@ -460,6 +476,22 @@
             dataViewModel.producto.precioCompra("");
             dataViewModel.producto.productoId(0);
         }
-        ko.applyBindings(dataViewModel);
+		ko.applyBindings(dataViewModel);
+
+		jQuery.validator.addMethod("pagoCompraMontoValid", function (value, element) {
+			return parseInt(value) >= parseInt($("#pagoCompraMontoTotal").val())
+		}, "El monto a pagar debe ser mayor o igual al total");
+
+		$('#pagoCompraForm').validate({
+			rules: {
+				pagoCompraMonto: {
+					pagoCompraMontoValid: true
+				}
+			},
+			errorPlacement: function (error, element) {
+				var span = element.siblings('span');
+				error.appendTo(span);
+			}
+		});
     </script>
 }

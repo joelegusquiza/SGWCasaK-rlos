@@ -17,66 +17,73 @@
                 </div>
                 <!--begin::Form-->
                 <form class="m-form m-form--fit m-form--label-align-right" id="form" data-bind="submit: postDataToController">
-                    <div class="m-portlet__body">
-                        <div class="form-group m-form__group">
-                            <label for="exampleInputEmail1">
-                                Nombre
-                            </label>
-                            <input type="text" class="form-control m-input" id="nombre" name="nombre" data-bind="value: nombre">
-                            <span class="alert-danger"></span>
-                        </div>
-                        <div class="form-group m-form__group">
-                            <label for="exampleInputEmail1">
-                                Descripcion
-                            </label>
-                            <input type="text" class="form-control m-input" id="descripcion" name="descripcion" data-bind="value: descripcion">
-                            <span class="alert-danger"></span>
-                        </div>
-                        <div class="form-group m-form__group">
-                            <label for="exampleInputEmail1">
-                                Stock Inicial
-                            </label>
-                            <input type="text" class="form-control m-input" id="stock" name="stock" data-bind="value: stock">
-                            <span class="alert-danger"></span>
-                        </div>
-                        <div class="form-group m-form__group">
-                            <label for="exampleInputEmail1">
-                                Porcentaje Ganancia
-                            </label>
-                            <input type="text" class="form-control m-input" id="porcentajeGanancia" name="porcentajeGanancia" data-bind="value: porcentajeGanancia">
-                            <span class="alert-danger"></span>
-                        </div>
-                        <div class="form-group m-form__group">
-                            <label for="exampleInputEmail1">
-                                IVA
-                            </label>
-                            <select class="form-control m-input m-input--square" id="porcentajeIva" name="porcentajeIva" data-bind="options: porcentajeIvas,
+					<div class="m-portlet__body">
+						<div class="form-group m-form__group">
+							<label for="exampleInputEmail1">
+								Nombre
+							</label>
+							<input type="text" class="form-control m-input" id="nombre" name="nombre" data-bind="value: nombre">
+							<span class="alert-danger"></span>
+						</div>
+						<div class="form-group m-form__group">
+							<label for="exampleInputEmail1">
+								Descripcion
+							</label>
+							<input type="text" class="form-control m-input" id="descripcion" name="descripcion" data-bind="value: descripcion">
+							<span class="alert-danger"></span>
+						</div>
+						<div class="form-group m-form__group">
+							<label for="exampleInputEmail1">
+								Stock Inicial
+							</label>
+							<input type="text" class="form-control m-input" id="stock" name="stock" data-bind="value: stock">
+							<span class="alert-danger"></span>
+						</div>
+						<div class="form-group m-form__group">
+							<label for="exampleInputEmail1">
+								Precio Inicial
+							</label>
+							<input type="text" class="form-control m-input" id="precio" name="precio" data-bind="value: precioVenta">
+							<span class="alert-danger"></span>
+						</div>
+						<div class="form-group m-form__group">
+							<label for="exampleInputEmail1">
+								Porcentaje Ganancia
+							</label>
+							<input type="text" class="form-control m-input" id="porcentajeGanancia" name="porcentajeGanancia" data-bind="value: porcentajeGanancia">
+							<span class="alert-danger"></span>
+						</div>
+						<div class="form-group m-form__group">
+							<label for="exampleInputEmail1">
+								IVA
+							</label>
+							<select class="form-control m-input m-input--square" id="porcentajeIva" name="porcentajeIva" data-bind="options: porcentajeIvas,
                                            optionsValue: 'value',
                                            optionsText: 'text',
                                            value: porcentajeIva,
                                            optionsCaption: 'Seleccione una opcion'"></select>
-                        </div>
-                        <div class="form-group m-form__group">
-                            <label for="exampleInputEmail1">
-                                Unidad de Medida
-                            </label>
-                            <select class="form-control m-input m-input--square" id="unidadMedida" name="unidadMedida" data-bind="options: unidadesMedida,
+						</div>
+						<div class="form-group m-form__group">
+							<label for="exampleInputEmail1">
+								Unidad de Medida
+							</label>
+							<select class="form-control m-input m-input--square" id="unidadMedida" name="unidadMedida" data-bind="options: unidadesMedida,
                                            optionsValue: 'value',
                                            optionsText: 'text',
                                            value: unidadMedida,
                                            optionsCaption: 'Seleccione una opcion'"></select>
-                        </div>
-                        <div class="form-group m-form__group">
-                            <label for="exampleInputEmail1">
-                                Categoria del Producto
-                            </label>
-                            <select class="form-control m-input m-input--square" id="categoriaProducto" name="categoriaProducto" data-bind="options: categoriasProducto,
+						</div>
+						<div class="form-group m-form__group">
+							<label for="exampleInputEmail1">
+								Categoria del Producto
+							</label>
+							<select class="form-control m-input m-input--square" id="categoriaProducto" name="categoriaProducto" data-bind="options: categoriasProducto,
                                            optionsValue: 'value',
                                            optionsText: 'text',
                                            value: categoriaProductoId,
                                            optionsCaption: 'Seleccione una opcion'"></select>
-                        </div>
-                    </div>
+						</div>
+					</div>
                     <div class="m-portlet__foot m-portlet__foot--fit">
                         <div class="m-form__actions">
                             <button type="submit" class="btn btn-primary">
@@ -260,7 +267,12 @@
                 },
                 categoriaProducto: {
                     required: true
-                }
+				},
+				precio: {
+					required: true,
+					number: true,
+					min: 1
+				}
             },
             errorPlacement: function (error, element) {
                 var span = element.siblings('span');

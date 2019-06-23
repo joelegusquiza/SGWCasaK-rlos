@@ -91,15 +91,18 @@
 							<!-- ko if: estado() ==  @((int)Core.Constants.EstadoPedido.Preparado)-->
 							@if (HasPermisos(Core.Constants.AccessFunctions.GenerateVentaPedido))
 							{
-								<a href="#" data-bind="attr: { id: id() }" onClick="javacript: validarCajaAbierta(this)"><i class="fa fa-edit"></i>Generar Venta</a>
+								<a href="#" data-bind="attr: { id: 'ventabtn-'+id() }" onClick="javacript: validarCajaAbierta(this)"><i class="fa fa-edit"></i>Generar Venta</a>
 							}
 							<!-- /ko -->
+
+							<a href="#" data-bind="attr: { href: '@Url.Action("GetPedidoPdf", "Pedidos", new  { area = "Platform" })?id=' + id() }"><i class="fa fa-edit"></i>Imprimir</a>
+
 							<!-- ko if: estado() !=@((int)Core.Constants.EstadoPedido.EntregadoPorDelivery) || estado() !=@((int)Core.Constants.EstadoPedido.Finalizado) -->
 							@if (HasPermisos(Core.Constants.AccessFunctions.ChangeEstadoPedido))
 							{
 								<a href="#" data-bind="attr: { id: id() }" onClick="javacript: openCambiarEstadoModal(this)"><i class="fa fa-edit"></i> Cambiar Estado</a>
 							}
-							<!-- /ko -->
+						<!-- /ko -->
 						</td>
                     </tr>
                 </tbody>
@@ -140,7 +143,8 @@
 
         function generarVenta (element)
         {
-            var id = $(element).attr('id');
+			var idElement = $(element).attr('id');
+			var id = idElement.split("-")[1];
                 $.ajax({
                     url: "@Url.Action("ValidarPedido")",
                     type: "POST",
