@@ -1,0 +1,91 @@
+﻿@model Core.DTOs.Clientes.ListaClientesIndexViewModel
+@{
+    ViewData["Title"] = "ListaClientes";
+    Layout = "~/Areas/Shared/Views/Shared/_EmptyLayout.cshtml";
+}
+
+<div class="m-portlet__body--no-padding">
+    <!--begin::Portlet-->
+    <div class="m-portlet m-portlet--tab" style="margin-bottom: 0px !important">
+        <!--begin::Form-->
+        <form class="m-form m-form--fit m-form--label-align-right">
+            <div class="m-portlet__body" style="margin-left: 20px; margin-right: 20px;">
+                <table class="" id="listaClientesTable" width="100%">
+                    <thead>
+                        <tr>
+                            <th title="Field #1">
+                                RUC
+                            </th>
+                            <th title="Field #2">
+                                Nombre
+                            </th>
+                            <th title="Field #3">
+                                Apellido
+                            </th>
+
+                            <th title="Field #4">
+                                Razon Social
+                            </th>
+                            <th title="Field #5">
+                                Telefono
+                            </th>
+
+                        </tr>
+                    </thead>
+                    <tbody data-bind="foreach: clientes">
+                        <tr data-bind=" attr: { id : clienteId()}">
+                            <td data-bind="text: ruc"></td>
+                            <td data-bind="text: nombre"></td>
+                            <td data-bind="text: apellido"></td>
+                            <td data-bind="text: razonSocial"></td>
+                            <td data-bind="text: telefono"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="m-portlet__foot m-portlet__foot--fit">
+                <div class="m-form__actions">
+                    <button type="reset" class="btn btn-primary" data-bind="click: seleccionarCliente, enable: clienteId() > 0">
+                        Agregar
+                    </button>
+                    <button type="reset" class="btn btn-secondary">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </form>
+        <!--end::Form-->
+    </div>
+</div>
+@section scripts{
+    <script>
+        var model = @Html.Raw(Json.Serialize(Model));
+        var dataViewModel = ko.mapping.fromJS(model);
+        dataViewModel.clienteId = ko.observable();
+        $(document).ready(function () {
+            var table = $('#listaClientesTable').DataTable();
+
+            $('#listaClientesTable tbody').on('click', 'tr', function () {
+                if ($(this).hasClass('selected')) {
+                    dataViewModel.productoId(0);
+                    $(this).removeClass('selected');
+                }
+                else {
+                    dataViewModel.clienteId($(this).attr('id'));
+                    table.$('tr.selected').removeClass('selected');
+                    $(this).addClass('selected');
+                }
+            });
+        })
+
+        dataViewModel.seleccionarCliente = function()
+        {
+            var cliente = $.grep(dataViewModel.clientes(), function (item) { return item.clienteId() === parseInt(dataViewModel.clienteId()); })[0];
+            parent.seleccionarCliente(ko.mapping.toJS(cliente));
+        }
+
+
+        ko.applyBindings(dataViewModel);
+    </script>
+
+}

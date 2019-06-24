@@ -1,0 +1,88 @@
+﻿@model Core.DTOs.Pedidos.PedidosChangeEstadoViewModel
+@using Core
+@{
+	ViewData["Title"] = "CambiarEstado";
+	Layout = "~/Areas/Shared/Views/Shared/_EmptyLayout.cshtml";
+}
+
+<div class="m-portlet__body--no-padding">
+	<!--begin::Portlet-->
+	<div class="m-portlet m-portlet--tab" style="margin-bottom: 0px !important">
+		<!--begin::Form-->
+		<form class="m-form m-form--fit m-form--label-align-right" id="form" data-bind="submit: changeEstadoPedido">
+			<div class="m-portlet__body">
+				
+				<div class="form-group m-form__group">
+					<label for="exampleInputEmail1">
+						Estados
+					</label>
+					<select class="form-control m-input m-input--square" id="pedidosEstadosSelect" name="estados" data-bind="options: estados,
+                                           optionsValue: 'value',
+                                           optionsText: 'text',
+                                           value: estado,
+                                           optionsCaption: 'Seleccione una opcion'"></select>
+				</div>
+				<!-- ko if: estado() == @((int)Core.Constants.EstadoPedido.Anulado) -->
+				<div class="form-group m-form__group">
+					<label for="exampleInputEmail1">
+						Razon de Anulacion
+					</label>
+					<input type="text" class="form-control m-input" id="nombre" name="nombre" data-bind="value: razonAnulado">
+					<span class="alert-danger"></span>
+				</div>
+				<!-- /ko -->
+			</div>
+			<div class="m-portlet__foot m-portlet__foot--fit">
+				<div class="m-form__actions">
+					<button type="submit" class="btn btn-primarym-demo__preview  m-demo__preview btn btn m-btn m-btn--gradient-from-primary m-btn--gradient-to-info">
+						Guardar
+					</button>
+
+				</div>
+			</div>
+		</form>
+		<!--end::Form-->
+	</div>
+</div>
+@section scripts{
+	<script>
+        var model = @Html.Raw(Json.Serialize(Model));
+        var dataViewModel = ko.mapping.fromJS(model);
+		dataViewModel.changeEstadoPedido = function ()
+		{
+			if (!$("#form").valid()) return;
+			if (dataViewModel.estado() == @((int)Constants.EstadoPedido.Anulado) && dataViewModel.razonAnulado() == null)
+			{
+				showError("Debe introducir la razon de la anulacion");
+				return;
+			}
+				
+            $.ajax({
+                url: "@Url.Action("CambiarEstado")",
+                type: "POST",
+                data: { id: dataViewModel.id(), estado: dataViewModel.estado()},
+                success: function (response) {
+					parent.changeEstadoPedido(response);
+                },
+                error: function () {
+                    showError("Error!");
+                }
+            });
+        }
+		ko.applyBindings(dataViewModel);
+
+		$('#form').validate({
+			rules: {
+				estados: {
+					required: true
+				}
+			},
+			errorPlacement: function (error, element) {
+				var span = element.siblings('span');
+				error.appendTo(span);
+			}
+		});
+	</script>
+
+}
+

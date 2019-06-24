@@ -1,0 +1,61 @@
+﻿
+@{
+    ViewData["Title"] = "UnverifiedEmail";
+    Layout = "~/Areas/Platform/Views/Shared/_Layout.cshtml";
+}
+<div class="m-content" style="width: 50%">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="m-portlet m-portlet--tab">
+                <div class="m-portlet__head">
+                    <div class="m-portlet__head-caption">
+                        <div class="m-portlet__head-title">
+                            <div class="alert alert-warning" role="alert">
+                                <strong>
+                                    Atencion!
+                                </strong>
+                                Debe verificar su cuenta 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--begin::Form-->
+                <div class="m-portlet__foot m-portlet__foot--fit">
+                    <div class="m-form__actions">
+                        <button type="button" onclick="reenviarEmail()" class="btn btn-primary">
+                            Reenviar Email
+                        </button>
+
+                    </div>
+                </div>
+                <!--end::Form-->
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts
+{ 
+    <script>
+        function reenviarEmail()
+        {
+        
+            $.ajax({
+                url: "@Url.Action("ResendEmail", "Profile")",
+                type: "POST",
+                data: {},
+                success: function (response) {
+                    if (response.success) {
+                        showSuccess(response.message);
+                    } else {
+                        showError(response.message);
+                    }
+                },
+                error: function () {
+                    showError();
+                }
+            });
+        }
+    </script>
+
+}
+

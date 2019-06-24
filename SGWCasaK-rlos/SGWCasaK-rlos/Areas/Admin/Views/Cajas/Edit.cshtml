@@ -1,0 +1,104 @@
+﻿@model Core.DTOs.Cajas.CajasEditViewModel
+<div class="m-content" style="width: 50%">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="m-portlet m-portlet--tab">
+                <div class="m-portlet__head">
+                    <div class="m-portlet__head-caption">
+                        <div class="m-portlet__head-title">
+                            <span class="m-portlet__head-icon m--hide">
+                                <i class="la la-gear"></i>
+                            </span>
+                            <h3 class="m-portlet__head-text">
+                                Editar Caja
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+                <!--begin::Form-->
+                <form class="m-form m-form--fit m-form--label-align-right" id="form" data-bind="submit: postDataToController">
+					<div class="m-portlet__body">
+						<div class="form-group m-form__group">
+							<label for="exampleInputEmail1">
+								Nombre
+							</label>
+							<input type="text" class="form-control m-input" id="nombre" name="nombre" data-bind="value: nombre">
+							<span class="alert-danger"></span>
+						</div>
+						<div class="form-group m-form__group">
+							<label for="exampleInputEmail1">
+								Punto Expedicion
+							</label>
+							<input type="text" class="form-control m-input" id="puntoExpedicion" name="puntoExpedicion" data-bind="value: puntoExpedicion">
+							<span class="alert-danger"></span>
+						</div>
+						<div class="form-group m-form__group">
+							<label for="exampleInputEmail1">
+								Sucursal
+							</label>
+							<select class="form-control m-input m-input--square" id="sucursal" name="sucursal" data-bind="options: sucursales,
+                                           optionsValue: 'value',
+                                           optionsText: 'text',
+                                           value: sucursalId,
+                                           optionsCaption: 'Seleccione una opcion'"></select>
+						</div>
+					</div>
+                    <div class="m-portlet__foot m-portlet__foot--fit">
+                        <div class="m-form__actions">
+                            <button type="submit" class="m-demo__preview  m-demo__preview btn btn m-btn m-btn--gradient-from-primary m-btn--gradient-to-info">
+                                Guardar
+                            </button>
+
+                        </div>
+                    </div>
+                </form>
+                <!--end::Form-->
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script>
+        var model = @Html.Raw(Json.Serialize(Model));
+        var dataViewModel = ko.mapping.fromJS(model);
+        dataViewModel.postDataToController = function () {
+
+
+            if (!$("#form").valid()) return;
+
+            $.ajax({
+                url: "@Url.Action("Edit", "Cajas")",
+                type: "POST",
+                data: { model: ko.toJSON(dataViewModel) },
+                success: function (response) {
+                    if (response.success) {
+                        showSuccessAndGoToUrl(response.message, '@Url.Action("Index", "Cajas", new { area = "Admin"})');
+                    } else {
+                        showError(response.message);
+                    }
+                },
+                error: function () {
+                    showError();
+                }
+            });
+            return false;
+        }
+        ko.applyBindings(dataViewModel);
+
+
+        $('#form').validate({
+            rules: {
+                nombre: {
+                    required: true
+                },
+                sucursal: {
+                    required: true
+                }
+            },
+            errorPlacement: function (error, element) {
+                var span = element.siblings('span');
+                error.appendTo(span);
+            }
+        });
+    </script>
+}

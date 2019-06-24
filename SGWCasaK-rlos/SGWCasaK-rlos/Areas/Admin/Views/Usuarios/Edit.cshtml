@@ -1,0 +1,163 @@
+﻿@model Core.DTOs.Usuarios.UsuariosEditViewModel
+<div class="m-content" style="width: 50%">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="m-portlet m-portlet--tab">
+                <div class="m-portlet__head">
+                    <div class="m-portlet__head-caption">
+                        <div class="m-portlet__head-title">
+                            <span class="m-portlet__head-icon m--hide">
+                                <i class="la la-gear"></i>
+                            </span>
+                            <h3 class="m-portlet__head-text">
+                                Editar Usuario
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+                <!--begin::Form-->
+                <form class="m-form m-form--fit m-form--label-align-right" id="form" data-bind="submit: postDataToController">
+                    <div class="m-portlet__body">
+                        <div class="form-group m-form__group">
+                            <label for="exampleInputEmail1">
+                                Nombre
+                            </label>
+                            <input type="text" class="form-control m-input" id="nombre" name="nombre" data-bind="value: nombre">
+                            <span class="alert-danger"></span>
+                        </div>
+                        <div class="form-group m-form__group">
+                            <label for="exampleInputEmail1">
+                                Apellido
+                            </label>
+                            <input type="text" class="form-control m-input" id="apellido" name="apellido" data-bind="value: apellido">
+                            <span class="alert-danger"></span>
+                        </div>
+                        <div class="form-group m-form__group">
+                            <label for="exampleInputEmail1">
+                                Correo
+                            </label>
+                            <input type="text" class="form-control m-input" id="email" name="email" data-bind="value: email" readonly>
+                            <span class="alert-danger"></span>
+                        </div>
+                        <div class="form-group m-form__group">
+                            <label for="exampleInputEmail1">
+                                Telefono
+                            </label>
+                            <input type="text" class="form-control m-input" id="telefono" name="telefono" data-bind="value: telefono">
+                            <span class="alert-danger"></span>
+                        </div>
+                        <div class="form-group m-form__group">
+                            <label for="exampleInputEmail1">
+                                Rol
+                            </label>
+                            <select class="form-control m-input m-input--square" id="roles" name="roles" data-bind="options: roles,
+                                           optionsValue: 'value',
+                                           optionsText: 'text',
+                                           value: rolId,
+                                           optionsCaption: 'Seleccione una opcion'"></select>
+                        </div>
+                        <div data-bind="visible: dataViewModel.needSucursal()" class="form-group m-form__group">
+                            <label for="exampleInputEmail1">
+                                Sucursales
+                            </label>
+                            <select class="form-control m-input m-input--square" id="sucursales" name="sucursales" data-bind="options: sucursales,
+                                           optionsValue: 'value',
+                                           optionsText: 'text',
+                                           value: sucursalId,
+                                           optionsCaption: 'Seleccione una opcion'"></select>
+                        </div>
+                        <div class="form-group m-form__group">
+                            <label for="exampleInputEmail1">
+                                Password
+                            </label>
+                            <input type="password" class="form-control m-input" id="password" name="password" data-bind="value: password">
+                            <span class="alert-danger"></span>
+                        </div>
+                        <div class="form-group m-form__group">
+                            <label for="exampleInputEmail1">
+                                Repita Password
+                            </label>
+                            <input type="password" class="form-control m-input" id="repassword" name="repassword">
+                            <span class="alert-danger"></span>
+                        </div>
+                    </div>
+                    <div class="m-portlet__foot m-portlet__foot--fit">
+                        <div class="m-form__actions">
+                            <button type="submit" class="btn btn-primary">
+                                Guardar
+                            </button>
+
+                        </div>
+                    </div>
+                </form>
+                <!--end::Form-->
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script>
+        var model = @Html.Raw(Json.Serialize(Model));
+        var dataViewModel = ko.mapping.fromJS(model);
+
+        dataViewModel.needSucursal = ko.pureComputed(function () {
+            var rol = $.grep(dataViewModel.roles(), function (item) { return item.value() === dataViewModel.rolId(); })[0]
+            if (rol == undefined)
+                return true;
+            return rol.additionalBool();
+        });
+
+        dataViewModel.postDataToController = function () {
+
+            if (dataViewModel.needSucursal() ) { showError("Necesita agregar una sucursal al usuario") }
+            if (!$("#form").valid()) return;
+
+            $.ajax({
+                url: "@Url.Action("Edit", "Usuarios")",
+                type: "POST",
+                data: { model: ko.toJSON(dataViewModel) },
+                success: function (response) {
+                    if (response.success) {
+                        showSuccessAndGoToUrl(response.message, '@Url.Action("Index", "Usuarios", new { area = "Admin"})');
+                    } else {
+                        showError(response.message);
+                    }
+                },
+                error: function () {
+                    showError();
+                }
+            });
+            return false;
+        }
+        ko.applyBindings(dataViewModel);
+
+
+        $('#form').validate({
+            rules: {
+                nombre: {
+                    required: true
+                },
+                apellido: {
+                    required: true
+                },
+                email: {
+                    required: true,
+                    email: true
+                },
+                roles: {
+                    required: true
+                },
+                sucursales: {
+                    required: true
+                },
+                repassword: {
+                    equalTo: "#password"
+                }
+            },
+            errorPlacement: function (error, element) {
+                var span = element.siblings('span');
+                error.appendTo(span);
+            }
+        });
+    </script>
+}

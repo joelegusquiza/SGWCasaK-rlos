@@ -1,0 +1,78 @@
+﻿@model Core.DTOs.Cuotas.ListaCuotasIndexViewModel
+@{
+	ViewData["Title"] = "ListaCuotas";
+	Layout = "~/Areas/Shared/Views/Shared/_EmptyLayout.cshtml";
+}
+
+<div class="m-portlet__body--no-padding">
+	<!--begin::Portlet-->
+	<div class="m-portlet m-portlet--tab" style="margin-bottom: 0px !important">
+		<!--begin::Form-->
+		<form class="m-form m-form--fit m-form--label-align-right">
+			<div class="m-portlet__body" style="margin-left: 20px; margin-right: 20px;">
+				<table class="" id="listaProdutosTable" width="100%">
+					<thead>
+						<tr>
+							<th title="Field #1">
+								Nro
+							</th>
+							<th title="Field #2">
+								Vencimiento
+							</th>
+							<th title="Field #5">
+								Monto
+							</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody data-bind="foreach: cuotas">
+						<tr>
+							<td data-bind="text: numeroCuota"></td>
+							<td data-bind="text: moment(fechaVencimiento()).format('DD/MM/YYYY')"></td>
+							<td data-bind="text: monto"></td>
+							<td><input type="checkbox" data-bind="checked: seleccionar"/></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="m-portlet__foot m-portlet__foot--fit">
+				<div class="m-form__actions">
+					<button type="reset" class="btn btn-primary" data-bind="click: seleccionarCuotas, enable: $.grep(dataViewModel.cuotas(), function (item) { return item.seleccionar() === true; }).length > 0">
+						Agregar
+					</button>
+					<button type="reset" class="btn btn-secondary">
+						Cancel
+					</button>
+				</div>
+			</div>
+		</form>
+		<!--end::Form-->
+	</div>
+</div>
+@section scripts{
+	<script>
+        var model = @Html.Raw(Json.Serialize(Model));
+        var dataViewModel = ko.mapping.fromJS(model);
+        dataViewModel.clienteId = ko.observable();
+        $(document).ready(function () {
+          
+        })
+
+		dataViewModel.seleccionarCuotas = function () {
+			for (var i = 1; i < dataViewModel.cuotas().length; i++)
+			{
+				if (!dataViewModel.cuotas()[i - 1].seleccionar() && dataViewModel.cuotas()[i].seleccionar())
+				{
+					showError("Debe seleccionar cuotas consecutivas");
+					return;
+				}
+			}
+			var cuotas = $.grep(dataViewModel.cuotas(), function (item) { return item.seleccionar() === true; });
+            parent.seleccionarCuotas(ko.mapping.toJS(cuotas));
+        }
+
+
+        ko.applyBindings(dataViewModel);
+	</script>
+
+}
