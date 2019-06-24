@@ -1,0 +1,201 @@
+﻿@model Core.DTOs.Inventario.InventariosIndexViewModel
+@using Core
+<div class="m-content" style="width: 100%">
+	<div class="m-portlet m-portlet--mobile">
+		<div class="m-portlet__head">
+			<div class="m-portlet__head-caption">
+				<div class="m-portlet__head-title">
+					<h3 class="m-portlet__head-text">
+						Inventarios
+					</h3>
+				</div>
+			</div>
+		</div>
+
+		<div class="m-portlet__body">
+			<!--begin: Search Form -->
+			<div class="m-form m-form--label-align-right m--margin-top-20 m--margin-bottom-30">
+				<div class="row align-items-center">
+					<div class="col-xl-8 order-2 order-xl-1">
+						<div class="form-group m-form__group row align-items-center">
+							<div class="col-md-4">
+								<div class="m-input-icon m-input-icon--left">
+									<input type="text" class="form-control m-input" placeholder="Buscar..." id="generalSearch">
+									<span class="m-input-icon__icon m-input-icon__icon--left">
+										<span>
+											<i class="la la-search"></i>
+										</span>
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+					@if (HasPermisos(Core.Constants.AccessFunctions.AddInventario))
+					{
+						<!-- ko if: $.grep(dataViewModel.inventarios(), function (item) { return item.estado() === @((int) Constants.InventarioEstado.Pendiente); }).length == 0 -->
+						<div class="col-xl-4 order-1 order-xl-2 m--align-right">
+							<a href="@Url.Action("Add", "Inventario", new { area = "Platform"})" class="m-demo__preview  m-demo__preview btn btn m-btn m-btn--gradient-from-primary m-btn--gradient-to-info">
+								<span>
+									<i class="la la-plus"></i>
+									<span>
+										Agregar
+									</span>
+								</span>
+							</a>
+							<div class="m-separator m-separator--dashed d-xl-none"></div>
+						</div>
+						<!-- /ko -->
+					}
+
+				</div>
+			</div>
+			<!--end: Search Form -->
+			<!--begin: Datatable -->
+			<table class="m-datatable" id="inventarioIndexTable" width="100%">
+				<thead>
+					<tr>
+						<th title="Field #1">
+							Fecha
+						</th>
+						<th title="Field #2">
+							Estado
+						</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody data-bind="foreach: inventarios">
+					<tr>
+						<td data-bind="text: moment(dateCreated()).format('DD/MM/YYYY')"></td>
+						<td data-bind="text: estadoDescription"></td>
+
+						<td>
+							<div class="btn-group bootstrap-select form-control m-bootstrap-select m-bootstrap-select--solid">
+								<button type="button" class="btn dropdown-toggle bs-placeholder btn-default" data-toggle="dropdown" role="button" data-id="m_form_type" title="All">
+									<span class="filter-option pull-left">
+										Opciones
+									</span>&nbsp;<span class="bs-caret"><span class="caret"></span></span>
+								</button><div class="dropdown-menu open" role="combobox">
+											 <ul class="dropdown-menu inner" role="listbox" aria-expanded="false">
+											 	<!-- ko if: estado() == @((int) Constants.InventarioEstado.Pendiente) -->
+											 	@if (HasPermisos(Core.Constants.AccessFunctions.EditInventario))
+												{
+											 	<li data-original-index="0" class="selected">
+
+											 		<a data-bind="attr: { href: '@Url.Action("Edit", "Inventario", new  { area = "Platform" })?id=' + id() }" tabindex="0" class="" data-tokens="null" role="option" aria-disabled="false" aria-selected="true">
+											 			<span class="fa fa-edit"></span>&nbsp;
+											 			<span class="text">
+											 				Editar
+											 			</span>
+											 		</a>
+											 	</li>
+											}
+											 @if (HasPermisos(Core.Constants.AccessFunctions.AnularInventario))
+											 {
+											 	<li data-original-index="1">
+											 		<a href="#" data-bind="attr: { id: id() }" onClick="javacript: openAnularModal(this)" tabindex="0" class="" data-tokens="null" role="option" aria-disabled="false" aria-selected="true">
+											 			<span class="fa fa-trash"></span>&nbsp;
+											 			<span class="text">
+											 				Anular
+											 			</span>
+											 		</a>
+											 	</li>
+											}
+
+											 <!-- /ko -->
+
+											 @if (HasPermisos(Core.Constants.AccessFunctions.ViewInventario))
+											 {
+											 	<li data-original-index="0" class="selected">
+
+											 		<a data-bind="attr: { href: '@Url.Action("View", "Inventario", new  { area = "Platform" })?id=' + id() }" tabindex="0" class="" data-tokens="null" role="option" aria-disabled="false" aria-selected="true">
+											 			<span class="fa fa-edit"></span>&nbsp;
+											 			<span class="text">
+											 				Ver
+											 			</span>
+											 		</a>
+											 	</li>
+											}
+
+											 </ul>
+								</div>
+							</div>
+							@*<!-- ko if: estado() == @((int) Constants.InventarioEstado.Pendiente) -->
+							@if (HasPermisos(Core.Constants.AccessFunctions.EditInventario))
+							{
+								<a data-bind="attr: { href: '@Url.Action("Edit", "Inventario", new  { area = "Platform" })?id=' + id() }"><i class="fa fa-edit"></i> Editar</a>
+							}
+
+
+							@if (HasPermisos(Core.Constants.AccessFunctions.AnularInventario))
+							{
+
+								<a href="#" data-bind="attr: { id: id() }" onClick="javacript: openAnularModal(this)"><i class="fa fa-trash"></i> Anular</a>
+
+							}
+							@if (HasPermisos(Core.Constants.AccessFunctions.AnularInventario))
+							{
+
+								<a data-bind="attr: { href: '@Url.Action("View", "Inventario", new  { area = "Platform" })?id=' + id() }"><i class="fa fa-eye"></i> View</a>
+
+							}
+							<!-- /ko -->*@
+
+
+
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<!--end: Datatable -->
+		</div>
+	</div>
+</div>
+@{
+	Html.RenderPartial("~/Areas/Platform/Views/Inventario/Shared/_ReasonAnularInventarioModal.cshtml");
+
+}
+@section scripts{
+	<script>
+
+        var model = @Html.Raw(Json.Serialize(Model));
+        var dataViewModel = ko.mapping.fromJS(model);
+        dataViewModel.deleteReason = ko.observable();
+        dataViewModel.idToDelete = ko.observable();
+        dataViewModel.anular = function(){
+
+            //bootbox.confirm("Estas seguro?", function (result) {
+                //if (result) {
+                    $.ajax({
+                        url: "@Url.Action("Anular")",
+                        type: "POST",
+                        data: { id: dataViewModel.idToDelete(), razon: dataViewModel.deleteReason() },
+                        success: function (response) {
+                            if (response.success) {
+
+                                localStorage.setItem('show', 'true');
+                                showSuccessAndGoToUrl(response.message, '@Url.Action("Index", "Inventario", new { area = "Platform"})');
+                            } else {
+                                showError(response.message);
+                            }
+                        },
+                        error: function () {
+                            showError("Error!");
+                        }
+                    });
+                //}
+            //});
+            return false;
+        }
+
+        function openAnularModal(element)
+        {
+            dataViewModel.idToDelete($(element).attr('id'));
+            $("#reasonAnularInventarioModal").modal("show");
+        }
+        ko.applyBindings(dataViewModel);
+        $(document).ready(function () {
+
+        });
+	</script>
+}
+
