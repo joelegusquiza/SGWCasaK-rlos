@@ -57,20 +57,19 @@
 						<div class="m-form__group form-group">
 							<label>
 								Permisos
-							</label>
+							</label><br />
+							<label class="m-checkbox">
+								<input id="selectall" type="checkbox">
+								Seleccionar todo
+								<span></span>
+							</label><br /><br />
 							<div class="m-checkbox-list" style=" list-style: none; overflow-y: scroll;    height: 500px; " data-bind="foreach: permisosList">
 								<label class="m-checkbox">
 									<input type="checkbox" data-bind="checked: selected">
 									<label data-bind="text: nombre"> </label>
 									<span></span>
 								</label>
-								@*<div class="checkbox">
-									<label class="i-checks">
-										<input type="checkbox" value="" data-bind="checked: selected">
-										<i></i>
-										<span data-bind="text: nombre" style="margin-left:20px"></span>
-									</label>
-								</div>*@
+
 							</div>
 
 						</div>
@@ -92,7 +91,20 @@
 @section scripts{
     <script>
         var model = @Html.Raw(Json.Serialize(Model));
-        var dataViewModel = ko.mapping.fromJS(model);
+		var dataViewModel = ko.mapping.fromJS(model);
+
+		$("#selectall").change(function () {
+			if ($(this).is(":checked")) {
+				for (var i = 0; i < dataViewModel.permisosList().length; i++) {
+					dataViewModel.permisosList()[i].selected(true);
+				}
+			} else {
+				for (var i = 0; i < dataViewModel.permisosList().length; i++) {
+					dataViewModel.permisosList()[i].selected(false);
+				}
+			}
+		});
+
         dataViewModel.postDataToController = function () {
 
             if ($.grep(dataViewModel.permisosList(), function (item) { return item.selected() === true; }).length < 1) {

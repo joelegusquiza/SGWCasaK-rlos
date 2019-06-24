@@ -59,7 +59,41 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
 			return View(viewModel);
         }
 
-        private List<InventarioDetalleViewModel> GetDetalleInventario(Inventario inventario)
+		public IActionResult View(int id)
+		{
+			var viewModel = new InventariosEditViewModel() { SucursalId = SucursalId, UsuarioId = UserId };
+
+			var inventario = _inventario.GetById(id);
+
+
+			viewModel.DetalleInventario = GetDetalleInventarioView(inventario);
+			viewModel = Mapper.Map(inventario, viewModel);
+
+			return View(viewModel);
+		}
+
+		private List<InventarioDetalleViewModel> GetDetalleInventarioView(Inventario inventario)
+		{
+			var listToReturn = new List<InventarioDetalleViewModel>();
+			var productoIds = inventario.DetalleInventario.Select(x => x.ProductoId).ToList();
+			var productos = _productos.GetAll().Where(x => productoIds.Contains(x.Id));			
+			foreach (var producto in productos)
+			{
+				var detalleInventario = inventario.DetalleInventario.FirstOrDefault(x => x.ProductoId == producto.Id);				
+				var item = new InventarioDetalleViewModel()
+				{
+					ProductoId = producto.Id,
+					ProductoNombre = producto.Nombre,
+					StockActual = detalleInventario.StockActual,
+					StockEncontrado = detalleInventario.StockEncontrado,
+					Id = detalleInventario.Id
+				};
+				listToReturn.Add(item);
+			}
+			return listToReturn.OrderBy(x => x.ProductoNombre).ToList();
+		}
+
+		private List<InventarioDetalleViewModel> GetDetalleInventario(Inventario inventario)
         {
             var listToReturn = new List<InventarioDetalleViewModel>();
             var productoIds = inventario.DetalleInventario.Select(x => x.ProductoId).ToList();

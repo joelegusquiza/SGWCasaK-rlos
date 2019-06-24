@@ -82,6 +82,12 @@
 								<a href="#" data-bind="attr: { id: id() }" onClick="javacript: openAnularModal(this)"><i class="fa fa-trash"></i> Anular</a>
 
 							}
+							@if (HasPermisos(Core.Constants.AccessFunctions.AnularInventario))
+							{
+
+								<a data-bind="attr: { href: '@Url.Action("View", "Inventario", new  { area = "Platform" })?id=' + id() }" ><i class="fa fa-eye"></i> View</a>
+
+							}
 							<!-- /ko -->
 
 
