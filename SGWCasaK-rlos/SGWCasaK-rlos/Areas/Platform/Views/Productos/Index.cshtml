@@ -73,11 +73,12 @@
                         <td data-bind="text: porcentajeGanancia"></td>
 						<td>
 							<div class="btn-group bootstrap-select form-control m-bootstrap-select m-bootstrap-select--solid">
-								<button type="button" class="btn dropdown-toggle bs-placeholder btn-default" data-toggle="dropdown" role="button" data-id="m_form_type" title="All">
-									<span class="filter-option pull-left">
-										Opciones
-									</span>&nbsp;<span class="bs-caret"><span class="caret"></span></span>
-								</button><div class="dropdown-menu open" role="combobox">
+                                <button type="button" class="btn btn-md btn-outline-primary m-0 px-3 py-2 z-depth-0 waves-effect" data-toggle="dropdown" role="button" data-id="m_form_type" title="All">
+                                    @*btn dropdown-toggle bs-placeholder btn-default*@
+                                    <span class="filter-option pull-left">
+                                        Opciones
+                                    </span>&nbsp;<span class="bs-caret"><span class="caret"></span></span>
+                                </button><div class="dropdown-menu open" role="combobox">
 									<ul class="dropdown-menu inner" role="listbox" aria-expanded="false">
 										@if (HasPermisos(Core.Constants.AccessFunctions.EditProducto))
 										{
