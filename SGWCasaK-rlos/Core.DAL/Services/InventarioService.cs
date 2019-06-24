@@ -76,6 +76,7 @@ namespace Core.DAL.Services
             foreach (var detalle in viewModel.DetalleInventario)
             {
                 var item = inventario.DetalleInventario.FirstOrDefault(x => x.Id == detalle.Id);
+				item.StockActual = detalle.StockActual;
                 item.StockEncontrado = detalle.StockEncontrado;
                 _context.Entry(item).State = EntityState.Modified;
 

@@ -119,7 +119,9 @@ namespace Core
             ConfirmInventario = 4500,
             [Description("Anular Inventario")]
             AnularInventario = 4600,
-            [Description("Ver Cajas")]
+			[Description("Ver Inventario")]
+			ViewInventario = 4650,
+			[Description("Ver Cajas")]
             IndexCaja = 4700,
             [Description("Agregar Cajas")]
             AddCaja = 4800,

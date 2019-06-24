@@ -9,7 +9,7 @@
 		<div class="col-md-12">
 			<div class="m-portlet m-portlet--tab">
 				<div class="m-portlet__head">
-					<div class="row">
+					
 						<div class="m-portlet__head-caption col-md-3">
 							<div class="m-portlet__head-title">
 								<span class="m-portlet__head-icon m--hide">
@@ -20,32 +20,35 @@
 								</h3>
 							</div>
 						</div>
-
-					</div>
+				
 
 				</div>
 				<!--begin::Form-->
 
 				<div class="m-portlet__body">
 					<div class="row">
-						<div class="col-md-8">
+						<div class="col-md-4">
 							<div class="form-group m-form__group row">
-								<label for="example-text-input" class="col-2 col-form-label" style="text-align: left">
+								<label class="col-form-label col-md-3">
 									Fecha Incio
 								</label>
-								<div class="col-2">
+								<div class="col-md-6">
 									<input class="form-control m-input datepicker" style="width: 100%" type="text" id="example-text-input" data-bind="datepicker: parameters.fechaInicio, datepickerOptions: {language: 'es'}">
 								</div>
-								<label for="example-text-input" class="col-2 col-form-label" style="text-align: left">
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group m-form__group row">
+								<label class="col-form-label col-md-3">
 									Fecha Fin
 								</label>
-								<div class="col-2">
+								<div class="col-md-6">
 									<input class="form-control m-input datepicker" style="width: 100%" type="text" id="example-text-input" data-bind="datepicker: parameters.fechaFin, datepickerOptions: {language: 'es'}">
 								</div>
 							</div>
 						</div>
-						<div class="col-md-2" align="right">
-							<div class="m-portlet__head-title" style="margin-top: 20px;">
+						<div class="col-md-2">
+							<div class="m-portlet__head-title">
 								<button type="button" class="btn btn-success" data-bind="click: filtrar">
 									Filtrar
 								</button>
