@@ -71,7 +71,7 @@ namespace Core.DAL.Services
         public SystemValidationModel Edit(InventariosEditViewModel viewModel)
         {
             var inventario = GetById(viewModel.Id);
-			inventario.Estado = GetEstado(inventario);
+            inventario.Estado = GetEstado(inventario);
             _context.Entry(inventario).State = EntityState.Modified;
             foreach (var detalle in viewModel.DetalleInventario)
             {
@@ -80,10 +80,10 @@ namespace Core.DAL.Services
                 _context.Entry(item).State = EntityState.Modified;
 
             }
-            if (inventario.Estado == Constants.InventarioEstado.Confirmado)
-                UpdateStock(viewModel);
-			if (inventario.Estado == Constants.InventarioEstado.Terminado)
-				inventario.UsuarioFinId = viewModel.UsuarioId;
+
+
+                if (inventario.Estado == Constants.InventarioEstado.Terminado){ UpdateStock(viewModel); inventario.UsuarioFinId = viewModel.UsuarioId; }
+
             
             var success = _context.SaveChanges() > 0;
             var validation = new SystemValidationModel()

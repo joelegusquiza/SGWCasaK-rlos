@@ -21,7 +21,7 @@
                         <div class="form-group m-form__group row align-items-center">
                             <div class="col-md-4">
                                 <div class="m-input-icon m-input-icon--left">
-                                    <input type="text" class="form-control m-input" placeholder="Search..." id="generalSearch">
+                                    <input type="text" class="form-control m-input" placeholder="Buscar..." id="generalSearch">
                                     <span class="m-input-icon__icon m-input-icon__icon--left">
                                         <span>
                                             <i class="la la-search"></i>
@@ -34,7 +34,7 @@
                     @if (HasPermisos(Core.Constants.AccessFunctions.AddCategoria)) 
                     { 
                         <div class="col-xl-4 order-1 order-xl-2 m--align-right">
-                            <a href="@Url.Action("Add", "CategoriaProductos", new { area = "Platform"})" class="btn btn-primary m-btn m-btn--custom m-btn--icon m-btn--air m-btn--pill">
+                            <a href="@Url.Action("Add", "CategoriaProductos", new { area = "Platform"})" class="m-demo__preview  m-demo__preview btn btn m-btn m-btn--gradient-from-primary m-btn--gradient-to-info">
                                 <span>
                                     <i class="la la-plus"></i>
                                     <span>
