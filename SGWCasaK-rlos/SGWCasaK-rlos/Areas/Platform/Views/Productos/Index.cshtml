@@ -153,7 +153,7 @@
                         data: { id: id},
                         success: function (response) {
                             if (response.success) {
-
+								localStorage.setItem('message', 'Se ha eliminado correctamente el producto');
                                 localStorage.setItem('show', 'true');
                                 window.location.reload();
                             } else {
@@ -185,7 +185,8 @@
                         success: function (response) {
                             if (response.success) {
 
-                                localStorage.setItem('show', 'true');
+								localStorage.setItem('show', 'true');
+								localStorage.setItem('message', 'Se ha agregado correctamente a la sucursal');
                                 window.location.reload();
                             } else {
                                 showError(response.message);
@@ -203,7 +204,7 @@
         $(document).ready(function () {
             var show = localStorage.getItem('show');
             if (show === 'true') {
-                showSuccess("Se ha eliminado correctamente el prducto");
+				showSuccess(localStorage.getItem('message'));
                 localStorage.setItem('show', 'false');
             }
         });
