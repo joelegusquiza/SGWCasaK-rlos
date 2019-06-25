@@ -254,10 +254,9 @@
         })
 
         dataViewModel.confirmarCompra = function(){
-            
-            //bootbox.confirm("Estas seguro?", function (result) {
-                //if (result) {
-                    $.ajax({
+            confirmAction().then(function (result) {
+				if (result.value) {
+					  $.ajax({
                         url: "@Url.Action("Confirm")",
                         type: "POST",
                         data: { id: dataViewModel.id()},
@@ -273,8 +272,8 @@
                             showError("Error!");
                         }
                     });
-                //}
-            //});
+				}
+			}); 
             return false;
         }
         ko.applyBindings(dataViewModel);

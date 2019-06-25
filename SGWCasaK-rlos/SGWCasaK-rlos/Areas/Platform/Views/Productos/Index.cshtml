@@ -144,10 +144,10 @@
         var model = @Html.Raw(Json.Serialize(Model));
         var dataViewModel = ko.mapping.fromJS(model);
         function desactivate(element){
-            var id = $(element).attr('id');
-            //bootbox.confirm("Estas seguro?", function (result) {
-                //if (result) {
-                    $.ajax({
+			var id = $(element).attr('id');
+			confirmAction().then(function (result) {
+				if (result.value) {
+					   $.ajax({
                         url: "@Url.Action("Desactivate")",
                         type: "POST",
                         data: { id: id},
@@ -164,16 +164,21 @@
                             showError("Error!");
                         }
                     });
+				}
+			}); 
+            //bootbox.confirm("Estas seguro?", function (result) {
+                //if (result) {
+                  
                 //}
             //});
             return false;
         }
 
          function addToSucursal(element){
-            var id = $(element).attr('id');
-            //bootbox.confirm("Estas seguro?", function (result) {
-                //if (result) {
-                    $.ajax({
+			 var id = $(element).attr('id');
+			confirmAction().then(function (result) {
+				if (result.value) {
+					 $.ajax({
                         url: "@Url.Action("AddToSucursal")",
                         type: "POST",
                         data: { id: id},
@@ -190,8 +195,8 @@
                             showError("Error!");
                         }
                     });
-                //}
-            //});
+				}
+			}); 
             return false;
         }
         ko.applyBindings(dataViewModel);

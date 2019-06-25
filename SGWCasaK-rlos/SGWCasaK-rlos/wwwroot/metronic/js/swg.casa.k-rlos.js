@@ -13,6 +13,16 @@ function showSuccessAndGoToUrl(message, url) {
         });
 }
 
+function confirmAction(message)
+{
+	return swal({
+		title: 'Estas Seguro?',		
+		cancelButtonText: "Cancelar",
+		type: 'warning',
+		showCancelButton: true,
+		confirmButtonText: 'Confirmar'
+	})
+}
 function printFacturaCaida(data) {
 	var windowUrl = 'about:blank';
 	var uniqueName = new Date();

@@ -162,10 +162,9 @@
         dataViewModel.deleteReason = ko.observable();
         dataViewModel.idToDelete = ko.observable();
         dataViewModel.anular = function(){
-
-            //bootbox.confirm("Estas seguro?", function (result) {
-                //if (result) {
-                    $.ajax({
+			confirmAction().then(function (result) {
+				if (result.value) {
+					 $.ajax({
                         url: "@Url.Action("Anular")",
                         type: "POST",
                         data: { id: dataViewModel.idToDelete(), razon: dataViewModel.deleteReason() },
@@ -182,8 +181,8 @@
                             showError("Error!");
                         }
                     });
-                //}
-            //});
+				}
+			}); 
             return false;
         }
 

@@ -120,32 +120,39 @@
         dataViewModel.estado = ko.observable();
 
         dataViewModel.changeEstadoPedido = function ()
-        {
-                $.ajax({
-                    url: "@Url.Action("CambiarEstado")",
-                    type: "POST",
-                    data: { id: dataViewModel.pedidoId(), estado: dataViewModel.estado()},
-                    success: function (response) {
-                        if (response.success) {
-                            localStorage.setItem('message', response.message);
-                            localStorage.setItem('show', 'true');
-                            dataViewModel.pedidoId(0);
-                            dataViewModel.estado(0);
-                            window.location.reload();
-                        } else {
-                            showError(response.message);
-                        }
-                    },
-                    error: function () {
-                        showError("Error!");
-                    }
-                });
+		{
+			confirmAction().then(function (result) {
+				if (result.value) {
+					  $.ajax({
+						url: "@Url.Action("CambiarEstado")",
+						type: "POST",
+						data: { id: dataViewModel.pedidoId(), estado: dataViewModel.estado()},
+						success: function (response) {
+							if (response.success) {
+								localStorage.setItem('message', response.message);
+								localStorage.setItem('show', 'true');
+								dataViewModel.pedidoId(0);
+								dataViewModel.estado(0);
+								window.location.reload();
+							} else {
+								showError(response.message);
+							}
+						},
+						error: function () {
+							showError("Error!");
+						}
+					});
+				}
+			}); 
+               
         }
 
         function generarVenta (element)
         {
-            var id = $(element).attr('id');
-                $.ajax({
+			var id = $(element).attr('id');
+			confirmAction().then(function (result) {
+				if (result.value) {
+					  $.ajax({
                     url: "@Url.Action("ValidarPedido")",
                     type: "POST",
                     data: { pedidoId: id},
@@ -160,6 +167,9 @@
                         showError("Error!");
                     }
                 });
+				}
+			}); 
+               
         }
 
         function openCambiarEstadoModal(element)
@@ -170,10 +180,10 @@
         }
 
         function anular(element){
-            var id = $(element).attr('id');
-            //bootbox.confirm("Estas seguro?", function (result) {
-                //if (result) {
-                    $.ajax({
+			var id = $(element).attr('id');
+			confirmAction().then(function (result) {
+				if (result.value) {
+					$.ajax({
                         url: "@Url.Action("Desactivate")",
                         type: "POST",
                         data: { id: id},
@@ -190,8 +200,9 @@
                             showError("Error!");
                         }
                     });
-                //}
-            //});
+				}
+			}); 
+
             return false;
         }
         ko.applyBindings(dataViewModel);

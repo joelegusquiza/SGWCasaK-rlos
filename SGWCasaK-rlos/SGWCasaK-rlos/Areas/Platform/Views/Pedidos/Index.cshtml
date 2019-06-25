@@ -194,28 +194,31 @@
         dataViewModel.estado = ko.observable();
 
 		function validarCajaAbierta(element) {
-				$.ajax({
-                    url: "@Url.Action("IsAnyCajaOpen", "CajaAperturaCierre")",
-                    type: "POST",
+			$.ajax({
+							url: "@Url.Action("IsAnyCajaOpen", "CajaAperturaCierre")",
+							type: "POST",
 
-                    success: function (response) {
-						if (response.success) {
-							generarVenta(element);
-                        } else {
-                            showError(response.message);
-                        }
-                    },
-                    error: function () {
-                        showError("Error!");
-                    }
-                });
-		}
+							success: function (response) {
+								if (response.success) {
+									generarVenta(element);
+								} else {
+									showError(response.message);
+								}
+							},
+							error: function () {
+								showError("Error!");
+							}
+						});
+				
+			}
 
         function generarVenta (element)
         {
 			var idElement = $(element).attr('id');
 			var id = idElement.split("-")[1];
-                $.ajax({
+			confirmAction().then(function (result) {
+				if (result.value) {
+					$.ajax({
                     url: "@Url.Action("ValidarPedido")",
                     type: "POST",
                     data: { pedidoId: id},
@@ -230,6 +233,9 @@
                         showError("Error!");
                     }
                 });
+				}
+			}); 
+                
         }
 		function openCambiarEstadoModal(element) {
 			var id = $(element).attr('id');
@@ -248,10 +254,10 @@
           
 
         function anular(element){
-            var id = $(element).attr('id');
-            //bootbox.confirm("Estas seguro?", function (result) {
-                //if (result) {
-                    $.ajax({
+			var id = $(element).attr('id');
+			confirmAction().then(function (result) {
+				if (result.value) {
+					$.ajax({
                         url: "@Url.Action("Desactivate")",
                         type: "POST",
                         data: { id: id},
@@ -268,8 +274,9 @@
                             showError("Error!");
                         }
                     });
-                //}
-            //});
+				}
+			}); 
+
             return false;
         }
         ko.applyBindings(dataViewModel);
