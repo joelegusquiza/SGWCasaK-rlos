@@ -42,7 +42,7 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
         {
             var viewModel = new CajaAperturaCierreIndexViewModel()
             {
-                CajasAperturaCierre = Mapper.Map<List<CajaAperturaCierreViewModel>>(_cajaAperturaCierre.GetAll())
+                CajasAperturaCierre = Mapper.Map<List<CajaAperturaCierreViewModel>>(_cajaAperturaCierre.GetAll(SucursalId))
             };
             return View(viewModel);
         }

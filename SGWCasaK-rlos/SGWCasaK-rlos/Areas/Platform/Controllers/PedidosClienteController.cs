@@ -77,7 +77,7 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
 		[Authorize(Policy = "ClienteAnularPedido")]
 		public SystemValidationModel Anular(int pedidoId)
 		{			
-			return _pedidos.ChangeEstado(pedidoId, EstadoPedido.Anulado);
+			return _pedidos.ChangeEstado(pedidoId, EstadoPedido.Anulado, "");
 		}
 	}
 }

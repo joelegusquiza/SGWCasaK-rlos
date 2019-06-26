@@ -133,10 +133,10 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
 
         [HttpPost]
         [Authorize(Policy = "ChangeEstadoPedido")]
-        public SystemValidationModel CambiarEstado(int id, EstadoPedido estado)
+        public SystemValidationModel CambiarEstado(int id, EstadoPedido estado, string razonAnulado)
         {
             
-            return _pedidos.ChangeEstado(id, estado);
+            return _pedidos.ChangeEstado(id, estado, razonAnulado);
         }
 
         //[HttpPost]

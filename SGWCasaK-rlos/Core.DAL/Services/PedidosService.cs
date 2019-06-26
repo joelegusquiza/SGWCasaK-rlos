@@ -202,10 +202,12 @@ namespace Core.DAL.Services
             return validation;
         }
 
-        public SystemValidationModel ChangeEstado(int id, EstadoPedido estado)
+        public SystemValidationModel ChangeEstado(int id, EstadoPedido estado, string razonAnulado)
         {
             var pedido = GetById(id);
             pedido.Estado = estado;
+			if (estado == EstadoPedido.Anulado)
+				pedido.RazonAnulado = razonAnulado;
             _context.Entry(pedido).State = EntityState.Modified;
 			if (estado == EstadoPedido.EntregadoPorDelivery && !pedido.Delivery)
 				return new SystemValidationModel() {Success = false, Message = "El pedido no cuenta con deliver" };

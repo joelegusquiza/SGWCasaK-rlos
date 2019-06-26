@@ -59,8 +59,8 @@
 				
             $.ajax({
                 url: "@Url.Action("CambiarEstado")",
-                type: "POST",
-                data: { id: dataViewModel.id(), estado: dataViewModel.estado()},
+				type: "POST",
+				data: { id: dataViewModel.id(), estado: dataViewModel.estado(), razonAnulado : dataViewModel.razonAnulado() },
                 success: function (response) {
 					parent.changeEstadoPedido(response);
                 },
