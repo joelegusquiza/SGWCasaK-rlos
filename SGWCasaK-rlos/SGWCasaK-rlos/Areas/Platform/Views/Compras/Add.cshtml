@@ -32,7 +32,7 @@
 									<label for="example-text-input" class="col-2 col-form-label" style="text-align: left">
 										Nro Factura
 									</label>
-									<div class="col-6">
+									<div class="col-5">
 										<input class="form-control m-input" style="width: 100%" type="text" id="example-text-input" data-bind="value: nroFactura">
 									</div>
 								</div>
@@ -42,7 +42,7 @@
 									<label for="example-text-input" class="col-4 col-form-label" style="text-align: left">
 										Condicion Compra
 									</label>
-									<div class="col-8">
+									<div class="col-5">
 										<select class="form-control m-input m-input--square" id="condicionCompraSelect" data-bind="options: condicionesCompra,
                                            optionsValue: 'value',
                                            optionsText: 'text',
@@ -58,7 +58,7 @@
                                     <label for="example-text-input" class="col-2 col-form-label" style="text-align: left">
                                         Ruc
                                     </label>
-                                    <div class="col-6">
+                                    <div class="col-5">
                                         <input class="form-control m-input" type="text" id="example-text-input" data-bind="value: dataViewModel.proveedor.ruc" readonly>
                                     </div>
                                     <div class="col-4" align="right">
@@ -77,7 +77,7 @@
                                     <label for="example-text-input" class="col-4 col-form-label" style="text-align: left">
                                         Nombre o Razon Social
                                     </label>
-                                    <div class="col-8">
+                                    <div class="col-7">
                                         <input class="form-control m-input" type="text" id="example-text-input" data-bind="value: dataViewModel.proveedor.displayName" readonly>
                                     </div>
                                 </div>
@@ -89,13 +89,13 @@
                                     <label for="example-text-input" class="col-1 col-form-label" style="text-align: left">
                                         Fecha Inicio
                                     </label>
-                                    <div class="col-3">
+                                    <div class="col-4">
                                         <input class="form-control m-input datepicker" style="width: 80%" type="text" id="example-text-input" data-bind="datepicker: fechaInicio, datepickerOptions: {language: 'es'}">
                                     </div>
                                     <label for="example-text-input" class="col-1 col-form-label" style="text-align: left">
-                                        Fecha Inicio
+                                        Fecha Fin
                                     </label>
-                                    <div class="col-3">
+                                    <div class="col-4">
                                         <input class="form-control m-input datepicker" style="width: 80%" type="text" id="example-text-input" data-bind="datepicker: fechaFin, datepickerOptions: {language: 'es'}">
                                     </div>
                                 </div>
@@ -105,7 +105,7 @@
                                     <label for="example-text-input" class="col-4 col-form-label" style="text-align: left">
                                         Nro Timbrado
                                     </label>
-                                    <div class="col-8">
+                                    <div class="col-7">
                                         <input class="form-control m-input" style="width: 100%" type="text" id="example-text-input" data-bind="value: timbrado">
                                     </div>
                                 </div>
@@ -130,30 +130,30 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group m-form__group row">
-                                    <label for="example-text-input" class="col-2 col-form-label">
+                                    <label for="example-text-input" class="col-4 col-form-label" style="text-align: left">
                                         Nombre
                                     </label>
-                                    <div class="col-10">
+                                    <div class="col-7">
                                         <input class="form-control m-input" type="text" id="productoNombre" data-bind="value: dataViewModel.producto.nombre">
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group m-form__group row">
-                                    <label for="example-text-input" class="col-2 col-form-label">
+                                    <label for="example-text-input" class="col-4 col-form-label" style="text-align: left">
                                         Precio
                                     </label>
-                                    <div class="col-10">
+                                    <div class="col-5">
                                         <input class="form-control m-input" type="text" id="productoPrecioCompra" data-bind="value: dataViewModel.producto.precioCompra">
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group m-form__group row">
-                                    <label for="example-text-input" class="col-2 col-form-label">
+                                    <label for="example-text-input" class="col-4 col-form-label" style="text-align: left">
                                         Cantidad
                                     </label>
-                                    <div class="col-10">
+                                    <div class="col-5">
                                         <input class="form-control m-input" type="text" id="productoCantidad" data-bind="value: dataViewModel.producto.cantidad">
                                     </div>
                                 </div>
