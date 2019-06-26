@@ -25,9 +25,9 @@ namespace Core.DAL.Services
 		{
 			var data = new ReportesIndexViewModel();
 			data.Parameters = parameters;			
-			data.Ventas = GetReporteVentas(parameters.FechaInicio, parameters.FechaFin, sucursalId);
-			data.Compras = GetReporteCompras(parameters.FechaInicio, parameters.FechaFin, sucursalId);
-			data.Pedidos = GetReportePedidos(parameters.FechaInicio, parameters.FechaFin, sucursalId);
+			data.Ventas = GetReporteVentas(parameters.FechaInicio.ToUniversalTime(), parameters.FechaFin.ToUniversalTime(), sucursalId);
+			data.Compras = GetReporteCompras(parameters.FechaInicio.ToUniversalTime(), parameters.FechaFin.ToUniversalTime(), sucursalId);
+			data.Pedidos = GetReportePedidos(parameters.FechaInicio.ToUniversalTime(), parameters.FechaFin.ToUniversalTime(), sucursalId);
 			return data;
 		}
 
@@ -36,8 +36,8 @@ namespace Core.DAL.Services
 			var data = new ReporteImpuestosIndexViewModel();
 			data.Parameters = parameters;
 			
-			var ventas = _context.Set<Venta>().Where(x => x.DateCreated.Date >= parameters.FechaInicio.Date && x.DateCreated.Date <= parameters.FechaFin.Date && x.SucursalId == sucursalId && x.Estado == Constants.EstadoVenta.Pagado);
-			var compras = _context.Set<Compra>().Where(x => x.DateCreated.Date >= parameters.FechaInicio.Date && x.DateCreated.Date <= parameters.FechaFin.Date && x.SucursalId == sucursalId && x.Estado == Constants.EstadoCompra.Pagado);
+			var ventas = _context.Set<Venta>().Where(x => x.DateCreated.Date >= parameters.FechaInicio.ToUniversalTime().Date && x.DateCreated.Date <= parameters.FechaFin.ToUniversalTime().Date && x.SucursalId == sucursalId && x.Estado == Constants.EstadoVenta.Pagado);
+			var compras = _context.Set<Compra>().Where(x => x.DateCreated.Date >= parameters.FechaInicio.ToUniversalTime().Date && x.DateCreated.Date <= parameters.FechaFin.ToUniversalTime().Date && x.SucursalId == sucursalId && x.Estado == Constants.EstadoCompra.Pagado);
 			data.Reporte.MontoCincoDebito = ventas.Sum(x => x.IvaCinco);
 			data.Reporte.MontoDiezDebito = ventas.Sum(x => x.IvaDiez);
 			data.Reporte.MontoDebito = data.Reporte.MontoCincoDebito + data.Reporte.MontoDiezDebito;
@@ -51,8 +51,8 @@ namespace Core.DAL.Services
 		{
 			var data = new ReportesProductoIndexViewModel();
 			data.Parameters = parameters;
-			var detalleVentas = _context.Set<DetalleVenta>().Where(x => x.Active && x.Venta.Estado == Constants.EstadoVenta.Pagado && x.Venta.SucursalId == sucursalId && x.DateCreated.Date >= parameters.FechaInicio.Date && x.DateCreated.Date <= parameters.FechaFin.Date);
-			var detalleCompras = _context.Set<DetalleCompra>().Where(x => x.Active && x.Compra.Estado == Constants.EstadoCompra.Confirmado && x.Compra.SucursalId == sucursalId && x.DateCreated.Date >= parameters.FechaInicio.Date && x.DateCreated.Date <= parameters.FechaFin.Date);
+			var detalleVentas = _context.Set<DetalleVenta>().Where(x => x.Active && x.Venta.Estado == Constants.EstadoVenta.Pagado && x.Venta.SucursalId == sucursalId && x.DateCreated.Date >= parameters.FechaInicio.ToUniversalTime().Date && x.DateCreated.Date <= parameters.FechaFin.ToUniversalTime().Date);
+			var detalleCompras = _context.Set<DetalleCompra>().Where(x => x.Active && x.Compra.Estado == Constants.EstadoCompra.Confirmado && x.Compra.SucursalId == sucursalId && x.DateCreated.Date >= parameters.FechaInicio.ToUniversalTime().Date && x.DateCreated.Date <= parameters.FechaFin.ToUniversalTime().Date);
 			var productosIds = detalleVentas.Select(x => x.ProductoId).Concat(detalleCompras.Select(x => x.ProductoId)).Distinct().ToList();
 			var productos = _context.Set<Producto>().Include(x => x.CategoriaProducto).Where(x => x.Active && productosIds.Contains(x.Id));
 			if (parameters.CategoriaId != 0)
@@ -82,7 +82,7 @@ namespace Core.DAL.Services
 		private ReportesVentasIndexViewModel GetReporteVentas(DateTime inicio, DateTime fin, int sucursalId)
 		{
 			var ventaReporte = new ReportesVentasIndexViewModel();
-			var ventas = _context.Set<Venta>().Where(x => x.DateCreated.Date >= inicio.Date && x.DateCreated.Date <= fin.Date && x.SucursalId == sucursalId);
+			var ventas = _context.Set<Venta>().Where(x => x.DateCreated.Date >= inicio.ToUniversalTime().Date && x.DateCreated.Date <= fin.ToUniversalTime().Date && x.SucursalId == sucursalId);
 			ventaReporte.CantVentas = ventas.Count();
 			ventaReporte.MontoTotal = ventas.Sum(x => x.MontoTotal);
 			ventaReporte.CantVentasPendientes = ventas.Where(x => x.Estado == Constants.EstadoVenta.PendientedePago).Count();
@@ -97,7 +97,7 @@ namespace Core.DAL.Services
 		private ReportesComprasIndexViewModel GetReporteCompras(DateTime inicio, DateTime fin, int sucursalId)
 		{
 			var compraReporte = new ReportesComprasIndexViewModel();
-			var compras = _context.Set<Compra>().Where(x => x.DateCreated.Date >= inicio.Date && x.DateCreated.Date <= fin.Date && x.SucursalId == sucursalId);
+			var compras = _context.Set<Compra>().Where(x => x.DateCreated.Date >= inicio.ToUniversalTime().Date && x.DateCreated.Date <= fin.ToUniversalTime().Date && x.SucursalId == sucursalId);
 			compraReporte.CantCompras = compras.Count();
 			compraReporte.MontoTotal = compras.Sum(x => x.MontoTotal);
 			compraReporte.CantComprasPendientes = compras.Where(x => x.Estado == Constants.EstadoCompra.PendientedePago).Count();
@@ -112,7 +112,7 @@ namespace Core.DAL.Services
 		private ReportesPedidosIndexViewModel GetReportePedidos(DateTime inicio, DateTime fin, int sucursalId)
 		{
 			var pedidoReporte = new ReportesPedidosIndexViewModel();
-			var pedidos = _context.Set<Pedido>().Where(x => x.DateCreated.Date >= inicio.Date && x.DateCreated.Date <= fin.Date && x.SucursalId == sucursalId);
+			var pedidos = _context.Set<Pedido>().Where(x => x.DateCreated.Date >= inicio.ToUniversalTime().Date && x.DateCreated.Date <= fin.ToUniversalTime().Date && x.SucursalId == sucursalId);
 			pedidoReporte.Detalle = Mapper.Map<List<ReportesPedidosDetalleViewModel>>(pedidos);
 			return pedidoReporte;
 		}
@@ -120,9 +120,9 @@ namespace Core.DAL.Services
 		public DashboardIndexViewModel GetDashboardData(int sucursalId)
 		{
 			var data = new DashboardIndexViewModel();
-			var ventas = _context.Set<Venta>().Where(x => x.Active && x.Estado != Constants.EstadoVenta.Anulado && x.DateCreated.Date == DateTime.Now.Date && x.SucursalId == sucursalId);
-			var compras = _context.Set<Compra>().Where(x => x.Active && x.Estado != Constants.EstadoCompra.Anulado && x.DateCreated.Date == DateTime.Now.Date && x.SucursalId == sucursalId);
-			var pedidos = _context.Set<Pedido>().Where(x => x.Active && x.Estado != Constants.EstadoPedido.Anulado && x.Estado != Constants.EstadoPedido.EntregadoPorDelivery && x.DateCreated.Date == DateTime.Now.Date && x.SucursalId == sucursalId);
+			var ventas = _context.Set<Venta>().Where(x => x.Active && x.Estado != Constants.EstadoVenta.Anulado && x.DateCreated.Date == DateTime.UtcNow.Date && x.SucursalId == sucursalId);
+			var compras = _context.Set<Compra>().Where(x => x.Active && x.Estado != Constants.EstadoCompra.Anulado && x.DateCreated.Date == DateTime.UtcNow.Date && x.SucursalId == sucursalId);
+			var pedidos = _context.Set<Pedido>().Where(x => x.Active && x.Estado != Constants.EstadoPedido.Anulado && x.Estado != Constants.EstadoPedido.EntregadoPorDelivery && x.DateCreated.Date == DateTime.UtcNow.Date && x.SucursalId == sucursalId);
 
 			data.Ventas.CantVentas = ventas.Count();
 			data.Compras.CantCompras = compras.Count();					

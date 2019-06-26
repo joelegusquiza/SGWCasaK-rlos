@@ -55,38 +55,39 @@
 									</div>
 								</div>
 							</div>
-							<div class="col-md-4">
-								@if (HasPermisos(Core.Constants.AccessFunctions.ChangeEstadoPedido))
-								{
-									<div class="form-group m-form__group row">
-										<label for="example-text-input" class="col-4 col-form-label" style="text-align: left">
-											Estado
-										</label>
-										<div class="col-8">
-											<select class="form-control m-input m-input--square" id="condicionVentaSelect" data-bind="options: estados,
+							<div class="col-md-6">
+
+								<div class="form-group m-form__group row">
+									<label for="example-text-input" class="col-4 col-form-label" style="text-align: left">
+										Estado
+									</label>
+									<div class="col-6">
+										<select class="form-control m-input m-input--square" id="condicionVentaSelect" data-bind="options: estados,
                                            optionsValue: 'value',
                                            optionsText: 'text',
                                            value: estado,
                                            optionsCaption: 'Seleccione una opcion'" disabled></select>
-										</div>
 									</div>
-								}
-								else
-								{
+								</div>
+
+							</div>
+							@if (Model.Estado == Core.Constants.EstadoPedido.Anulado)
+							{
+								<div class="col-md-6">
+
 									<div class="form-group m-form__group row">
 										<label for="example-text-input" class="col-4 col-form-label" style="text-align: left">
-											Estado
+											Razon Anulado
 										</label>
-										<div class="col-8" disabled="disabled">
-											<select class="form-control m-input m-input--square" id="condicionVentaSelect" data-bind="options: estados,
-                                           optionsValue: 'value',
-                                           optionsText: 'text',
-                                           value: estado,
-                                           optionsCaption: 'Seleccione una opcion'"></select>
+										<div class="col-6">
+											<input class="form-control m-input" type="text" id="example-text-input" data-bind="value: dataViewModel.razonAnulado" readonly>
 										</div>
 									</div>
-								}
-							</div>
+									</div>
+
+						
+							}
+
 						</div>
 						<div class="row" style="margin-bottom: 20px;">
 							<div class="col-md-4">

@@ -385,7 +385,7 @@
             }
             var productoToAdd = ko.mapping.fromJS(ko.mapping.toJS(dataViewModel.producto));
             productoToAdd.precioVenta(dataViewModel.producto.precioVentaToAdd());
-            dataViewModel.producto.montoTotal(dataViewModel.producto.precioVenta() *  dataViewModel.producto.cantidad());
+			productoToAdd.montoTotal(productoToAdd.precioVenta() * productoToAdd.cantidad());
             dataViewModel.detalleVenta.push(ko.mapping.fromJS(ko.mapping.toJS(productoToAdd)))
             resetProductoForm();
 
