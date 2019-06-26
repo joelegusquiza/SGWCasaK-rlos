@@ -63,16 +63,16 @@ namespace Core.DAL.Services
 					listToReturn.Add(EstadoPedido.Anulado);
 
 			}
-			if (pedido.Estado == EstadoPedido.Preparado)
-			{
-				if (pedido.Delivery)
-					listToReturn.Add(EstadoPedido.EntregadoPorDelivery);
-				else
-					listToReturn.Add(EstadoPedido.Finalizado);
-				if (anularPedidoPermiso)
-					listToReturn.Add(EstadoPedido.Anulado);
+			//if (pedido.Estado == EstadoPedido.Preparado)
+			//{
+			//	if (pedido.Delivery)
+			//		listToReturn.Add(EstadoPedido.EntregadoPorDelivery);
+			//	else
+			//		listToReturn.Add(EstadoPedido.Finalizado);
+			//	if (anularPedidoPermiso)
+			//		listToReturn.Add(EstadoPedido.Anulado);
 
-			}
+			//}
 
 			return listToReturn;
 		}

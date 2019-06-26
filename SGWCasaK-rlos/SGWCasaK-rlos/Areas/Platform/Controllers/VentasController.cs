@@ -74,6 +74,15 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
             
             var viewModel = Mapper.Map<VentasAddViewModel>(pedido);
 			viewModel.CajaId = CajaId;
+			viewModel.SucursalId = SucursalId;
+			viewModel.CajaId = CajaId;
+			viewModel.CajaAperturaCierreId = CajaAperturaCierreId;
+			var timbrado = _timbrados.GetValidTimbrado(SucursalId, CajaId);
+			viewModel.NroFactura = _ventas.GetValidNroFactura(SucursalId, CajaId);
+			viewModel.NroFacturaString = _ventas.GetNroFacturaString(SucursalId, CajaId, viewModel.NroFactura);
+			viewModel.TimbradoId = timbrado.Id;
+			if (timbrado != null)
+				viewModel = Mapper.Map(timbrado, viewModel);
 			foreach (var detalle in viewModel.DetalleVenta)
             {
                 var producto = productos.FirstOrDefault(x => x.Id == detalle.ProductoId);

@@ -12,6 +12,7 @@ namespace Core.DTOs.Pedidos
     {
         public int Id { get; set; }
         public EstadoPedido Estado { get; set; }
+		public string RazonAnulado { get; set; }
         public List<DropDownViewModel<EstadoPedido>> Estados { get; set; } = Enum.GetValues(typeof(EstadoPedido)).Cast<EstadoPedido>().Select(x => new DropDownViewModel<EstadoPedido>
         {
             Text = x.GetDescription(),
