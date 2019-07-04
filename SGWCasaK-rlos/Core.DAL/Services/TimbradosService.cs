@@ -35,19 +35,19 @@ namespace Core.DAL.Services
             return timbrados.FirstOrDefault();
         }
 
-        public SystemValidationModel VerifyTimbrado(DateTimeOffset inicio, DateTimeOffset fin, int nroInicio, int nroFin, int nroTimbrado)
+        public SystemValidationModel VerifyTimbrado(DateTimeOffset inicio, DateTimeOffset fin, int nroInicio, int nroFin, int nroTimbrado, int sucursalId, int cajaId)
         {
-            var timbrado = _context.Set<Timbrado>().FirstOrDefault(x => x.Active &&(inicio >= x.FechaInicio && fin <= x.FechaFin) 
+            var timbrado = _context.Set<Timbrado>().FirstOrDefault(x => x.Active &&((inicio >= x.FechaInicio && fin <= x.FechaFin) 
                                                                                 || (inicio >= x.FechaInicio && inicio <= x.FechaFin) 
                                                                                 || (fin >= x.FechaInicio && fin <= x.FechaFin) 
-                                                                                || (x.FechaInicio >= inicio && x.FechaFin <= fin));
+                                                                                || (x.FechaInicio >= inicio && x.FechaFin <= fin)) && x.SucursalId == sucursalId && x.CajaId == cajaId);
             
             if (timbrado != null)
                 return new SystemValidationModel() { Id = timbrado.Id, Message = "Ya existe un timbrado en el rango" };
-            timbrado = _context.Set<Timbrado>().FirstOrDefault(x => x.Active &&  (nroInicio >= x.NroInicio && nroFin <= x.NroFin)
+            timbrado = _context.Set<Timbrado>().FirstOrDefault(x => x.Active &&  ((nroInicio >= x.NroInicio && nroFin <= x.NroFin)
                                                                                 || (nroInicio >= x.NroInicio && nroInicio <= x.NroFin)
                                                                                 || (nroFin >= x.NroInicio && nroFin <= x.NroFin)
-                                                                                || (x.NroInicio >= nroInicio && x.NroFin <= nroFin));
+                                                                                || (x.NroInicio >= nroInicio && x.NroFin <= nroFin)) && x.SucursalId == sucursalId && x.CajaId == cajaId);
             if (timbrado != null)
                 return new SystemValidationModel() { Id = timbrado.Id, Message = "Ya existe un timbrado con los mismos valores" };
             return null;
@@ -56,7 +56,7 @@ namespace Core.DAL.Services
         public SystemValidationModel Save(TimbradosAddViewModel viewModel)
         {
 
-            var validation = VerifyTimbrado(viewModel.FechaInicio, viewModel.FechaFin, viewModel.NroInicio, viewModel.NroFin, viewModel.NroTimbrado);
+            var validation = VerifyTimbrado(viewModel.FechaInicio, viewModel.FechaFin, viewModel.NroInicio, viewModel.NroFin, viewModel.NroTimbrado, viewModel.SucursalId, viewModel.CajaId);
             if (validation != null)
                 return validation;
 
@@ -75,7 +75,7 @@ namespace Core.DAL.Services
         public SystemValidationModel Edit(TimbradosEditViewModel viewModel)
         {
             var timbrado = GetById(viewModel.Id);
-            var validation = VerifyTimbrado(viewModel.FechaInicio, viewModel.FechaFin, viewModel.NroInicio, viewModel.NroFin, viewModel.NroTimbrado);
+            var validation = VerifyTimbrado(viewModel.FechaInicio, viewModel.FechaFin, viewModel.NroInicio, viewModel.NroFin, viewModel.NroTimbrado, viewModel.SucursalId, viewModel.CajaId);
             if (validation != null && validation.Id != viewModel.Id)
                 return validation;
             timbrado = Mapper.Map(viewModel, timbrado);
