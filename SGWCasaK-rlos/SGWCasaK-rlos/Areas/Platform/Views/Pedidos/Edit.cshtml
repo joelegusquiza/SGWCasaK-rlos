@@ -33,69 +33,165 @@
 				</div>
 				<!--begin::Form-->
 				<form class="m-form m-form--fit m-form--label-align-right">
+                    <div class="m-portlet__body">
+                        <div class="row" style="margin-bottom: 20px;">
+                            <div class="col-md-6">
+                                <div class="form-group m-form__group row">
+                                    <label class="col-form-label col-md-6 " style="text-align: left">
+                                        Fecha y Hora de Pedido
+                                    </label>
+                                    <div class="col-md-5">
+                                        <div class='input-group date'>
+                                            <input type='text' class="form-control" data-bind="datetimepicker: dateCreated" disabled />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group m-form__group row">
+                                    <label for="example-text-input" class="col-4 col-form-label" style="text-align: left">
+                                        Delivery
+                                    </label>
+                                    <div class="col-1 col-form-label" style="text-align: left">
+                                        <input type="checkbox" class="form-control m-input" id="delivery" name="delivery" data-bind="checked: delivery, event:{ change: deliveryValues}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" style="margin-bottom: 20px;">
+                            <div class="col-md-6">
+                                <div class="form-group m-form__group row">
+                                    <label for="example-text-input" class="col-2 col-form-label" style="text-align: left">
+                                        Ruc
+                                    </label>
+                                    <div class="col-4">
+                                        <input class="form-control m-input" type="text" id="example-text-input" data-bind="value: dataViewModel.cliente.ruc" readonly>
+                                    </div>
+
+                                    <div class="col-4 col-form-label" style="text-align: left">
+                                        <button type="button" class="m-demo__preview  m-demo__preview btn btn m-btn m-btn--gradient-from-primary m-btn--gradient-to-info" onclick="showAddClienteModal()">
+                                            Agregar
+                                        </button>
+                                        <button type="button" class="m-demo__preview  m-demo__preview btn btn m-btn m-btn--gradient-from-primary m-btn--gradient-to-info" onclick="showListaClientesModal()">
+                                            Buscar
+                                        </button>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group m-form__group row">
+                                    <label for="example-text-input" class="col-4 col-form-label" style="text-align: left">
+                                        Nombre o Razon Social
+                                    </label>
+                                    <div class="col-8">
+                                        <input class="form-control m-input" type="text" id="example-text-input" data-bind="value: dataViewModel.cliente.displayName" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-bottom: 20px;">
+
+                            <div class="col-md-6" data-bind="visible: delivery()">
+                                <div class="form-group m-form__group row">
+                                    <label class="col-form-label col-md-6 " style="text-align: left">
+                                        Fecha y Hora de Entrega
+                                    </label>
+                                    <div class="col-md-6">
+                                        <div class='input-group date'>
+                                            <input type='text' id="fechaEntrega" class="form-control" data-bind="datetimepicker: fechaEntrega" readonly />
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6" data-bind="visible: delivery()">
+                                <div class="form-group m-form__group row">
+                                    <label for="example-text-input" class="col-6 col-form-label" style="text-align: left">
+                                        Direccion de Entrega
+                                    </label>
+                                    <div class="col-6">
+                                        <input class="form-control m-input" type="text" id="example-text-input" data-bind="value: dataViewModel.direccionEntrega">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+        </form>
+			</div>
+            <div class="m-portlet m-portlet--tab">
+                <div class="m-portlet__head">
+                    <div class="m-portlet__head-caption">
+                        <div class="m-portlet__head-title">
+                            <h3 class=" m-portlet__head-text">
+                                Productos
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+                <!--begin::Form-->
+                <form class="m-form m-form--fit m-form--label-align-right">
 					<div class="m-portlet__body">
 						<div class="row" style="margin-bottom: 20px;">
 							<div class="col-md-6">
 								<div class="form-group m-form__group row">
-
 									<label class="col-form-label col-md-6 " style="text-align: left">
 										Fecha y Hora de Pedido
 									</label>
-									<div class="col-md-6">
+									<div class="col-md-5">
 										<div class='input-group date'>
-											<input type='text' class="form-control" data-bind="datetimepicker: dateCreated" disabled />
+											<input type='text' class="form-control" data-bind="datetimepicker: dateCreated"  disabled/>
 										</div>
-
-									</div>
-								</div>
-
-
-							</div>
-							<div class="col-md-6">
-								<div class="form-group m-form__group row">
-									<label for="example-text-input" class="col-2 col-form-label" style="text-align: left">
-										Delivery
-									</label>
-									<input type="checkbox" class="form-control m-input" id="delivery" name="delivery" data-bind="checked: delivery, event:{ change: deliveryValues}">
-
-								</div>
-
-							</div>
-						</div>
-
-						<div class="row" style="margin-bottom: 20px;">
-							<div class="col-md-6">
-								<div class="form-group m-form__group row">
-									<label for="example-text-input" class="col-2 col-form-label" style="text-align: left">
-										Ruc
-									</label>
-									<div class="col-6">
-										<input class="form-control m-input" type="text" id="example-text-input" data-bind="value: dataViewModel.cliente.ruc" readonly>
-									</div>
-									<div class="col-4" align="right">
-										<button type="button" class="m-demo__preview  m-demo__preview btn btn m-btn m-btn--gradient-from-primary m-btn--gradient-to-info" onclick="showAddClienteModal()">
-											Agregar
-										</button>
-										<button type="button" class="m-demo__preview  m-demo__preview btn btn m-btn m-btn--gradient-from-primary m-btn--gradient-to-info" onclick="showListaClientesModal()">
-											Buscar
-										</button>
-
 									</div>
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div class="form-group m-form__group row">
 									<label for="example-text-input" class="col-4 col-form-label" style="text-align: left">
-										Nombre o Razon Social
+										Delivery
 									</label>
-									<div class="col-8">
-										<input class="form-control m-input" type="text" id="example-text-input" data-bind="value: dataViewModel.cliente.displayName" readonly>
-									</div>
-								</div>
-							</div>
+                                    <div class="col-1 col-form-label" style="text-align: left">
+                                        <input type="checkbox" class="form-control m-input" id="delivery" name="delivery" data-bind="checked: delivery, event:{ change: deliveryValues}">
+                                    </div>
+                                 </div>
+                            </div>
 						</div>
-						<div class="row" style="margin-bottom: 20px;">
+						
+                        <div class="row" style="margin-bottom: 20px;">
+                            <div class="col-md-6">
+                                <div class="form-group m-form__group row">
+                                    <label for="example-text-input" class="col-2 col-form-label" style="text-align: left">
+                                        Ruc
+                                    </label>
+                                    <div class="col-5">
+                                        <input class="form-control m-input" type="text" id="example-text-input" data-bind="value: dataViewModel.cliente.ruc" readonly>
+                                    </div>
+                                </div>
+                            </div>
 
+                            <div class="col-4 col-form-label" style="text-align: left">
+                                <button type="button" class= "m-demo__preview  m-demo__preview btn btn m-btn m-btn--gradient-from-primary m-btn--gradient-to-info" onclick="showAddClienteModal()">
+                                    Agregar
+                                </button>
+                                <button type="button" class="m-demo__preview  m-demo__preview btn btn m-btn m-btn--gradient-from-primary m-btn--gradient-to-info" onclick="showListaClientesModal()">
+                                    Buscar
+                                </button>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group m-form__group row">
+                                    <label for="example-text-input" class="col-4 col-form-label" style="text-align: left">
+                                        Nombre o Razon Social
+                                    </label>
+                                    <div class="col-8">
+                                        <input class="form-control m-input" type="text" id="example-text-input" data-bind="value: dataViewModel.cliente.displayName" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+						<div class="row" style="margin-bottom: 20px;">
+							
 							<div class="col-md-6" data-bind="visible: delivery()">
 								<div class="form-group m-form__group row">
 									<label class="col-form-label col-md-6 " style="text-align: left">
@@ -114,7 +210,7 @@
 									<label for="example-text-input" class="col-6 col-form-label" style="text-align: left">
 										Direccion de Entrega
 									</label>
-									<div class="col-6">
+									<div class="col-4">
 										<input class="form-control m-input" type="text" id="example-text-input" data-bind="value: dataViewModel.direccionEntrega">
 									</div>
 								</div>
@@ -122,8 +218,8 @@
 						</div>
 
 					</div>
-				</form>
-			</div>
+                </form>
+            </div>
             <div class="m-portlet m-portlet--tab">
                 <div class="m-portlet__head">
                     <div class="m-portlet__head-caption">
@@ -140,52 +236,40 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group m-form__group row">
-                                    <label for="example-text-input" class="col-2 col-form-label">
+                                    <label for="example-text-input" class="col-4 col-form-label" style="text-align: left">
                                         Nombre
                                     </label>
-                                    <div class="col-10">
+                                    <div class="col-7">
                                         <input class="form-control m-input" type="text" id="productoNombre" data-bind="value: dataViewModel.producto.nombre">
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group m-form__group row">
-                                    <label for="example-text-input" class="col-2 col-form-label">
+                                    <label for="example-text-input" class="col-4 col-form-label" style="text-align: left">
                                         Precio
                                     </label>
-                                    <div class="col-10">
+                                    <div class="col-5">
                                         <input class="form-control m-input" type="text" id="productoPrecioVenta" data-bind="value: dataViewModel.producto.precioVenta" readonly>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group m-form__group row">
-                                    <label for="example-text-input" class="col-2 col-form-label">
+                                    <label for="example-text-input" class="col-4 col-form-label" style="text-align: left">
                                         Cantidad
                                     </label>
-                                    <div class="col-10">
+                                    <div class="col-5">
                                         <input class="form-control m-input" type="text" id="productoCantidad" data-bind="value: dataViewModel.producto.cantidad">
                                     </div>
                                 </div>
                             </div>
+
                         </div>
 
                     </div>
-                    <div class="m-portlet__foot m-portlet__foot--fit">
-                        <div class="m-form__actions">
-                            <div class="row">
-                                <div class="col-12">
-                                    <button type="button" class="m-demo__preview  m-demo__preview btn btn m-btn m-btn--gradient-from-primary m-btn--gradient-to-info" onclick="showListaProductosModal()">
-                                        Buscar
-                                    </button>
-                                    <button type="button" class="m-demo__preview  m-demo__preview btn btn m-btn m-btn--gradient-from-primary m-btn--gradient-to-info" data-bind="click: agregarDetalle">
-                                        Agregar
-                                    </button>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    
+                   
                 </form>
             </div>
             <div class="m-portlet m-portlet--tab">
