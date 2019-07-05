@@ -29,7 +29,7 @@ namespace Core.DAL.Services
 
         public List<Compra> GetToPayByProveedorId(int proveedorId)
         {
-            return _context.Set<Compra>().Include(x => x.Proveedor).Where(x => x.Active && x.ProveedorId == proveedorId && x.Estado == Constants.EstadoCompra.Confirmado).ToList();
+            return _context.Set<Compra>().Include(x => x.Proveedor).Where(x => x.Active && x.ProveedorId == proveedorId && x.Estado == Constants.EstadoCompra.PendientedePago).ToList();
         }
 
         public Compra GetById(int id)
@@ -73,7 +73,7 @@ namespace Core.DAL.Services
         public SystemValidationModel ConfirmCompra(int id, int sucursalId)
         {
             var compra = _context.Set<Compra>().Include(x => x.DetalleCompra).FirstOrDefault(x => x.Active && x.Id == id);
-            compra.Estado = Constants.EstadoCompra.Confirmado;
+            compra.Estado = Constants.EstadoCompra.PendientedePago;
             _context.Entry(compra).State = EntityState.Modified;
             AumentarStock(compra.DetalleCompra.Where(x => x.Active).ToList(), sucursalId);
 			AumetarSaldoProveedor(compra);

@@ -11,7 +11,7 @@ namespace Core.DTOs.PedidosCliente
     {
         public bool Delivery { get; set; }
         public string DireccionEntrega { get; set; }
-        public DateTimeOffset FechaEntrega { get; set; } = DateTimeOffset.Now;
+        public DateTimeOffset? FechaEntrega { get; set; } = DateTimeOffset.Now;
         public decimal MontoTotal { get; set; }
         public int ClienteId { get; set; }
 		public int SucursalId { get; set; }

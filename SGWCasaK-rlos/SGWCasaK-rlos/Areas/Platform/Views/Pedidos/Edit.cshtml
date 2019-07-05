@@ -231,46 +231,60 @@
                     </div>
                 </div>
                 <!--begin::Form-->
-                <form class="m-form m-form--fit m-form--label-align-right" id="productoAddDetalleForm">
-                    <div class="m-portlet__body">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="form-group m-form__group row">
-                                    <label for="example-text-input" class="col-4 col-form-label" style="text-align: left">
-                                        Nombre
-                                    </label>
-                                    <div class="col-7">
-                                        <input class="form-control m-input" type="text" id="productoNombre" data-bind="value: dataViewModel.producto.nombre">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group m-form__group row">
-                                    <label for="example-text-input" class="col-4 col-form-label" style="text-align: left">
-                                        Precio
-                                    </label>
-                                    <div class="col-5">
-                                        <input class="form-control m-input" type="text" id="productoPrecioVenta" data-bind="value: dataViewModel.producto.precioVenta" readonly>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group m-form__group row">
-                                    <label for="example-text-input" class="col-4 col-form-label" style="text-align: left">
-                                        Cantidad
-                                    </label>
-                                    <div class="col-5">
-                                        <input class="form-control m-input" type="text" id="productoCantidad" data-bind="value: dataViewModel.producto.cantidad">
-                                    </div>
-                                </div>
-                            </div>
+				<form class="m-form m-form--fit m-form--label-align-right" id="productoAddDetalleForm">
+					<div class="m-portlet__body">
+						<div class="row">
+							<div class="col-md-4">
+								<div class="form-group m-form__group row">
+									<label for="example-text-input" class="col-4 col-form-label" style="text-align: left">
+										Nombre
+									</label>
+									<div class="col-7">
+										<input class="form-control m-input" type="text" id="productoNombre" data-bind="value: dataViewModel.producto.nombre">
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group m-form__group row">
+									<label for="example-text-input" class="col-4 col-form-label" style="text-align: left">
+										Precio
+									</label>
+									<div class="col-5">
+										<input class="form-control m-input" type="text" id="productoPrecioVenta" data-bind="value: dataViewModel.producto.precioVenta" readonly>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group m-form__group row">
+									<label for="example-text-input" class="col-4 col-form-label" style="text-align: left">
+										Cantidad
+									</label>
+									<div class="col-5">
+										<input class="form-control m-input" type="text" id="productoCantidad" data-bind="value: dataViewModel.producto.cantidad">
+									</div>
+								</div>
+							</div>
 
-                        </div>
+						</div>
 
-                    </div>
-                    
-                   
-                </form>
+					</div>
+					<div class="m-portlet__foot m-portlet__foot--fit">
+						<div class="m-form__actions">
+							<div class="row">
+								<div class="col-12">
+									<button type="button" class="m-demo__preview  m-demo__preview btn btn m-btn m-btn--gradient-from-primary m-btn--gradient-to-info" onclick="showListaProductosModal()">
+										Buscar
+									</button>
+									<button type="button" class="m-demo__preview  m-demo__preview btn btn m-btn m-btn--gradient-from-primary m-btn--gradient-to-info" data-bind="click: agregarDetalle">
+										Agregar
+									</button>
+
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</form>
             </div>
             <div class="m-portlet m-portlet--tab">
                 <div class="m-portlet__head">

@@ -172,7 +172,7 @@ namespace Core
         public enum EstadoCompra
         {
             Pendiente,
-            Confirmado,
+            //Confirmado,
             PendientedePago,
             Pagado,
             Anulado,

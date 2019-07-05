@@ -115,6 +115,7 @@
 									<div class="col-4">
 										<input class="form-control m-input" type="text" id="example-text-input" data-bind="value: dataViewModel.cliente.ruc" readonly>
 									</div>
+									<!-- ko if: pedidoId() == null  -->
 									<div class="col-4" align="right">
 										@*<button  class="btn btn-success">
 												Agregar
@@ -124,6 +125,7 @@
 										</button>
 
 									</div>
+										<!-- /ko -->
 								</div>
 							</div>
 							<div class="col-md-6">
@@ -188,6 +190,7 @@
 						</div>
 
 					</div>
+
 					<div class="m-portlet__foot m-portlet__foot--fit">
 						<div class="m-form__actions">
 							<div class="row">

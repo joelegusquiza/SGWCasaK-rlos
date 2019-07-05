@@ -354,7 +354,7 @@ namespace Core.DAL.Services
             var productoIds = detallesVenta.Select(x => x.ProductoId).ToList();
 			var all = _context.Set<ProductoSucursal>().ToList();
 
-			var productosSucursal = _context.Set<ProductoSucursal>().Where(x => productoIds.Contains(x.ProductoId) && x.SucursalId == sucursalId);
+			var productosSucursal = _context.Set<ProductoSucursal>().Where(x => productoIds.Contains(x.ProductoId) && x.SucursalId == sucursalId).ToList();
             foreach (var producto in productosSucursal)
             {
                 var detalleVenta = detallesVenta.FirstOrDefault(x => x.ProductoId == producto.ProductoId);

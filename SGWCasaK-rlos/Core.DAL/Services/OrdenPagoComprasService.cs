@@ -72,7 +72,7 @@ namespace Core.DAL.Services
             var compras = _context.Set<Compra>().Where(x => comprasIds.Contains(x.Id) && x.Active).ToList();
             foreach (var compra in compras)
             {
-                compra.Estado = Constants.EstadoCompra.Confirmado;
+                compra.Estado = Constants.EstadoCompra.PendientedePago;
                 _context.Entry(compra).State = EntityState.Modified;
             }
             var success = _context.SaveChanges() > 0;

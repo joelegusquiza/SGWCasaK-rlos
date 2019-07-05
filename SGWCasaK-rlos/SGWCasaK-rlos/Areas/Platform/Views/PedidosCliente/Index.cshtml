@@ -104,7 +104,7 @@
 											}
 
 
-											 }
+											 
 											 @if (HasPermisos(Core.Constants.AccessFunctions.ClienteAnularPedido))
 											 {
 
@@ -112,7 +112,7 @@
 											 		<a data-bind="attr: { href: '@Url.Action("Anular", "PedidosCliente", new  { area = "Platform" })?id=' + id() }" tabindex="0" class="" data-tokens="null" role="option" aria-disabled="false" aria-selected="true">
 											 			<span class="fa fa-trash"></span>&nbsp;
 											 			<span class="text">
-											 				Eliminar
+											 				Anular
 											 			</span>
 											 		</a>
 											 	</li>											 	
@@ -122,7 +122,7 @@
 									</ul>
 								</div>
 							</div>
-							<a data-bind="attr: { href: '@Url.Action("View", "PedidosCliente", new  { area = "Platform" })?id=' + id() }"><i class="fa fa-edit"></i> Ver</a>
+							@*<a data-bind="attr: { href: '@Url.Action("View", "PedidosCliente", new  { area = "Platform" })?id=' + id() }"><i class="fa fa-edit"></i> Ver</a>
 							<!-- ko if: estado() == @((int)Core.Constants.EstadoPedido.Pendiente)  -->
 							@if (HasPermisos(Core.Constants.AccessFunctions.ClienteEditPedido))
 							{
@@ -136,7 +136,7 @@
 								<a data-bind="attr: { href: '@Url.Action("Anular", "PedidosCliente", new  { area = "Platform" })?id=' + id() }"><i class="fa fa-trash"></i> Anular</a>
 
 							}
-							<!-- /ko -->
+							<!-- /ko -->*@
 						</td>
                     </tr>
                 </tbody>

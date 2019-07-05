@@ -99,7 +99,7 @@ namespace Core.DAL.Services
         public SystemValidationModel UpdatePrecioVenta(List<int> productoIds, int sucursalId)
         {
             var productos= GetAll().Include(x => x.ProductoSucursal).Include(x => x.ProductoPresentaciones).Where(x => productoIds.Contains(x.Id));
-            var compras = _context.Set<DetalleCompra>().Include(x => x.Compra).Where(x => productoIds.Contains(x.ProductoId) && x.Compra.Estado == Constants.EstadoCompra.Confirmado);
+            var compras = _context.Set<DetalleCompra>().Include(x => x.Compra).Where(x => productoIds.Contains(x.ProductoId) && x.Compra.Estado == Constants.EstadoCompra.PendientedePago);
             foreach (var producto in productos)
             {
                 var sumaCompras = compras.Where(x => x.ProductoId == producto.Id && x.Compra.SucursalId == sucursalId).Sum(x => x.MontoTotal);
