@@ -63,7 +63,7 @@
                         <div class="row" style="margin-bottom: 20px;">
                             <div class="col-md-6">
                                 <div class="form-group m-form__group row">
-                                    <label for="exampleInputEmail1" class="col-4 col-form-label" style="text-align: left">
+                                    <label for="exampleInputEmail1" class="col-1 col-form-label" style="text-align: left">
                                         Delivery
                                     </label>
                                     <div class="col-1 col-form-label" style="text-align: left">
@@ -71,12 +71,12 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-4" data-bind="visible: delivery()">
+                                <div class="col-md-6" data-bind="visible: delivery()">
                                     <div class="form-group m-form__group row">
                                         <label class="col-form-label col-md-6 " style="text-align: left">
                                             Fecha y Hora de Entrega
                                         </label>
-                                        <div class="col-md-6">
+                                        <div class="col-md-8">
                                             <div class='input-group date'>
                                                 <input type='text' id="fechaEntrega" class="form-control" data-bind="datetimepicker: fechaEntrega" />
                                             </div>
@@ -85,12 +85,12 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4" data-bind="visible: delivery()">
+                            <div class="col-md-6" data-bind="visible: delivery()">
                                 <div class="form-group m-form__group row">
                                     <label for="example-text-input" class="col-4 col-form-label" style="text-align: left">
                                         Direccion de Entrega
                                     </label>
-                                    <div class="col-8">
+                                    <div class="col-6">
                                         <input class="form-control m-input" type="text" id="example-text-input" data-bind="value: dataViewModel.direccionEntrega">
                                     </div>
                                 </div>
