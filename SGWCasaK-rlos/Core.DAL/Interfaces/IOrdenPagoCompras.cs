@@ -13,6 +13,8 @@ namespace Core.DAL.Interfaces
         List<OrdenPagoCompra> GetAllWithProveedores();
         OrdenPagoCompra GetById(int id);
         SystemValidationModel Save(OrdenPagoComprasAddViewModel viewModel);
-        SystemValidationModel Anular(int id);
+		SystemValidationModel Confirmar(OrdenPagoComprasAddViewModel viewModel);
+		OrdenPagoComprasAddViewModel GetForView(int id);
+		SystemValidationModel Anular(int id);
     }
 }

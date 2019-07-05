@@ -39,9 +39,12 @@ namespace Core.DAL.Services
 		{
 			var viewModel = new VentasViewViewModel() { };
 			
-			var venta = _context.Set<Venta>().Include(x => x.DetalleVenta).Include(x => x.Cliente).FirstOrDefault(x => x.Active && x.Id == id);
+			var venta = _context.Set<Venta>().Include(x => x.DetalleVenta).Include(x => x.Cliente).Include(x => x.Timbrado).FirstOrDefault(x => x.Active && x.Id == id);
+
+		
 			venta.DetalleVenta = venta.DetalleVenta.Where(x => x.Active).ToList();
 			viewModel = Mapper.Map<VentasViewViewModel>(GetById(id));
+			viewModel = Mapper.Map(venta.Timbrado, viewModel);
 			var productosIds = venta.DetalleVenta.Select(x => x.ProductoId).ToList();
 			var productos = _context.Set<Producto>().Where(x => productosIds.Contains(x.Id));
 			foreach (var detalle in viewModel.DetalleVenta)
@@ -87,6 +90,7 @@ namespace Core.DAL.Services
 		{
 
 			var venta = Mapper.Map<Venta>(viewModel);
+			venta.DateCreated = DateTime.Now;
 			//var timbrado = _timbrados.GetValidTimbrado(viewModel.SucursalId, viewModel.CajaId);
 			//if (timbrado == null)
 			//	return new SystemValidationModel() { Success = false, Message = "No existe un timbrado valido registrado" };
@@ -120,7 +124,7 @@ namespace Core.DAL.Services
 			{
 				var pedido = _pedidos.GetById(viewModel.PedidoId.Value);
 				ChecForUpdatePedido(pedido, venta.DetalleVenta);
-				pedido.Estado = Constants.EstadoPedido.Finalizado;
+				pedido.Estado = pedido.Delivery ? Constants.EstadoPedido.EntregadoPorDelivery : Constants.EstadoPedido.Finalizado;
 				_context.Entry(pedido).State = EntityState.Modified;
 			}
 
@@ -208,7 +212,22 @@ namespace Core.DAL.Services
 
 			var productoIdsToDelete = productoPedidoIds.Except(productoVentIds);
 			var productoIdsToAdd = productoVentIds.Except(productoPedidoIds);
+			var productoIdsPersist = productoPedidoIds.Intersect(productoVentIds);
 
+			foreach (var id in productoIdsPersist)
+			{
+				var detalleVenta = detallesVenta.FirstOrDefault(x => x.ProductoId == id);
+				var detallePedido = pedido.DetallePedido.FirstOrDefault(x => x.ProductoId == id);
+				if (detalleVenta.MontoTotal != detallePedido.MontoTotal)
+				{
+					detallePedido.PrecioVenta = detalleVenta.PrecioVenta;
+					detallePedido.MontoTotal = detalleVenta.MontoTotal;
+					detallePedido.Cantidad = detalleVenta.Cantidad;
+					detallePedido.Equivalencia = detalleVenta.Equivalencia;
+					detallePedido.Descripcion = detalleVenta.Descripcion;
+					_context.Entry(detallePedido).State = EntityState.Modified;
+				}
+			}
 			foreach (var productoId in productoIdsToDelete)
 			{
 				var detalle = pedido.DetallePedido.FirstOrDefault(x => x.ProductoId == productoId);
@@ -338,7 +357,7 @@ namespace Core.DAL.Services
             var productoIds = detallesVenta.Select(x => x.ProductoId).ToList();
 			var all = _context.Set<ProductoSucursal>().ToList();
 
-			var productosSucursal = _context.Set<ProductoSucursal>().Where(x => productoIds.Contains(x.ProductoId) && x.SucursalId == sucursalId);
+			var productosSucursal = _context.Set<ProductoSucursal>().Where(x => productoIds.Contains(x.ProductoId) && x.SucursalId == sucursalId).ToList();
             foreach (var producto in productosSucursal)
             {
                 var detalleVenta = detallesVenta.FirstOrDefault(x => x.ProductoId == producto.ProductoId);

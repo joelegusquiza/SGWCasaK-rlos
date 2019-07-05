@@ -17,7 +17,8 @@ namespace Core.DTOs.OrdenPagoCompras
         public DateTime DateCreated { get; set; }
         public string Proveedor { get; set; }
         public decimal MontoTotal { get; set; }
-        public OrdenPagoCompraEstado Estado { get; set; }
+		public decimal Cambio { get; set; }
+		public OrdenPagoCompraEstado Estado { get; set; }
         public string EstadoDescripcion => Estado.GetDescription();
     }
 }

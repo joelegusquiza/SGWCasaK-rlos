@@ -30,7 +30,7 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
         {
             var viewModel = new ComprasIndexViewModel()
             {
-                Compras = Mapper.Map<List<CompraViewModel>>(_compras.GetAllWithProveedor())
+                Compras = Mapper.Map<List<CompraViewModel>>(_compras.GetAllWithProveedor().OrderByDescending(x=> x.DateCreated))
             };
             return View(viewModel);
         }
@@ -53,7 +53,15 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
             return View(viewModel);
         }
 
-        public IActionResult Add()
+		public IActionResult View(int id)
+		{
+			var compra = _compras.GetById(id);
+			var viewModel = Mapper.Map<ComprasAddViewModel>(compra);
+
+			return View(viewModel);
+		}
+
+		public IActionResult Add()
         {
             var viewModel = new ComprasAddViewModel() { SucursalId = SucursalId};
             return View(viewModel);

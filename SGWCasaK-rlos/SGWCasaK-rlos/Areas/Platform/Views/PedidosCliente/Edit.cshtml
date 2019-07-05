@@ -16,7 +16,7 @@
                         </div>
                         <div class="col-md-6 col-sm-4" align="right">
                             <div class="m-portlet__head-title" style="margin-top: 20px;">
-                                <button type="button" class="btn btn-success" data-bind="click: postDataToController">
+                                <button type="button" class="m-demo__preview  m-demo__preview btn btn m-btn m-btn--gradient-from-primary m-btn--gradient-to-info" data-bind="click: postDataToController">
                                     Guardar
                                 </button>
                             </div>
@@ -103,30 +103,30 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group m-form__group row">
-                                    <label for="example-text-input" class="col-2 col-form-label">
+                                    <label for="example-text-input" class="col-4 col-form-label">
                                         Nombre
                                     </label>
-                                    <div class="col-10">
+                                    <div class="col-7">
                                         <input class="form-control m-input" type="text" id="productoNombre" data-bind="value: dataViewModel.producto.nombre">
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group m-form__group row">
-                                    <label for="example-text-input" class="col-2 col-form-label">
+                                    <label for="example-text-input" class="col-4 col-form-label">
                                         Precio
                                     </label>
-                                    <div class="col-10">
+                                    <div class="col-5">
                                         <input class="form-control m-input" type="text" id="productoPrecioVenta" data-bind="value: dataViewModel.producto.precioVenta" readonly>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group m-form__group row">
-                                    <label for="example-text-input" class="col-2 col-form-label">
+                                    <label for="example-text-input" class="col-4 col-form-label">
                                         Cantidad
                                     </label>
-                                    <div class="col-10">
+                                    <div class="col-5">
                                         <input class="form-control m-input" type="text" id="productoCantidad" data-bind="value: dataViewModel.producto.cantidad">
                                     </div>
                                 </div>
@@ -138,10 +138,10 @@
                         <div class="m-form__actions">
                             <div class="row">
                                 <div class="col-12">
-                                    <button type="button" class="btn btn-success" onclick="showListaProductosModal()" data-bind="enable: dataViewModel.sucursalId() != undefined">
+                                    <button type="button" class="m-demo__preview  m-demo__preview btn btn m-btn m-btn--gradient-from-primary m-btn--gradient-to-info" onclick="showListaProductosModal()" data-bind="enable: dataViewModel.sucursalId() != undefined">
                                         Buscar
                                     </button>
-                                    <button type="button" class="btn btn-secondary" data-bind="click: agregarDetalle">
+                                    <button type="button" class="m-demo__preview  m-demo__preview btn btn m-btn m-btn--gradient-from-primary m-btn--gradient-to-info" data-bind="click: agregarDetalle">
                                         Agregar
                                     </button>
 

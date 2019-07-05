@@ -23,6 +23,6 @@ namespace Core.DAL.Interfaces
         SystemValidationModel Edit(PedidosEditViewModel viewModel);
         SystemValidationModel Edit(PedidosClienteEditViewModel viewModel);
         SystemValidationModel Desactivate(int id);
-        SystemValidationModel ChangeEstado(int id, Constants.EstadoPedido estado);
+        SystemValidationModel ChangeEstado(int id, Constants.EstadoPedido estado, string razonAnulado);
     }
 }

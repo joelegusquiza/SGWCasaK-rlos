@@ -10,7 +10,7 @@
         <!--begin::Form-->
         <form class="m-form m-form--fit m-form--label-align-right">
             <div class="m-portlet__body" style="margin-left: 20px; margin-right: 20px;">
-                <table class="" id="listaClientesTable" width="100%">
+                <table class="" id="listaClientesTable" width="50%">
                     <thead>
                         <tr>
                             <th title="Field #1">
@@ -45,10 +45,10 @@
             </div>
             <div class="m-portlet__foot m-portlet__foot--fit">
                 <div class="m-form__actions">
-                    <button type="reset" class="btn btn-primary" data-bind="click: seleccionarCliente, enable: clienteId() > 0">
+                    <button type="reset" class="m-demo__preview  m-demo__preview btn btn m-btn m-btn--gradient-from-primary m-btn--gradient-to-info" data-bind="click: seleccionarCliente, enable: clienteId() > 0">
                         Agregar
                     </button>
-                    <button type="reset" class="btn btn-secondary">
+                    <button type="reset" class="m-demo__preview  m-demo__preview btn btn m-btn m-btn--gradient-from-primary m-btn--gradient-to-infoy">
                         Cancel
                     </button>
                 </div>

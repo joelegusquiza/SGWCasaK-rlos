@@ -23,9 +23,9 @@ namespace Core.DAL.Services
             _context = context;
         }
 
-        public List<CajaAperturaCierre> GetAll()
+        public List<CajaAperturaCierre> GetAll(int sucursalId)
         {
-            var list = _context.Set<CajaAperturaCierre>().Include(x => x.Caja).ToList();
+            var list = _context.Set<CajaAperturaCierre>().Include(x => x.Caja).Where(x => x.Caja.SucursalId == sucursalId).ToList();
             return list;
 
         }

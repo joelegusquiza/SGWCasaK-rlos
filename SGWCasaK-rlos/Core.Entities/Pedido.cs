@@ -14,6 +14,7 @@ namespace Core.Entities
         public string DireccionEntrega { get; set; }
         public DateTimeOffset? FechaEntrega { get; set; }
         public EstadoPedido Estado { get; set; }
+		public string RazonAnulado { get; set; }
 
         public Cliente Cliente { get; set; }
         public int ClienteId { get; set; }

@@ -10,6 +10,7 @@ namespace Core.Helpers
 		public const string UserName = "UserName";
         public const string ClientId = "ClientId";
 		public const string RolId = "RolId";
+		public const string Roles = "Roles";
         public const string Permisos = "Permisos";
         public const string EmailVerified = "EmailVerified";
         public const string CajaId = "CajaId";

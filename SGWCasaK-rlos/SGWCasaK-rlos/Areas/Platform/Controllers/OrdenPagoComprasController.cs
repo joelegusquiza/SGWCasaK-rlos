@@ -41,8 +41,9 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
 
         public IActionResult View(int id)
         {
-            var viewModel = Mapper.Map<OrdenPagoComprasAddViewModel>(_ordenPagoCompras.GetById(id));
-            return View(viewModel);
+			var orden = _ordenPagoCompras.GetForView(id);
+
+			return View(orden);
         }
 
         [HttpPost]
@@ -52,8 +53,15 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
             var viewModel = JsonConvert.DeserializeObject<OrdenPagoComprasAddViewModel>(model);
             return _ordenPagoCompras.Save(viewModel);
         }
+		[HttpPost]
+		[Authorize(Policy = "AddOrdenPagoCompras")]
+		public SystemValidationModel Confirmar(string model)
+		{
+			var viewModel = JsonConvert.DeserializeObject<OrdenPagoComprasAddViewModel>(model);
+			return _ordenPagoCompras.Confirmar(viewModel);
+		}
 
-        [HttpPost]
+		[HttpPost]
         [Authorize(Policy = "AnularOrdenPagoCompras")]
         public SystemValidationModel Anular(int id)
         {

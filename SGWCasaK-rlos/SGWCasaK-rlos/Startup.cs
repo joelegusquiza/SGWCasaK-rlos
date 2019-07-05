@@ -60,9 +60,9 @@ namespace SGWCasaK_rlos
                    opts.LogoutPath = new PathString("/Shared/Login/Index");
                    opts.SlidingExpiration = true;
                });
-            
-			services.AddDbContext<DataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")), ServiceLifetime.Transient);
 			services.AddSingleton(x => Configuration);
+			services.AddDbContext<DataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")), ServiceLifetime.Transient);
+			
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
             services.AddSingleton<IVentas, VentasServices>();

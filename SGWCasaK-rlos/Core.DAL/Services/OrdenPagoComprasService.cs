@@ -34,12 +34,28 @@ namespace Core.DAL.Services
 
         public OrdenPagoCompra GetById(int id)
         {
-            return _context.Set<OrdenPagoCompra>().Include(x => x.OrdenPagoDetalle).FirstOrDefault(x => x.Id == id);
+            return _context.Set<OrdenPagoCompra>().Include(x => x.OrdenPagoDetalle).Include(x => x.Proveedor).FirstOrDefault(x => x.Id == id);
         }
 
-        public SystemValidationModel Save(OrdenPagoComprasAddViewModel viewModel)
+		public OrdenPagoComprasAddViewModel GetForView(int id)
+		{
+			var orden = _context.Set<OrdenPagoCompra>().Include(x => x.OrdenPagoDetalle).Include(x => x.Proveedor).FirstOrDefault(x => x.Id == id);
+			var viewModel = Mapper.Map<OrdenPagoComprasAddViewModel>(orden);
+			var comprasIds = orden.OrdenPagoDetalle.Select(x => x.CompraId);
+			var compras = _context.Set<Compra>().Where(x => comprasIds.Contains(x.Id)).ToList();
+			foreach(var detalle in viewModel.OrdenPagoDetalle)
+			{
+				var compra = compras.FirstOrDefault(x => x.Id == detalle.CompraId);
+				detalle.DateCompra = compra.DateCompra;
+			}
+			return viewModel;
+		}
+
+
+		public SystemValidationModel Save(OrdenPagoComprasAddViewModel viewModel)
         {
             var ordenPago = Mapper.Map<OrdenPagoCompra>(viewModel);
+			
             ordenPago.Estado = Constants.OrdenPagoCompraEstado.Pendiente;
             var comprasIds = viewModel.OrdenPagoDetalle.Select(x => x.CompraId).ToList();
             var compras = _context.Set<Compra>().Where(x => comprasIds.Contains(x.Id) ).ToList();
@@ -64,7 +80,32 @@ namespace Core.DAL.Services
             return validation;
         }
 
-        public SystemValidationModel Anular(int id)
+		public SystemValidationModel Confirmar(OrdenPagoComprasAddViewModel viewModel)
+		{
+			var ordenPago = GetById(viewModel.Id);
+			ordenPago.Estado = Constants.OrdenPagoCompraEstado.Pagado;
+			ordenPago.Cambio = viewModel.PagoCompra.Cambio;
+			var comprasIds = ordenPago.OrdenPagoDetalle.Select(x => x.CompraId).ToList();
+			var compras = _context.Set<Compra>().Where(x => comprasIds.Contains(x.Id) && x.Active).ToList();
+			foreach (var compra in compras)
+			{
+				compra.Estado = Constants.EstadoCompra.Pagado;
+				_context.Entry(compra).State = EntityState.Modified;
+			}
+			var proveedor = _context.Set<Proveedor>().FirstOrDefault(x => x.Id == viewModel.Proveedor.ProveedorId);
+			proveedor.Saldo -= viewModel.MontoTotal;
+			_context.Entry(proveedor).State = EntityState.Modified;
+			var success = _context.SaveChanges() > 0;
+			var validation = new SystemValidationModel()
+			{
+				Id = ordenPago.Id,
+				Message = success ? "Se ha confirmado correctamente la orden de pago" : "No se pudo confirmar la orden de pago",
+				Success = success
+			};
+			return validation;
+		}
+
+		public SystemValidationModel Anular(int id)
         {
             var ordenPago = GetById(id);
             ordenPago.Estado = Constants.OrdenPagoCompraEstado.Anulado;
@@ -72,7 +113,7 @@ namespace Core.DAL.Services
             var compras = _context.Set<Compra>().Where(x => comprasIds.Contains(x.Id) && x.Active).ToList();
             foreach (var compra in compras)
             {
-                compra.Estado = Constants.EstadoCompra.Confirmado;
+                compra.Estado = Constants.EstadoCompra.PendientedePago;
                 _context.Entry(compra).State = EntityState.Modified;
             }
             var success = _context.SaveChanges() > 0;

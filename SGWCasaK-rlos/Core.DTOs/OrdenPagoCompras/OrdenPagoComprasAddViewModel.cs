@@ -1,8 +1,10 @@
-﻿using Core.DTOs.Proveedores;
+﻿using Core.DTOs.Compras;
+using Core.DTOs.Proveedores;
 using Core.DTOs.Shared;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using static Core.Constants;
 
 namespace Core.DTOs.OrdenPagoCompras
 {
@@ -10,9 +12,11 @@ namespace Core.DTOs.OrdenPagoCompras
     {
         public int Id { get; set; }
         public decimal MontoTotal { get; set; }
-        public ListaProveedorViewModel Proveedor { get; set; } = new ListaProveedorViewModel();
+		public OrdenPagoCompraEstado Estado { get; set; }
+		public ListaProveedorViewModel Proveedor { get; set; } = new ListaProveedorViewModel();
         public OrdenPagoComprasDetalleViewModel Compra { get; set; } = new OrdenPagoComprasDetalleViewModel();
-        public List<OrdenPagoComprasDetalleViewModel> OrdenPagoDetalle { get; set; } = new List<OrdenPagoComprasDetalleViewModel>();
+		public AddPagoCompraViewModel PagoCompra { get; set; } = new AddPagoCompraViewModel();
+		public List<OrdenPagoComprasDetalleViewModel> OrdenPagoDetalle { get; set; } = new List<OrdenPagoComprasDetalleViewModel>();
     }
 
     public class OrdenPagoComprasDetalleViewModel

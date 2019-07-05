@@ -15,10 +15,13 @@ namespace Core.DTOs.Reportes
 	{
 		public int Id { get; set; }
 		public string RazonSocial { get; set; }
-		public string Nombre { get; set; }
-		public string Apellido { get; set; }
 		public EstadoPedido Estado { get; set; }
 		public string EstadoDescripcion => Estado.GetDescription();
+		public string Nombre { get; set; }
+
+		public string Apellido { get; set; }
+		
+	
 		public string DisplayName
 		{
 			get

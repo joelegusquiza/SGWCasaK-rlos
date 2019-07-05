@@ -35,8 +35,8 @@ namespace SGWCasaK_rlos.SecurityHelpers
                 return;
             }
            
-            var userId = Int32.Parse(context.User.Claims.FirstOrDefault(x => x.Type == CustomClaims.UserId).Value.ToString());
-            bool hasPermission = _usuarios.CheckPermissionForUser(userId, requirement.Permission);
+            var permisos = context.User.Claims.FirstOrDefault(x => x.Type == CustomClaims.Permisos).Value.ToString().Split(",").Select(x => Convert.ToInt32 (x)).ToList();
+			bool hasPermission = permisos.Contains((int)requirement.Permission);
             if (hasPermission)
             {
                 context.Succeed(requirement);

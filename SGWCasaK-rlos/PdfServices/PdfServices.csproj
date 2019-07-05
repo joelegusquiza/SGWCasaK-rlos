@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Core.DTOs\Core.DTOs.csproj" />
     <ProjectReference Include="..\MigradocFiles\MigraDoc.DocumentObjectModel\MigraDoc.DocumentObjectModel.csproj" />
     <ProjectReference Include="..\MigradocFiles\MigraDoc.Rendering\MigraDoc.Rendering.csproj" />
