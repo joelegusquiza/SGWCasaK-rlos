@@ -328,8 +328,8 @@ namespace ApplicationContext
         public DataContext CreateDbContext(string[] args)
         {
             var builder = new DbContextOptionsBuilder<DataContext>();
-			builder.UseSqlServer("Server=(local)\\SQLEXPRESS;Database=CasaK-rlosDev;Trusted_Connection=True;MultipleActiveResultSets=true");
-			//builder.UseSqlServer("Data Source=SQL5002.site4now.net;Initial Catalog=DB_A4A370_sgwcasakrlosdev;User Id=DB_A4A370_sgwcasakrlosdev_admin;Password=Sgwcasakrlos1;");
+			//builder.UseSqlServer("Server=(local)\\SQLEXPRESS;Database=CasaK-rlosDev;Trusted_Connection=True;MultipleActiveResultSets=true");
+			builder.UseSqlServer("Data Source=SQL5002.site4now.net;Initial Catalog=DB_A4A370_sgwcasakrlosdev;User Id=DB_A4A370_sgwcasakrlosdev_admin;Password=Sgwcasakrlos1;");
             return new DataContext(builder.Options, _contextAccessor, _configuration);
         }
 
