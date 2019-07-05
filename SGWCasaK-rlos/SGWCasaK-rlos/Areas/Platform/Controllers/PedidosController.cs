@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -11,6 +12,7 @@ using Core.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using PdfServices.Interfaces;
 using SGWCasaK_rlos.Areas.Shared.Controllers;
 using SGWCasaK_rlos.SecurityHelpers;
 using static Core.Constants;
@@ -21,11 +23,13 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
     public class PedidosController : BaseController
     {
         private readonly IPedidos _pedidos;
+		private readonly IPdfCreation _pdfCreation;
         private readonly IProductos _productos;
-        public PedidosController(IPedidos pedidos, IProductos productos)
+        public PedidosController(IPedidos pedidos, IProductos productos, IPdfCreation pdfCreation)
         {
             _pedidos = pedidos;
             _productos = productos;
+			_pdfCreation = pdfCreation;
         }
         [Authorize(Policy = "IndexPedido")]
         public IActionResult Index()
@@ -33,11 +37,20 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
             var viewModel = new PedidosIndexViewModel()
             {
                 Pedidos = Mapper.Map<List<PedidoViewModel>>(_pedidos.GetBySucursalId(SucursalId))
-            };
-		
-		
+            };				
 			return View(viewModel);
         }
+
+		public IActionResult GetPedidoPdf(int id)
+		{
+			var model = _pedidos.GetPdfModel(id);
+			byte[] byteArray = _pdfCreation.GetPedidosPdf(model);
+			MemoryStream pdfStream = new MemoryStream();
+			pdfStream.Write(byteArray, 0, byteArray.Length);
+			pdfStream.Position = 0;
+			return new FileStreamResult(pdfStream, "application/pdf");
+			
+		}
 
 		[Authorize(Policy = "IndexPedido")]
 		public IActionResult IndexDelivery()
@@ -120,10 +133,10 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
 
         [HttpPost]
         [Authorize(Policy = "ChangeEstadoPedido")]
-        public SystemValidationModel CambiarEstado(int id, EstadoPedido estado)
+        public SystemValidationModel CambiarEstado(int id, EstadoPedido estado, string razonAnulado)
         {
             
-            return _pedidos.ChangeEstado(id, estado);
+            return _pedidos.ChangeEstado(id, estado, razonAnulado);
         }
 
         //[HttpPost]

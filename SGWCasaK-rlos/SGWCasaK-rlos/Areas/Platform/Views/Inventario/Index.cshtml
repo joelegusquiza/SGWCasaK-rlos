@@ -20,7 +20,7 @@
 						<div class="form-group m-form__group row align-items-center">
 							<div class="col-md-4">
 								<div class="m-input-icon m-input-icon--left">
-									<input type="text" class="form-control m-input" placeholder="Search..." id="generalSearch">
+									<input type="text" class="form-control m-input" placeholder="Buscar..." id="generalSearch">
 									<span class="m-input-icon__icon m-input-icon__icon--left">
 										<span>
 											<i class="la la-search"></i>
@@ -34,7 +34,7 @@
 					{
 						<!-- ko if: $.grep(dataViewModel.inventarios(), function (item) { return item.estado() === @((int) Constants.InventarioEstado.Pendiente); }).length == 0 -->
 						<div class="col-xl-4 order-1 order-xl-2 m--align-right">
-							<a href="@Url.Action("Add", "Inventario", new { area = "Platform"})" class="btn btn-primary m-btn m-btn--custom m-btn--icon m-btn--air m-btn--pill">
+							<a href="@Url.Action("Add", "Inventario", new { area = "Platform"})" class="m-demo__preview  m-demo__preview btn btn m-btn m-btn--gradient-from-primary m-btn--gradient-to-info">
 								<span>
 									<i class="la la-plus"></i>
 									<span>
@@ -60,7 +60,6 @@
 						<th title="Field #2">
 							Estado
 						</th>
-
 						<th></th>
 					</tr>
 				</thead>
@@ -70,7 +69,57 @@
 						<td data-bind="text: estadoDescription"></td>
 
 						<td>
-							<!-- ko if: estado() == @((int) Constants.InventarioEstado.Pendiente) -->
+							<div class="btn-group bootstrap-select form-control m-bootstrap-select m-bootstrap-select--solid">
+								<button type="button" class="btn btn-md btn-outline-primary m-0 px-3 py-2 z-depth-0 waves-effect" data-toggle="dropdown" role="button" data-id="m_form_type" title="All">
+									<span class="filter-option pull-left">
+										Opciones
+									</span>&nbsp;<span class="bs-caret"><span class="caret"></span></span>
+								</button><div class="dropdown-menu open" role="combobox">
+											 <ul class="dropdown-menu inner" role="listbox" aria-expanded="false">
+											 	<!-- ko if: estado() == @((int) Constants.InventarioEstado.Pendiente) -->
+											 	@if (HasPermisos(Core.Constants.AccessFunctions.EditInventario))
+												{
+											 	<li data-original-index="0" class="selected">
+
+											 		<a data-bind="attr: { href: '@Url.Action("Edit", "Inventario", new  { area = "Platform" })?id=' + id() }" tabindex="0" class="" data-tokens="null" role="option" aria-disabled="false" aria-selected="true">
+											 			<span class="fa fa-edit"></span>&nbsp;
+											 			<span class="text">
+											 				Editar
+											 			</span>
+											 		</a>
+											 	</li>
+											}
+											 @if (HasPermisos(Core.Constants.AccessFunctions.AnularInventario))
+											 {
+											 	<li data-original-index="1">
+											 		<a href="#" data-bind="attr: { id: id() }" onClick="javacript: openAnularModal(this)" tabindex="0" class="" data-tokens="null" role="option" aria-disabled="false" aria-selected="true">
+											 			<span class="fa fa-trash"></span>&nbsp;
+											 			<span class="text">
+											 				Anular
+											 			</span>
+											 		</a>
+											 	</li>
+											}
+
+											 <!-- /ko -->
+
+											 @if (HasPermisos(Core.Constants.AccessFunctions.ViewInventario))
+											 {
+											 	<li data-original-index="0" class="selected">
+
+											 		<a data-bind="attr: { href: '@Url.Action("View", "Inventario", new  { area = "Platform" })?id=' + id() }" tabindex="0" class="" data-tokens="null" role="option" aria-disabled="false" aria-selected="true">
+											 			<span class="fa fa-edit"></span>&nbsp;
+											 			<span class="text">
+											 				Ver
+											 			</span>
+											 		</a>
+											 	</li>
+											}
+
+											 </ul>
+								</div>
+							</div>
+							@*<!-- ko if: estado() == @((int) Constants.InventarioEstado.Pendiente) -->
 							@if (HasPermisos(Core.Constants.AccessFunctions.EditInventario))
 							{
 								<a data-bind="attr: { href: '@Url.Action("Edit", "Inventario", new  { area = "Platform" })?id=' + id() }"><i class="fa fa-edit"></i> Editar</a>
@@ -83,7 +132,13 @@
 								<a href="#" data-bind="attr: { id: id() }" onClick="javacript: openAnularModal(this)"><i class="fa fa-trash"></i> Anular</a>
 
 							}
-							<!-- /ko -->
+							@if (HasPermisos(Core.Constants.AccessFunctions.AnularInventario))
+							{
+
+								<a data-bind="attr: { href: '@Url.Action("View", "Inventario", new  { area = "Platform" })?id=' + id() }"><i class="fa fa-eye"></i> View</a>
+
+							}
+							<!-- /ko -->*@
 
 
 
@@ -107,10 +162,9 @@
         dataViewModel.deleteReason = ko.observable();
         dataViewModel.idToDelete = ko.observable();
         dataViewModel.anular = function(){
-
-            //bootbox.confirm("Estas seguro?", function (result) {
-                //if (result) {
-                    $.ajax({
+			confirmAction().then(function (result) {
+				if (result.value) {
+					 $.ajax({
                         url: "@Url.Action("Anular")",
                         type: "POST",
                         data: { id: dataViewModel.idToDelete(), razon: dataViewModel.deleteReason() },
@@ -127,8 +181,8 @@
                             showError("Error!");
                         }
                     });
-                //}
-            //});
+				}
+			}); 
             return false;
         }
 

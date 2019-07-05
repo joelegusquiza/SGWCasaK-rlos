@@ -4,9 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Core.DAL.Interfaces;
+using Core.DTOs.Pdf;
 using Core.DTOs.Shared;
 using Core.DTOs.Ventas;
 using Core.Entities;
+using Core.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -22,15 +24,20 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
         private readonly IPedidos _pedidos;
         private readonly IProductos _productos;
 		private readonly ITimbrados _timbrados;
+		private readonly ISucursales _sucursales;
+		private readonly IClientes _clientes;
 		private readonly ICajaAperturaCierre _cajasAperturaCierre;
-        public VentasController(IVentas ventas, IPedidos pedidos, IProductos productos, ICajaAperturaCierre cajasAperturaCierre, ITimbrados timbrados)
+        public VentasController(IVentas ventas, IPedidos pedidos, IProductos productos, ICajaAperturaCierre cajasAperturaCierre, ITimbrados timbrados, ISucursales sucursales, IClientes clientes)
         {
             _ventas = ventas;
             _pedidos = pedidos;
             _productos = productos;
 			_timbrados = timbrados;
             _cajasAperturaCierre = cajasAperturaCierre;
+			_sucursales = sucursales;
+			_clientes = clientes;
         }
+
         [Authorize(Policy = "IndexVenta")]
         public IActionResult Index()
         {
@@ -44,8 +51,11 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
         public IActionResult Add()
         {
            
-            var viewModel = new VentasAddViewModel() { SucursalId = SucursalId, CajaId = CajaId};
+            var viewModel = new VentasAddViewModel() { SucursalId = SucursalId, CajaId = CajaId, CajaAperturaCierreId = CajaAperturaCierreId};
 			var timbrado = _timbrados.GetValidTimbrado(SucursalId, CajaId);
+			viewModel.NroFactura = _ventas.GetValidNroFactura(SucursalId, CajaId);
+			viewModel.NroFacturaString = _ventas.GetNroFacturaString(SucursalId, CajaId, viewModel.NroFactura);
+			viewModel.TimbradoId = timbrado.Id;
 			if (timbrado != null)
 				viewModel = Mapper.Map(timbrado, viewModel);
             return View(viewModel);
@@ -64,6 +74,15 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
             
             var viewModel = Mapper.Map<VentasAddViewModel>(pedido);
 			viewModel.CajaId = CajaId;
+			viewModel.SucursalId = SucursalId;
+			viewModel.CajaId = CajaId;
+			viewModel.CajaAperturaCierreId = CajaAperturaCierreId;
+			var timbrado = _timbrados.GetValidTimbrado(SucursalId, CajaId);
+			viewModel.NroFactura = _ventas.GetValidNroFactura(SucursalId, CajaId);
+			viewModel.NroFacturaString = _ventas.GetNroFacturaString(SucursalId, CajaId, viewModel.NroFactura);
+			viewModel.TimbradoId = timbrado.Id;
+			if (timbrado != null)
+				viewModel = Mapper.Map(timbrado, viewModel);
 			foreach (var detalle in viewModel.DetalleVenta)
             {
                 var producto = productos.FirstOrDefault(x => x.Id == detalle.ProductoId);
@@ -88,7 +107,7 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
         [Authorize(Policy = "AddVenta")]
         public SystemValidationModel Save(string model)
         {
-            var lastCajaAperturaCierre = _cajasAperturaCierre.GetLastAperturaCierreByUser(UserId);
+            var lastCajaAperturaCierre = _cajasAperturaCierre.GetLastAperturaCierreByUser(UserId, SucursalId);
             if (lastCajaAperturaCierre == null || lastCajaAperturaCierre.FechaCierre != null)
             {
                 return new SystemValidationModel() { Success = false, Message = "Debe registrar la apertura de una Caja" };
@@ -102,7 +121,7 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
 		[Authorize(Policy = "EditVenta")]
 		public SystemValidationModel Edit(string model)
 		{
-			var lastCajaAperturaCierre = _cajasAperturaCierre.GetLastAperturaCierreByUser(UserId);
+			var lastCajaAperturaCierre = _cajasAperturaCierre.GetLastAperturaCierreByUser(UserId, SucursalId);
 			if (lastCajaAperturaCierre == null || lastCajaAperturaCierre.FechaCierre != null)
 			{
 				return new SystemValidationModel() { Success = false, Message = "Debe registrar la apertura de una Caja" };
@@ -128,6 +147,92 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
 		{
 			
 			return _ventas.Anular(id);
+		}
+
+
+		public FacturaPdfModel GetFacturaPdf(int id)
+		{
+			var data = new FacturaPdfModel();
+			try
+			{
+				var numString = new NumLetra();
+				var venta = _ventas.GetById(id);
+				venta.Impreso = true;
+				var result = _ventas.Edit(venta);
+				data.Success = result.Success;
+				if (result.Success)
+				{
+					var sucursal = _sucursales.GetById(venta.SucursalId);
+					var timbrado = _timbrados.GetById(venta.TimbradoId);
+					data.RazonSocial = "Casa K-rlos S.A.";
+					data.Ruc = "1234567-5";
+					data.NombreSucursal = sucursal.Nombre;
+					data.Direccion = "Ruta 3 Gral Elizardo Aquino Km 325";
+					data.Telefono = "(0971) - 222 333";
+					data.Timbrado = timbrado.NroTimbrado;
+					data.InicioTimbrado = timbrado.FechaInicio.ToString("dd/MM/yyyy");
+					data.FinTimbrado = timbrado.FechaFin.ToString("dd/MM/yyyy");
+					data.Fecha = venta.DateCreated.ToString("dd/MM/yyyy");
+					data.Hora = venta.DateCreated.Hour + ":" + venta.DateCreated.Minute;
+					data.TipoFactura = venta.CondicionVenta == Core.Constants.CondicionVenta.Credito ? "Credito" : "Contado";
+
+					data.NroFactura = venta.NroFacturaString;
+					var entitie = _clientes.GetById(venta.ClienteId);
+					data.DisplayName = !string.IsNullOrEmpty(entitie.RazonSocial) ? entitie.RazonSocial : $"{entitie.Nombre} {entitie.Apellido}";
+					data.RUCEntitie = entitie.Ruc;
+					data.TelefonoEntitie = string.IsNullOrEmpty(entitie.Telefono) ? "" : entitie.Telefono;
+					data.DireccionEntitie = "";
+
+					foreach (var detalle in venta.DetalleVenta)
+					{
+						var temp = new DetalleFacturaPdfModel()
+						{
+							Cantidad = detalle.Cantidad,
+							Descripcion = detalle.Descripcion,
+							PrecioUnitario = detalle.PrecioVenta,
+
+						};
+						var producto = _productos.GetById(detalle.ProductoId);
+						if (producto.PorcentajeIva == Core.Constants.PorcIva.Excento)
+						{
+							temp.PrecioTotalExcenta = detalle.MontoTotal;
+							data.SubTotalExcenta += detalle.MontoTotal;
+						}
+
+						if (producto.PorcentajeIva == Core.Constants.PorcIva.Cinco)
+						{
+							temp.PrecioTotalCinco = detalle.MontoTotal;
+							data.SubTotalCinco += detalle.MontoTotal;
+						}
+
+						if (producto.PorcentajeIva == Core.Constants.PorcIva.Diez)
+						{
+							temp.PrecioTotalDiez = detalle.MontoTotal;
+							data.SubTotalDiez += detalle.MontoTotal;
+						}
+
+						data.MontoTotal += detalle.MontoTotal;
+						data.MontoTotalString = numString.Convertir(data.MontoTotal.ToString(), true);
+						data.Detalles.Add(temp);
+						data.IvaDiez = venta.IvaDiez;
+						data.IvaCinco = venta.IvaCinco;
+						data.IvaTotal = venta.IvaCinco + venta.IvaDiez;
+
+					}
+					
+				}
+				else
+				{
+					data.Message = "No se pudo imprimir la venta";
+				}
+
+				return data;
+			}
+			catch (Exception ex)
+			{
+				throw;
+			}						
+			
 		}
 	}
 }

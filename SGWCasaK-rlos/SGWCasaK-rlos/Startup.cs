@@ -15,6 +15,8 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using PdfServices.Interfaces;
+using PdfServices.Services;
 using SGWCasaK_rlos.SecurityHelpers;
 using static Core.Constants;
 
@@ -58,9 +60,9 @@ namespace SGWCasaK_rlos
                    opts.LogoutPath = new PathString("/Shared/Login/Index");
                    opts.SlidingExpiration = true;
                });
-
-            services.AddDbContext<DataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddSingleton(x => Configuration);
+            
+			services.AddDbContext<DataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")), ServiceLifetime.Transient);
+			services.AddSingleton(x => Configuration);
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
             services.AddSingleton<IVentas, VentasServices>();
@@ -82,6 +84,8 @@ namespace SGWCasaK_rlos
             services.AddSingleton<ICajaAperturaCierre, CajaAperturaCierreService>();
 			services.AddSingleton<IRecibos, RecibosService>();
 			services.AddSingleton<ICuotas, CuotasService>();
+			services.AddSingleton<IPdfCreation, PdfCreationServices>();
+			services.AddSingleton<IReportes, ReportesService>();
 			services.AddScoped<UserEmailActiveFilter>();
 			
 			return services.BuildServiceProvider();
@@ -109,6 +113,8 @@ namespace SGWCasaK_rlos
                 cfg.AddProfile<CajaAperturaCierreProfile>();
 				cfg.AddProfile<RecibosProfile>();
 				cfg.AddProfile<CuotasProfile>();
+				cfg.AddProfile<DashboardProfile>();
+				cfg.AddProfile<ReportesProfile>();
 			});
             if (env.IsDevelopment())
             {

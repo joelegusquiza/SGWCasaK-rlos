@@ -16,13 +16,6 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-md-6 col-sm-4" align="right">
-							<div class="m-portlet__head-title" style="margin-top: 20px;">
-								<button type="button" class="btn btn-success" data-bind="click: showPagoVentaModal">
-									Guardar
-								</button>
-							</div>
-						</div>
 					</div>
 					@*<div >
 							<div class="m-portlet__head-title">
@@ -36,27 +29,50 @@
 				<!--begin::Form-->
 				<form class="m-form m-form--fit m-form--label-align-right">
 					<div class="m-portlet__body">
-						<div class="row" style="margin-bottom: 20px;">
-							<div class="col-md-6">
-								<div class="form-group m-form__group row">
-									<p>Casa K-rlos</p> <br />
-									<p>Ferreteria y deposito de materiales</p> <br />
-									<span>Ruta 3 Gral Elizardo Aquino Km 325</span> <br />
-									<span>Telefono (097122233)</span>
-
+						<div class="row">
+							
+							<div class="col-md-6 col-sm-6 col-xs-12 row">								
+								<div align="center" class="col-md-8 well m-t  lt cabecera">
+									<h1 style="letter-spacing: 4px">Casa K-rlos</h1>
+									<h4>Ferreteria y Deposito de materiales</h4>
+									<h4>Ruta 3 Gral Elizardo Aquino Km 325</h4>
+									<h4 style="display: inline;">Telefono: </h4><h4 style="display: inline;">(0971) 222-333</h4>
 								</div>
 							</div>
-							<div class="col-md-6">
-								<div class="form-group m-form__group row">
-									RUC 12345-6 <br />
-									Timbrado <span data-bind="text: nroTimbrado"></span> <br />
-									Inicio Vigencia: <span data-bind="text: moment(fechaInicio()).format('DD/MM/YYYY')"></span> <br />
-									Fin Vigencia: <span data-bind="text: moment(fechaFin()).format('DD/MM/YYYY')"></span> <br />
-									Factura
-									001-001-0000001
+							<div class="col-md-6 col-sm-6 col-xs-12 ">
+								<div align="center" class="well m-t lt cabecera">
+									<h4 style="display: inline;">R.U.C.: </h4><h4 style="display: inline;">123456-5</h4>
+									<h4></h4>
+									<label>Fecha Inicio de Vigencia </label> <label data-bind="text:  moment(fechaInicio()).format('DD/MM/YYYY')"></label><br />
+									<label>Fecha Fin de Vigencia </label> <label data-bind="text: moment(fechaFin()).format('DD/MM/YYYY')"></label>
+									<h4></h4>
+									<h4 style="display: inline;">Timbrado N°</h4><h4 data-bind="text: nroTimbrado" style="display: inline;"></h4>
+									<h2 style="letter-spacing: 6px">Factura</h2>
+									<h2 data-bind="text: nroFacturaString" style="display:inline"></h2>
 								</div>
 							</div>
 						</div>
+						@*<div class="row" style="margin-bottom: 20px;">
+			<div class="col-md-6">
+				<div class="form-group m-form__group row">
+					<p>Casa K-rlos</p> <br />
+					<p>Ferreteria y deposito de materiales</p> <br />
+					<span>Ruta 3 Gral Elizardo Aquino Km 325</span> <br />
+					<span>Telefono (0971222333)</span>
+
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="form-group m-form__group row">
+					RUC 12345-6 <br />
+					Timbrado <span data-bind="text: nroTimbrado"></span> <br />
+					Inicio Vigencia: <span data-bind="text: moment(fechaInicio()).format('DD/MM/YYYY')"></span> <br />
+					Fin Vigencia: <span data-bind="text: moment(fechaFin()).format('DD/MM/YYYY')"></span> <br />
+					Factura: <span data-bind="text: nroFacturaString"></span>
+
+				</div>
+			</div>
+		</div>*@
 					</div>
 				</form>
 			</div>
@@ -70,7 +86,7 @@
 									<label for="example-text-input" class="col-2 col-form-label" style="text-align: left">
 										Fecha
 									</label>
-									<div class="col-10">
+									<div class="col-4">
 										<input class="form-control m-input" type="text" id="example-text-input" readonly data-bind="value: moment(dateCreated()).format('DD/MM/YYYY')">
 									</div>
 								</div>
@@ -80,7 +96,7 @@
 									<label for="example-text-input" class="col-4 col-form-label" style="text-align: left">
 										Condicion de Venta
 									</label>
-									<div class="col-8">
+									<div class="col-5">
 										<select onchange="clearOptionByCondicionVenta()" class="form-control m-input m-input--square" id="condicionVentaSelect" data-bind="options: condicionesVenta,
                                            optionsValue: 'value',
                                            optionsText: 'text',
@@ -96,18 +112,20 @@
 									<label for="example-text-input" class="col-2 col-form-label" style="text-align: left">
 										Ruc
 									</label>
-									<div class="col-6">
+									<div class="col-4">
 										<input class="form-control m-input" type="text" id="example-text-input" data-bind="value: dataViewModel.cliente.ruc" readonly>
 									</div>
+									<!-- ko if: pedidoId() == null  -->
 									<div class="col-4" align="right">
 										@*<button  class="btn btn-success">
 												Agregar
 											</button>*@
-										<button type="button" class="btn btn-success" onclick="showListaClientesModal()">
+										<button type="button" class="m-demo__preview  m-demo__preview btn btn m-btn m-btn--gradient-from-primary m-btn--gradient-to-info" onclick="showListaClientesModal()">
 											Buscar
 										</button>
 
 									</div>
+										<!-- /ko -->
 								</div>
 							</div>
 							<div class="col-md-6">
@@ -115,7 +133,7 @@
 									<label for="example-text-input" class="col-4 col-form-label" style="text-align: left">
 										Nombre o Razon Social
 									</label>
-									<div class="col-8">
+									<div class="col-5">
 										<input class="form-control m-input" type="text" id="example-text-input" data-bind="value: dataViewModel.cliente.displayName" readonly>
 									</div>
 								</div>
@@ -141,30 +159,30 @@
 						<div class="row">
 							<div class="col-md-4">
 								<div class="form-group m-form__group row">
-									<label for="example-text-input" class="col-2 col-form-label">
-										Nombre
-									</label>
-									<div class="col-10">
-										<input class="form-control m-input" type="text" id="productoNombre" data-bind="value: dataViewModel.producto.nombre" readonly>
-									</div>
-								</div>
+                                    <label for="example-text-input" class="col-4 col-form-label" style="text-align: left">
+                                        Nombre
+                                    </label>
+                                        <div class="col-7">
+                                            <input class="form-control m-input" type="text" id="productoNombre" data-bind="value: dataViewModel.producto.nombre" readonly>
+                                        </div>
+</div>
 							</div>
 							<div class="col-md-4">
 								<div class="form-group m-form__group row">
-									<label for="example-text-input" class="col-2 col-form-label">
+									<label for="example-text-input" class="col-4 col-form-label" style="text-align: left">
 										Precio
 									</label>
-									<div class="col-10">
+									<div class="col-5">
 										<input class="form-control m-input" type="text" id="productoPrecioVenta" data-bind="value: dataViewModel.producto.precioVentaToAdd">
 									</div>
 								</div>
 							</div>
 							<div class="col-md-4">
 								<div class="form-group m-form__group row">
-									<label for="example-text-input" class="col-2 col-form-label">
+									<label for="example-text-input" class="col-4 col-form-label" style="text-align: left">
 										Cantidad
 									</label>
-									<div class="col-10">
+									<div class="col-5">
 										<input class="form-control m-input" type="text" id="productoCantidad" data-bind="value: dataViewModel.producto.cantidad">
 									</div>
 								</div>
@@ -172,14 +190,15 @@
 						</div>
 
 					</div>
+
 					<div class="m-portlet__foot m-portlet__foot--fit">
 						<div class="m-form__actions">
 							<div class="row">
 								<div class="col-12">
-									<button type="button" class="btn btn-success" onclick="showListaProductosModal()">
+									<button type="button" class="m-demo__preview  m-demo__preview btn btn m-btn m-btn--gradient-from-primary m-btn--gradient-to-info" onclick="showListaProductosModal()">
 										Buscar
 									</button>
-									<button type="button" class="btn btn-secondary" data-bind="click: agregarDetalle">
+									<button type="button" class="m-demo__preview  m-demo__preview btn btn m-btn m-btn--gradient-from-primary m-btn--gradient-to-info" data-bind="click: agregarDetalle">
 										Agregar
 									</button>
 
@@ -313,6 +332,13 @@
 						</div>
 
 					</div>
+                    <div class="col-md-6 col-sm-4" align="right">
+							<div class="m-portlet__head-title" style="margin-top: 20px;">
+								<button type="button" class="m-demo__preview  m-demo__preview btn btn m-btn m-btn--gradient-from-primary m-btn--gradient-to-info" data-bind="click: showPagoVentaModal">
+									Guardar
+								</button>
+							</div>
+						</div>
 				</form>
 			</div>
 		</div>
@@ -359,8 +385,10 @@
                 resetProductoForm();
                 return;
             }
-            dataViewModel.producto.montoTotal(dataViewModel.producto.precioVenta() *  dataViewModel.producto.cantidad());
-            dataViewModel.detalleVenta.push(ko.mapping.fromJS(ko.mapping.toJS(dataViewModel.producto)))
+            var productoToAdd = ko.mapping.fromJS(ko.mapping.toJS(dataViewModel.producto));
+            productoToAdd.precioVenta(dataViewModel.producto.precioVentaToAdd());
+			productoToAdd.montoTotal(productoToAdd.precioVenta() * productoToAdd.cantidad());
+            dataViewModel.detalleVenta.push(ko.mapping.fromJS(ko.mapping.toJS(productoToAdd)))
             resetProductoForm();
 
         }
@@ -510,7 +538,7 @@
 
         function resetProductoForm() {
             dataViewModel.producto.nombre("");
-            dataViewModel.producto.precioVenta(0);
+            dataViewModel.producto.precioVentaToAdd(0);
             dataViewModel.producto.cantidad(0);
             dataViewModel.producto.productoId(0);
 		}

@@ -14,7 +14,7 @@ namespace Core.DTOs.Pedidos
 		public DateTime DateCreated { get; set; } = DateTime.Now;
         public DateTimeOffset? FechaEntrega { get; set; }
         public decimal MontoTotal { get; set; }
-        public int ClienteId { get; set; }
+
 		public int SucursalId { get; set; }
         public ListaClienteViewModel Cliente { get; set; } = new ListaClienteViewModel();
         public VentasDetalleAddViewModel Producto { get; set; } = new VentasDetalleAddViewModel();

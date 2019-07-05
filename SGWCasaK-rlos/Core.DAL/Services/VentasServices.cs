@@ -53,8 +53,10 @@ namespace Core.DAL.Services
 			return viewModel;
 		}
 
-		public int? GetValidNroFactura(Timbrado timbrado)
+		public int GetValidNroFactura(int sucursalId, int cajaId)
 		{
+			var timbrado = _timbrados.GetValidTimbrado(sucursalId, cajaId);
+			
 			var ultimaFactura = _context.Set<Venta>().OrderByDescending(x => x.NroFactura).FirstOrDefault();
 			if (ultimaFactura == null)
 			{
@@ -63,7 +65,7 @@ namespace Core.DAL.Services
 			else
 			{
 				if (ultimaFactura.NroFactura + 1 > timbrado.NroFin) {
-					return null;
+					return 0;
 				}
 				return ultimaFactura.NroFactura + 1;
 			}
@@ -85,20 +87,26 @@ namespace Core.DAL.Services
 		{
 
 			var venta = Mapper.Map<Venta>(viewModel);
-			var timbrado = _timbrados.GetValidTimbrado(viewModel.SucursalId, viewModel.CajaId);
-			if (timbrado == null)
-				return new SystemValidationModel() { Success = false, Message = "No existe un timbrado valido registrado" };
-			venta.Timbrado = timbrado;
-			var nroFactura = GetValidNroFactura(timbrado);
-			if (nroFactura == null)
-				return new SystemValidationModel() { Success = false, Message = "No existen numeros validos para el timbrado actual" };
-
-			venta.NroFactura = nroFactura.Value;
-			venta.NroFacturaString = GetNroFacturaString(venta, viewModel);
+			venta.DateCreated = DateTime.Now;
+			//var timbrado = _timbrados.GetValidTimbrado(viewModel.SucursalId, viewModel.CajaId);
+			//if (timbrado == null)
+			//	return new SystemValidationModel() { Success = false, Message = "No existe un timbrado valido registrado" };
+			//venta.Timbrado = timbrado;
+			//var nroFactura = GetValidNroFactura(timbrado);
+			//if (nroFactura == null)
+			//	return new SystemValidationModel() { Success = false, Message = "No existen numeros validos para el timbrado actual" };
+			
 			if (viewModel.PagoVenta.Cambio != 0)
 				venta.Cambio = viewModel.PagoVenta.Cambio;
 			DescontarStock(viewModel.DetalleVenta, viewModel.SucursalId);
 			venta.Estado = viewModel.CondicionVenta == Constants.CondicionVenta.Contado ? Constants.EstadoVenta.Pagado : Constants.EstadoVenta.PendientedePago;
+			
+			if (venta.Estado == Constants.EstadoVenta.Pagado)
+				SaveDetalleCaja(venta, viewModel);
+
+			if (venta.CondicionVenta == Constants.CondicionVenta.Credito)
+				AumentarSaldoCliente(venta);
+			
 			_context.Entry(venta).State = EntityState.Added;
 			foreach (var detalle in venta.DetalleVenta)
 			{
@@ -113,7 +121,7 @@ namespace Core.DAL.Services
 			{
 				var pedido = _pedidos.GetById(viewModel.PedidoId.Value);
 				ChecForUpdatePedido(pedido, venta.DetalleVenta);
-				pedido.Estado = Constants.EstadoPedido.Finalizado;
+				pedido.Estado = pedido.Delivery ? Constants.EstadoPedido.EntregadoPorDelivery : Constants.EstadoPedido.Finalizado;
 				_context.Entry(pedido).State = EntityState.Modified;
 			}
 
@@ -129,10 +137,29 @@ namespace Core.DAL.Services
 
 		}
 
-		private string GetNroFacturaString(Venta venta, VentasAddViewModel viewModel)
+		private void AumentarSaldoCliente(Venta venta)
 		{
-			var codigoEstablecimiento = _context.Set<Sucursal>().FirstOrDefault(x => x.Id == viewModel.SucursalId).CodigoEstablecimiento;
-			var puntoExpedicion = _context.Set<Caja>().FirstOrDefault(x => x.Id == viewModel.CajaId).PuntoExpedicion;
+			var cliente = _context.Set<Cliente>().FirstOrDefault(x => x.Id == venta.Cliente.Id);
+			cliente.Saldo += venta.MontoTotal;
+			_context.Entry(cliente).State = EntityState.Modified;
+		}
+
+		private void SaveDetalleCaja(Venta venta, VentasAddViewModel viewModel)
+		{
+			var cajaAperturaCierreDetalle = new DetalleCajaAperturaCierre() 
+			{ 
+				CajaAperturaCierreId = viewModel.CajaAperturaCierreId, 
+				Monto = venta.MontoTotal, 
+				Cambio = venta.Cambio, 
+				TipoOperacion = Constants.TipoCajaAperturaCierreOperacion.Venta  
+			};
+			_context.Entry(cajaAperturaCierreDetalle).State = EntityState.Added;
+		}
+
+		public string GetNroFacturaString(int sucursalId, int cajaId, int nroFactura)
+		{
+			var codigoEstablecimiento = _context.Set<Sucursal>().FirstOrDefault(x => x.Id == sucursalId).CodigoEstablecimiento;
+			var puntoExpedicion = _context.Set<Caja>().FirstOrDefault(x => x.Id == cajaId).PuntoExpedicion;
 			var stringInicio = "";
 			var stringMedio = "";
 			var stringFinal = "";
@@ -156,7 +183,7 @@ namespace Core.DAL.Services
 
 			while (MAX > 0)
 			{
-				if (Math.Round((float)venta.NroFactura / MAX) == 0)
+				if (Math.Round((float)nroFactura / MAX) == 0)
 				{
 					stringFinal += "0";
 				}
@@ -168,7 +195,7 @@ namespace Core.DAL.Services
 			}
 			stringMedio += puntoExpedicion;
 			stringInicio += codigoEstablecimiento;
-			stringFinal += venta.NroFactura;
+			stringFinal += nroFactura;
 
 			return stringInicio + "-" + stringMedio + "-" + stringFinal;
 
@@ -182,7 +209,22 @@ namespace Core.DAL.Services
 
 			var productoIdsToDelete = productoPedidoIds.Except(productoVentIds);
 			var productoIdsToAdd = productoVentIds.Except(productoPedidoIds);
+			var productoIdsPersist = productoPedidoIds.Intersect(productoVentIds);
 
+			foreach (var id in productoIdsPersist)
+			{
+				var detalleVenta = detallesVenta.FirstOrDefault(x => x.ProductoId == id);
+				var detallePedido = pedido.DetallePedido.FirstOrDefault(x => x.ProductoId == id);
+				if (detalleVenta.MontoTotal != detallePedido.MontoTotal)
+				{
+					detallePedido.PrecioVenta = detalleVenta.PrecioVenta;
+					detallePedido.MontoTotal = detalleVenta.MontoTotal;
+					detallePedido.Cantidad = detalleVenta.Cantidad;
+					detallePedido.Equivalencia = detalleVenta.Equivalencia;
+					detallePedido.Descripcion = detalleVenta.Descripcion;
+					_context.Entry(detallePedido).State = EntityState.Modified;
+				}
+			}
 			foreach (var productoId in productoIdsToDelete)
 			{
 				var detalle = pedido.DetallePedido.FirstOrDefault(x => x.ProductoId == productoId);
@@ -219,20 +261,35 @@ namespace Core.DAL.Services
 
 		}
 
+		public SystemValidationModel Edit(Venta venta)
+		{			
+			_context.Entry(venta).State = EntityState.Modified;
+
+			var success = _context.SaveChanges() > 0;
+			var validation = new SystemValidationModel()
+			{
+				Message = success ? "Se ha editado correctamente la venta" : "No se pudo editado la venta",
+				Success = success
+			};
+
+			return validation;
+
+		}
+
 		public SystemValidationModel Confirm(VentasViewViewModel viewModel)
 		{
 
 			var venta = GetById(viewModel.Id);
 			venta = Mapper.Map(viewModel, venta);			
-			var timbrado = _timbrados.GetValidTimbrado(viewModel.SucursalId, viewModel.CajaId);
-			if (timbrado == null)
-				return new SystemValidationModel() { Success = false, Message = "No existe un timbrado valido registrado" };
-			venta.Timbrado = timbrado;
-			var nroFactura = GetValidNroFactura(timbrado);
-			if (nroFactura == null)
-				return new SystemValidationModel() { Success = false, Message = "No existen numeros validos para el timbrado actual" };
+			//var timbrado = _timbrados.GetValidTimbrado(viewModel.SucursalId, viewModel.CajaId);
+			//if (timbrado == null)
+			//	return new SystemValidationModel() { Success = false, Message = "No existe un timbrado valido registrado" };
+			//venta.Timbrado = timbrado;
+			//var nroFactura = GetValidNroFactura(timbrado);
+			//if (nroFactura == null)
+			//	return new SystemValidationModel() { Success = false, Message = "No existen numeros validos para el timbrado actual" };
 
-			venta.NroFactura = nroFactura.Value;
+			//venta.NroFactura = nroFactura.Value;
 			DescontarStock(viewModel.DetalleVenta, viewModel.SucursalId);
 			_context.Entry(venta).State = EntityState.Modified;
 			venta.Estado = viewModel.CondicionVenta == Constants.CondicionVenta.Contado ? Constants.EstadoVenta.Pagado : Constants.EstadoVenta.PendientedePago;
@@ -297,7 +354,7 @@ namespace Core.DAL.Services
             var productoIds = detallesVenta.Select(x => x.ProductoId).ToList();
 			var all = _context.Set<ProductoSucursal>().ToList();
 
-			var productosSucursal = _context.Set<ProductoSucursal>().Where(x => productoIds.Contains(x.ProductoId) && x.SucursalId == sucursalId);
+			var productosSucursal = _context.Set<ProductoSucursal>().Where(x => productoIds.Contains(x.ProductoId) && x.SucursalId == sucursalId).ToList();
             foreach (var producto in productosSucursal)
             {
                 var detalleVenta = detallesVenta.FirstOrDefault(x => x.ProductoId == producto.ProductoId);

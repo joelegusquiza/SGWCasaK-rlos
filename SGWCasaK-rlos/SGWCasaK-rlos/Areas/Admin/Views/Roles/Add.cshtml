@@ -32,57 +32,47 @@
                             <input type="text" class="form-control m-input" id="descripcion" name="descripcion" data-bind="value: descripcion">
                             <span class="alert-danger"></span>
                         </div>
-                        <div class="form-group m-form__group">
-                            @*<label for="exampleInputEmail1">
-            Es Cliente
-        </label>
-        <input type="checkbox" class="form-control m-input" id="isCliente" name="isCliente" data-bind="checked: isCliente">*@
-                            <div class="m-radio-list">
-                                <label class="m-radio">
-                                    <input type="radio" name="example_1" value="1">
-                                    Option 1
-                                    <span></span>
-                                </label>
-                                <label class="m-radio">
-                                    <input type="radio" name="example_1" value="2">
-                                    Option 2
-                                    <span></span>
-                                </label>
-                                <label class="m-radio m-radio--disabled">
-                                    <input type="radio" disabled>
-                                    Disabled
-                                    <span></span>
-                                </label>
-                                <label class="m-radio">
-                                    <input type="radio" checked="checked">
-                                    Checked
-                                    <span></span>
-                                </label>
-                            </div>
-                        </div>
-                        <div class="form-group m-form__group">
-                            <label for="exampleInputEmail1">
-                                Es Cajero
-                            </label>
-                            <input type="checkbox" class="form-control m-input" id="isCajero" name="isCajero" data-bind="checked: isCajero">
+						<div class="form-group m-form__group">
+							@*<label for="exampleInputEmail1">
+								Es Cliente
+							</label>
+							<input type="checkbox" class="form-control m-input" id="isCliente" name="isCliente" data-bind="checked: isCliente">*@
+							<label class="m-checkbox">
+								<input type="checkbox"  data-bind="checked: isCliente">
+								Es Cliente
+								<span></span>
+							</label>
+						</div>
+						<div class="form-group m-form__group">
+							@*<label for="exampleInputEmail1">
+								Es Cajero
+							</label>
+							<input type="checkbox" class="form-control m-input" id="isCajero" name="isCajero" data-bind="checked: isCajero">*@
+							<label class="m-checkbox">
+								<input type="checkbox"  data-bind="checked: isCajero">
+								Es Cajero
+								<span></span>
+							</label>
+						</div>
+						<div class="m-form__group form-group">
+							<label>
+								Permisos
+							</label><br />
+							<label class="m-checkbox">
+								<input id="selectall" type="checkbox" >
+								Seleccionar todo
+								<span></span>
+							</label><br /><br />
+							<div class="m-checkbox-list" style=" list-style: none; overflow-y: scroll;    height: 500px; " data-bind="foreach: permisosList">
+								<label class="m-checkbox">
+									<input type="checkbox" data-bind="checked: selected">
+									<label data-bind="text: nombre"> </label>
+									<span></span>
+								</label>
+							
+							</div>
 
-                        </div>
-                        <div class="m-form__group form-group">
-                            <label>
-                                Permisos
-                            </label>
-                            <div class="m-checkbox-list" style=" list-style: none; overflow-y: scroll; height: 120px; " data-bind="foreach: permisosList">
-
-                                <div class="checkbox">
-                                    <label class="i-checks">
-                                        <input type="checkbox" value="" data-bind="checked: selected">
-                                        <i></i>
-                                        <span data-bind="text: nombre" style="margin-left:20px"></span>
-                                    </label>
-                                </div>
-                            </div>
-
-                        </div>
+						</div>
                     </div>
                     <div class="m-portlet__foot m-portlet__foot--fit">
                         <div class="m-form__actions">
@@ -101,7 +91,19 @@
 @section scripts{
     <script>
         var model = @Html.Raw(Json.Serialize(Model));
-        var dataViewModel = ko.mapping.fromJS(model);
+		var dataViewModel = ko.mapping.fromJS(model);
+		$("#selectall").change(function () {
+			if ($(this).is(":checked")) {
+				for (var i = 0; i < dataViewModel.permisosList().length; i++) {
+					dataViewModel.permisosList()[i].selected(true);
+				}
+			} else {
+				for (var i = 0; i < dataViewModel.permisosList().length; i++) {
+					dataViewModel.permisosList()[i].selected(false);
+				}
+			}
+		});
+	
         dataViewModel.postDataToController = function () {
             
             if ($.grep(dataViewModel.permisosList(), function (item) { return item.selected() === true; }).length < 1) {

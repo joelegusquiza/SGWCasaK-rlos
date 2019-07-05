@@ -29,7 +29,8 @@
                                 <input class="form-control m-input" type="text" id="productoPrecioVenta" data-bind="value: dataViewModel.producto.precioVenta" readonly>
                             </div>
                         </div>
-                    </div>*@                 
+                    </div>*@    
+					<!-- ko if: dataViewModel.producto.productoPresentaciones().length > 0 -->
                     <div class="col-md-4">
                         <div class="form-group m-form__group row">
                             <label for="example-text-input" class="col-4 col-form-label">
@@ -44,15 +45,16 @@
                             </div>
                         </div>
                     </div>
+					<!-- /ko -->
                 </div>
 
             </div>
             <div class="m-portlet__foot m-portlet__foot--fit">
                 <div class="m-form__actions">
-                    <button type="reset" class="btn btn-primary" data-bind="click: seleccionarProducto, enable: dataViewModel.producto.productoId() > 0">
+                    <button type="reset" class="m-demo__preview  m-demo__preview btn btn m-btn m-btn--gradient-from-primary m-btn--gradient-to-info" data-bind="click: seleccionarProducto, enable: dataViewModel.producto.productoId() > 0">
                         Agregar
                     </button>
-                    <button type="reset" class="btn btn-secondary">
+                    <button type="reset" class="m-demo__preview  m-demo__preview btn btn m-btn m-btn--gradient-from-primary m-btn--gradient-to-info">
                         Cancel
                     </button>
                 </div>

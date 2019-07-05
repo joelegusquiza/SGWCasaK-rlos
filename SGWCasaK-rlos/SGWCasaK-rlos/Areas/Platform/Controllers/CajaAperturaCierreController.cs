@@ -26,13 +26,15 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
         public readonly IUsuarios _usuarios;
         public readonly IVentas _ventas;
         public readonly ICompras _compras;
-        public CajaAperturaCierreController(ICajaAperturaCierre cajaAperturaCierre, ICajas cajas, IVentas ventas, ICompras compras, IUsuarios usuarios)
+		public readonly ITimbrados _timbrados;
+        public CajaAperturaCierreController(ICajaAperturaCierre cajaAperturaCierre, ICajas cajas, IVentas ventas, ICompras compras, IUsuarios usuarios, ITimbrados timbrados)
         {
             _cajaAperturaCierre = cajaAperturaCierre;
             _cajas = cajas;
             _ventas = ventas;
             _compras = compras;
             _usuarios = usuarios;
+			_timbrados = timbrados;
         }
 
         [Authorize(Policy = "IndexAperturaCierreCaja")]
@@ -40,7 +42,7 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
         {
             var viewModel = new CajaAperturaCierreIndexViewModel()
             {
-                CajasAperturaCierre = Mapper.Map<List<CajaAperturaCierreViewModel>>(_cajaAperturaCierre.GetAll())
+                CajasAperturaCierre = Mapper.Map<List<CajaAperturaCierreViewModel>>(_cajaAperturaCierre.GetAll(SucursalId))
             };
             return View(viewModel);
         }
@@ -49,7 +51,7 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
         public IActionResult CajaApertura(int id)
         {
             
-            var aperturaCierre = _cajaAperturaCierre.GetLastAperturaCierreByUser(UserId);
+            var aperturaCierre = _cajaAperturaCierre.GetLastAperturaCierreByUser(UserId, SucursalId);
             if (aperturaCierre == null || aperturaCierre.FechaCierre != null)
             {
                 var viewModel = new AddCajaAperturaViewModel()
@@ -91,8 +93,9 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
 				UsuarioId = UserId,
 				Cajas = _cajas.GetAllBySucusalId(SucursalId).Select(x => new DropDownViewModel<int>() { Text = $"{x.Nombre}", Value = x.Id }).ToList(),
 				CajaId = cajaAperturaCierre.CajaId,
-				Id = cajaAperturaCierre.Id,				
-				Detalle = _cajaAperturaCierre.GetCajaDetalle(id)
+				Id = cajaAperturaCierre.Id,
+				Detalle = Mapper.Map<List<CajaCierreDetalleViewModel>>(cajaAperturaCierre.Detalle)
+				
 			};
 			viewModel.Monto = viewModel.Detalle.Sum(x => x.Monto);
 			return View(viewModel);
@@ -100,9 +103,15 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
 
 		public SystemValidationModel IsAnyCajaOpen()
 		{
-			var aperturaCierre = _cajaAperturaCierre.GetLastAperturaCierreByUser(UserId);
+			var aperturaCierre = _cajaAperturaCierre.GetLastAperturaCierreByUser(UserId, SucursalId);
 			if (aperturaCierre == null || aperturaCierre.FechaCierre != null)
 				return new SystemValidationModel() { Success = false, Message = "Debe abrir una caja para agregar una venta" };
+			var timbrado = _timbrados.GetValidTimbrado(SucursalId, aperturaCierre.CajaId);
+			if (timbrado == null)
+				return new SystemValidationModel() { Success = false, Message = "Debe introducir un timbrado valido para la venta" };
+			var nroFactura = _ventas.GetValidNroFactura(SucursalId, aperturaCierre.CajaId);
+			if (nroFactura == 0)
+				return new SystemValidationModel() { Success = false, Message = "Debe  introducir un timbrado con numeros disponibles" };
 			return new SystemValidationModel() { Success = true};
 		}
 
@@ -110,7 +119,7 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
         {
             var listToReturn = new List<AdditionalData>();
             var item = new AdditionalData();
-            var aperturaCierre = _cajaAperturaCierre.GetLastAperturaCierreByUser(UserId);
+            var aperturaCierre = _cajaAperturaCierre.GetLastAperturaCierreByUser(UserId, SucursalId);
             if (aperturaCierre == null || aperturaCierre.FechaCierre != null)
             {
                 item.Text = $"Abrir Caja";
@@ -136,7 +145,7 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
             {
                 var usuario = _usuarios.GetForLogin(Email);
                 var caja = _cajas.GetById(viewModel.CajaId);
-                var claims = new ClaimsIdentity(SecurityHelper.GetUserClaims(usuario, usuario.Sucursal, caja), "Cookie");
+                var claims = new ClaimsIdentity(SecurityHelper.GetUserClaims(usuario, usuario.Sucursal, caja, result.Id), "Cookie");
                 await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claims));
             }

@@ -1,0 +1,187 @@
+﻿
+@{
+	ViewData["Title"] = "ProductosReportes";
+	Layout = "~/Areas/Platform/Views/Shared/_Layout.cshtml";
+}
+
+<div class="m-content" style="width: 100%">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="m-portlet m-portlet--tab">
+				<div class="m-portlet__head">
+	
+						<div class="m-portlet__head-caption col-md-3">
+							<div class="m-portlet__head-title">
+								<span class="m-portlet__head-icon m--hide">
+									<i class="la la-gear"></i>
+								</span>
+								<h3 class="m-portlet__head-text">
+									Reporte Productos
+								</h3>
+							</div>
+						</div>
+				</div>
+				<!--begin::Form-->
+
+				<div class="m-portlet__body">
+					<div class="row">
+						<div class="col-md-3">
+							<div class="form-group m-form__group row">
+								<label class="col-form-label col-md-6">
+									Fecha Inicio
+								</label>
+								<div class="col-md-6">
+									<input class="form-control m-input datepicker" style="width: 100%" type="text" id="example-text-input" data-bind="datepicker: parameters.fechaInicio, datepickerOptions: {language: 'es'}">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-group m-form__group row">
+								<label class="col-form-label col-md-6">
+									Fecha Fin
+								</label>
+								<div class="col-md-6">
+									<input class="form-control m-input datepicker" style="width: 100%" type="text" id="example-text-input" data-bind="datepicker: parameters.fechaFin, datepickerOptions: {language: 'es'}">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-group m-form__group row">
+								<label class="col-form-label col-md-4">
+									Categorias
+								</label>
+								<div class="col-md-8">
+									<select class="form-control m-input m-input--square" id="tipo" name="tipo" data-bind="options: parameters.categorias,
+							   optionsValue: 'value',
+							   optionsText: 'text',
+							   value: parameters.categoriaId,
+							   optionsCaption: 'Seleccione una opcion'"></select>
+								</div>
+							</div>
+							
+						</div>
+						<div class="col-md-2">
+							<div class="m-portlet__head-title">
+								<button type="button" class="m-demo__preview  m-demo__preview btn btn m-btn m-btn--gradient-from-primary m-btn--gradient-to-info" data-bind="click: filtrar">
+									Filtrar
+								</button>
+							</div>
+						</div>
+
+					</div>
+					@*<div class="row">
+			<div class="col-md-8">
+				<div class="form-group m-form__group row">
+					<label for="example-text-input" class="col-2 col-form-label" style="text-align: left">
+						Fecha Incio
+					</label>
+					<div class="col-2">
+						<input class="form-control m-input datepicker" style="width: 100%" type="text" id="example-text-input" data-bind="datepicker: parameters.fechaInicio, datepickerOptions: {language: 'es'}">
+					</div>
+					<label for="example-text-input" class="col-2 col-form-label" style="text-align: left">
+						Fecha Fin
+					</label>
+					<div class="col-2">
+						<input class="form-control m-input datepicker" style="width: 100%" type="text" id="example-text-input" data-bind="datepicker: parameters.fechaFin, datepickerOptions: {language: 'es'}">
+					</div>
+				</div>
+			</div>
+			<div class="form-group m-form__group">
+				<label for="exampleInputEmail1">
+					Categoria
+				</label>
+				<select class="form-control m-input m-input--square" id="tipo" name="tipo" data-bind="options: parameters.categorias,
+							   optionsValue: 'value',
+							   optionsText: 'text',
+							   value: parameters.categoriaId,
+							   optionsCaption: 'Seleccione una opcion'"></select>
+			</div>
+			<div class="col-md-2" align="right">
+				<div class="m-portlet__head-title" style="margin-top: 20px;">
+					<button type="button" class="btn btn-success" data-bind="click: filtrar">
+						Filtrar
+					</button>
+				</div>
+			</div>
+		</div>*@
+					<div class="m-section">
+						<div class="m-section__content">
+							<table class="table m-table m-table--head-bg-brand">
+								<thead>
+									<tr>
+										<th>Id</th>
+										<th title="Field #1">
+											Nombre
+										</th>
+										<th title="Field #2">
+											Precio Venta
+										</th>
+										<th title="Field #2">
+											Categoria
+										</th>
+										<th title="Field #2">
+											Cantidad Comprada
+										</th>
+										<th title="Field #5">
+											Total Comprado
+										</th>
+										<th title="Field #2">
+											Cantidad Vendida
+										</th>
+										<th title="Field #5">
+											Total Vendido
+										</th>
+										<th title="Field #5">
+											Resultado
+										</th>
+									</tr>
+								</thead>
+								<tbody data-bind="foreach: reporte">
+
+									<tr>
+										<td data-bind="text: id"></td>
+										<td data-bind="text: nombre"></td>
+										<td data-bind="text: precioVenta"></td>
+										<td data-bind="text: categoria"></td>
+										<td data-bind="text: cantComprada"></td>
+										<td data-bind="text: montoTotalComprado"></td>
+										<td data-bind="text: cantVendida"></td>
+										<td data-bind="text: montoTotalVendido"></td>
+										<td data-bind="text: resultado"></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				<!--end::Form-->
+			</div>
+		</div>
+	</div>
+</div>
+
+@section scripts{
+	<script>
+        var model = @Html.Raw(Json.Serialize(Model));
+        var dataViewModel = ko.mapping.fromJS(model);
+        dataViewModel.filtrar = function () {
+            $.ajax({
+                url: "@Url.Action("GetReporteProductos", "Reportes")",
+                type: "POST",
+                data: { model: ko.toJSON(dataViewModel.parameters) },
+                success: function (response) {
+
+						ko.mapping.fromJS(response.reporte, {}, dataViewModel.reporte);
+
+
+                },
+                error: function () {
+					showError("Ocurrio un error, intentelo de nuevo");
+                }
+            });
+            return false;
+        }
+        ko.applyBindings(dataViewModel);
+
+	</script>
+}

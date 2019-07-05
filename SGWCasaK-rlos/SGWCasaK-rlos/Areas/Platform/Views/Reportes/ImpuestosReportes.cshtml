@@ -1,0 +1,214 @@
+﻿@model Core.DTOs.Reportes.ReporteImpuestosIndexViewModel
+@{
+	ViewData["Title"] = "ImpuestosReportes";
+	Layout = "~/Areas/Platform/Views/Shared/_Layout.cshtml";
+}
+
+<div class="m-content" style="width: 100%">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="m-portlet m-portlet--tab">
+				<div class="m-portlet__head">
+					
+						<div class="m-portlet__head-caption col-md-3">
+							<div class="m-portlet__head-title">
+								<span class="m-portlet__head-icon m--hide">
+									<i class="la la-gear"></i>
+								</span>
+								<h3 class="m-portlet__head-text">
+									Reporte Impuestos
+								</h3>
+							</div>
+						</div>
+				
+
+				</div>
+				<!--begin::Form-->
+
+				<div class="m-portlet__body">
+					<div class="row">
+						<div class="col-md-4">
+							<div class="form-group m-form__group row">
+								<label class="col-form-label col-md-3">
+									Fecha Inicio
+								</label>
+								<div class="col-md-6">
+									<input class="form-control m-input datepicker" style="width: 100%" type="text" id="example-text-input" data-bind="datepicker: parameters.fechaInicio, datepickerOptions: {language: 'es'}">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group m-form__group row">
+								<label class="col-form-label col-md-3">
+									Fecha Fin
+								</label>
+								<div class="col-md-6">
+									<input class="form-control m-input datepicker" style="width: 100%" type="text" id="example-text-input" data-bind="datepicker: parameters.fechaFin, datepickerOptions: {language: 'es'}">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-2">
+							<div class="m-portlet__head-title">
+								<button type="button" class="m-demo__preview  m-demo__preview btn btn m-btn m-btn--gradient-from-primary m-btn--gradient-to-info" data-bind="click: filtrar">
+									Filtrar
+								</button>
+							</div>
+						</div>
+					</div>
+					<div class="row m-row--no-padding m-row--col-separator-xl">
+						<div class="col-md-12 col-lg-12 col-xl-6">
+							<!--begin:: Widgets/Stats2-1 -->
+							<div class="m-widget1">
+								<div class="m-widget1__item">
+									<div class="row  m-row--no-padding align-items-center">
+										<div class="col">
+											<h3>
+												IVA Debito
+											</h3>
+
+										</div>
+									</div>								
+								</div>
+								<div class="m-widget1__item">									
+									<div class="row m-row--no-padding align-items-center">
+										<div class="col">
+											<h3 class="m-widget1__title">
+												IVA Cinco
+											</h3>
+
+										</div>
+										<div class="col m--align-right">
+											<span class="m-widget1__number m--font-brand" data-bind="text: reporte.montoCincoDebito">
+
+											</span>
+										</div>
+									</div>
+								</div>
+								<div class="m-widget1__item">
+									<div class="row m-row--no-padding align-items-center">
+										<div class="col">
+											<h3 class="m-widget1__title">
+												IVA Diez
+											</h3>
+
+										</div>
+										<div class="col m--align-right">
+											<span class="m-widget1__number m--font-danger" data-bind="text: reporte.montoDiezDebito">
+
+											</span>
+										</div>
+									</div>
+								</div>
+								<div class="m-widget1__item">
+									<div class="row m-row--no-padding align-items-center">
+										<div class="col">
+											<h3 class="m-widget1__title">
+												Monto Total
+											</h3>
+
+										</div>
+										<div class="col m--align-right">
+											<span class="m-widget1__number m--font-accent" data-bind="text: reporte.montoDebito">
+
+											</span>
+										</div>
+									</div>
+								</div>
+
+							</div>
+							<!--end:: Widgets/Stats2-1 -->
+						</div>
+						<div class="col-md-12 col-lg-12 col-xl-6">
+							<!--begin:: Widgets/Stats2-1 -->
+							<div class="m-widget1">
+								<div class="m-widget1__item">
+									<div class="row  m-row--no-padding align-items-center">
+										<div class="col">
+											<h3>
+												IVA Credito
+											</h3>
+
+										</div>
+									</div>
+								</div>
+								<div class="m-widget1__item">
+									<div class="row m-row--no-padding align-items-center">
+										<div class="col">
+											<h3 class="m-widget1__title">
+												IVA Cinco
+											</h3>
+
+										</div>
+										<div class="col m--align-right">
+											<span class="m-widget1__number m--font-brand" data-bind="text: reporte.montoCincoCredito">
+
+											</span>
+										</div>
+									</div>
+								</div>
+								<div class="m-widget1__item">
+									<div class="row m-row--no-padding align-items-center">
+										<div class="col">
+											<h3 class="m-widget1__title">
+												IVA Diez
+											</h3>
+
+										</div>
+										<div class="col m--align-right">
+											<span class="m-widget1__number m--font-danger" data-bind="text: reporte.montoDiezCredito">
+
+											</span>
+										</div>
+									</div>
+								</div>
+								<div class="m-widget1__item">
+									<div class="row m-row--no-padding align-items-center">
+										<div class="col">
+											<h3 class="m-widget1__title">
+												Monto Total
+											</h3>
+
+										</div>
+										<div class="col m--align-right">
+											<span class="m-widget1__number m--font-accent" data-bind="text: reporte.montoCredito">
+
+											</span>
+										</div>
+									</div>
+								</div>
+
+							</div>
+							<!--end:: Widgets/Stats2-1 -->
+						</div>
+					</div>
+				</div>
+				<!--end::Form-->
+			</div>
+		</div>
+	</div>
+</div>
+@section scripts{
+	<script>
+        var model = @Html.Raw(Json.Serialize(Model));
+        var dataViewModel = ko.mapping.fromJS(model);
+        dataViewModel.filtrar = function () {
+            $.ajax({
+                url: "@Url.Action("GetReporteImpuestos", "Reportes")",
+                type: "POST",
+                data: { model: ko.toJSON(dataViewModel.parameters) },
+                success: function (response) {
+
+						ko.mapping.fromJS(response.reporte, {}, dataViewModel.reporte);
+
+
+                },
+                error: function () {
+					showError("Ocurrio un error, intentelo de nuevo");
+                }
+            });
+            return false;
+        }
+        ko.applyBindings(dataViewModel);
+
+	</script>
+}

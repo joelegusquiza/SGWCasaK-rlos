@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Core.DAL.Interfaces;
+using Core.DTOs.Dashboard;
 using Core.DTOs.PedidosCliente;
 using Core.DTOs.Shared;
 using Microsoft.AspNetCore.Authorization;
@@ -55,7 +56,6 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
 			return View(viewModel);
 		}
 
-
 		[HttpPost]
         [Authorize(Policy = "ClienteAddPedido")]
         public SystemValidationModel Save(string model)
@@ -77,7 +77,7 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
 		[Authorize(Policy = "ClienteAnularPedido")]
 		public SystemValidationModel Anular(int pedidoId)
 		{			
-			return _pedidos.ChangeEstado(pedidoId, EstadoPedido.Anulado);
+			return _pedidos.ChangeEstado(pedidoId, EstadoPedido.Anulado, "");
 		}
 	}
 }

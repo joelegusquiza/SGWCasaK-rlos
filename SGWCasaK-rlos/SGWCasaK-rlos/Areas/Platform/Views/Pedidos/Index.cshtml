@@ -20,7 +20,7 @@
                         <div class="form-group m-form__group row align-items-center">
                             <div class="col-md-4">
                                 <div class="m-input-icon m-input-icon--left">
-                                    <input type="text" class="form-control m-input" placeholder="Search..." id="generalSearch">
+                                    <input type="text" class="form-control m-input" placeholder="Buscar..." id="generalSearch">
                                     <span class="m-input-icon__icon m-input-icon__icon--left">
                                         <span>
                                             <i class="la la-search"></i>
@@ -33,7 +33,7 @@
                     @if (HasPermisos(Core.Constants.AccessFunctions.AddPedido)) 
                     { 
                         <div class="col-xl-4 order-1 order-xl-2 m--align-right">
-                            <a href="@Url.Action("Add", "Pedidos", new { area = "Platform"})" class="btn btn-primary m-btn m-btn--custom m-btn--icon m-btn--air m-btn--pill">
+                            <a href="@Url.Action("Add", "Pedidos", new { area = "Platform"})" class="m-demo__preview  m-demo__preview btn btn m-btn m-btn--gradient-from-primary m-btn--gradient-to-info">
                                 <span>
                                     <i class="la la-plus"></i>
                                     <span>
@@ -80,8 +80,78 @@
                         <!-- ko if: delivery() != true -->
                         <td data-bind="text:'No'"></td>
                         <!-- /ko -->
-						<td>
-							<a data-bind="attr: { href: '@Url.Action("View", "Pedidos", new  { area = "Platform" })?id=' + id() }"><i class="fa fa-eye"></i> View</a>
+                        <td>
+							<div class="btn-group bootstrap-select form-control m-bootstrap-select m-bootstrap-select--solid">
+                                <button type="button" class="btn btn-md btn-outline-primary m-0 px-3 py-2 z-depth-0 waves-effect" data-toggle="dropdown" role="button" data-id="m_form_type" title="All">
+                                    @*btn dropdown-toggle bs-placeholder btn-default*@
+                                    <span class="filter-option pull-left">
+                                        Opciones
+                                    </span>&nbsp;<span class="bs-caret"><span class="caret"></span></span>
+                                </button><div class="dropdown-menu open" role="combobox">
+											 <ul class="dropdown-menu inner" role="listbox" aria-expanded="false">
+											 	<li data-original-index="0">
+
+											 		<a data-bind="attr: { href: '@Url.Action("View", "Pedidos", new  { area = "Platform" })?id=' + id() }" tabindex="0" class="" data-tokens="null" role="option" aria-disabled="false" aria-selected="true">
+
+											 			<span class="text">
+											 				Ver
+											 			</span>
+											 		</a>
+											 	</li>
+											 	<!-- ko if: estado() == @((int)Core.Constants.EstadoPedido.Pendiente)  -->
+											 	@if (HasPermisos(Core.Constants.AccessFunctions.EditPedido))
+												{
+											 	<li data-original-index="0">
+
+											 		<a data-bind="attr: { href: '@Url.Action("Edit", "Pedidos", new { area = "Platform" })?id=' + id() }" tabindex="0" class="" data-tokens="null" role="option" aria-disabled="false" aria-selected="true">
+
+											 			<span class="text">
+											 				Editar
+											 			</span>
+											 		</a>
+											 	</li>
+											}
+											 <!-- /ko -->
+											 <!-- ko if: estado() ==  @((int)Core.Constants.EstadoPedido.Preparado)-->
+											 @if (HasPermisos(Core.Constants.AccessFunctions.GenerateVentaPedido))
+											 {
+											 	<li data-original-index="1">
+											 		<a href="#" data-bind="attr: { id: id() }" onClick="javacript: validarCajaAbierta(this)" tabindex="0" class="" data-tokens="null" role="option" aria-disabled="false" aria-selected="true">
+
+											 			<span class="text">
+											 				Generar Venta Pedido
+											 			</span>
+											 		</a>
+											 	</li>
+											}
+											 <!-- /ko -->
+											 <li data-original-index="1">
+											 	<a href="#" data-bind="attr: { href: '@Url.Action("GetPedidoPdf", "Pedidos", new  { area = "Platform" })?id=' + id() }" tabindex="0" class="" data-tokens="null" role="option" aria-disabled="false" aria-selected="true">
+
+											 		<span class="text">
+											 			Imprimir
+											 		</span>
+											 	</a>
+											 </li>
+											<!-- ko if: estado() ==@((int)Core.Constants.EstadoPedido.Pendiente) -->
+											 @if (HasPermisos(Core.Constants.AccessFunctions.ChangeEstadoPedido))
+											 {
+											 	<li data-original-index="1">
+											 		<a href="#" data-bind="attr: { id: id() }" onClick="javacript: openCambiarEstadoModal(this)" tabindex="0" class="" data-tokens="null" role="option" aria-disabled="false" aria-selected="true">
+
+											 			<span class="text">
+											 				Cambiar Estado
+											 			</span>
+											 		</a>
+											 	</li>
+											}
+											 <!-- /ko -->
+
+											 </ul>
+								</div>
+							</div>
+
+                            @*<a data-bind="attr: { href: '@Url.Action("View", "Pedidos", new  { area = "Platform" })?id=' + id() }"><i class="fa fa-eye"></i> View</a>
 							<!-- ko if: estado() == @((int)Core.Constants.EstadoPedido.Pendiente)  -->
 							@if (HasPermisos(Core.Constants.AccessFunctions.EditPedido))
 							{
@@ -91,16 +161,19 @@
 							<!-- ko if: estado() ==  @((int)Core.Constants.EstadoPedido.Preparado)-->
 							@if (HasPermisos(Core.Constants.AccessFunctions.GenerateVentaPedido))
 							{
-								<a href="#" data-bind="attr: { id: id() }" onClick="javacript: validarCajaAbierta(this)"><i class="fa fa-edit"></i>Generar Venta</a>
+								<a href="#" data-bind="attr: { id: 'ventabtn-'+id() }" onClick="javacript: validarCajaAbierta(this)"><i class="fa fa-edit"></i>Generar Venta</a>
 							}
 							<!-- /ko -->
+
+							<a href="#" data-bind="attr: { href: '@Url.Action("GetPedidoPdf", "Pedidos", new  { area = "Platform" })?id=' + id() }"><i class="fa fa-edit"></i>Imprimir</a>
+
 							<!-- ko if: estado() !=@((int)Core.Constants.EstadoPedido.EntregadoPorDelivery) || estado() !=@((int)Core.Constants.EstadoPedido.Finalizado) -->
 							@if (HasPermisos(Core.Constants.AccessFunctions.ChangeEstadoPedido))
 							{
 								<a href="#" data-bind="attr: { id: id() }" onClick="javacript: openCambiarEstadoModal(this)"><i class="fa fa-edit"></i> Cambiar Estado</a>
 							}
-							<!-- /ko -->
-						</td>
+							<!-- /ko -->*@
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -121,27 +194,32 @@
         dataViewModel.estado = ko.observable();
 
 		function validarCajaAbierta(element) {
-				$.ajax({
-                    url: "@Url.Action("IsAnyCajaOpen", "CajaAperturaCierre")",
-                    type: "POST",
+			$.ajax({
+							url: "@Url.Action("IsAnyCajaOpen", "CajaAperturaCierre")",
+							type: "POST",
 
-                    success: function (response) {
-						if (response.success) {
-							generarVenta(element);
-                        } else {
-                            showError(response.message);
-                        }
-                    },
-                    error: function () {
-                        showError("Error!");
-                    }
-                });
-		}
+							success: function (response) {
+								if (response.success) {
+									generarVenta(element);
+								} else {
+									showError(response.message);
+								}
+							},
+							error: function () {
+								showError("Error!");
+							}
+						});
+				
+			}
 
         function generarVenta (element)
-        {
-            var id = $(element).attr('id');
-                $.ajax({
+		{
+			console.log(element);
+			var id = $(element).attr('id');
+			
+			confirmAction().then(function (result) {
+				if (result.value) {
+					$.ajax({
                     url: "@Url.Action("ValidarPedido")",
                     type: "POST",
                     data: { pedidoId: id},
@@ -156,6 +234,9 @@
                         showError("Error!");
                     }
                 });
+				}
+			}); 
+                
         }
 		function openCambiarEstadoModal(element) {
 			var id = $(element).attr('id');
@@ -174,10 +255,10 @@
           
 
         function anular(element){
-            var id = $(element).attr('id');
-            //bootbox.confirm("Estas seguro?", function (result) {
-                //if (result) {
-                    $.ajax({
+			var id = $(element).attr('id');
+			confirmAction().then(function (result) {
+				if (result.value) {
+					$.ajax({
                         url: "@Url.Action("Desactivate")",
                         type: "POST",
                         data: { id: id},
@@ -194,8 +275,9 @@
                             showError("Error!");
                         }
                     });
-                //}
-            //});
+				}
+			}); 
+
             return false;
         }
         ko.applyBindings(dataViewModel);

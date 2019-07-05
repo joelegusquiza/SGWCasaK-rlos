@@ -20,7 +20,7 @@
                         <div class="form-group m-form__group row align-items-center">
                             <div class="col-md-4">
                                 <div class="m-input-icon m-input-icon--left">
-                                    <input type="text" class="form-control m-input" placeholder="Search..." id="generalSearch">
+                                    <input type="text" class="form-control m-input" placeholder="Buscar..." id="generalSearch">
                                     <span class="m-input-icon__icon m-input-icon__icon--left">
                                         <span>
                                             <i class="la la-search"></i>
@@ -33,7 +33,7 @@
                     @if (HasPermisos(Core.Constants.AccessFunctions.AddVenta)) 
                     { 
                         <div class="col-xl-4 order-1 order-xl-2 m--align-right">
-                            <button type="button" onclick="validarCajaAbierta()" class="btn btn-primary m-btn m-btn--custom m-btn--icon m-btn--air m-btn--pill">
+                            <button type="button" onclick="validarCajaAbierta()" class="m-demo__preview  m-demo__preview btn btn m-btn m-btn--gradient-from-primary m-btn--gradient-to-info">
                                 <span>
                                     <i class="la la-plus"></i>
                                     <span>
@@ -51,19 +51,20 @@
             <!--begin: Datatable -->
             <table class="m-datatable" id="ventasIndexTable" width="100%">
                 <thead>
-                    <tr>
-                        <th title="Field #1">
-                            Nro de Factura
-                        </th>
-                        <th title="Field #2">
-                            Fecha
-                        </th>
-                        <th title="Field #2">
-                            Monto Total
-                        </th>
-                       <th>Estado</th>
-                        <th></th>
-                    </tr>
+					<tr>
+						<th title="Field #1">
+							Nro de Factura
+						</th>
+						<th title="Field #2">
+							Fecha
+						</th>
+						<th title="Field #2">
+							Monto Total
+						</th>
+						<th>Estado</th>
+						<th>Impreso</th>
+						<th></th>
+					</tr>
                 </thead>
                 <tbody data-bind="foreach: ventas">
                     <tr>
@@ -71,10 +72,47 @@
                         <td data-bind="text: moment(dateCreated()).format('DD/MM/YYYY')"></td>
                         <td data-bind="text: montoTotal"></td>
                         <td data-bind="text: estadoDescription"></td>
-                      
+						<td data-bind="text: impresoString"></td>
 						<td>
-						<a data-bind="attr: { href: '@Url.Action("View", "Ventas", new  { area = "Platform" })?id=' + id() }"><i class="fa fa-edit"></i> Ver</a>
-							@*<!-- ko if: estado() == @((int)Core.Constants.EstadoVenta.Pendiente)  -->
+
+						<div class="btn-group bootstrap-select form-control m-bootstrap-select m-bootstrap-select--solid" style="width: 50px">
+								<button type="button" class="m-demo__preview  m-demo__preview btn btn m-btn m-btn--gradient-from-primary m-btn--gradient-to-info" data-toggle="dropdown" role="button" data-id="m_form_type" title="All">
+									<span class="filter-option pull-left">
+										Opciones
+									</span>&nbsp;<span class="bs-caret"><span class="caret"></span></span>
+								</button><div class="dropdown-menu open" role="combobox" >
+											 <ul class="dropdown-menu inner" role="listbox" aria-expanded="false">
+
+											 	<li data-original-index="0" class="selected">
+
+											 		<a data-bind="attr: { href: '@Url.Action("View", "Ventas", new  { area = "Platform" })?id=' + id() }" tabindex="0" class="" data-tokens="null" role="option" aria-disabled="false" aria-selected="true">
+											 			<span class="fa fa-edit"></span>&nbsp;
+											 			<span class="text">
+											 				Ver
+											 			</span>
+											 		</a>
+											 	</li>
+
+											 	<!-- ko if: impreso() != true  -->
+											 	<li data-original-index="1">
+											 		<a data-bind="attr: {id : id()}" onclick="javacript:getFacturaPdf(this)" tabindex="0" class="" data-tokens="null" role="option" aria-disabled="false" aria-selected="true">
+											 			<span class="fa fa-print"></span>&nbsp;
+											 			<span class="text">
+											 				Imprimir
+											 			</span>
+											 		</a>
+											 	</li>
+											 	<!-- /ko -->
+
+
+											 </ul>
+								</div>
+							</div>
+						@*<a data-bind="attr: { href: '@Url.Action("View", "Ventas", new  { area = "Platform" })?id=' + id() }"><i class="fa fa-edit"></i> Ver</a>
+						<!-- ko if: impreso() != true  -->
+						<button data-bind="attr: {id : id()}" onclick="javacript:getFacturaPdf(this)"><i class="fa fa-edit"></i> Imprimir</button>
+						<!-- /ko -->
+							<!-- ko if: estado() == @((int)Core.Constants.EstadoVenta.Pendiente)  -->
 							@if (HasPermisos(Core.Constants.AccessFunctions.AnularVenta))
 							{
 								<a href="#" data-bind="attr: { id: id() }" onClick="javacript: desactivate(this)"><i class="fa fa-trash"></i> Anular</a>
@@ -101,10 +139,10 @@
         var model = @Html.Raw(Json.Serialize(Model));
         var dataViewModel = ko.mapping.fromJS(model);
         function desactivate(element){
-            var id = $(element).attr('id');
-            //bootbox.confirm("Estas seguro?", function (result) {
-                //if (result) {
-                    $.ajax({
+			var id = $(element).attr('id');
+			confirmAction().then(function (result) {
+				if (result.value) {
+					  $.ajax({
                         url: "@Url.Action("Anular")",
                         type: "POST",
                         data: { id: id},
@@ -121,12 +159,13 @@
                             showError("Error!");
                         }
                     });
-                //}
-            //});
+				}
+			}); 
+
             return false;
 		}
 
-			function validarCajaAbierta(element) {
+			function validarCajaAbierta() {
 				$.ajax({
                     url: "@Url.Action("IsAnyCajaOpen", "CajaAperturaCierre")",
                     type: "GET",
@@ -143,6 +182,32 @@
                     }
                 });
 		}
+		function getFacturaPdf(element) {          
+			var id = $(element).attr('id');
+            $.ajax({
+                url: "@Url.Action("GetFacturaPdf")",
+                type: "POST",
+                data: { id: id },
+				success: function (response) {
+					if (response.success)
+					{
+						printFacturaCaida(response);
+						window.location.replace("@Url.Action("index", "ventas", new { area = "platform"})");
+					}
+					else
+					{
+						showError(response.message);
+					}
+                    
+                },
+                error: function () {
+                    showError();
+                    $("#pagosFactura").modal("hide");
+                }
+            });
+
+            return false;
+        } 
         ko.applyBindings(dataViewModel);
         $(document).ready(function () {            
 			var show = localStorage.getItem('show');

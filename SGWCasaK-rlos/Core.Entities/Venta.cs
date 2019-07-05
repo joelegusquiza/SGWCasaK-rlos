@@ -20,6 +20,7 @@ namespace Core.Entities
         public EstadoVenta Estado { get; set; }
 		public string RazonAnulado { get; set; }
 		public bool Impreso { get; set; }
+		
 
 		public int ClienteId { get; set; }
         public Cliente Cliente { get; set; }

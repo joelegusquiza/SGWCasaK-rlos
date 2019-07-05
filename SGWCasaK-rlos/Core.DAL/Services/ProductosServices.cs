@@ -99,7 +99,7 @@ namespace Core.DAL.Services
         public SystemValidationModel UpdatePrecioVenta(List<int> productoIds, int sucursalId)
         {
             var productos= GetAll().Include(x => x.ProductoSucursal).Include(x => x.ProductoPresentaciones).Where(x => productoIds.Contains(x.Id));
-            var compras = _context.Set<DetalleCompra>().Include(x => x.Compra).Where(x => productoIds.Contains(x.ProductoId) && x.Compra.Estado == Constants.EstadoCompra.Confirmado);
+            var compras = _context.Set<DetalleCompra>().Include(x => x.Compra).Where(x => productoIds.Contains(x.ProductoId) && x.Compra.Estado == Constants.EstadoCompra.PendientedePago);
             foreach (var producto in productos)
             {
                 var sumaCompras = compras.Where(x => x.ProductoId == producto.Id && x.Compra.SucursalId == sucursalId).Sum(x => x.MontoTotal);
@@ -177,7 +177,12 @@ namespace Core.DAL.Services
         public SystemValidationModel Desactivate(int id)
         {
             var producto = GetById(id);
-            producto.Active = false;
+			var detalleVenta = _context.Set<DetalleVenta>().Where(x => x.Active && x.Venta.Estado != Constants.EstadoVenta.Anulado && x.ProductoId == id);
+			var detalleCompra = _context.Set<DetalleCompra>().Where(x => x.Active && x.Compra.Estado != Constants.EstadoCompra.Anulado && x.ProductoId == id);
+			var detallePedido = _context.Set<DetallePedido>().Where(x => x.Active && x.Pedido.Estado != Constants.EstadoPedido.Anulado && x.ProductoId == id);
+			if (detalleVenta.Count() > 0 || detalleCompra.Count() > 0 || detallePedido.Count() > 0)
+				return new SystemValidationModel() { Success = false, Message = "No se puede eliminar un producto que este en una venta, un pedido o una compra" };
+			producto.Active = false;
             _context.Entry(producto).State = EntityState.Modified;
             foreach (var presentacion in producto.ProductoPresentaciones)
             {

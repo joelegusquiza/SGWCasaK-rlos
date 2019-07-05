@@ -43,6 +43,12 @@ namespace Core.DAL.Services
             return _context.Set<Pedido>().Include(x => x.DetallePedido).Include(x => x.Cliente).FirstOrDefault(x => x.Active && x.Id == id);
         }
 
+		public PedidosPdfModel GetPdfModel(int id)
+		{
+			var pedido = Mapper.Map<PedidosPdfModel>(GetById(id));
+			return pedido;
+		}
+
 		public List<EstadoPedido> GetEstadoAvailable(int id, bool anularPedidoPermiso)
 		{
 			var listToReturn = new List<EstadoPedido>();
@@ -57,16 +63,16 @@ namespace Core.DAL.Services
 					listToReturn.Add(EstadoPedido.Anulado);
 
 			}
-			if (pedido.Estado == EstadoPedido.Preparado)
-			{
-				if (pedido.Delivery)
-					listToReturn.Add(EstadoPedido.EntregadoPorDelivery);
-				else
-					listToReturn.Add(EstadoPedido.Finalizado);
-				if (anularPedidoPermiso)
-					listToReturn.Add(EstadoPedido.Anulado);
+			//if (pedido.Estado == EstadoPedido.Preparado)
+			//{
+			//	if (pedido.Delivery)
+			//		listToReturn.Add(EstadoPedido.EntregadoPorDelivery);
+			//	else
+			//		listToReturn.Add(EstadoPedido.Finalizado);
+			//	if (anularPedidoPermiso)
+			//		listToReturn.Add(EstadoPedido.Anulado);
 
-			}
+			//}
 
 			return listToReturn;
 		}
@@ -83,7 +89,8 @@ namespace Core.DAL.Services
             {
                 _context.Entry(detalle).State = EntityState.Added;
             }
-            _context.Entry(pedido).State = EntityState.Added;
+			_context.Entry(pedido.Cliente).State = EntityState.Modified;
+			_context.Entry(pedido).State = EntityState.Added;
 
             var success = _context.SaveChanges() > 0;
             var validation = new SystemValidationModel()
@@ -196,10 +203,12 @@ namespace Core.DAL.Services
             return validation;
         }
 
-        public SystemValidationModel ChangeEstado(int id, EstadoPedido estado)
+        public SystemValidationModel ChangeEstado(int id, EstadoPedido estado, string razonAnulado)
         {
             var pedido = GetById(id);
             pedido.Estado = estado;
+			if (estado == EstadoPedido.Anulado)
+				pedido.RazonAnulado = razonAnulado;
             _context.Entry(pedido).State = EntityState.Modified;
 			if (estado == EstadoPedido.EntregadoPorDelivery && !pedido.Delivery)
 				return new SystemValidationModel() {Success = false, Message = "El pedido no cuenta con deliver" };

@@ -37,9 +37,9 @@ namespace Core.DAL.Services
             return GetAll().FirstOrDefault(x => x.RUC.TryTrim() == ruc.TryTrim()); 
         }
 
-        public Proveedor GetByRazonSocial(string razonSocial)
+        public Proveedor GetByRazonSocial(string razonSocial, Constants.TiposProveedores tipo)
         {
-            return GetAll().FirstOrDefault(x => x.RazonSocial.TryTrim() == razonSocial.TryTrim());
+            return GetAll().FirstOrDefault(x => x.RazonSocial.TryTrim() == razonSocial.TryTrim() && x.Tipo == tipo);
         }
 
         public SystemValidationModel Upsert(ProveedoresUpserViewModel viewModel)
@@ -56,7 +56,7 @@ namespace Core.DAL.Services
             if (verifyProveedor != null)
                 return new SystemValidationModel() { Message = "Ya existe un proveedor con el mismo RUC", Success = false};
 
-            verifyProveedor = GetByRazonSocial(viewModel.RazonSocial);
+            verifyProveedor = GetByRazonSocial(viewModel.RazonSocial, viewModel.Tipo);
             if (verifyProveedor != null)
                 return new SystemValidationModel() { Message = "Ya existe un proveedor con la misma razon social", Success = false };
 
@@ -80,7 +80,7 @@ namespace Core.DAL.Services
             if (verifyProveedor != null && verifyProveedor.Id != viewModel.Id)
                 return new SystemValidationModel() { Message = "Ya existe un proveedor con el mismo RUC", Success = false };
 
-            verifyProveedor = GetByRazonSocial(viewModel.RazonSocial);
+            verifyProveedor = GetByRazonSocial(viewModel.RazonSocial, viewModel.Tipo);
             if (verifyProveedor != null && verifyProveedor.Id != viewModel.Id)
                 return new SystemValidationModel() { Message = "Ya existe un proveedor con la misma razon social", Success = false };
 

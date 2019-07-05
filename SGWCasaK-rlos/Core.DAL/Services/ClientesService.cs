@@ -112,6 +112,9 @@ namespace Core.DAL.Services
         public SystemValidationModel Desactivate(int id)
         {
             var cliente = GetById(id);
+			var ventas = _context.Set<Venta>().Where(x => x.Active && x.Estado != Constants.EstadoVenta.Anulado && x.ClienteId == id);
+			if (ventas.Count() > 0)
+				return new SystemValidationModel() { Success = false, Message = "No se puede eliminar un cliente que tiene ventas" };
             cliente.Active = false;
             _context.Entry(cliente).State = EntityState.Modified;
             foreach (var direccion in cliente.Direcciones)

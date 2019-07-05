@@ -15,13 +15,14 @@ namespace Core.DAL.Interfaces
 		List<Pedido> GetAllWithDelivery(int sucursaId);
 		List<Pedido> GetBySucursalId(int sucursalId);
 		List<Pedido> GetByClientId(int clienteId);
-        Pedido GetById(int id);
+		PedidosPdfModel GetPdfModel(int id);	
+		Pedido GetById(int id);
 		List<EstadoPedido> GetEstadoAvailable(int id, bool anularPedidoPermiso);
 		SystemValidationModel Save(PedidosAddViewModel viewModel);
         SystemValidationModel Save(PedidosClienteAddViewModel viewModel);
         SystemValidationModel Edit(PedidosEditViewModel viewModel);
         SystemValidationModel Edit(PedidosClienteEditViewModel viewModel);
         SystemValidationModel Desactivate(int id);
-        SystemValidationModel ChangeEstado(int id, Constants.EstadoPedido estado);
+        SystemValidationModel ChangeEstado(int id, Constants.EstadoPedido estado, string razonAnulado);
     }
 }

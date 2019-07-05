@@ -19,9 +19,9 @@ License: You must have a valid license purchased only from themeforest(the above
 <!-- begin::Head -->
 <head>
 	<meta charset="utf-8" />
-	<title>
-		Metronic | Dashboard
-	</title>
+    <title>
+        Ferretería | SGW K-RLOS
+    </title>
 	<meta name="description" content="Latest updates and statistic charts">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -118,45 +118,65 @@ License: You must have a valid license purchased only from themeforest(the above
 			}
 
 			})
-            .ajaxStart(function () { $.blockUI({ message: '' }); $("#pleaseWaitDialog").modal("show"); })
-            .ajaxStop(function () { $.unblockUI(); $("#pleaseWaitDialog").modal("hide"); });
+            //.ajaxStart(function () { $.blockUI({ message: '' }); $("#pleaseWaitDialog").modal("show"); })
+            //.ajaxStop(function () { $.unblockUI(); $("#pleaseWaitDialog").modal("hide"); });
 
-        function getSucursales() {
-            $.ajax({
-					url: '/Admin/Sucursales/GetSucursales',
+		function getSucursales() {
+			$.ajax({
+				url: '/Platform/CajaAperturaCierre/GetLastAperturaCierre',
                 type: "POST",
                 data: {},
-                async: false,
                 global: false,
+                async: false,
                 success: function (response) {
-						if (response.length > 1) {
-							for (var i = 0; i < response.length; i++) {
-								var id = response[i].value;
-								var nombre = response[i].text;
-                            $("#listSucursales").append(
-                                `<li id="`+id+`"class="m-menu__item " aria-haspopup="true">
-                                                <a onclick = "javascript: changeSucursal(`+id+`)" href="#" class="m-menu__link ">
+					if (response[0].additionalString != '@Constants.CajaTipoOperacion.Cierre.ToString()') {
+						$.ajax({
+							url: '/Admin/Sucursales/GetSucursales',
+							type: "POST",
+							data: {},
+							async: false,
+							global: false,
+							success: function (response) {
+								if (response.length > 1) {
+									for (var i = 0; i < response.length; i++) {
+										var id = response[i].value;
+										var nombre = response[i].text;
+										$("#listSucursales").append(
+											`<li id="` + id + `"class="m-menu__item " aria-haspopup="true">
+                                                <a onclick = "javascript: changeSucursal(`+ id + `)" href="#" class="m-menu__link ">
 
                                                     <span class="m-menu__link-text">
-                                                        `+nombre+`
+                                                        `+ nombre + `
                                                     </span>
                                                 </a>
                                             </li>`
-                            );
+										);
 
 
-                        }
-                    } else {
-                        //se oculta la lista de la sucursal y el nombre de la sucursales si solamente tiene central
-                        $("#listSucursalesLi").hide();
-                        $("#nombreSucursal").hide();
-                    }
+									}
+								} else {
+									//se oculta la lista de la sucursal y el nombre de la sucursales si solamente tiene central
+									$("#listSucursalesLi").hide();
+									$("#nombreSucursal").hide();
+								}
 
+							},
+							error: function () {
+								showError();
+							}
+						});
+					} else
+					{
+						$("#listSucursales").hide()
+					}
+					
+					
                 },
                 error: function () {
 				showError();
 			}
             });
+            
         }
 
         function getLastAperturaCierre() {
