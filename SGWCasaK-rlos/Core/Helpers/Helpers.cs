@@ -16,7 +16,7 @@ namespace Core.Helpers
 				return "0";
 			else if (!presentaciones.Any(x => x.Value <= stock))
 			{
-				format += $"{stock} unidades";
+				format += $"{stock} {unidadMedidaDefault.GetDescription()}";
 			} else
 			{
 				var stockInit = stock;
@@ -34,7 +34,7 @@ namespace Core.Helpers
 				}
 				if (stockInit != 0)
 				{
-					format += $"y {stockInit} unidades";
+					format += $"y {stockInit} {unidadMedidaDefault.GetDescription()}";
 				}
 			}
            
