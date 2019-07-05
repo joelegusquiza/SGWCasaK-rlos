@@ -89,7 +89,7 @@ namespace Core.DAL.Services
             {
                 _context.Entry(detalle).State = EntityState.Added;
             }
-			_context.Entry(pedido.Cliente).State = EntityState.Modified;
+			//_context.Entry(pedido.Cliente).State = EntityState.Modified;
 			_context.Entry(pedido).State = EntityState.Added;
 
             var success = _context.SaveChanges() > 0;

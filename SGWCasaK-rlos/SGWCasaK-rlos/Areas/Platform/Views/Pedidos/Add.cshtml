@@ -311,7 +311,7 @@
         };
         
         dataViewModel.postDataToController = function () {
-            if (dataViewModel.cliente.clienteId() == 0)
+            if (dataViewModel.clienteId() == 0)
             {
                 showError("Debe seleccionar un cliente para el pedido");
                 return;
@@ -364,7 +364,8 @@
         }
 
         function seleccionarCliente(cliente) {
-            ko.mapping.fromJS(cliente, {}, dataViewModel.cliente);
+			ko.mapping.fromJS(cliente, {}, dataViewModel.cliente);
+			dataViewModel.clienteId(cliente.id);
             $("#listaClientesModal").modal("hide");
 		}
 
@@ -375,6 +376,7 @@
         
 		function seleccionarAddCliente(cliente) {
 			ko.mapping.fromJS(cliente, {}, dataViewModel.cliente);
+			dataViewModel.clienteId(cliente.id);
 			$("#addClienteModal").modal("hide");
 		}
 

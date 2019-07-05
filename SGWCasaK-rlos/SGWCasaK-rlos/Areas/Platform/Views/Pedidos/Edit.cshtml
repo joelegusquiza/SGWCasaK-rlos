@@ -342,8 +342,9 @@
     </div>
 </div>
 @{
-    Html.RenderPartial("~/Areas/Platform/Views/Shared/_ListaProductoModal.cshtml");
-    Html.RenderPartial("~/Areas/Platform/Views/Shared/_ListaClientesModal.cshtml");
+	Html.RenderPartial("~/Areas/Platform/Views/Shared/_ListaProductoModal.cshtml");
+	Html.RenderPartial("~/Areas/Platform/Views/Shared/_ListaClientesModal.cshtml");
+	Html.RenderPartial("~/Areas/Platform/Views/Shared/_AddClienteModal.cshtml");
 }
 <!-- /content -->
 @section scripts{
@@ -450,10 +451,14 @@
         }
 
         function seleccionarCliente(cliente) {
-            ko.mapping.fromJS(cliente, {}, dataViewModel.cliente);
+			ko.mapping.fromJS(cliente, {}, dataViewModel.cliente);
+			dataViewModel.clienteId(cliente.id);
             $("#listaClientesModal").modal("hide");
         }
-
+		function showAddClienteModal() {
+			$("#addClienteIFrame").attr('src', '@Url.Action("AddClienteIFrame", "Clientes", new { area = "Platform"})');
+			$("#addClienteModal").modal("show");
+        }
         function resetProductoForm() {
             dataViewModel.producto.nombre("");
             dataViewModel.producto.precioVenta(0);
@@ -471,7 +476,13 @@
                 dataViewModel.direccionEntrega("");
             }
 
-        };
+		};
+
+		function seleccionarAddCliente(cliente) {
+			ko.mapping.fromJS(cliente, {}, dataViewModel.cliente);
+			dataViewModel.clienteId(cliente.id);
+			$("#addClienteModal").modal("hide");
+		}
         ko.applyBindings(dataViewModel);
     </script>
 }
