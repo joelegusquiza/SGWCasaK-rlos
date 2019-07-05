@@ -1,0 +1,209 @@
+﻿@model Core.DTOs.Clientes.ClientesEditViewModel
+<div class="m-content" style="width: 100%">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="m-portlet m-portlet--tab">
+                <div class="m-portlet__head">
+                    <div class="m-portlet__head-caption">
+                        <div class="m-portlet__head-title">
+                            <span class="m-portlet__head-icon m--hide">
+                                <i class="la la-gear"></i>
+                            </span>
+                            <h3 class="m-portlet__head-text">
+                                Editar Cliente
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+                <!--begin::Form-->
+                <form class="m-form m-form--fit m-form--label-align-right" id="form" data-bind="submit: postDataToController">
+                    <div class="m-portlet__body">
+                        <div class="form-group m-form__group">
+                            <label for="exampleInputEmail1">
+                                Nombre
+                            </label>
+                            <input type="text" class="form-control m-input" id="nombre" name="nombre" data-bind="value: nombre">
+                            <span class="alert-danger"></span>
+                        </div>
+                        <div class="form-group m-form__group">
+                            <label for="exampleInputEmail1">
+                                Apellido
+                            </label>
+                            <input type="text" class="form-control m-input" id="apellido" name="apellido" data-bind="value: apellido">
+                            <span class="alert-danger"></span>
+                        </div>
+                        <div class="form-group m-form__group">
+                            <label for="exampleInputEmail1">
+                                Razon Social
+                            </label>
+                            <input type="text" class="form-control m-input" id="razonSocial" name="razonSocial" data-bind="value: razonSocial">
+                            <span class="alert-danger"></span>
+                        </div>
+                        <div class="form-group m-form__group">
+                            <label for="exampleInputEmail1">
+                                Ruc
+                            </label>
+                            <input type="text" class="form-control m-input" id="ruc" name="ruc" data-bind="value: ruc">
+                            <span class="alert-danger"></span>
+                        </div>
+                        <div class="form-group m-form__group">
+                            <label for="exampleInputEmail1">
+                                Telefono
+                            </label>
+                            <input type="text" class="form-control m-input" id="telefono" name="telefono" data-bind="value: telefono">
+                            <span class="alert-danger"></span>
+                        </div>
+                    </div>
+                    <div class="m-portlet__foot m-portlet__foot--fit">
+                        <div class="m-form__actions">
+                            <button type="submit" class="m-demo__preview  m-demo__preview btn btn m-btn m-btn--gradient-from-primary m-btn--gradient-to-info">
+                                Guardar
+                            </button>
+
+                        </div>
+                    </div>
+                </form>
+                <!--end::Form-->
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="m-portlet m-portlet--tab">
+                <div class="m-portlet__head">
+                    <div class="m-portlet__head-caption">
+                        <div class="m-portlet__head-title">
+                            <span class="m-portlet__head-icon m--hide">
+                                <i class="la la-gear"></i>
+                            </span>
+                            <h3 class="m-portlet__head-text">
+                                Direcciones
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+                <!--begin::Form-->
+                <form class="m-form m-form--fit m-form--label-align-right" id="direccionForm" data-bind="submit: addDireccion">
+                    <div class="m-portlet__body">
+                        <div class="form-group m-form__group">
+                            <label for="exampleInputEmail1">
+                                Direccion
+                            </label>
+                            <input type="text" class="form-control m-input" id="direccionString" name="direccionString" data-bind="value: direccion.direccionString">
+                            <span class="alert-danger"></span>
+                        </div>
+                    </div>
+                    <div class="m-portlet__foot m-portlet__foot--fit">
+                        <div class="m-form__actions">
+                            <button class="m-demo__preview  m-demo__preview btn btn m-btn m-btn--gradient-from-primary m-btn--gradient-to-info" type="submit">
+                                Agregar
+                            </button>
+
+                        </div>
+                    </div>
+                    <div class="m-portlet__body">
+                        <div class="form-group m-form__group">
+
+                            <table class="table m-table--head-bg-success form-control m-input">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 15%">
+                                            #
+                                        </th>
+
+                                        <th style="width: 70%">
+                                            Direccion
+                                        </th>
+                                        <th style="width: 15%">
+
+                                        </th>
+
+                                    </tr>
+                                </thead>
+                                <tbody data-bind="foreach: direcciones">
+                                    <tr>
+
+                                        <td></td>
+                                        <td data-bind="text: direccionString"></td>
+                                        <td><a href="#" data-bind="click: $parent.deleteDireccion "><i class="fa fa-trash"></i></a></td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </form>
+                <!--end::Form-->
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script>
+        var model = @Html.Raw(Json.Serialize(Model));
+        var dataViewModel = ko.mapping.fromJS(model);
+        dataViewModel.postDataToController = function () {
+
+            if (!$("#form").valid()) return;
+
+            $.ajax({
+                url: "@Url.Action("Edit", "Clientes")",
+                type: "POST",
+                data: { model: ko.toJSON(dataViewModel) },
+                success: function (response) {
+                    if (response.success) {
+                        showSuccessAndGoToUrl(response.message, '@Url.Action("Index", "Clientes", new { area = "Platform"})');
+                    } else {
+                        showError(response.message);
+                    }
+                },
+                error: function () {
+                    showError();
+                }
+            });
+            return false;
+        }
+
+        dataViewModel.addDireccion = function () {
+
+            if (dataViewModel.direccion.direccionString() == null || dataViewModel.direccion.direccionString() == "") return;
+
+            dataViewModel.direcciones.push(ko.mapping.fromJS(ko.toJS(dataViewModel.direccion)));
+            dataViewModel.direccion.direccionString("");     
+        }
+
+        dataViewModel.deleteDireccion = function () {
+            var item = this;
+            dataViewModel.direcciones.remove(item);
+        }
+        ko.applyBindings(dataViewModel);
+
+        $('#form').validate({
+            rules: {
+                nombre: {
+                    required: true
+                },
+                apellido: {
+                    required: true
+                },
+                telefono: {
+                    required: true
+                }
+            },
+            errorPlacement: function (error, element) {
+                var span = element.siblings('span');
+                error.appendTo(span);
+            }
+        });
+        //$('#direccionForm').validate({
+        //    rules: {
+        //        direccionString: {
+        //            required: true
+        //        }
+        //    },
+        //    errorPlacement: function (error, element) {
+        //        var span = element.siblings('span');
+        //        error.appendTo(span);
+        //    }
+        //});
+    </script>
+}

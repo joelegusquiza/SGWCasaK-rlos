@@ -1,0 +1,97 @@
+﻿@model Core.DTOs.Compras.ListaComprasIndexViewModel
+@{
+    ViewData["Title"] = "ListaCompras";
+    Layout = "~/Areas/Shared/Views/Shared/_EmptyLayout.cshtml";
+}
+<div class="m-portlet__body--no-padding">
+    <!--begin::Portlet-->
+    <div class="m-portlet m-portlet--tab" style="margin-bottom: 0px !important">
+        <!--begin::Form-->
+        <form class="m-form m-form--fit m-form--label-align-right" id="">
+            <div class="m-portlet__foot m-portlet__foot--fit">
+                <div class="m-form__actions">
+                    <button type="reset" class="m-demo__preview  m-demo__preview btn btn m-btn m-btn--gradient-from-primary m-btn--gradient-to-info" data-bind="click: seleccionarCompra, enable: dataViewModel.compra.compraId() > 0">
+                        Agregar
+                    </button>
+                    <button type="reset" class="m-demo__preview  m-demo__preview btn btn m-btn m-btn--gradient-from-primary m-btn--gradient-to-info">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </form>
+        <!--end::Form-->
+    </div>
+    <div class="m-portlet m-portlet--tab" style="margin-bottom: 0px !important">
+        <!--begin::Form-->
+        <form class="m-form m-form--fit m-form--label-align-right">
+            <div class="m-portlet__body" style="margin-left: 20px; margin-right: 20px;">
+                <table class="" id="listaProdutosTable" width="100%">
+                    <thead>
+                        <tr>
+                            <th title="Field #1">
+                                Id
+                            </th>
+                            <th title="Field #2">
+                                Fecha
+                            </th>
+                            <th title="Field #5">
+                                Monto
+                            </th>
+                            <th title="Field #5">
+                                Proveedor
+                            </th>
+                            <th title="Field #5">
+                                Estado
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody data-bind="foreach: compras">
+                        <tr data-bind=" attr: { id : compraId()}">
+                            <td data-bind="text: compraId"></td>
+                            <td data-bind="text: moment(dateCompra()).format('DD/MM/YYYY')"></td>
+                            <td data-bind="text: monto"></td>
+                            <td data-bind="text: displayName"></td>
+                            <td data-bind="text: estadoDescripcion"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </form>
+        <!--end::Form-->
+    </div>
+</div>
+@section scripts{
+    <script>
+        var model = @Html.Raw(Json.Serialize(Model));
+        var dataViewModel = ko.mapping.fromJS(model);
+        dataViewModel.compraId = ko.observable();
+        $(document).ready(function () {
+            var table = $('#listaProdutosTable').DataTable();
+
+            $('#listaProdutosTable tbody').on('click', 'tr', function () {
+                if ($(this).hasClass('selected')) {
+                    dataViewModel.compraId(0);
+                    $(this).removeClass('selected');
+                }
+                else {
+                    dataViewModel.compraId($(this).attr('id'));
+                    var compra = $.grep(dataViewModel.compras(), function (item) { return item.compraId() === parseInt(dataViewModel.compraId()); })[0];
+                    ko.mapping.fromJS(compra, {}, dataViewModel.compra);
+                    table.$('tr.selected').removeClass('selected');
+                    $(this).addClass('selected');
+                }
+            });
+        })
+
+        dataViewModel.seleccionarCompra = function()
+        {
+            parent.seleccionarCompra(ko.mapping.toJS(dataViewModel.compra));
+
+        }
+
+        ko.applyBindings(dataViewModel);
+
+    </script>
+
+}

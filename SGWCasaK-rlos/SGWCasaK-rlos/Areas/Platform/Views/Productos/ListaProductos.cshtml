@@ -1,0 +1,157 @@
+﻿@model Core.DTOs.Productos.ListaProductosIndexViewModel
+@{
+    ViewData["Title"] = "ListaProductos";
+    Layout = "~/Areas/Shared/Views/Shared/_EmptyLayout.cshtml";
+}
+<div class="m-portlet__body--no-padding" >
+    <!--begin::Portlet-->
+    <div class="m-portlet m-portlet--tab" style="margin-bottom: 0px !important">
+        <!--begin::Form-->
+        <form class="m-form m-form--fit m-form--label-align-right" id="productoAddDetalleForm">
+            <div class="m-portlet__body container-fluid">
+                <div class="" style="display: flex">
+                    <div class="col-md-4">
+                        <div class="form-group m-form__group row">
+                            <label for="example-text-input" class="col-3 col-form-label">
+                                Nombre
+                            </label>
+                            <div class="col-9">
+                                <input class="form-control m-input" type="text" id="productoNombre" data-bind="value: dataViewModel.producto.nombre" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    @*<div class="col-md-4">
+                        <div class="form-group m-form__group row">
+                            <label for="example-text-input" class="col-2 col-form-label">
+                                Precio
+                            </label>
+                            <div class="col-10">
+                                <input class="form-control m-input" type="text" id="productoPrecioVenta" data-bind="value: dataViewModel.producto.precioVenta" readonly>
+                            </div>
+                        </div>
+                    </div>*@    
+					<!-- ko if: dataViewModel.producto.productoPresentaciones().length > 0 -->
+                    <div class="col-md-4">
+                        <div class="form-group m-form__group row">
+                            <label for="example-text-input" class="col-4 col-form-label">
+                                Presentacion
+                            </label>
+                            <div class="col-8">
+                                <select class="form-control m-input m-input--square" id="presentacionSelect" data-bind="options: producto.productoPresentaciones,
+                                          
+                                           optionsText: 'nombre',
+                                           value: producto.presentacion,
+                                           optionsCaption: 'Seleccione una opcion'"></select>
+                            </div>
+                        </div>
+                    </div>
+					<!-- /ko -->
+                </div>
+
+            </div>
+            <div class="m-portlet__foot m-portlet__foot--fit">
+                <div class="m-form__actions">
+                    <button type="reset" class="m-demo__preview  m-demo__preview btn btn m-btn m-btn--gradient-from-primary m-btn--gradient-to-info" data-bind="click: seleccionarProducto, enable: dataViewModel.producto.productoId() > 0">
+                        Agregar
+                    </button>
+                    <button type="reset" class="m-demo__preview  m-demo__preview btn btn m-btn m-btn--gradient-from-primary m-btn--gradient-to-info">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </form>
+        <!--end::Form-->
+    </div>
+    <div class="m-portlet m-portlet--tab" style="margin-bottom: 0px !important">
+        <!--begin::Form-->
+        <form class="m-form m-form--fit m-form--label-align-right">
+            <div class="m-portlet__body" style="margin-left: 20px; margin-right: 20px;">
+                <table class="" id="listaProdutosTable" width="100%">
+                    <thead>
+                        <tr>
+                            <th title="Field #1">
+                                Id
+                            </th>
+                            <th title="Field #2">
+                                Nombre
+                            </th>
+                            <th title="Field #5">
+                                Stock
+                            </th>
+
+                        </tr>
+                    </thead>
+                    <tbody data-bind="foreach: productos">
+                        <tr data-bind=" attr: { id : productoId()}">
+                            <td data-bind="text: productoId"></td>
+                            <td data-bind="text: nombre"></td>                          
+                            <td data-bind="text: stockString"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+        </form>
+        <!--end::Form-->
+    </div>
+</div>
+@section scripts{
+    <script>
+        var model = @Html.Raw(Json.Serialize(Model));
+        var dataViewModel = ko.mapping.fromJS(model);
+        dataViewModel.productoId = ko.observable();
+        $(document).ready(function () {
+            var table = $('#listaProdutosTable').DataTable();
+
+            $('#listaProdutosTable tbody').on('click', 'tr', function () {
+                if ($(this).hasClass('selected')) {
+                    dataViewModel.productoId(0);
+                    $(this).removeClass('selected');
+                }
+                else {
+                    dataViewModel.productoId($(this).attr('id'));
+                    var producto = $.grep(dataViewModel.productos(), function (item) { return item.productoId() === parseInt(dataViewModel.productoId()); })[0];                    
+                    ko.mapping.fromJS(producto, {}, dataViewModel.producto);       
+                    table.$('tr.selected').removeClass('selected');
+                    $(this).addClass('selected');
+                }
+            });
+        })
+
+        dataViewModel.seleccionarProducto = function()
+        {
+            //var stockDisponible;
+            if (dataViewModel.producto.presentacion != undefined && dataViewModel.producto.presentacion.presentacionId() != 0)
+            {
+                dataViewModel.producto.nombre(dataViewModel.producto.nombre() + " (" + dataViewModel.producto.presentacion.nombre() + ")")
+                dataViewModel.producto.precioVenta(dataViewModel.producto.presentacion.precioVenta())
+                dataViewModel.producto.equivalencia(dataViewModel.producto.presentacion.equivalencia())                
+            }
+            //else
+            //{
+            //    stockDisponible = checkStock(parseInt(dataViewModel.producto.cantidad()) * parseInt(dataViewModel.producto.presentacion.equivalencia()), dataViewModel.producto.stockActual());
+            //    dataViewModel.producto.nombre(dataViewModel.producto.nombre() + " (" + dataViewModel.producto.presentacion.nombre() + ")")
+            //    dataViewModel.producto.precioVenta(dataViewModel.producto.presentacion.precioVenta())
+            //    dataViewModel.producto.equivalencia(dataViewModel.producto.presentacion.equivalencia())
+               
+            //}
+
+            //if (stockDisponible) {
+                //dataViewModel.producto.montoTotal(dataViewModel.producto.cantidad() * dataViewModel.producto.precioVenta())
+                parent.seleccionarProducto(ko.mapping.toJS(dataViewModel.producto));
+            //    return
+            //} else {
+            //    showError("No existe la cantidad disponible del producto");
+            //}
+                
+        }
+
+        ko.applyBindings(dataViewModel);
+
+        function checkStock(cantidad, stock)
+        {
+            return cantidad <= stock;
+        }
+    </script>
+
+}

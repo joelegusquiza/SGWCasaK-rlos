@@ -1,0 +1,276 @@
+﻿@model Core.DTOs.Productos.ProductosEditViewModel
+<div class="m-content" style="width: 100%">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="m-portlet m-portlet--tab">
+                <div class="m-portlet__head">
+                    <div class="m-portlet__head-caption">
+                        <div class="m-portlet__head-title">
+                            <span class="m-portlet__head-icon m--hide">
+                                <i class="la la-gear"></i>
+                            </span>
+                            <h3 class="m-portlet__head-text">
+                                Editar Producto
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+                <!--begin::Form-->
+                <form class="m-form m-form--fit m-form--label-align-right" id="form" data-bind="submit: postDataToController">
+                    <div class="m-portlet__body">
+                        <div class="form-group m-form__group">
+                            <label for="exampleInputEmail1">
+                                Nombre
+                            </label>
+                            <input type="text" class="form-control m-input" id="nombre" name="nombre" data-bind="value: nombre">
+                            <span class="alert-danger"></span>
+                        </div>
+                        <div class="form-group m-form__group">
+                            <label for="exampleInputEmail1">
+                                Descripcion
+                            </label>
+                            <input type="text" class="form-control m-input" id="descripcion" name="descripcion" data-bind="value: descripcion">
+                            <span class="alert-danger"></span>
+                        </div>
+                        <div class="form-group m-form__group">
+                            <label for="exampleInputEmail1">
+                                Stock
+                            </label>
+                            <input type="text" class="form-control m-input" id="stock" name="stock" data-bind="value: stockString" readonly>
+                            <span class="alert-danger"></span>
+                        </div>
+                        <div class="form-group m-form__group">
+                            <label for="exampleInputEmail1">
+                                Porcentaje Ganancia
+                            </label>
+                            <input type="text" class="form-control m-input" id="porcentajeGanancia" name="porcentajeGanancia" data-bind="value: porcentajeGanancia">
+                            <span class="alert-danger"></span>
+                        </div>
+                        <div class="form-group m-form__group">
+                            <label for="exampleInputEmail1">
+                                IVA
+                            </label>
+                            <select class="form-control m-input m-input--square" id="porcentajeIva" name="porcentajeIva" data-bind="options: porcentajeIvas,
+                                           optionsValue: 'value',
+                                           optionsText: 'text',
+                                           value: porcentajeIva,
+                                           optionsCaption: 'Seleccione una opcion'"></select>
+                        </div>
+                        <div class="form-group m-form__group">
+                            <label for="exampleInputEmail1">
+                                Unidad de Medida
+                            </label>
+                            <select class="form-control m-input m-input--square" id="unidadMedida" name="unidadMedida" data-bind="options: unidadesMedida,
+                                           optionsValue: 'value',
+                                           optionsText: 'text',
+                                           value: unidadMedida,
+                                           optionsCaption: 'Seleccione una opcion'"></select>
+                        </div>
+                        <div class="form-group m-form__group">
+                            <label for="exampleInputEmail1">
+                                Categoria del Producto
+                            </label>
+                            <select class="form-control m-input m-input--square" id="categoriaProducto" name="categoriaProducto" data-bind="options: categoriasProducto,
+                                           optionsValue: 'value',
+                                           optionsText: 'text',
+                                           value: categoriaProductoId,
+                                           optionsCaption: 'Seleccione una opcion'"></select>
+                        </div>
+                    </div>
+                    <div class="m-portlet__foot m-portlet__foot--fit">
+                        <div class="m-form__actions">
+                            <button type="submit" class="m-demo__preview  m-demo__preview btn btn m-btn m-btn--gradient-from-primary m-btn--gradient-to-info">
+                                Guardar
+                            </button>
+
+                        </div>
+                    </div>
+                </form>
+                <!--end::Form-->
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="m-portlet m-portlet--tab">
+                <div class="m-portlet__head">
+                    <div class="m-portlet__head-caption">
+                        <div class="m-portlet__head-title">
+                            <span class="m-portlet__head-icon m--hide">
+                                <i class="la la-gear"></i>
+                            </span>
+                            <h3 class="m-portlet__head-text">
+                                Presentaciones
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+                <!--begin::Form-->
+                <form class="m-form m-form--fit m-form--label-align-right" id="presentacionesForm" data-bind="submit: addPresentacion">
+                    <div class="m-portlet__body">
+                        <div class="form-group m-form__group">
+                            <label for="exampleInputEmail1">
+                                Nombre
+                            </label>
+                            <input type="text" class="form-control m-input" id="presentacionNombre" name="presentacionNombre" data-bind="value: productoPresentacion.nombre">
+                            <span class="alert-danger"></span>
+                        </div>
+                        <div class="form-group m-form__group">
+                            <label for="exampleInputEmail1">
+                                Descripcion
+                            </label>
+                            <input type="text" class="form-control m-input" id="presentacionDescripcion" name="presentacionDescripcion" data-bind="value: productoPresentacion.descripcion">
+                            <span class="alert-danger"></span>
+                        </div>
+                        <div class="form-group m-form__group">
+                            <label for="exampleInputEmail1">
+                                Equivalencia
+                            </label>
+                            <input type="text" class="form-control m-input" id="presentacionEquivalencia" name="presentacionEquivalencia" data-bind="value: productoPresentacion.equivalencia">
+                            <span class="alert-danger"></span>
+                        </div>
+                        <div class="form-group m-form__group">
+                            <label for="exampleInputEmail1">
+                                Porcentaje Ganancia
+                            </label>
+                            <input type="text" class="form-control m-input" id="porcentajeGanancia" name="porcentajeGanancia" data-bind="value: productoPresentacion.porcentajeGanancia">
+                            <span class="alert-danger"></span>
+                        </div>
+                    </div>
+                    <div class="m-portlet__foot m-portlet__foot--fit">
+                        <div class="m-form__actions">
+                            <button class="btn btn-primary" type="submit">
+                                Agregar
+                            </button>
+
+                        </div>
+                    </div>
+                    <div class="m-portlet__body">
+                        <div class="form-group m-form__group">
+
+                            <table class="table m-table m-table--head-bg-brand">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 15%">
+                                            #
+                                        </th>
+
+                                        <th style="width: 25%">
+                                            Nombre
+                                        </th>
+                                        <th style="width: 25%">
+                                            Descripcion
+                                        </th>
+                                        <th style="width: 20%">
+                                            Equivalencia
+                                        </th>
+                                        <th style="width: 20%">
+                                            Porcentaje Ganancia
+                                        </th>
+                                        <th style="width: 15%">
+
+                                        </th>
+
+                                    </tr>
+                                </thead>
+                                <tbody data-bind="foreach: productoPresentaciones">
+                                    <tr>
+
+                                        <td></td>
+                                        <td data-bind="text: nombre"></td>
+                                        <td data-bind="text: descripcion"></td>
+                                        <td data-bind="text: equivalencia"></td>
+                                        <td data-bind="text: porcentajeGanancia"></td>
+                                        <td><a href="#" data-bind="click: $parent.deletePresentacion "><i class="fa fa-trash"></i></a></td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </form>
+                <!--end::Form-->
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script>
+        var model = @Html.Raw(Json.Serialize(Model));
+        var dataViewModel = ko.mapping.fromJS(model);
+        dataViewModel.postDataToController = function () {
+
+            if (!$("#form").valid()) return;
+            dataViewModel.productoPresentacion.equivalencia(0);
+            $.ajax({
+                url: "@Url.Action("Edit", "Productos")",
+                type: "POST",
+                data: { model: ko.toJSON(dataViewModel) },
+                success: function (response) {
+                    if (response.success) {
+                        showSuccessAndGoToUrl(response.message, '@Url.Action("Index", "Productos", new { area = "Platform"})');
+                    } else {
+                        showError(response.message);
+                    }
+                },
+                error: function () {
+                    showError();
+                }
+            });
+            return false;
+        }
+
+        dataViewModel.addPresentacion = function () {
+
+            if (dataViewModel.productoPresentacion.nombre() == null || dataViewModel.productoPresentacion.nombre()=="") return;
+            if (dataViewModel.productoPresentacion.equivalencia() == null || dataViewModel.productoPresentacion.equivalencia() == "") return;
+
+            dataViewModel.productoPresentaciones.push(ko.mapping.fromJS(ko.toJS(dataViewModel.productoPresentacion)));
+            dataViewModel.productoPresentacion.nombre("");
+            dataViewModel.productoPresentacion.equivalencia("");
+            dataViewModel.productoPresentacion.descripcion("");
+        }
+
+        dataViewModel.deletePresentacion = function () {
+            var item = this;
+            dataViewModel.productoPresentaciones.remove(item);
+        }
+        ko.applyBindings(dataViewModel);
+
+        $('#form').validate({
+            rules: {
+                nombre: {
+                    required: true
+                },
+                porcentajeIva: {
+                    required: true
+                },
+                unidadMedida: {
+                    required: true
+                },
+                porcentajeGanancia: {
+                    required: true,
+                    number: true,
+                    min: 1
+                },
+                categoriaProducto: {
+                    required: true
+                }
+            },
+            errorPlacement: function (error, element) {
+                var span = element.siblings('span');
+                error.appendTo(span);
+            }
+        });
+        //$('#direccionForm').validate({
+        //    rules: {
+        //        direccionString: {
+        //            required: true
+        //        }
+        //    },
+        //    errorPlacement: function (error, element) {
+        //        var span = element.siblings('span');
+        //        error.appendTo(span);
+        //    }
+        //});
+    </script>
+}

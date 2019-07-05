@@ -1,0 +1,50 @@
+﻿<!--begin::Modal-->
+<div class="modal fade" id="addPagoVentaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Pago
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">
+                        &times;
+                    </span>
+                </button>
+            </div>
+            <div class="modal-body">
+				<form id="pagoVentaForm">
+					<div class="form-group">
+						<label for="recipient-name" class="form-control-label">
+							Monto Total:
+						</label>
+						<input type="text" class="form-control" id="pagoVentaMontoTotal" data-bind="value: montoTotal" readonly>
+					</div>
+					<div class="form-group m-form__group">
+						<label for="exampleInputEmail1">
+							Importe:
+						</label>
+						<input type="text" class="form-control m-input" id="pagoVentaMonto" name="pagoVentaMonto" data-bind="value: pagoVenta.monto">
+						<span class="alert-danger"></span>
+					</div>
+	
+					<div class="form-group">
+						<label for="message-text" class="form-control-label">
+							Cambio:
+						</label>
+						<input type="text" class="form-control" id="pagoVentaCambio" data-bind="value: pagoVenta.cambio" readonly>
+					</div>
+				</form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="m-demo__preview  m-demo__preview btn btn m-btn m-btn--gradient-from-primary m-btn--gradient-to-info" data-dismiss="modal">
+                    Cerrar
+                </button>
+                <button type="button" class="m-demo__preview  m-demo__preview btn btn m-btn m-btn--gradient-from-primary m-btn--gradient-to-info" data-bind="click: postDataToController">
+                    Guardar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--end::Modal-->

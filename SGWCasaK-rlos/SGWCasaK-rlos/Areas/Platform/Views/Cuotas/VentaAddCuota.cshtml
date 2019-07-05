@@ -1,0 +1,141 @@
+﻿@{
+	ViewData["Title"] = "VentaAddCuota";
+	Layout = "~/Areas/Shared/Views/Shared/_EmptyLayout.cshtml";
+}
+@model Core.DTOs.Cuotas.CuotaIndexAddViewModel
+@using Core
+<div class="m-portlet__body--no-padding">
+	<!--begin::Portlet-->
+	<div class="m-portlet m-portlet--tab" style="margin-bottom: 0px !important">
+		<!--begin::Form-->
+		<form class="m-form m-form--fit m-form--label-align-right" id="productoAddDetalleForm">
+			<div class="m-portlet__body container-fluid">
+				<div class="" style="display: flex">
+					<div class="col-md-4">
+						<div class="form-group m-form__group row">
+							<label for="example-text-input" class="col-3 col-form-label">
+								Monto Total
+							</label>
+							<div class="col-9">
+								<input class="form-control m-input" type="text" id="productoNombre" data-bind="value: dataViewModel.montoTotal" readonly>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group m-form__group row">
+							<label for="example-text-input" class="col-4 col-form-label">
+								Nro de Cuotas
+							</label>
+							<div class="col-8">
+								<input class="form-control m-input" type="text" id="productoNombre" data-bind="value: dataViewModel.nroCuotas">
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group m-form__group row">
+							<label for="example-text-input" class="col-4 col-form-label">
+								Dias de Intervalos
+							</label>
+							<div class="col-8">
+								<input class="form-control m-input" type="text" id="productoNombre" data-bind="value: dataViewModel.dias">
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+			<div class="m-portlet__foot m-portlet__foot--fit">
+				<div class="m-form__actions">
+					<button type="button" class="m-demo__preview  m-demo__preview btn btn m-btn m-btn--gradient-from-primary m-btn--gradient-to-info" data-bind="click: generarCuotas">
+						Generar Cuotas
+					</button>
+					<button type="button" class="m-demo__preview  m-demo__preview btn btn m-btn m-btn--gradient-from-primary m-btn--gradient-to-info" data-bind="click: saveCuotas">
+						Guardar
+					</button>
+				</div>
+			</div>
+		</form>
+		<!--end::Form-->
+	</div>
+	<div class="m-portlet m-portlet--tab" style="margin-bottom: 0px !important">
+		<!--begin::Form-->
+		<form class="m-form m-form--fit m-form--label-align-right">
+			<div class="m-portlet__body" style="margin-left: 20px; margin-right: 20px;">
+				<table class="" id="listaProdutosTable" width="100%">
+					<thead>
+						<tr>
+							<th title="Field #1">
+								Nro
+							</th>
+							<th title="Field #2">
+								Vencimiento
+							</th>
+							<th title="Field #5">
+								Monto
+							</th>
+
+						</tr>
+					</thead>
+					<tbody data-bind="foreach: cuotas">
+						<tr>
+							<td data-bind="text: numeroCuota"></td>
+							<td data-bind="text: moment(fechaVencimiento()).format('DD/MM/YYYY')"></td>
+
+							<td data-bind="text: monto"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+		</form>
+		<!--end::Form-->
+	</div>
+</div>
+<!-- /content -->
+@section scripts{
+	<script>
+        var model = @Html.Raw(Json.Serialize(Model));
+        var dataViewModel = ko.mapping.fromJS(model);
+
+		dataViewModel.saveCuotas = function () {
+			
+				parent.saveCuotas(ko.mapping.toJS(dataViewModel.cuotas()));
+			
+			
+        }
+		dataViewModel.generarCuotas = function () {
+			dataViewModel.cuotas([]);
+			var date = new Date();
+			var nextDate = date;
+		
+			var montoCuotas = dataViewModel.montoTotal() / dataViewModel.nroCuotas();
+			for (var i = 1; i <= dataViewModel.nroCuotas(); i++)
+			{
+				nextDate.setDate(date.getDate() + parseInt(dataViewModel.dias()));
+				var dd = nextDate.getDate();
+				var mm = nextDate.getMonth() + 1;
+				var y = nextDate.getFullYear();
+				var formattedDate = mm + '/' + dd + '/' + y + ' GMT -' + date.getTimezoneOffset() / 60
+				var fechaVencimiento = new Date(formattedDate)
+				var item = { monto: ko.observable(montoCuotas), fechaVencimiento: ko.observable(fechaVencimiento), numeroCuota: ko.observable(i) }
+				dataViewModel.cuotas.push(ko.mapping.fromJS(ko.toJS(item)));
+			}
+            return false;
+        }
+        $(document).ready(function () {
+            $('#form').validate({
+                rules: {
+                    estado: {
+                        required: true
+                    },
+                },
+                errorPlacement: function (error, element) {
+                    var span = element.siblings('span');
+                    error.appendTo(span);
+                }
+            });
+        })
+
+        ko.applyBindings(dataViewModel);
+	</script>
+}

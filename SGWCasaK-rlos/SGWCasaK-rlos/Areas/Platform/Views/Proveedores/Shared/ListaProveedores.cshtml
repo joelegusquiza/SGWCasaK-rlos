@@ -1,0 +1,86 @@
+﻿@model Core.DTOs.Proveedores.ListaProveedoresIndexViewModel
+@{
+    ViewData["Title"] = "ListaProveedores";
+    Layout = "~/Areas/Shared/Views/Shared/_EmptyLayout.cshtml";
+}
+<div class="m-portlet__body--no-padding">
+    <!--begin::Portlet-->
+    <div class="m-portlet m-portlet--tab" style="margin-bottom: 0px !important">
+        <!--begin::Form-->
+        <form class="m-form m-form--fit m-form--label-align-right">
+            <div class="m-portlet__body" style="margin-left: 20px; margin-right: 20px;">
+                <table class="" id="listaProveedoresTable" width="100%">
+                    <thead>
+                        <tr>
+
+                            <th title="Field #2">
+                                Nombre/Razon Social
+                            </th>
+
+                            <th title="Field #3">
+                                RUC
+                            </th>
+                            <th title="Field #4">
+                                Telefono
+                            </th>
+                            <th title="Field #5">
+                                Saldo
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody data-bind="foreach: proveedores">
+                        <tr data-bind=" attr: { id : proveedorId()}">
+                            <td data-bind="text: displayName"></td>
+                            <td data-bind="text: ruc"></td>
+                            <td data-bind="text: telefono"></td>
+                            <td data-bind="text: saldo"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="m-portlet__foot m-portlet__foot--fit">
+                <div class="m-form__actions">
+                    <button type="reset" class="m-demo__preview  m-demo__preview btn btn m-btn m-btn--gradient-from-primary m-btn--gradient-to-info" data-bind="click: seleccionarProveedor, enable: proveedorId() > 0">
+                        Agregar
+                    </button>
+                    <button type="reset" class="m-demo__preview  m-demo__preview btn btn m-btn m-btn--gradient-from-primary m-btn--gradient-to-info">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </form>
+        <!--end::Form-->
+    </div>
+</div>
+@section scripts{
+    <script>
+        var model = @Html.Raw(Json.Serialize(Model));
+        var dataViewModel = ko.mapping.fromJS(model);
+        dataViewModel.proveedorId = ko.observable();
+        $(document).ready(function () {
+            var table = $('#listaProveedoresTable').DataTable();
+
+            $('#listaProveedoresTable tbody').on('click', 'tr', function () {
+                if ($(this).hasClass('selected')) {
+                    dataViewModel.proveedorId(0);
+                    $(this).removeClass('selected');
+                }
+                else {
+                    dataViewModel.proveedorId($(this).attr('id'));
+                    table.$('tr.selected').removeClass('selected');
+                    $(this).addClass('selected');
+                }
+            });
+        })
+
+        dataViewModel.seleccionarProveedor = function()
+        {
+            var proveedor = $.grep(dataViewModel.proveedores(), function (item) { return item.proveedorId() === parseInt(dataViewModel.proveedorId()); })[0];
+            parent.seleccionarProveedor(ko.mapping.toJS(proveedor));
+        }
+
+
+        ko.applyBindings(dataViewModel);
+    </script>
+
+}

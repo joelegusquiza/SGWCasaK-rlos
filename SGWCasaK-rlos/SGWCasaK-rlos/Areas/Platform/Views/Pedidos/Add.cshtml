@@ -1,0 +1,389 @@
+﻿@model Core.DTOs.Pedidos.PedidosAddViewModel
+<div class="m-content" style="width: 100%">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="m-portlet m-portlet--tab">
+                <div class="m-portlet__head">
+                    <div class="row">
+                        <div class="col-md-6 col-sm-4">
+                            <div class="m-portlet__head-caption">
+                                <div class="m-portlet__head-title" style="margin-top: 20px;">
+                                    <h3 class="m-portlet__head-text">
+                                        Agregar Pedido
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @*<div >
+                            <div class="m-portlet__head-title">
+
+                                <h3 class="m-portlet__head-text">
+                                    Agregar Venta
+                                </h3>
+                            </div>
+                        </div>*@
+                </div>
+                <!--begin::Form-->
+                <form class="m-form m-form--fit m-form--label-align-right">
+					<div class="m-portlet__body">
+						<div class="row" style="margin-bottom: 20px;">
+							<div class="col-md-6">
+								<div class="form-group m-form__group row">
+									<label class="col-form-label col-md-6 " style="text-align: left">
+										Fecha y Hora de Pedido
+									</label>
+									<div class="col-md-5">
+										<div class='input-group date'>
+											<input type='text' class="form-control" data-bind="datetimepicker: dateCreated"  disabled/>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group m-form__group row">
+									<label for="example-text-input" class="col-4 col-form-label" style="text-align: left">
+										Delivery
+									</label>
+                                    <div class="col-1 col-form-label" style="text-align: left">
+                                        <input type="checkbox" class="form-control m-input" id="delivery" name="delivery" data-bind="checked: delivery, event:{ change: deliveryValues}">
+                                    </div>
+                                 </div>
+                            </div>
+						</div>
+						
+                        <div class="row" style="margin-bottom: 20px;">
+                            <div class="col-md-6">
+                                <div class="form-group m-form__group row">
+                                    <label for="example-text-input" class="col-2 col-form-label" style="text-align: left">
+                                        Ruc
+                                    </label>
+                                    <div class="col-5">
+                                        <input class="form-control m-input" type="text" id="example-text-input" data-bind="value: dataViewModel.cliente.ruc" readonly>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-4 col-form-label" style="text-align: left">
+                                <button type="button" class= "m-demo__preview  m-demo__preview btn btn m-btn m-btn--gradient-from-primary m-btn--gradient-to-info" onclick="showAddClienteModal()">
+                                    Agregar
+                                </button>
+                                <button type="button" class="m-demo__preview  m-demo__preview btn btn m-btn m-btn--gradient-from-primary m-btn--gradient-to-info" onclick="showListaClientesModal()">
+                                    Buscar
+                                </button>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group m-form__group row">
+                                    <label for="example-text-input" class="col-4 col-form-label" style="text-align: left">
+                                        Nombre o Razon Social
+                                    </label>
+                                    <div class="col-8">
+                                        <input class="form-control m-input" type="text" id="example-text-input" data-bind="value: dataViewModel.cliente.displayName" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+						<div class="row" style="margin-bottom: 20px;">
+							
+							<div class="col-md-6" data-bind="visible: delivery()">
+								<div class="form-group m-form__group row">
+									<label class="col-form-label col-md-6 " style="text-align: left">
+										Fecha y Hora de Entrega
+									</label>
+									<div class="col-md-6">
+										<div class='input-group date'>
+											<input type='text' id="fechaEntrega" class="form-control" data-bind="datetimepicker: fechaEntrega" readonly />
+										</div>
+
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6" data-bind="visible: delivery()">
+								<div class="form-group m-form__group row">
+									<label for="example-text-input" class="col-6 col-form-label" style="text-align: left">
+										Direccion de Entrega
+									</label>
+									<div class="col-4">
+										<input class="form-control m-input" type="text" id="example-text-input" data-bind="value: dataViewModel.direccionEntrega">
+									</div>
+								</div>
+							</div>
+						</div>
+
+					</div>
+                </form>
+            </div>
+            <div class="m-portlet m-portlet--tab">
+                <div class="m-portlet__head">
+                    <div class="m-portlet__head-caption">
+                        <div class="m-portlet__head-title">
+                            <h3 class=" m-portlet__head-text">
+                                Productos
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+                <!--begin::Form-->
+                <form class="m-form m-form--fit m-form--label-align-right" id="productoAddDetalleForm">
+                    <div class="m-portlet__body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group m-form__group row">
+                                    <label for="example-text-input" class="col-4 col-form-label" style="text-align: left">
+                                        Nombre
+                                    </label>
+                                    <div class="col-7">
+                                        <input class="form-control m-input" type="text" id="productoNombre" data-bind="value: dataViewModel.producto.nombre">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group m-form__group row">
+                                    <label for="example-text-input" class="col-4 col-form-label" style="text-align: left">
+                                        Precio
+                                    </label>
+                                    <div class="col-5">
+                                        <input class="form-control m-input" type="text" id="productoPrecioVenta" data-bind="value: dataViewModel.producto.precioVenta" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group m-form__group row">
+                                    <label for="example-text-input" class="col-4 col-form-label" style="text-align: left">
+                                        Cantidad
+                                    </label>
+                                    <div class="col-5">
+                                        <input class="form-control m-input" type="text" id="productoCantidad" data-bind="value: dataViewModel.producto.cantidad">
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="m-portlet__foot m-portlet__foot--fit">
+                        <div class="m-form__actions">
+                            <div class="row">
+                                <div class="col-12">
+                                    <button type="button" class="m-demo__preview  m-demo__preview btn btn m-btn m-btn--gradient-from-primary m-btn--gradient-to-info" onclick="showListaProductosModal()">
+                                        Buscar
+                                    </button>
+                                    <button type="button" class="m-demo__preview  m-demo__preview btn btn m-btn m-btn--gradient-from-primary m-btn--gradient-to-info" data-bind="click: agregarDetalle">
+                                        Agregar
+                                    </button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                   
+                </form>
+            </div>
+            <div class="m-portlet m-portlet--tab">
+                <div class="m-portlet__head">
+                    <div class="m-portlet__head-caption">
+                        <div class="m-portlet__head-title">
+                            <h3 class="m-portlet__head-text">
+                                Detalle
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="m-portlet__body">
+                    <!--begin: Datatable -->
+                    <table id="detalleAddPedidoTable" class="table m-table m-table--head-bg-success">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Cant
+                                </th>
+                                <th>
+                                    Descripcion
+                                </th>
+                                <th>
+                                    Precio Venta
+                                </th>
+                                <th style=" text-align : center">
+                                    Total
+                                </th>
+                                <th></th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody data-bind="foreach: detallePedido">
+                            <tr>
+                                <td data-bind="text: cantidad"></td>
+                                <td data-bind="text: nombre"></td>
+                                <td data-bind="text: precioVenta"></td>
+                                <td><span data-bind="text: montoTotal"></span></td>
+                                <td><a href="#" data-bind="attr: { id: productoId() }, click: $parent.eliminarDetalle"><i class="fa fa-trash"></i></a></td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="3" style="text-align : center">Monto Total </td>
+
+                                <td data-bind="text: montoTotal"></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                    <div class="col-md-6 col-sm-4" align="right">
+                        <div class="m-portlet__head-title" style="margin-top: 20px;">
+                            <button type="button" class="m-demo__preview  m-demo__preview btn btn m-btn m-btn--gradient-from-primary m-btn--gradient-to-info" data-bind="click: postDataToController">
+                                Guardar
+                            </button>
+                        </div>
+                    </div>
+                    <!--end: Datatable -->
+                </div>
+            </div>            
+        </div>
+    </div>
+</div>
+@{
+	Html.RenderPartial("~/Areas/Platform/Views/Shared/_ListaProductoModal.cshtml");
+	Html.RenderPartial("~/Areas/Platform/Views/Shared/_ListaClientesModal.cshtml");
+	Html.RenderPartial("~/Areas/Platform/Views/Shared/_AddClienteModal.cshtml");
+}
+<!-- /content -->
+@section scripts{
+    <script>
+        var model = @Html.Raw(Json.Serialize(Model));
+        var dataViewModel = ko.mapping.fromJS(model);
+
+        dataViewModel.agregarDetalle = function ()
+        {
+            if (parseInt(dataViewModel.producto.cantidad()) == 0)
+            {
+                showError("Debe introducir la cantidad para agregar al pedido");
+                
+                return;
+            }
+            if ($.grep(dataViewModel.detallePedido(), function (item) { return item.productoId() === parseInt(dataViewModel.producto.productoId()); }).length > 0) {
+                showError("El producto ya fue agregado al detalle");
+                resetProductoForm();
+                return;
+            }
+            if (dataViewModel.producto.productoId() == 0) {
+                showError("Debe ingresar un producto para agregar al detalle");
+                resetProductoForm();
+                return;
+            }
+			var cantidadSeleccionada =  /* dataViewModel.producto.equivalencia() == 0 ? parseInt(dataViewModel.producto.cantidad()) : */parseInt(dataViewModel.producto.cantidad() * dataViewModel.producto.equivalencia());
+            if (cantidadSeleccionada > dataViewModel.producto.stock()) {
+                showError("El producto no existe en la cantidad deseada");
+                resetProductoForm();
+                return;
+            }
+            dataViewModel.producto.montoTotal(dataViewModel.producto.precioVenta() *  dataViewModel.producto.cantidad());
+            dataViewModel.detallePedido.push(ko.mapping.fromJS(ko.mapping.toJS(dataViewModel.producto)))
+            resetProductoForm();
+
+        }
+
+        dataViewModel.eliminarDetalle = function ()
+        {
+            var item = this;
+            dataViewModel.detallePedido.remove(item);
+        }
+
+
+        dataViewModel.montoTotal = ko.pureComputed(function () {
+            var total = dataViewModel.detallePedido().reduce(function (a, b) {
+                return a + b.montoTotal();
+            }, 0)
+            return total;
+        });
+
+        function deliveryValues() {
+            if (dataViewModel.delivery()) {
+                dataViewModel.fechaEntrega(new Date());
+                
+            }
+            else {
+				dataViewModel.fechaEntrega(null);
+				$("#fechaEntrega").val("");
+                dataViewModel.direccionEntrega("");  
+            }
+                
+        };
+        
+        dataViewModel.postDataToController = function () {
+            if (dataViewModel.cliente.clienteId() == 0)
+            {
+                showError("Debe seleccionar un cliente para el pedido");
+                return;
+            }
+            if (dataViewModel.detallePedido().length == 0) {
+                showError("Debe ingresar al menos un producto para realizar el pedido");
+                return;
+            }
+            dataViewModel.producto.cantidad(0);
+            $.ajax({
+                url: "@Url.Action("Save", "Pedidos")",
+                type: "POST",
+                data: { model: ko.toJSON(dataViewModel) },
+                success: function (response) {
+                    if (response.success) {
+                        showSuccessAndGoToUrl(response.message, '@Url.Action("Index", "Pedidos", new { area = "Platform"})');
+                    } else {
+                        showError(response.message);
+                    }
+                },
+                error: function () {
+                    showError();
+                }
+            });
+
+
+            return false;
+        }
+
+        $(document).ready(function () {       
+            dataViewModel.producto.cantidad("");
+        })
+
+        function showListaProductosModal() {
+			$("#listaProductosModalIframe").attr('src', '@Url.Action("ListaProductos", "Productos", new { area = "Platform"})?sucursalId=' + dataViewModel.sucursalId());
+            $("#listaProductosModal").modal("show");
+        }
+
+        function seleccionarProducto(producto) {
+            ko.mapping.fromJS(producto, {}, dataViewModel.producto);
+            $("#listaProductosModal").modal("hide");
+            //dataViewModel.detalleVenta.push(ko.mapping.fromJS(producto));
+            //dataViewModel.producto.cantidad("");
+            //$("#productoCantidad").focus();
+        }
+
+       function showListaClientesModal() {
+           $("#listaClientesModalIframe").attr('src', '@Url.Action("ListaClientes", "Clientes", new { area = "Platform"})');
+           $("#listaClientesModal").modal("show");
+        }
+
+        function seleccionarCliente(cliente) {
+            ko.mapping.fromJS(cliente, {}, dataViewModel.cliente);
+            $("#listaClientesModal").modal("hide");
+		}
+
+		function showAddClienteModal() {
+			$("#addClienteIFrame").attr('src', '@Url.Action("AddClienteIFrame", "Clientes", new { area = "Platform"})');
+			$("#addClienteModal").modal("show");
+        }
+        
+		function seleccionarAddCliente(cliente) {
+			ko.mapping.fromJS(cliente, {}, dataViewModel.cliente);
+			$("#addClienteModal").modal("hide");
+		}
+
+        function resetProductoForm() {
+            dataViewModel.producto.nombre("");
+            dataViewModel.producto.precioVenta(0);
+            dataViewModel.producto.cantidad(0);
+            dataViewModel.producto.productoId(0);
+        }
+        ko.applyBindings(dataViewModel);
+    </script>
+}

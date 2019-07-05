@@ -1,0 +1,442 @@
+﻿@model Core.DTOs.Reportes.ReportesIndexViewModel
+@{
+	ViewData["Title"] = "Index";
+	Layout = "~/Areas/Platform/Views/Shared/_Layout.cshtml";
+}
+
+<div class="m-content" style="width: 100%">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="m-portlet m-portlet--tab">
+				@*<div class="m-portlet__head">
+
+				<div class="m-portlet__head-caption col-md-3">
+					<div class="m-portlet__head-title">
+						<span class="m-portlet__head-icon m--hide">
+							<i class="la la-gear"></i>
+						</span>
+						<h3 class="m-portlet__head-text">
+							Reporte General
+						</h3>
+					</div>
+				</div>
+
+
+
+		</div>*@
+				<div class="m-portlet__head">
+					<div class="row">
+						<div class="col-md-6 col-sm-4">
+							<div class="m-portlet__head-caption">
+								<div class="m-portlet__head-title" style="margin-top: 20px;">
+									<h3 class="m-portlet__head-text">
+										Reporte Geeneral
+									</h3>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-4" align="right">
+						
+								<div class="m-portlet__head-title" style="margin-top: 20px;">
+									<button type="button" class="m-demo__preview  m-demo__preview btn btn m-btn m-btn--gradient-from-primary m-btn--gradient-to-info" data-bind="click: getReportePdf">
+										Pdf
+									</button>
+								</div>
+							
+
+						</div>
+					</div>
+
+				</div>
+				<!--begin::Form-->
+
+				<div class="m-portlet__body">
+					<div class="row">
+						<div class="col-md-4">
+							<div class="form-group m-form__group row">
+								<label class="col-form-label col-md-3">
+									Fecha Inicio
+								</label>
+								<div class="col-md-6">
+									<input class="form-control m-input datepicker" style="width: 100%" type="text" id="example-text-input" data-bind="datepicker: parameters.fechaInicio, datepickerOptions: {language: 'es'}">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group m-form__group row">
+								<label class="col-form-label col-md-3">
+									Fecha Fin
+								</label>
+								<div class="col-md-6">
+									<input class="form-control m-input datepicker" style="width: 100%" type="text" id="example-text-input" data-bind="datepicker: parameters.fechaFin, datepickerOptions: {language: 'es'}">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-2">
+							<div class="m-portlet__head-title">
+								<button type="button" class="m-demo__preview  m-demo__preview btn btn m-btn m-btn--gradient-from-primary m-btn--gradient-to-info" data-bind="click: filtrar">
+									Filtrar
+								</button>
+							</div>
+						</div>
+					</div>
+					<div class="row m-row--no-padding m-row--col-separator-xl">
+						<div class="col-md-12 col-lg-4 col-xl-6">
+							<div class="m-portlet m-portlet--full-height ">
+								<div class="m-portlet__head">
+									<div class="m-portlet__head-caption">
+										<div class="m-portlet__head-title">
+											<h3 class="m-portlet__head-text">
+												Ventas
+											</h3>
+										</div>
+									</div>
+
+								</div>
+								<div class="m-portlet__body">
+									<div class="m-widget6">
+										<div class="m-widget6__head">
+											<div class="m-widget6__item">
+												<span class="m-widget6__caption">
+													Cantidad
+												</span>
+												<span class="m-widget6__caption">
+													Descripcion
+												</span>
+												<span class="m-widget6__caption m--align-right">
+													Monto
+												</span>
+											</div>
+										</div>
+										<div class="m-widget6__body">
+											<div class="m-widget6__item">
+												<span class="m-widget6__text" data-bind="text: ventas.cantVentas">
+
+												</span>
+												<span class="m-widget6__text">
+													Total Ventas
+												</span>
+												<span class="m-widget6__text m--align-right m--font-boldest m--font-brand" data-bind="text: ventas.montoTotal">
+
+												</span>
+											</div>
+											<div class="m-widget6__item">
+												<span class="m-widget6__text" data-bind="text: ventas.cantVentasPendientes">
+
+												</span>
+												<span class="m-widget6__text">
+													Ventas Por Cobrar
+												</span>
+												<span class="m-widget6__text m--align-right m--font-boldest m--font-brand" data-bind="text: ventas.montoTotalPendientes">
+
+												</span>
+											</div>
+											<div class="m-widget6__item">
+												<span class="m-widget6__text" data-bind="text: ventas.cantVentasCobradas">
+
+												</span>
+												<span class="m-widget6__text">
+													Ventas Cobradas
+												</span>
+												<span class="m-widget6__text m--align-right m--font-boldest m--font-brand" data-bind="text: ventas.montoTotalCobradas">
+
+												</span>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-12 col-lg-4 col-xl-6">
+							<div class="m-portlet m-portlet--full-height ">
+								<div class="m-portlet__head">
+									<div class="m-portlet__head-caption">
+										<div class="m-portlet__head-title">
+											<h3 class="m-portlet__head-text">
+												Compras
+											</h3>
+										</div>
+									</div>
+
+								</div>
+								<div class="m-portlet__body">
+									<div class="m-widget6">
+										<div class="m-widget6__head">
+											<div class="m-widget6__item">
+												<span class="m-widget6__caption">
+													Cantidad
+												</span>
+												<span class="m-widget6__caption">
+													Descripcion
+												</span>
+												<span class="m-widget6__caption m--align-right">
+													Monto
+												</span>
+											</div>
+										</div>
+										<div class="m-widget6__body">
+											<div class="m-widget6__item">
+												<span class="m-widget6__text" data-bind="text: compras.cantCompras">
+
+												</span>
+												<span class="m-widget6__text">
+													Total Compras
+												</span>
+												<span class="m-widget6__text m--align-right m--font-boldest m--font-brand" data-bind="text: compras.montoTotal">
+
+												</span>
+											</div>
+											<div class="m-widget6__item">
+												<span class="m-widget6__text" data-bind="text: compras.cantComprasPendientes">
+
+												</span>
+												<span class="m-widget6__text">
+													Compras a Pagar
+												</span>
+												<span class="m-widget6__text m--align-right m--font-boldest m--font-brand" data-bind="text: compras.montoTotalPendientes">
+
+												</span>
+											</div>
+											<div class="m-widget6__item">
+												<span class="m-widget6__text" data-bind="text: compras.cantComprasPagado">
+
+												</span>
+												<span class="m-widget6__text">
+													Compras Pagadas
+												</span>
+												<span class="m-widget6__text m--align-right m--font-boldest m--font-brand" data-bind="text: compras.montoTotalPagado">
+
+												</span>
+											</div>
+										</div>
+
+									</div>
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+				<!--end::Form-->
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-12">
+			<div class="m-portlet m-portlet--tab">
+				<div class="m-portlet__head">
+					<div class="m-portlet__head-caption">
+						<div class="m-portlet__head-title">
+							<span class="m-portlet__head-icon m--hide">
+								<i class="la la-gear"></i>
+							</span>
+							<h3 class="m-portlet__head-text">
+								Ventas
+							</h3>
+						</div>
+					</div>
+				</div>
+				<!--begin::Form-->
+
+				<div class="m-portlet__body">
+
+					<div class="m-section">
+						<div class="m-section__content">
+							<table class="table m-table m-table--head-bg-brand">
+								<thead>
+									<tr>
+										<th title="Field #1">
+											Nro de Factura
+										</th>
+										<th title="Field #2">
+											Fecha
+										</th>
+										<th title="Field #2">
+											Timbrado
+										</th>
+										<th title="Field #2">
+											Monto Total
+										</th>
+										<th>Estado</th>
+									</tr>
+								</thead>
+								<tbody data-bind="foreach: ventas.detalle">
+									<tr>
+										<td data-bind="text: nroFacturaString"></td>
+										<td data-bind="text: moment(dateCreated()).format('DD/MM/YYYY')"></td>
+										<td data-bind="text: timbrado"></td>
+										<td data-bind="text: montoTotal"></td>
+										<td data-bind="text: estadoDescription"></td>
+
+									</tr>
+									
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				<!--end::Form-->
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-12">
+			<div class="m-portlet m-portlet--tab">
+				<div class="m-portlet__head">
+					<div class="m-portlet__head-caption">
+						<div class="m-portlet__head-title">
+							<span class="m-portlet__head-icon m--hide">
+								<i class="la la-gear"></i>
+							</span>
+							<h3 class="m-portlet__head-text">
+								Compras
+							</h3>
+						</div>
+					</div>
+				</div>
+				<!--begin::Form-->
+
+				<div class="m-portlet__body">
+
+					<div class="m-section">
+						<div class="m-section__content">
+							<table class="table m-table m-table--head-bg-brand">
+								<thead>
+									<tr>
+										<th title="Field #1">
+											Nro de Factura
+										</th>
+										<th title="Field #2">
+											Fecha
+										</th>
+										<th title="Field #2">
+											Proveedor
+										</th>
+										<th title="Field #2">
+											Timbrado
+										</th>
+										<th title="Field #5">
+											Monto Total
+										</th>
+										<th title="Field #5">
+											Estado
+										</th>
+									</tr>
+								</thead>
+								<tbody  data-bind="foreach: compras.detalle">
+									
+									<tr>
+										<td data-bind="text: nroFactura"></td>
+										<td data-bind="text: moment(dateCompra()).format('DD/MM/YYYY')"></td>
+										<td data-bind="text: displayName"></td>
+										<td data-bind="text: timbrado"></td>
+										<td data-bind="text: montoTotal"></td>
+										<td data-bind="text: estadoDescripcion"></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				<!--end::Form-->
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-12">
+			<div class="m-portlet m-portlet--tab">
+				<div class="m-portlet__head">
+					<div class="m-portlet__head-caption">
+						<div class="m-portlet__head-title">
+							<span class="m-portlet__head-icon m--hide">
+								<i class="la la-gear"></i>
+							</span>
+							<h3 class="m-portlet__head-text">
+								Pedidos
+							</h3>
+						</div>
+					</div>
+				</div>
+				<!--begin::Form-->
+
+				<div class="m-portlet__body">
+
+					<div class="m-section">
+						<div class="m-section__content">
+							<table class="table m-table m-table--head-bg-brand">
+								<thead>
+									<tr>
+										<th>#</th>
+										<th title="Field #1">
+											Cliente
+										</th>
+										<th title="Field #2">
+											Monto Total
+										</th>
+										<th title="Field #5">
+											Estado
+										</th>
+										<th title="Field #2">
+											Con Delivery
+										</th>
+									</tr>
+								</thead>
+								<tbody data-bind="foreach: pedidos.detalle">
+									
+									<tr>
+										<td data-bind="text: id"></td>
+										<td data-bind="text: displayName"></td>
+										<td data-bind="text: montoTotal"></td>
+										<td data-bind="text: estadoDescripcion"></td>
+										<!-- ko if: delivery() == true -->
+										<td data-bind="text:'Si'"></td>
+										<!-- /ko -->
+										<!-- ko if: delivery() != true -->
+										<td data-bind="text:'No'"></td>
+										<!-- /ko -->
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				<!--end::Form-->
+			</div>
+		</div>
+	</div>
+</div>
+
+@section scripts{
+	<script>
+        var model = @Html.Raw(Json.Serialize(Model));
+        var dataViewModel = ko.mapping.fromJS(model);
+        dataViewModel.filtrar = function () {           
+            $.ajax({
+                url: "@Url.Action("GetReporteIndex", "Reportes")",
+                type: "POST",
+                data: { model: ko.toJSON(dataViewModel.parameters) },
+                success: function (response) {
+                   
+						ko.mapping.fromJS(response.ventas, {}, dataViewModel.ventas); 
+						ko.mapping.fromJS(response.compras, {}, dataViewModel.compras); 
+						ko.mapping.fromJS(response.pedidos, {}, dataViewModel.pedidos);                                            
+                    
+                },
+                error: function () {
+					showError("Ocurrio un error, intentelo de nuevo");
+                }
+            });
+            return false;
+		}
+
+		dataViewModel.getReportePdf = function () {
+			window.open("@Url.Action("GetReportePdf", "Reportes")?model=" + ko.toJSON(dataViewModel.parameters))
+            return false;
+        }
+        ko.applyBindings(dataViewModel);
+       
+	</script>
+}

@@ -1,0 +1,97 @@
+﻿@model Core.DTOs.Ventas.ListaVentasIndexViewModel
+@{
+	ViewData["Title"] = "ListaVentas";
+	Layout = "~/Areas/Shared/Views/Shared/_EmptyLayout.cshtml";
+}
+<div class="m-portlet__body--no-padding">
+	<!--begin::Portlet-->
+	<div class="m-portlet m-portlet--tab" style="margin-bottom: 0px !important">
+		<!--begin::Form-->
+		<form class="m-form m-form--fit m-form--label-align-right" id="">
+			<div class="m-portlet__foot m-portlet__foot--fit">
+				<div class="m-form__actions">
+					<button type="reset" class="m-demo__preview  m-demo__preview btn btn m-btn m-btn--gradient-from-primary m-btn--gradient-to-info" data-bind="click: seleccionarVenta, enable: dataViewModel.venta.ventaId() > 0">
+						Agregar
+					</button>
+					<button type="reset" class="m-demo__preview  m-demo__preview btn btn m-btn m-btn--gradient-from-primary m-btn--gradient-to-info">
+						Cancel
+					</button>
+				</div>
+			</div>
+		</form>
+		<!--end::Form-->
+	</div>
+	<div class="m-portlet m-portlet--tab" style="margin-bottom: 0px !important">
+		<!--begin::Form-->
+		<form class="m-form m-form--fit m-form--label-align-right">
+			<div class="m-portlet__body" style="margin-left: 20px; margin-right: 20px;">
+				<table class="" id="listaProdutosTable" width="100%">
+					<thead>
+						<tr>
+							<th title="Field #1">
+								Id
+							</th>
+							<th title="Field #2">
+								NroFactura
+							</th>
+							<th title="Field #2">
+								Fecha
+							</th>
+							<th title="Field #5">
+								Monto
+							</th>
+							<th title="Field #5">
+								Estado
+							</th>
+						</tr>
+					</thead>
+					<tbody data-bind="foreach: ventas">
+						<tr data-bind=" attr: { id : ventaId()}">
+							<td data-bind="text: ventaId"></td>
+							<td data-bind="text: nroFacturaString"></td>
+							<td data-bind="text: moment(dateCreated()).format('DD/MM/YYYY')"></td>
+							<td data-bind="text: monto"></td>
+							<td data-bind="text: estadoDescripcion"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+		</form>
+		<!--end::Form-->
+	</div>
+</div>
+@section scripts{
+	<script>
+        var model = @Html.Raw(Json.Serialize(Model));
+        var dataViewModel = ko.mapping.fromJS(model);
+        dataViewModel.ventaId = ko.observable();
+        $(document).ready(function () {
+            var table = $('#listaProdutosTable').DataTable();
+
+            $('#listaProdutosTable tbody').on('click', 'tr', function () {
+                if ($(this).hasClass('selected')) {
+                    dataViewModel.ventaId(0);
+                    $(this).removeClass('selected');
+                }
+                else {
+                    dataViewModel.ventaId($(this).attr('id'));
+                    var venta = $.grep(dataViewModel.ventas(), function (item) { return item.ventaId() === parseInt(dataViewModel.ventaId()); })[0];
+                    ko.mapping.fromJS(venta, {}, dataViewModel.venta);
+                    table.$('tr.selected').removeClass('selected');
+                    $(this).addClass('selected');
+                }
+            });
+        })
+
+        dataViewModel.seleccionarVenta = function()
+        {
+            parent.seleccionarVenta(ko.mapping.toJS(dataViewModel.venta));
+
+        }
+
+        ko.applyBindings(dataViewModel);
+
+	</script>
+
+}

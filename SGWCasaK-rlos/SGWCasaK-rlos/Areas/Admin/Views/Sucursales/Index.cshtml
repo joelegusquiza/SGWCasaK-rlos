@@ -1,0 +1,145 @@
+﻿@model Core.DTOs.Sucursales.SucursalesIndexViewModel
+
+<div class="m-content" style="width: 100%">
+    <div class="m-portlet m-portlet--mobile">
+        <div class="m-portlet__head">
+            <div class="m-portlet__head-caption">
+                <div class="m-portlet__head-title">
+                    <h3 class="m-portlet__head-text">
+                        Sucursales
+                    </h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="m-portlet__body">
+            <!--begin: Search Form -->
+            <div class="m-form m-form--label-align-right m--margin-top-20 m--margin-bottom-30">
+                <div class="row align-items-center">
+                    <div class="col-xl-8 order-2 order-xl-1">
+                        <div class="form-group m-form__group row align-items-center">
+                            <div class="col-md-4">
+                                <div class="m-input-icon m-input-icon--left">
+                                    <input type="text" class="form-control m-input" placeholder="Buscar..." id="generalSearch">
+                                    <span class="m-input-icon__icon m-input-icon__icon--left">
+                                        <span>
+                                            <i class="la la-search"></i>
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 order-1 order-xl-2 m--align-right">
+                        <a href="@Url.Action("Add", "Sucursales", new { area = "Admin"})" class="m-demo__preview  m-demo__preview btn btn m-btn m-btn--gradient-from-primary m-btn--gradient-to-info">
+                            <span>
+                                <i class="la la-plus"></i>
+                                <span>
+                                    Agregar
+                                </span>
+                            </span>
+                        </a>
+                        <div class="m-separator m-separator--dashed d-xl-none"></div>
+                    </div>
+                </div>
+            </div>
+            <!--end: Search Form -->
+            <!--begin: Datatable -->
+            <table class="m-datatable" id="sucursalesIndexTable" >
+                <thead>
+                    <tr>
+                        <th title="Field #1">
+                            Id
+                        </th>
+                        <th title="Field #2">
+                            Nombre
+                        </th>
+
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody data-bind="foreach: sucursales">
+                    <tr>
+                        <td data-bind="text: id"></td>
+                        <td data-bind="text: nombre"></td>
+
+						<td>
+							<div class="btn-group bootstrap-select form-control m-bootstrap-select m-bootstrap-select--solid">
+								<button type="button" class="btn btn-md btn-outline-primary m-0 px-3 py-2 z-depth-0 waves-effectt" data-toggle="dropdown" role="button" data-id="m_form_type" title="All">
+									<span class="filter-option pull-left">
+										Opciones
+									</span>&nbsp;<span class="bs-caret"><span class="caret"></span></span>
+								</button><div class="dropdown-menu open" role="combobox">
+									<ul class="dropdown-menu inner" role="listbox" aria-expanded="false">
+										<li data-original-index="0" class="selected">
+
+											<a data-bind="attr: { href: '@Url.Action("Edit", "Sucursales", new  { area = "Admin" })?id=' + id() }" tabindex="0" class="" data-tokens="null" role="option" aria-disabled="false" aria-selected="true">
+												<span class="fa fa-edit"></span>&nbsp;
+												<span class="text">
+													Editar
+												</span>
+											</a>
+										</li>
+										<li data-original-index="1">
+											<a href="#" data-bind="attr: { id: id() }" onClick="javacript: desactivate(this)" tabindex="0" class="" data-tokens="null" role="option" aria-disabled="false" aria-selected="true">
+												<span class="fa fa-trash"></span>&nbsp;
+												<span class="text">
+													Eliminar
+												</span>
+											</a>
+										</li>
+
+									</ul>
+								</div>
+							</div>
+							@*<a data-bind="attr: { href: '@Url.Action("Edit", "Sucursales", new  { area = "Admin" })?id=' + id() }"><i class="fa fa-edit"></i></a>
+		<a href="#" data-bind="attr: { id: id() }" onClick="javacript: desactivate(this)"><i class="fa fa-trash"></i></a>*@
+						</td>
+                    </tr>
+                </tbody>
+            </table>
+            <!--end: Datatable -->
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script>
+
+        var model = @Html.Raw(Json.Serialize(Model));
+        var dataViewModel = ko.mapping.fromJS(model);
+        function desactivate(element){
+			var id = $(element).attr('id');
+			confirmAction().then(function (result) {
+				if (result.value) {
+					 $.ajax({
+                        url: "@Url.Action("Desactivate")",
+                        type: "POST",
+                        data: { id: id},
+                        success: function (response) {
+                            if (response.success) {
+
+                                localStorage.setItem('show', 'true');
+                                window.location.reload();
+                            } else {
+                                showError(response.message);
+                            }
+                        },
+                        error: function () {
+                            showError("Error!");
+                        }
+                    });
+				}
+			});   
+           
+            return false;
+        }
+        ko.applyBindings(dataViewModel);
+        $(document).ready(function () {
+            var show = localStorage.getItem('show');
+            if (show === 'true') {
+                showSuccess("Se ha eliminado correctamente la sucursal");
+                localStorage.setItem('show', 'false');
+            }
+        });
+    </script>
+}
