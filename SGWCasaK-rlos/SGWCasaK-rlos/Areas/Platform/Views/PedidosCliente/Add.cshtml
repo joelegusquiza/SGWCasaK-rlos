@@ -34,42 +34,57 @@
                 <!--begin::Form-->
                 <form class="m-form m-form--fit m-form--label-align-right">
                     <div class="m-portlet__body">
-						<div class="row" style="margin-bottom: 20px">
-							<div class="form-group m-form__group">
-								<label for="exampleInputEmail1">
-									Sucursal
-								</label>
-								<select class="form-control m-input m-input--square" id="tipo" name="tipo" data-bind="options: sucursales,
+                        <div class="row" style="margin-bottom: 20px">
+                            <div class="form-group m-form__group">
+                                <label for="exampleInputEmail1">
+                                    Sucursal
+                                </label>
+                                <select class="form-control m-input m-input--square" id="tipo" name="tipo" data-bind="options: sucursales,
                                            optionsValue: 'value',
                                            optionsText: 'text',
                                            value: sucursalId,
                                            optionsCaption: 'Seleccione una opcion'"></select>
-							</div>
-						</div>
+                            </div>
+                        </div>
+
+
+                        @*<div class="col-md-6">
+                            <div class="form-group m-form__group row">
+                                <label for="example-text-input" class="col-4 col-form-label" style="text-align: left">
+                                    Delivery
+                                </label>
+                                <div class="col-1 col-form-label" style="text-align: left">
+                                    <input type="checkbox" class="form-control m-input" id="delivery" name="delivery" data-bind="checked: delivery, event:{ change: deliveryValues}">
+                                </div>
+                            </div>
+                        </div>*@
+
+
                         <div class="row" style="margin-bottom: 20px;">
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <div class="form-group m-form__group row">
-                                    <label for="exampleInputEmail1">
+                                    <label for="exampleInputEmail1" class="col-4 col-form-label" style="text-align: left">
                                         Delivery
                                     </label>
-                                    <input type="checkbox" class="form-control m-input" id="delivery" name="delivery" data-bind="checked: delivery, event:{ change: deliveryValues}">
-
+                                    <div class="col-1 col-form-label" style="text-align: left">
+                                        <input type="checkbox" class="form-control m-input" id="delivery" name="delivery" data-bind="checked: delivery, event:{ change: deliveryValues}">
+                                    </div>
                                 </div>
 
-                            </div>
-							<div class="col-md-4" data-bind="visible: delivery()">
-								<div class="form-group m-form__group row">
-									<label class="col-form-label col-md-6 " style="text-align: left">
-										Fecha y Hora de Entrega
-									</label>
-									<div class="col-md-6">
-										<div class='input-group date'>
-											<input type='text' id="fechaEntrega" class="form-control" data-bind="datetimepicker: fechaEntrega"  />
-										</div>
+                                <div class="col-md-4" data-bind="visible: delivery()">
+                                    <div class="form-group m-form__group row">
+                                        <label class="col-form-label col-md-6 " style="text-align: left">
+                                            Fecha y Hora de Entrega
+                                        </label>
+                                        <div class="col-md-6">
+                                            <div class='input-group date'>
+                                                <input type='text' id="fechaEntrega" class="form-control" data-bind="datetimepicker: fechaEntrega" />
+                                            </div>
 
-									</div>
-								</div>
-							</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="col-md-4" data-bind="visible: delivery()">
                                 <div class="form-group m-form__group row">
                                     <label for="example-text-input" class="col-4 col-form-label" style="text-align: left">
