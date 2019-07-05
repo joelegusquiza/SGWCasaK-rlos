@@ -30,7 +30,7 @@ namespace SGWCasaK_rlos.SecurityHelpers
             {
                 var emailVerified = _contextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type == CustomClaims.EmailVerified).Value;
 
-                if (emailVerified == "False")
+                if (emailVerified.ToLower() == "false")
                 {
                     context.Result = new RedirectToActionResult("UnverifiedEmail", "Profile", new { area = "Shared" });
                 }

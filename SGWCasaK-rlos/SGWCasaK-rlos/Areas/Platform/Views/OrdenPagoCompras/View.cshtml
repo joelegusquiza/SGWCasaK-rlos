@@ -37,6 +37,7 @@
 				<!--begin::Form-->
 				<form class="m-form m-form--fit m-form--label-align-right">
 					<div class="m-portlet__body">
+						<!-- ko if: estado() == @((int)Constants.OrdenPagoCompraEstado.Pendiente)  -->
 						<div class="row" style="margin-bottom: 20px;">
 							<div class="col-md-6">
 								<div class="form-group m-form__group row">
@@ -59,6 +60,31 @@
 								</div>
 							</div>
 						</div>
+						<!-- /ko -->
+						<!-- ko if: estado() == @((int)Constants.OrdenPagoCompraEstado.Pagado)  -->
+						<div class="row" style="margin-bottom: 20px;">
+							<div class="col-md-6">
+								<div class="form-group m-form__group row">
+									<label for="example-text-input" class="col-2 col-form-label" style="text-align: left">
+										Ruc
+									</label>
+									<div class="col-6">
+										<input class="form-control m-input" type="text" id="example-text-input" data-bind="value: dataViewModel.proveedor.ruc" readonly>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group m-form__group row">
+									<label for="example-text-input" class="col-4 col-form-label" style="text-align: left">
+										Nombre o Razon Social
+									</label>
+									<div class="col-8">
+										<input class="form-control m-input" type="text" id="example-text-input" data-bind="value: dataViewModel.proveedor.displayName" readonly>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- /ko -->
 					</div>
 				</form>
 			</div>
