@@ -105,11 +105,11 @@ namespace Core.DAL.Services
                 var sumaCompras = compras.Where(x => x.ProductoId == producto.Id && x.Compra.SucursalId == sucursalId).Sum(x => x.MontoTotal);
                 var cant = compras.Where(x => x.ProductoId == producto.Id).Sum(x => x.Equivalencia * x.Cantidad);
                 var precioPromedioUnidad = sumaCompras / cant;
-                producto.PrecioVenta = precioPromedioUnidad + precioPromedioUnidad * Convert.ToDecimal(producto.PorcentajeGanancia/100);
+                producto.PrecioVenta = decimal.Round(precioPromedioUnidad + precioPromedioUnidad * Convert.ToDecimal(producto.PorcentajeGanancia/100), 0);
                 foreach (var presentacion in producto.ProductoPresentaciones)
                 {
                     var precioPresentacion = precioPromedioUnidad * presentacion.Equivalencia;
-                    presentacion.PrecioVenta = precioPresentacion + precioPresentacion * Convert.ToDecimal(presentacion.PorcentajeGanancia/100);
+                    presentacion.PrecioVenta = decimal.Round(precioPresentacion + precioPresentacion * Convert.ToDecimal(presentacion.PorcentajeGanancia/100),0);
                 }
                 _context.Entry(producto).State = EntityState.Modified;
             }

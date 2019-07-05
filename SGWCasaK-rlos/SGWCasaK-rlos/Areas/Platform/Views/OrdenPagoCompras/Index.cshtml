@@ -51,22 +51,25 @@
             <!--begin: Datatable -->
             <table class="m-datatable" id="comprasIndexTable" width="100%">
                 <thead>
-                    <tr>
-                       
-                        <th title="Field #2">
-                            Fecha
-                        </th>
-                        <th title="Field #2">
-                            Proveedor
-                        </th>
-                        <th title="Field #5">
-                            Monto Total
-                        </th>
-                        <th title="Field #5">
-                            Estado
-                        </th>
-                        <th></th>
-                    </tr>
+					<tr>
+
+						<th title="Field #2">
+							Fecha
+						</th>
+						<th title="Field #2">
+							Proveedor
+						</th>
+						<th title="Field #5">
+							Monto Total
+						</th>
+						<th title="Field #5">
+							Cambio
+						</th>
+						<th title="Field #5">
+							Estado
+						</th>
+						<th></th>
+					</tr>
                 </thead>
                 <tbody data-bind="foreach: ordenPagosCompra">
                     <tr>
@@ -74,7 +77,8 @@
                         <td data-bind="text: moment(dateCreated()).format('DD/MM/YYYY')"></td>
                         <td data-bind="text: proveedor"></td>
                         <td data-bind="text: montoTotal"></td>
-                        <td data-bind="text: estadoDescripcion"></td>
+						<td data-bind="text: cambio"></td>
+						<td data-bind="text: estadoDescripcion"></td>
 						<td>
 							<div class="btn-group bootstrap-select form-control m-bootstrap-select m-bootstrap-select--solid">
 								<button type="button" class="btn btn-md btn-outline-primary m-0 px-3 py-2 z-depth-0 waves-effect" data-toggle="dropdown" role="button" data-id="m_form_type" title="All">

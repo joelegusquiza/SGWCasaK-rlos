@@ -207,6 +207,7 @@ namespace Core.DAL.Services
         {
             var pedido = GetById(id);
             pedido.Estado = estado;
+
 			if (estado == EstadoPedido.Anulado)
 				pedido.RazonAnulado = razonAnulado;
             _context.Entry(pedido).State = EntityState.Modified;

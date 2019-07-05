@@ -98,7 +98,7 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
 
 		[HttpPost]
         [Authorize(Policy = "GenerateVentaPedido")]
-        public SystemValidationModel ValidarPedido(int pedidoId)
+        public SystemValidationModel GenerarVenta(int pedidoId)
         {
 
             var pedido = _pedidos.GetById(pedidoId);            
@@ -135,7 +135,16 @@ namespace SGWCasaK_rlos.Areas.Platform.Controllers
         [Authorize(Policy = "ChangeEstadoPedido")]
         public SystemValidationModel CambiarEstado(int id, EstadoPedido estado, string razonAnulado)
         {
-            
+            if (estado == EstadoPedido.Preparado)
+			{
+				var pedido = _pedidos.GetById(id);
+				var resultValidateStock = _productos.ValidateStockPedido(pedido.DetallePedido.ToList());
+				if (!resultValidateStock.Success)
+				{
+					resultValidateStock.Message = "No existe la cantidad suficiente de algunos productos";
+					return resultValidateStock;
+				}
+			}
             return _pedidos.ChangeEstado(id, estado, razonAnulado);
         }
 

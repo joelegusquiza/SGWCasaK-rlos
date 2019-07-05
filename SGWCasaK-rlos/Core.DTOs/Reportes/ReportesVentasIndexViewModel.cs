@@ -23,6 +23,7 @@ namespace Core.DTOs.Reportes
 	{
 		public int Id { get; set; }
 		public string NroFacturaString { get; set; }
+		public string Timbrado { get; set; }
 		public DateTime DateCreated { get; set; }
 		public decimal MontoTotal { get; set; }
 		public EstadoVenta Estado { get; set; }		

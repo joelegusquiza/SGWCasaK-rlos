@@ -1,4 +1,5 @@
 ﻿using Core.DTOs.Pedidos;
+using Core.DTOs.Reportes;
 using MigraDoc.Rendering;
 using PdfServices.Builders;
 using PdfServices.Interfaces;
@@ -19,6 +20,20 @@ namespace PdfServices.Services
 		public byte[] GetPedidosPdf(PedidosPdfModel model)
 		{
 			var pdfDocument = PedidosBuilder.Build(model);
+			var renderer = new PdfDocumentRenderer() { Document = pdfDocument };
+			renderer.RenderDocument();
+			byte[] fileContents;
+			using (var stream = new MemoryStream())
+			{
+				renderer.PdfDocument.Save(stream, false);
+				fileContents = stream.ToArray();
+			}
+			return fileContents;
+		}
+
+		public byte[] GetReportePdf(ReportesIndexViewModel model)
+		{
+			var pdfDocument = ReporteGeneralBuilder.Build(model);
 			var renderer = new PdfDocumentRenderer() { Document = pdfDocument };
 			renderer.RenderDocument();
 			byte[] fileContents;

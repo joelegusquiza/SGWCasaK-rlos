@@ -24,8 +24,20 @@ namespace Core.DTOs.Reportes
 		public EstadoCompra Estado { get; set; }
 		public string EstadoDescripcion => Estado.GetDescription();
 		public string NroFactura { get; set; }
+		public string Timbrado { get; set; }
 		public decimal MontoTotal { get; set; }
 		public decimal FechaCompra { get; set; }
-		public string Proveedor { get; set; }
+		public string Nombre { get; set; }
+		public string Apellido { get; set; }
+		public string RazonSocial { get; set; }
+		public string DisplayName
+		{
+			get
+			{
+				if (!string.IsNullOrEmpty(RazonSocial))
+					return RazonSocial;
+				return $"{Nombre} {Apellido}";
+			}
+		}
 	}
 }

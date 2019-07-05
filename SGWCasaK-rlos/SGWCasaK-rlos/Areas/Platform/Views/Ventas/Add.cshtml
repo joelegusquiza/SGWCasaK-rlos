@@ -489,7 +489,7 @@
                 data: { model: ko.toJSON(dataViewModel) },
                 success: function (response) {
                     if (response.success) {
-                        showSuccessAndGoToUrl(response.message, '@Url.Action("Index", "Ventas", new { area = "Platform"})');
+                        showSuccessAndGoToUrl(response.message, '@Url.Action("Add", "Ventas", new { area = "Platform"})');
                     } else {
                         showError(response.message);
                     }

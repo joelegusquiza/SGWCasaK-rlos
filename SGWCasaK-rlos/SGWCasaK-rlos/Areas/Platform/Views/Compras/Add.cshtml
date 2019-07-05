@@ -424,7 +424,7 @@
                 data: { model: ko.toJSON(dataViewModel) },
                 success: function (response) {
                     if (response.success) {
-                        showSuccessAndGoToUrl(response.message, '@Url.Action("Index", "Compras", new { area = "Platform"})');
+                        showSuccessAndGoToUrl(response.message, '@Url.Action("Pending", "Compras", new { area = "Platform"})?id='+response.id);
                     } else {
                         showError(response.message);
                     }

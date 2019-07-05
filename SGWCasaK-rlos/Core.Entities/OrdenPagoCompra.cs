@@ -8,6 +8,7 @@ namespace Core.Entities
     public class OrdenPagoCompra : BaseEntity
     {
         public decimal MontoTotal { get; set; }
+		public decimal Cambio { get; set; }
 
         public int ProveedorId { get; set; }
         public Proveedor Proveedor { get; set; }

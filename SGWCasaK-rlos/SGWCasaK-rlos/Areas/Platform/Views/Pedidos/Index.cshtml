@@ -220,7 +220,7 @@
 			confirmAction().then(function (result) {
 				if (result.value) {
 					$.ajax({
-                    url: "@Url.Action("ValidarPedido")",
+                    url: "@Url.Action("GenerarVenta")",
                     type: "POST",
                     data: { pedidoId: id},
                     success: function (response) {

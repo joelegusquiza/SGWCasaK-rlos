@@ -20,7 +20,7 @@ namespace Core.DAL.Services
 		{
 			_context = context;
 		}
-		
+	
 		public ReportesIndexViewModel GetReporteIndex (ReporteParameterViewModel parameters, int sucursalId)
 		{
 			var data = new ReportesIndexViewModel();
@@ -82,7 +82,7 @@ namespace Core.DAL.Services
 		private ReportesVentasIndexViewModel GetReporteVentas(DateTime inicio, DateTime fin, int sucursalId)
 		{
 			var ventaReporte = new ReportesVentasIndexViewModel();
-			var ventas = _context.Set<Venta>().Where(x => x.DateCreated.ToLocalTime().Date >= inicio.Date && x.DateCreated.ToLocalTime().Date <= fin.Date && x.SucursalId == sucursalId);
+			var ventas = _context.Set<Venta>().Include(x => x.Timbrado).Where(x => x.DateCreated.ToLocalTime().Date >= inicio.Date && x.DateCreated.ToLocalTime().Date <= fin.Date && x.SucursalId == sucursalId).OrderByDescending(x => x.DateCreated);
 			ventaReporte.CantVentas = ventas.Count();
 			ventaReporte.MontoTotal = ventas.Sum(x => x.MontoTotal);
 			ventaReporte.CantVentasPendientes = ventas.Where(x => x.Estado == Constants.EstadoVenta.PendientedePago).Count();
@@ -97,7 +97,7 @@ namespace Core.DAL.Services
 		private ReportesComprasIndexViewModel GetReporteCompras(DateTime inicio, DateTime fin, int sucursalId)
 		{
 			var compraReporte = new ReportesComprasIndexViewModel();
-			var compras = _context.Set<Compra>().Where(x => x.DateCreated.ToLocalTime().Date >= inicio.Date && x.DateCreated.ToLocalTime().Date <= fin.Date && x.SucursalId == sucursalId);
+			var compras = _context.Set<Compra>().Include(x => x.Proveedor).Where(x => x.DateCreated.ToLocalTime().Date >= inicio.Date && x.DateCreated.ToLocalTime().Date <= fin.Date && x.SucursalId == sucursalId).OrderByDescending(x => x.DateCreated);
 			compraReporte.CantCompras = compras.Count();
 			compraReporte.MontoTotal = compras.Sum(x => x.MontoTotal);
 			compraReporte.CantComprasPendientes = compras.Where(x => x.Estado == Constants.EstadoCompra.PendientedePago).Count();
@@ -112,7 +112,7 @@ namespace Core.DAL.Services
 		private ReportesPedidosIndexViewModel GetReportePedidos(DateTime inicio, DateTime fin, int sucursalId)
 		{
 			var pedidoReporte = new ReportesPedidosIndexViewModel();
-			var pedidos = _context.Set<Pedido>().Where(x => x.DateCreated.ToLocalTime().Date >= inicio.Date && x.DateCreated.ToLocalTime().Date <= fin.Date && x.SucursalId == sucursalId);
+			var pedidos = _context.Set<Pedido>().Include(x => x.Cliente).Where(x => x.DateCreated.ToLocalTime().Date >= inicio.Date && x.DateCreated.ToLocalTime().Date <= fin.Date && x.SucursalId == sucursalId);
 			pedidoReporte.Detalle = Mapper.Map<List<ReportesPedidosDetalleViewModel>>(pedidos);
 			return pedidoReporte;
 		}

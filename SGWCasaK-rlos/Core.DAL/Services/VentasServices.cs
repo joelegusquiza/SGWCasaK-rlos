@@ -39,9 +39,12 @@ namespace Core.DAL.Services
 		{
 			var viewModel = new VentasViewViewModel() { };
 			
-			var venta = _context.Set<Venta>().Include(x => x.DetalleVenta).Include(x => x.Cliente).FirstOrDefault(x => x.Active && x.Id == id);
+			var venta = _context.Set<Venta>().Include(x => x.DetalleVenta).Include(x => x.Cliente).Include(x => x.Timbrado).FirstOrDefault(x => x.Active && x.Id == id);
+
+		
 			venta.DetalleVenta = venta.DetalleVenta.Where(x => x.Active).ToList();
 			viewModel = Mapper.Map<VentasViewViewModel>(GetById(id));
+			viewModel = Mapper.Map(venta.Timbrado, viewModel);
 			var productosIds = venta.DetalleVenta.Select(x => x.ProductoId).ToList();
 			var productos = _context.Set<Producto>().Where(x => productosIds.Contains(x.Id));
 			foreach (var detalle in viewModel.DetalleVenta)
